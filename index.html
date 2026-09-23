@@ -1,199 +1,280 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>SENHS Gate Scanner</title>
 
-  <script src="https://unpkg.com/html5-qrcode"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      text-align: center;
-      padding: 15px;
-      margin: 0;
-    }
+<title>SENHS Gate Scanner</title>
 
-    h2 {
-      margin-bottom: 18px;
-    }
+<script src="https://unpkg.com/html5-qrcode"></script>
 
-    .key-container {
-      position: relative;
-      width: 90%;
-      max-width: 400px;
-      margin: auto;
-    }
+<style>
 
-    #deviceKey {
-      width: 100%;
-      padding: 14px 50px 14px 14px;
-      font-size: 18px;
-      box-sizing: border-box;
-      border: 1px solid #aaa;
-      border-radius: 8px;
-    }
+* {
+  box-sizing: border-box;
+}
 
-    #toggleKey {
-      position: absolute;
-      right: 5px;
-      top: 5px;
-      height: 42px;
-      width: 45px;
-      border: none;
-      background: transparent;
-      font-size: 22px;
-      cursor: pointer;
-    }
+body {
+  font-family: Arial, sans-serif;
+  text-align: center;
+  margin: 0;
+  padding: 15px;
+  background: white;
+}
 
-    #startBtn {
-      padding: 14px 22px;
-      font-size: 18px;
-      margin: 12px 0 15px;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-    }
+h2 {
+  margin: 10px 0 15px;
+}
 
-    #reader {
-      width: 100%;
-      max-width: 450px;
-      margin: auto;
-    }
+#loginArea {
+  max-width: 450px;
+  margin: auto;
+}
 
-    #status {
-      margin: 20px auto;
-      padding: 18px;
-      max-width: 450px;
-      font-size: 21px;
-      font-weight: bold;
-      border-radius: 10px;
-      box-sizing: border-box;
-    }
+.keyBox {
+  position: relative;
+  width: 100%;
+  margin-bottom: 10px;
+}
 
-    .ready {
-      background: #eeeeee;
-      color: #222;
-    }
+#deviceKey {
+  width: 100%;
+  padding: 14px 50px 14px 14px;
+  font-size: 18px;
+  border: 1px solid #aaa;
+  border-radius: 8px;
+}
 
-    .processing {
-      background: #fff3cd;
-      color: #664d03;
-    }
+#showKey {
+  position: absolute;
+  right: 5px;
+  top: 5px;
+  width: 42px;
+  height: 42px;
+  border: none;
+  background: transparent;
+  font-size: 21px;
+  cursor: pointer;
+}
 
-    .accepted {
-      background: #d4edda;
-      color: #155724;
-    }
+#startBtn {
+  width: 100%;
+  padding: 15px;
+  font-size: 18px;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
 
-    .denied {
-      background: #f8d7da;
-      color: #721c24;
-    }
+#startBtn:disabled {
+  opacity: 0.6;
+}
 
-    .cooldown {
-      font-size: 18px;
-      margin-top: 8px;
-    }
-  </style>
+.status {
+  margin: 15px auto;
+  padding: 15px;
+  font-size: 20px;
+  font-weight: bold;
+  border-radius: 10px;
+  max-width: 450px;
+}
+
+.ready {
+  background: #eeeeee;
+  color: #222;
+}
+
+.processing {
+  background: #fff3cd;
+  color: #664d03;
+}
+
+.accepted {
+  background: #d4edda;
+  color: #155724;
+}
+
+.denied {
+  background: #f8d7da;
+  color: #721c24;
+}
+
+#scannerArea {
+  display: none;
+}
+
+#scannerTitle {
+  font-size: 24px;
+  font-weight: bold;
+  margin: 10px 0 15px;
+}
+
+#reader {
+  width: 100%;
+  max-width: 450px;
+  margin: auto;
+}
+
+#countdown {
+  font-size: 18px;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+</style>
 </head>
 
 <body>
 
-<h2>SENHS GATE SCANNER</h2>
+<!-- DEVICE LOGIN -->
 
-<div class="key-container">
-  <input
-    id="deviceKey"
-    type="password"
-    placeholder="Enter Gate Device Key"
-    autocomplete="off"
-  >
+<div id="loginArea">
+
+  <h2>SENHS GATE SCANNER</h2>
+
+  <div class="keyBox">
+
+    <input
+      id="deviceKey"
+      type="password"
+      placeholder="Enter Gate Device Key"
+      autocomplete="off"
+    >
+
+    <button
+      id="showKey"
+      type="button"
+      aria-label="Show device key"
+    >
+      👁️
+    </button>
+
+  </div>
 
   <button
-    id="toggleKey"
+    id="startBtn"
     type="button"
-    aria-label="Show device key"
-  >👁️</button>
+  >
+    START SCANNER
+  </button>
+
+  <div
+    id="loginStatus"
+    class="status ready"
+  >
+    Enter authorized device key.
+  </div>
+
 </div>
 
-<button id="startBtn" type="button">
-  START SCANNER
-</button>
 
-<div id="status" class="ready">
-  Enter authorized device key.
+<!-- SCANNER -->
+
+<div id="scannerArea">
+
+  <div id="scannerTitle">
+    SENHS GATE SCANNER
+  </div>
+
+  <div
+    id="status"
+    class="status ready"
+  >
+    READY — I-SCAN ANG QR CODE
+  </div>
+
+  <div id="reader"></div>
+
+  <div id="countdown"></div>
+
 </div>
 
-<div id="reader"></div>
 
 <script>
 
 const APPS_SCRIPT_URL =
 "https://script.google.com/macros/s/AKfycbyXwfLu_wjourRT3BwQDTwA-H9vIJfu5LvqbjjbG3jwv5JVb0mi_1SO5CRPq60S5KdaCg/exec";
 
-let processing = false;
-let scanner = null;
-let scannerStarted = false;
 
-const statusBox =
-  document.getElementById("status");
+let scanner = null;
+let processing = false;
+let deviceAuthorized = false;
+let authorizedDeviceKey = "";
+let cooldownTimer = null;
+
+
+/* ELEMENTS */
 
 const deviceKey =
-  document.getElementById("deviceKey");
+document.getElementById("deviceKey");
 
-const toggleKey =
-  document.getElementById("toggleKey");
+const showKey =
+document.getElementById("showKey");
+
+const startBtn =
+document.getElementById("startBtn");
+
+const loginArea =
+document.getElementById("loginArea");
+
+const scannerArea =
+document.getElementById("scannerArea");
+
+const loginStatus =
+document.getElementById("loginStatus");
+
+const statusBox =
+document.getElementById("status");
+
+const countdown =
+document.getElementById("countdown");
 
 
-// ================================
-// SHOW / HIDE DEVICE KEY
-// ================================
+/* SHOW / HIDE KEY */
 
-toggleKey.addEventListener("click", function () {
+showKey.addEventListener(
+"click",
+function() {
 
   if (deviceKey.type === "password") {
 
     deviceKey.type = "text";
-
-    toggleKey.innerText = "🙈";
-
-    toggleKey.setAttribute(
-      "aria-label",
-      "Hide device key"
-    );
+    showKey.textContent = "🙈";
 
   } else {
 
     deviceKey.type = "password";
+    showKey.textContent = "👁️";
 
-    toggleKey.innerText = "👁️";
-
-    toggleKey.setAttribute(
-      "aria-label",
-      "Show device key"
-    );
   }
 
 });
 
 
-// ================================
-// STATUS DISPLAY
-// ================================
+/* LOGIN STATUS */
 
-function setStatus(message, className) {
+function setLoginStatus(message, className) {
 
-  statusBox.innerHTML = message;
-
-  statusBox.className = className;
+  loginStatus.innerHTML = message;
+  loginStatus.className =
+    "status " + className;
 
 }
 
 
-// ================================
-// ACCEPTED SOUND
-// ================================
+/* SCANNER STATUS */
+
+function setStatus(message, className) {
+
+  statusBox.innerHTML = message;
+  statusBox.className =
+    "status " + className;
+
+}
+
+
+/* ACCEPTED SOUND */
 
 function acceptedSound() {
 
@@ -225,7 +306,7 @@ function acceptedSound() {
 
     gain.gain.exponentialRampToValueAtTime(
       0.001,
-      audioContext.currentTime + 0.35
+      audioContext.currentTime + 0.4
     );
 
     oscillator.connect(gain);
@@ -237,7 +318,7 @@ function acceptedSound() {
     oscillator.start();
 
     oscillator.stop(
-      audioContext.currentTime + 0.35
+      audioContext.currentTime + 0.4
     );
 
   } catch (error) {
@@ -249,9 +330,7 @@ function acceptedSound() {
 }
 
 
-// ================================
-// DEVICE FEEDBACK
-// ================================
+/* VIBRATION */
 
 function deviceFeedback() {
 
@@ -270,43 +349,101 @@ function deviceFeedback() {
 }
 
 
-// ================================
-// START SCANNER
-// ================================
+/* START SCANNER */
 
-document
-  .getElementById("startBtn")
-  .addEventListener("click", function () {
+startBtn.addEventListener(
+"click",
+async function() {
 
-    const key =
-      deviceKey.value.trim();
+  const key =
+    deviceKey.value.trim();
 
-    if (!key) {
 
-      setStatus(
-        "❌ ENTER AUTHORIZED DEVICE KEY FIRST",
+  if (!key) {
+
+    setLoginStatus(
+      "ENTER DEVICE KEY FIRST.",
+      "denied"
+    );
+
+    return;
+
+  }
+
+
+  startBtn.disabled = true;
+
+
+  setLoginStatus(
+    "CHECKING DEVICE...",
+    "processing"
+  );
+
+
+  try {
+
+    const checkUrl =
+      APPS_SCRIPT_URL +
+      "?device=" +
+      encodeURIComponent(key) +
+      "&format=json";
+
+
+    const response =
+      await fetch(checkUrl);
+
+
+    const result =
+      await response.json();
+
+
+    if (!result.success) {
+
+      setLoginStatus(
+        "❌ ACCESS DENIED<br>Unauthorized device",
         "denied"
       );
 
-      return;
-    }
-
-    if (scannerStarted) {
-
-      setStatus(
-        "SCANNER IS ALREADY RUNNING",
-        "processing"
-      );
+      startBtn.disabled = false;
 
       return;
+
     }
 
-    scannerStarted = true;
+
+    /* AUTHORIZED DEVICE */
+
+    authorizedDeviceKey = key;
+
+    deviceAuthorized = true;
+
+
+    /*
+      Burahin ang key sa input.
+      Hindi na ito makikita sa screen.
+    */
+
+    deviceKey.value = "";
+
+
+    /*
+      Itago ang login screen.
+    */
+
+    loginArea.style.display = "none";
+
+    scannerArea.style.display = "block";
+
 
     setStatus(
-      "STARTING CAMERA...<br>Please allow camera access.",
+      "STARTING CAMERA...",
       "processing"
     );
+
+
+    /*
+      Start QR scanner.
+    */
 
     scanner =
       new Html5QrcodeScanner(
@@ -321,31 +458,48 @@ document
         false
       );
 
+
     scanner.render(
       onScanSuccess,
       onScanFailure
     );
 
-  });
+
+  } catch (error) {
+
+    setLoginStatus(
+      "❌ CONNECTION ERROR<br>Check internet connection.",
+      "denied"
+    );
+
+    startBtn.disabled = false;
+
+  }
+
+});
 
 
-// ================================
-// QR SCAN SUCCESS
-// ================================
+/* QR SCAN SUCCESS */
 
-function onScanSuccess(decodedText) {
+async function onScanSuccess(decodedText) {
 
-  // Prevent multiple scans
+
+  if (!deviceAuthorized) return;
+
   if (processing) return;
+
 
   processing = true;
 
+
   setStatus(
-    "⏳ PROCESSING...<br>Please wait.",
+    "PROCESSING...<br>Please wait.",
     "processing"
   );
 
+
   let lrn = "";
+
 
   try {
 
@@ -362,9 +516,10 @@ function onScanSuccess(decodedText) {
       "denied"
     );
 
-    processing = false;
+    startCooldown();
 
     return;
+
   }
 
 
@@ -375,186 +530,193 @@ function onScanSuccess(decodedText) {
       "denied"
     );
 
-    processing = false;
+    startCooldown();
 
     return;
+
   }
 
 
-  const key =
-    deviceKey.value.trim();
-
-
-  if (!key) {
-
-    setStatus(
-      "❌ DEVICE KEY REQUIRED",
-      "denied"
-    );
-
-    processing = false;
-
-    return;
-  }
-
-
-  // ================================
-  // SEND TO GOOGLE APPS SCRIPT
-  // ================================
+  /*
+    Send LRN + authorized device key
+    to Apps Script.
+  */
 
   const requestUrl =
     APPS_SCRIPT_URL +
     "?lrn=" +
     encodeURIComponent(lrn) +
     "&device=" +
-    encodeURIComponent(key);
+    encodeURIComponent(authorizedDeviceKey) +
+    "&format=json";
 
 
-  fetch(requestUrl)
+  try {
 
-    .then(function(response) {
-
-      return response.text();
-
-    })
-
-    .then(function(result) {
-
-      const upperResult =
-        result.toUpperCase();
+    const response =
+      await fetch(requestUrl);
 
 
-      // ============================
-      // ACCESS DENIED
-      // ============================
-
-      if (
-        upperResult.includes("ACCESS DENIED") ||
-        upperResult.includes("UNAUTHORIZED")
-      ) {
-
-        setStatus(
-          "❌ ACCESS DENIED<br>" +
-          "<span class='cooldown'>" +
-          "Unauthorized device" +
-          "</span>",
-          "denied"
-        );
-
-      }
+    const result =
+      await response.json();
 
 
-      // ============================
-      // ERROR
-      // ============================
+    /*
+      SERVER ERROR
+    */
 
-      else if (
-        upperResult.includes("ERROR")
-      ) {
-
-        setStatus(
-          "❌ ERROR<br>" +
-          result,
-          "denied"
-        );
-
-      }
-
-
-      // ============================
-      // ACCEPTED
-      // ============================
-
-      else {
-
-        deviceFeedback();
-
-        setStatus(
-          "✅ ACCEPTED<br><br>" +
-          result +
-          "<br><br>" +
-          "<span class='cooldown'>" +
-          "NEXT SCAN IN 5 SECONDS" +
-          "</span>",
-          "accepted"
-        );
-
-      }
-
-
-      // ============================
-      // 5 SECOND COOLDOWN
-      // ============================
-
-      let seconds = 5;
-
-      const countdown =
-        setInterval(function () {
-
-          seconds--;
-
-          if (seconds > 0) {
-
-            statusBox.innerHTML =
-              statusBox.innerHTML
-                .replace(
-                  /NEXT SCAN IN \d+ SECONDS/,
-                  "NEXT SCAN IN " +
-                  seconds +
-                  " SECONDS"
-                );
-
-          } else {
-
-            clearInterval(countdown);
-
-            processing = false;
-
-            setStatus(
-              "READY — I-SCAN ANG QR CODE",
-              "ready"
-            );
-
-          }
-
-        }, 1000);
-
-    })
-
-
-    // ================================
-    // CONNECTION ERROR
-    // ================================
-
-    .catch(function(error) {
+    if (!result.success) {
 
       setStatus(
-        "❌ CONNECTION ERROR<br>" +
-        "<span class='cooldown'>" +
-        "Check internet connection." +
-        "</span>",
+        "❌ ERROR<br>" +
+        (result.message || "Scan failed."),
         "denied"
       );
 
-      setTimeout(function () {
+      startCooldown();
 
-        processing = false;
+      return;
 
-        setStatus(
-          "READY — I-SCAN ANG QR CODE",
-          "ready"
-        );
+    }
 
-      }, 5000);
 
-    });
+    /*
+      SUCCESS
+    */
+
+    deviceFeedback();
+
+
+    setStatus(
+
+      "✅ " +
+      result.event +
+
+      "<br><br>" +
+
+      "<strong>" +
+      result.name +
+      "</strong>" +
+
+      "<br>" +
+
+      result.section +
+
+      "<br><br>" +
+
+      "TIME: " +
+      result.time +
+
+      "<br>" +
+
+      "TRANSACTION #" +
+      result.transaction +
+
+      "<br><br>" +
+
+      "✅ RECORDED",
+
+      "accepted"
+
+    );
+
+
+    /*
+      Show result for 10 seconds.
+    */
+
+    startCooldown();
+
+
+  } catch (error) {
+
+    /*
+      Important:
+      Hindi agad sasabihin na
+      NO INTERNET CONNECTION.
+
+      Posibleng na-record na ng Apps Script
+      kahit hindi bumalik nang maayos ang response.
+    */
+
+    setStatus(
+
+      "⚠️ SCAN SENT<br>" +
+      "Please wait...",
+
+      "processing"
+
+    );
+
+
+    startCooldown();
+
+  }
 
 }
 
 
-// ================================
-// NORMAL QR SCANNER EVENT
-// ================================
+/* 10 SECOND COOLDOWN */
+
+function startCooldown() {
+
+
+  let seconds = 10;
+
+
+  countdown.innerHTML =
+    "NEXT SCAN IN " +
+    seconds +
+    " SECONDS";
+
+
+  if (cooldownTimer) {
+
+    clearInterval(cooldownTimer);
+
+  }
+
+
+  cooldownTimer =
+    setInterval(
+      function() {
+
+
+        seconds--;
+
+
+        if (seconds > 0) {
+
+          countdown.innerHTML =
+            "NEXT SCAN IN " +
+            seconds +
+            " SECONDS";
+
+        } else {
+
+          clearInterval(
+            cooldownTimer
+          );
+
+          countdown.innerHTML = "";
+
+          processing = false;
+
+          setStatus(
+            "READY — I-SCAN ANG QR CODE",
+            "ready"
+          );
+
+        }
+
+      },
+      1000
+    );
+
+}
+
+
+/* NORMAL QR SCANNING */
 
 function onScanFailure(error) {
 
