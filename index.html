@@ -30,7 +30,6 @@ body {
     linear-gradient(135deg, #d9f1ff 0%, #eefaf5 45%, #ccecff 100%);
 }
 
-/* SCHOOL BACKGROUND DECORATIONS */
 body::before {
   content: "";
   position: fixed;
@@ -39,7 +38,7 @@ body::before {
   border-radius: 50%;
   right: -150px;
   top: 35%;
-  background: rgba(19, 105, 145, .08);
+  background: rgba(19,105,145,.08);
   z-index: -2;
 }
 
@@ -51,7 +50,7 @@ body::after {
   border-radius: 50%;
   left: -130px;
   bottom: -100px;
-  background: rgba(24, 151, 125, .09);
+  background: rgba(24,151,125,.09);
   z-index: -2;
 }
 
@@ -85,6 +84,7 @@ body::after {
 
 
 /* LOGO PLACEHOLDER */
+
 .schoolLogo {
   width: 105px;
   height: 105px;
@@ -117,7 +117,7 @@ body::after {
 }
 
 
-/* MAIN LOGIN TITLE */
+/* LOGIN TITLE */
 
 #loginTitle {
   margin: 0 0 28px;
@@ -175,7 +175,8 @@ body::after {
 
 #deviceKey:focus {
   border-color: #198b8c;
-  box-shadow: 0 0 0 4px rgba(25,139,140,.12);
+  box-shadow:
+    0 0 0 4px rgba(25,139,140,.12);
 }
 
 #togglePassword {
@@ -281,7 +282,7 @@ body::after {
 }
 
 
-/* SCHOOL DECORATIVE CORNERS */
+/* SCHOOL DECORATIVE BACKGROUND */
 
 .scannerShell::before {
   content: "";
@@ -394,7 +395,7 @@ body::after {
 }
 
 
-/* DECORATIVE LINE */
+/* SCHOOL LINE */
 
 .schoolLine {
   position: relative;
@@ -476,7 +477,7 @@ body::after {
 }
 
 
-/* QR LIBRARY CONTROLS */
+/* QR CONTROLS */
 
 #reader__dashboard_section_csr button {
   border-radius: 10px !important;
@@ -490,6 +491,107 @@ body::after {
 
 #reader__dashboard_section_csr span {
   font-size: 14px !important;
+}
+
+
+/* =========================
+   PROCESSING OVERLAY
+========================= */
+
+#processingOverlay {
+  display: none;
+
+  position: absolute;
+
+  inset: 0;
+
+  z-index: 40;
+
+  align-items: center;
+  justify-content: center;
+
+  text-align: center;
+
+  background:
+    rgba(5,31,47,.72);
+
+  backdrop-filter:
+    blur(3px);
+}
+
+.processingBox {
+  width: 82%;
+  max-width: 560px;
+
+  padding:
+    28px 18px;
+
+  border-radius: 24px;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(18,97,138,.98),
+      rgba(25,154,139,.98)
+    );
+
+  border:
+    3px solid
+    rgba(255,255,255,.8);
+
+  box-shadow:
+    0 15px 45px
+    rgba(0,0,0,.45);
+
+  color: white;
+}
+
+.processingIcon {
+  width: 65px;
+  height: 65px;
+
+  margin:
+    0 auto
+    12px;
+
+  border-radius: 50%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background:
+    rgba(255,255,255,.18);
+
+  border:
+    2px solid
+    rgba(255,255,255,.65);
+
+  font-size: 32px;
+}
+
+#processingText {
+  font-size:
+    clamp(34px, 8vw, 58px);
+
+  line-height: 1;
+
+  font-weight: 900;
+
+  letter-spacing: 2px;
+
+  margin: 0;
+}
+
+.processingSubtext {
+  margin-top: 12px;
+
+  font-size:
+    clamp(15px, 3vw, 21px);
+
+  font-weight: 700;
+
+  opacity: .95;
 }
 
 
@@ -513,8 +615,7 @@ body::after {
   z-index: 50;
 
   padding:
-    24px
-    16px;
+    24px 16px;
 
   border-radius: 22px;
 
@@ -734,11 +835,16 @@ body::after {
     border-radius: 18px;
   }
 
-  .resultCheck {
-    width: 48px;
-    height: 48px;
+  .processingBox {
+    width: 88%;
+    padding:
+      25px 12px;
+  }
 
-    font-size: 25px;
+  .processingIcon {
+    width: 55px;
+    height: 55px;
+    font-size: 27px;
   }
 
 }
@@ -809,7 +915,6 @@ body::after {
 
   <div class="loginCard">
 
-    <!-- LOGO PLACEHOLDER -->
     <div class="schoolLogo">
       <span>
         SENHS<br>
@@ -888,7 +993,6 @@ body::after {
   <div class="scannerShell">
 
 
-    <!-- SCHOOL LOGO -->
     <div class="scannerLogo">
 
       SENHS<br>
@@ -914,8 +1018,6 @@ body::after {
     <div class="schoolLine"></div>
 
 
-    <!-- CAMERA -->
-
     <div class="cameraCard">
 
       <div class="cameraInner">
@@ -923,7 +1025,34 @@ body::after {
         <div id="reader"></div>
 
 
-        <!-- RESULT OVERLAY -->
+        <!-- =====================
+             PROCESSING OVERLAY
+        ====================== -->
+
+        <div id="processingOverlay">
+
+          <div class="processingBox">
+
+            <div class="processingIcon">
+              ⟳
+            </div>
+
+            <div id="processingText">
+              PROCESSING...
+            </div>
+
+            <div class="processingSubtext">
+              Please wait while the QR code is being recorded.
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <!-- =====================
+             STUDENT RESULT
+        ====================== -->
 
         <div id="resultOverlay">
 
@@ -1014,6 +1143,9 @@ const startButton =
 
 const loginMessage =
   document.getElementById("loginMessage");
+
+const processingOverlay =
+  document.getElementById("processingOverlay");
 
 const resultOverlay =
   document.getElementById("resultOverlay");
@@ -1199,7 +1331,7 @@ function startCamera() {
 
   const config = {
 
-    fps: 10,
+    fps: 15,
 
 
     qrbox:
@@ -1301,6 +1433,8 @@ async function onScanSuccess(
 ) {
 
 
+  /* DO NOT ACCEPT ANOTHER QR
+     WHILE PROCESSING OR DISPLAYING */
   if (scanningLocked) {
     return;
   }
@@ -1342,6 +1476,17 @@ async function onScanSuccess(
   }
 
 
+  /* =====================
+     SHOW LARGE PROCESSING
+     INSIDE CAMERA
+  ====================== */
+
+  processingOverlay.style.display =
+    "flex";
+
+  resultOverlay.style.display =
+    "none";
+
   readyMessage.textContent =
     "PROCESSING...";
 
@@ -1377,6 +1522,12 @@ async function onScanSuccess(
       await response.json();
 
 
+    /* PROCESSING FINISHED */
+
+    processingOverlay.style.display =
+      "none";
+
+
     if (!data.success) {
 
       readyMessage.textContent =
@@ -1386,7 +1537,21 @@ async function onScanSuccess(
       readyMessage.style.color =
         "#b42318";
 
-      scanningLocked = false;
+      setTimeout(
+        function() {
+
+          readyMessage.textContent =
+            "READY — SCAN QR CODE";
+
+          readyMessage.style.color =
+            "#12618a";
+
+          scanningLocked =
+            false;
+
+        },
+        2000
+      );
 
       return;
 
@@ -1394,8 +1559,8 @@ async function onScanSuccess(
 
 
     /* =====================
-       DISPLAY STUDENT
-    ===================== */
+       DISPLAY STUDENT RESULT
+    ====================== */
 
     studentName.textContent =
       data.name ||
@@ -1447,8 +1612,8 @@ async function onScanSuccess(
 
 
     /* =====================
-       5 SECOND DISPLAY
-    ===================== */
+       RESULT FOR 5 SECONDS
+    ====================== */
 
     setTimeout(
       function() {
@@ -1475,6 +1640,21 @@ async function onScanSuccess(
 
   } catch (error) {
 
+
+    /*
+      Hide processing overlay
+      after request finishes.
+    */
+
+    processingOverlay.style.display =
+      "none";
+
+
+    /*
+      If browser cannot read
+      the response, do not show
+      a false "NO INTERNET".
+    */
 
     readyMessage.textContent =
       "SCAN SENT — PLEASE WAIT...";
@@ -1513,8 +1693,8 @@ async function onScanSuccess(
 function onScanFailure(error) {
 
   /*
-    Normal QR scanning failures
-    are intentionally ignored.
+    Normal QR detection failures
+    are ignored automatically.
   */
 
 }
