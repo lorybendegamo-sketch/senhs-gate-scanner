@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SENHS Gate Scanner</title>
+  <script src="https://unpkg.com/html5-qrcode"></script>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 15px;
+    }
+
+    #reader {
+      width: 100%;
+      max-width: 450px;
+      margin: auto;
+    }
+
+    #status {
+      margin: 20px 0;
+      font-size: 20px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+
+<body>
+
+<h2>SENHS GATE SCANNER</h2>
+
+<div id="status">I-scan ang QR Code</div>
+<div id="reader"></div>
+
+<script>
+const APPS_SCRIPT_URL =
+  "https://script.google.com/macros/s/AKfycbyXwfLu_wjourRT3BwQDTwA-H9vIJfu5LvqbjjbG3jwv5JVb0mi_1SO5CRPq60S5KdaCg/exec";
+
+let processing = false;
+
+function onScanSuccess(decodedText) {
+
+  if (processing) return;
+  processing = true;
+
+  document.getElementById("status").innerText = "Processing...";
+
+  let lrn = "";
+
+  try {
+    const url = new URL(decodedText);
+    lrn = url.searchParams.get("lrn");
+  } catch (e) {
+    document.getElementById("status").innerText = "Invalid QR Code";
+    processing = false;
+    return;
+  }
+
+  if (!lrn) {
+    document.getElementById("status").innerText = "LRN not found";
+    processing = false;
+    return;
+  }
+
+  const deviceKey = localStorage.getItem("SENHS_DEVICE_KEY");
+
+  if (!deviceKey) {
+    document.getElementById("status").innerText =
+      "Device not authorized";
+    processing = false;
+    return;
+  }
+
+  const requestUrl =
+    APPS_SCRIPT_URL +
+    "?lrn=" + encodeURIComponent(lrn) +
+    "&device=" + encodeURIComponent(deviceKey);
+
+  fetch(requestUrl)
+    .then(response => response.text())
+    .then(result => {
+
+      document.getElementById("status").innerHTML = result;
+
+      setTimeout(() => {
+        processing = false;
+        document.getElementById("status").innerText =
+          "I-scan ang QR Code";
+      }, 3000);
+
+    })
+    .catch(error => {
+
+      document.getElementById("status").innerText =
+        "System Error";
+
+      processing = false;
+    });
+}
+
+function onScanFailure(error) {
+  // Normal habang naghahanap ng QR.
+}
+
+const scanner = new Html5QrcodeScanner(
+  "reader",
+  {
+    fps: 10,
+    qrbox: {
+      width: 250,
+      height: 250
+    }
+  },
+  false
+);
+
+scanner.render(onScanSuccess, onScanFailure);
+</script>
+
+</body>
+</html>
