@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html>
+
 <head>
 
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1">
 
 <title>SENHS Gate Scanner</title>
 
@@ -15,18 +17,23 @@
 }
 
 body {
-  font-family: Arial, sans-serif;
-  text-align: center;
   margin: 0;
   padding: 15px;
-  background: white;
+  font-family: Arial, sans-serif;
+  text-align: center;
+  background: #ffffff;
 }
 
 h2 {
-  margin: 10px 0 15px;
+  margin: 10px 0 20px;
 }
 
-#loginArea {
+
+/* =========================
+   LOGIN
+========================= */
+
+#loginPage {
   max-width: 450px;
   margin: auto;
 }
@@ -34,12 +41,12 @@ h2 {
 .keyBox {
   position: relative;
   width: 100%;
-  margin-bottom: 10px;
+  margin-bottom: 12px;
 }
 
 #deviceKey {
   width: 100%;
-  padding: 14px 50px 14px 14px;
+  padding: 15px 50px 15px 15px;
   font-size: 18px;
   border: 1px solid #aaa;
   border-radius: 8px;
@@ -49,12 +56,11 @@ h2 {
   position: absolute;
   right: 5px;
   top: 5px;
-  width: 42px;
-  height: 42px;
-  border: none;
+  width: 44px;
+  height: 44px;
+  border: 0;
   background: transparent;
   font-size: 21px;
-  cursor: pointer;
 }
 
 #startBtn {
@@ -62,22 +68,22 @@ h2 {
   padding: 15px;
   font-size: 18px;
   font-weight: bold;
-  border: none;
+  border: 0;
   border-radius: 8px;
-  cursor: pointer;
 }
 
-#startBtn:disabled {
-  opacity: 0.6;
-}
+
+/* =========================
+   STATUS
+========================= */
 
 .status {
+  max-width: 450px;
   margin: 15px auto;
   padding: 15px;
+  border-radius: 10px;
   font-size: 20px;
   font-weight: bold;
-  border-radius: 10px;
-  max-width: 450px;
 }
 
 .ready {
@@ -100,12 +106,17 @@ h2 {
   color: #721c24;
 }
 
-#scannerArea {
+
+/* =========================
+   SCANNER PAGE
+========================= */
+
+#scannerPage {
   display: none;
 }
 
 #scannerTitle {
-  font-size: 24px;
+  font-size: 25px;
   font-weight: bold;
   margin: 10px 0 15px;
 }
@@ -117,19 +128,24 @@ h2 {
 }
 
 #countdown {
+  margin-top: 12px;
   font-size: 18px;
   font-weight: bold;
-  margin-top: 10px;
 }
 
 </style>
+
 </head>
+
 
 <body>
 
-<!-- DEVICE LOGIN -->
 
-<div id="loginArea">
+<!-- =========================
+     PAGE 1
+========================= -->
+
+<div id="loginPage">
 
   <h2>SENHS GATE SCANNER</h2>
 
@@ -145,12 +161,12 @@ h2 {
     <button
       id="showKey"
       type="button"
-      aria-label="Show device key"
     >
       👁️
     </button>
 
   </div>
+
 
   <button
     id="startBtn"
@@ -158,6 +174,7 @@ h2 {
   >
     START SCANNER
   </button>
+
 
   <div
     id="loginStatus"
@@ -169,42 +186,70 @@ h2 {
 </div>
 
 
-<!-- SCANNER -->
 
-<div id="scannerArea">
+<!-- =========================
+     PAGE 2
+========================= -->
+
+<div id="scannerPage">
 
   <div id="scannerTitle">
     SENHS GATE SCANNER
   </div>
 
+
   <div
     id="status"
     class="status ready"
   >
-    READY — I-SCAN ANG QR CODE
+    READY — SCAN QR CODE
   </div>
 
+
   <div id="reader"></div>
+
 
   <div id="countdown"></div>
 
 </div>
 
 
+
 <script>
+
+
+/* =========================
+   APPS SCRIPT URL
+========================= */
 
 const APPS_SCRIPT_URL =
 "https://script.google.com/macros/s/AKfycbyXwfLu_wjourRT3BwQDTwA-H9vIJfu5LvqbjjbG3jwv5JVb0mi_1SO5CRPq60S5KdaCg/exec";
 
 
+/* =========================
+   VARIABLES
+========================= */
+
 let scanner = null;
-let processing = false;
-let deviceAuthorized = false;
+
 let authorizedDeviceKey = "";
-let cooldownTimer = null;
+
+let deviceAuthorized = false;
+
+let processing = false;
+
+let countdownTimer = null;
 
 
-/* ELEMENTS */
+/* =========================
+   ELEMENTS
+========================= */
+
+const loginPage =
+document.getElementById("loginPage");
+
+const scannerPage =
+document.getElementById("scannerPage");
 
 const deviceKey =
 document.getElementById("deviceKey");
@@ -214,12 +259,6 @@ document.getElementById("showKey");
 
 const startBtn =
 document.getElementById("startBtn");
-
-const loginArea =
-document.getElementById("loginArea");
-
-const scannerArea =
-document.getElementById("scannerArea");
 
 const loginStatus =
 document.getElementById("loginStatus");
@@ -231,50 +270,65 @@ const countdown =
 document.getElementById("countdown");
 
 
-/* SHOW / HIDE KEY */
+/* =========================
+   SHOW / HIDE CODE
+========================= */
 
 showKey.addEventListener(
-"click",
-function() {
+  "click",
+  function() {
 
-  if (deviceKey.type === "password") {
+    if (deviceKey.type === "password") {
 
-    deviceKey.type = "text";
-    showKey.textContent = "🙈";
+      deviceKey.type = "text";
 
-  } else {
+      showKey.textContent = "🙈";
 
-    deviceKey.type = "password";
-    showKey.textContent = "👁️";
+    } else {
+
+      deviceKey.type = "password";
+
+      showKey.textContent = "👁️";
+
+    }
 
   }
+);
 
-});
 
+/* =========================
+   STATUS
+========================= */
 
-/* LOGIN STATUS */
-
-function setLoginStatus(message, className) {
+function setLoginStatus(
+  message,
+  className
+) {
 
   loginStatus.innerHTML = message;
+
   loginStatus.className =
     "status " + className;
 
 }
 
 
-/* SCANNER STATUS */
-
-function setStatus(message, className) {
+function setStatus(
+  message,
+  className
+) {
 
   statusBox.innerHTML = message;
+
   statusBox.className =
     "status " + className;
 
 }
 
 
-/* ACCEPTED SOUND */
+/* =========================
+   SOUND
+========================= */
 
 function acceptedSound() {
 
@@ -286,14 +340,14 @@ function acceptedSound() {
 
     if (!AudioContext) return;
 
-    const audioContext =
+    const audio =
       new AudioContext();
 
     const oscillator =
-      audioContext.createOscillator();
+      audio.createOscillator();
 
     const gain =
-      audioContext.createGain();
+      audio.createGain();
 
     oscillator.type = "sine";
 
@@ -301,36 +355,34 @@ function acceptedSound() {
 
     gain.gain.setValueAtTime(
       0.25,
-      audioContext.currentTime
+      audio.currentTime
     );
 
     gain.gain.exponentialRampToValueAtTime(
       0.001,
-      audioContext.currentTime + 0.4
+      audio.currentTime + 0.4
     );
 
     oscillator.connect(gain);
 
     gain.connect(
-      audioContext.destination
+      audio.destination
     );
 
     oscillator.start();
 
     oscillator.stop(
-      audioContext.currentTime + 0.4
+      audio.currentTime + 0.4
     );
 
-  } catch (error) {
-
-    // Ignore sound error
-
-  }
+  } catch (error) {}
 
 }
 
 
-/* VIBRATION */
+/* =========================
+   VIBRATION
+========================= */
 
 function deviceFeedback() {
 
@@ -349,142 +401,166 @@ function deviceFeedback() {
 }
 
 
-/* START SCANNER */
+/* =========================
+   START SCANNER
+========================= */
 
 startBtn.addEventListener(
-"click",
-async function() {
+  "click",
+  async function() {
 
-  const key =
-    deviceKey.value.trim();
-
-
-  if (!key) {
-
-    setLoginStatus(
-      "ENTER DEVICE KEY FIRST.",
-      "denied"
-    );
-
-    return;
-
-  }
+    const key =
+      deviceKey.value.trim();
 
 
-  startBtn.disabled = true;
-
-
-  setLoginStatus(
-    "CHECKING DEVICE...",
-    "processing"
-  );
-
-
-  try {
-
-    const checkUrl =
-      APPS_SCRIPT_URL +
-      "?device=" +
-      encodeURIComponent(key) +
-      "&format=json";
-
-
-    const response =
-      await fetch(checkUrl);
-
-
-    const result =
-      await response.json();
-
-
-    if (!result.success) {
+    if (!key) {
 
       setLoginStatus(
-        "❌ ACCESS DENIED<br>Unauthorized device",
+        "ENTER DEVICE KEY FIRST.",
         "denied"
       );
-
-      startBtn.disabled = false;
 
       return;
 
     }
 
 
-    /* AUTHORIZED DEVICE */
-
-    authorizedDeviceKey = key;
-
-    deviceAuthorized = true;
+    startBtn.disabled = true;
 
 
-    /*
-      Burahin ang key sa input.
-      Hindi na ito makikita sa screen.
-    */
-
-    deviceKey.value = "";
-
-
-    /*
-      Itago ang login screen.
-    */
-
-    loginArea.style.display = "none";
-
-    scannerArea.style.display = "block";
-
-
-    setStatus(
-      "STARTING CAMERA...",
+    setLoginStatus(
+      "CHECKING DEVICE...",
       "processing"
     );
 
 
-    /*
-      Start QR scanner.
-    */
+    try {
 
-    scanner =
-      new Html5QrcodeScanner(
-        "reader",
-        {
-          fps: 10,
-          qrbox: {
-            width: 250,
-            height: 250
-          }
-        },
-        false
+      const checkUrl =
+        APPS_SCRIPT_URL +
+        "?device=" +
+        encodeURIComponent(key) +
+        "&format=json";
+
+
+      const response =
+        await fetch(checkUrl);
+
+
+      const result =
+        await response.json();
+
+
+      if (!result.success) {
+
+        setLoginStatus(
+          "❌ ACCESS DENIED",
+          "denied"
+        );
+
+        startBtn.disabled = false;
+
+        return;
+
+      }
+
+
+      /* AUTHORIZED */
+
+      authorizedDeviceKey = key;
+
+      deviceAuthorized = true;
+
+
+      /*
+        Clear the code.
+      */
+
+      deviceKey.value = "";
+
+
+      /*
+        Completely hide Page 1.
+      */
+
+      loginPage.style.display =
+        "none";
+
+
+      /*
+        Show scanner page.
+      */
+
+      scannerPage.style.display =
+        "block";
+
+
+      setStatus(
+        "STARTING CAMERA...",
+        "processing"
       );
 
 
-    scanner.render(
-      onScanSuccess,
-      onScanFailure
-    );
+      /*
+        Start camera.
+      */
+
+      scanner =
+        new Html5QrcodeScanner(
+          "reader",
+          {
+            fps: 10,
+            qrbox: {
+              width: 250,
+              height: 250
+            }
+          },
+          false
+        );
 
 
-  } catch (error) {
+      scanner.render(
+        onScanSuccess,
+        onScanFailure
+      );
 
-    setLoginStatus(
-      "❌ CONNECTION ERROR<br>Check internet connection.",
-      "denied"
-    );
 
-    startBtn.disabled = false;
+    } catch (error) {
+
+      setLoginStatus(
+        "❌ CONNECTION ERROR",
+        "denied"
+      );
+
+      startBtn.disabled = false;
+
+    }
 
   }
+);
 
-});
+
+/* =========================
+   QR SUCCESS
+========================= */
+
+async function onScanSuccess(
+  decodedText
+) {
 
 
-/* QR SCAN SUCCESS */
-
-async function onScanSuccess(decodedText) {
-
+  /*
+    Ignore scan when
+    not authorized.
+  */
 
   if (!deviceAuthorized) return;
+
+
+  /*
+    Ignore scans during
+    10-second display.
+  */
 
   if (processing) return;
 
@@ -493,7 +569,7 @@ async function onScanSuccess(decodedText) {
 
 
   setStatus(
-    "PROCESSING...<br>Please wait.",
+    "PROCESSING...",
     "processing"
   );
 
@@ -538,8 +614,7 @@ async function onScanSuccess(decodedText) {
 
 
   /*
-    Send LRN + authorized device key
-    to Apps Script.
+    Send scan to Apps Script.
   */
 
   const requestUrl =
@@ -547,7 +622,9 @@ async function onScanSuccess(decodedText) {
     "?lrn=" +
     encodeURIComponent(lrn) +
     "&device=" +
-    encodeURIComponent(authorizedDeviceKey) +
+    encodeURIComponent(
+      authorizedDeviceKey
+    ) +
     "&format=json";
 
 
@@ -562,14 +639,17 @@ async function onScanSuccess(decodedText) {
 
 
     /*
-      SERVER ERROR
+      ERROR FROM SERVER
     */
 
     if (!result.success) {
 
       setStatus(
         "❌ ERROR<br>" +
-        (result.message || "Scan failed."),
+        (
+          result.message ||
+          "Scan failed."
+        ),
         "denied"
       );
 
@@ -589,32 +669,25 @@ async function onScanSuccess(decodedText) {
 
     setStatus(
 
-      "✅ " +
-      result.event +
-
-      "<br><br>" +
-
-      "<strong>" +
+      "<div style='font-size:28px;'>" +
       result.name +
-      "</strong>" +
+      "</div>" +
 
-      "<br>" +
-
+      "<div style='font-size:21px;margin-top:8px;'>" +
       result.section +
+      "</div>" +
 
-      "<br><br>" +
+      "<div style='font-size:30px;margin-top:15px;'>" +
+      result.event +
+      "</div>" +
 
-      "TIME: " +
+      "<div style='font-size:20px;margin-top:8px;'>" +
       result.time +
+      "</div>" +
 
-      "<br>" +
-
-      "TRANSACTION #" +
-      result.transaction +
-
-      "<br><br>" +
-
-      "✅ RECORDED",
+      "<div style='font-size:24px;margin-top:15px;'>" +
+      "✅ RECORDED" +
+      "</div>",
 
       "accepted"
 
@@ -631,23 +704,14 @@ async function onScanSuccess(decodedText) {
   } catch (error) {
 
     /*
-      Important:
-      Hindi agad sasabihin na
+      Don't show misleading
       NO INTERNET CONNECTION.
-
-      Posibleng na-record na ng Apps Script
-      kahit hindi bumalik nang maayos ang response.
     */
 
     setStatus(
-
-      "⚠️ SCAN SENT<br>" +
-      "Please wait...",
-
+      "⚠️ SCAN SENT<br>Please wait...",
       "processing"
-
     );
-
 
     startCooldown();
 
@@ -656,7 +720,9 @@ async function onScanSuccess(decodedText) {
 }
 
 
-/* 10 SECOND COOLDOWN */
+/* =========================
+   10 SECOND WAIT
+========================= */
 
 function startCooldown() {
 
@@ -665,19 +731,21 @@ function startCooldown() {
 
 
   countdown.innerHTML =
-    "NEXT SCAN IN " +
+    "WAIT " +
     seconds +
     " SECONDS";
 
 
-  if (cooldownTimer) {
+  if (countdownTimer) {
 
-    clearInterval(cooldownTimer);
+    clearInterval(
+      countdownTimer
+    );
 
   }
 
 
-  cooldownTimer =
+  countdownTimer =
     setInterval(
       function() {
 
@@ -688,24 +756,30 @@ function startCooldown() {
         if (seconds > 0) {
 
           countdown.innerHTML =
-            "NEXT SCAN IN " +
+            "WAIT " +
             seconds +
             " SECONDS";
 
         } else {
 
+
           clearInterval(
-            cooldownTimer
+            countdownTimer
           );
 
-          countdown.innerHTML = "";
+
+          countdown.innerHTML =
+            "";
+
 
           processing = false;
 
+
           setStatus(
-            "READY — I-SCAN ANG QR CODE",
+            "READY — SCAN QR CODE",
             "ready"
           );
+
 
         }
 
@@ -716,7 +790,9 @@ function startCooldown() {
 }
 
 
-/* NORMAL QR SCANNING */
+/* =========================
+   SCAN FAILURE
+========================= */
 
 function onScanFailure(error) {
 
