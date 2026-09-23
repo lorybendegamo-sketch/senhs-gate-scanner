@@ -11,25 +11,48 @@
       font-family: Arial, sans-serif;
       text-align: center;
       padding: 15px;
+      margin: 0;
     }
 
     h2 {
-      margin-bottom: 15px;
+      margin-bottom: 18px;
     }
 
-    input {
+    .key-container {
+      position: relative;
       width: 90%;
       max-width: 400px;
-      padding: 14px;
-      font-size: 18px;
-      margin-bottom: 10px;
-      box-sizing: border-box;
+      margin: auto;
     }
 
-    button {
-      padding: 12px 20px;
-      font-size: 17px;
-      margin-bottom: 15px;
+    #deviceKey {
+      width: 100%;
+      padding: 14px 50px 14px 14px;
+      font-size: 18px;
+      box-sizing: border-box;
+      border: 1px solid #aaa;
+      border-radius: 8px;
+    }
+
+    #toggleKey {
+      position: absolute;
+      right: 5px;
+      top: 5px;
+      height: 42px;
+      width: 45px;
+      border: none;
+      background: transparent;
+      font-size: 22px;
+      cursor: pointer;
+    }
+
+    #startBtn {
+      padding: 14px 22px;
+      font-size: 18px;
+      margin: 12px 0 15px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
     }
 
     #reader {
@@ -39,9 +62,38 @@
     }
 
     #status {
-      margin: 20px 0;
-      font-size: 20px;
+      margin: 20px auto;
+      padding: 18px;
+      max-width: 450px;
+      font-size: 21px;
       font-weight: bold;
+      border-radius: 10px;
+      box-sizing: border-box;
+    }
+
+    .ready {
+      background: #eeeeee;
+      color: #222;
+    }
+
+    .processing {
+      background: #fff3cd;
+      color: #664d03;
+    }
+
+    .accepted {
+      background: #d4edda;
+      color: #155724;
+    }
+
+    .denied {
+      background: #f8d7da;
+      color: #721c24;
+    }
+
+    .cooldown {
+      font-size: 18px;
+      margin-top: 8px;
     }
   </style>
 </head>
@@ -50,19 +102,28 @@
 
 <h2>SENHS GATE SCANNER</h2>
 
-<input
-  id="deviceKey"
-  type="password"
-  placeholder="Enter Gate Device Key"
+<div class="key-container">
+  <input
+    id="deviceKey"
+    type="password"
+    placeholder="Enter Gate Device Key"
+    autocomplete="off"
+  >
 
-
-<br>
+  <button
+    id="toggleKey"
+    type="button"
+    aria-label="Show device key"
+  >👁️</button>
+</div>
 
 <button id="startBtn" type="button">
   START SCANNER
 </button>
 
-<div id="status">Enter authorized device key.</div>
+<div id="status" class="ready">
+  Enter authorized device key.
+</div>
 
 <div id="reader"></div>
 
@@ -73,112 +134,432 @@ const APPS_SCRIPT_URL =
 
 let processing = false;
 let scanner = null;
+let scannerStarted = false;
 
-document.getElementById("startBtn").addEventListener("click", function () {
+const statusBox =
+  document.getElementById("status");
 
-  const key = document.getElementById("deviceKey").value.trim();
+const deviceKey =
+  document.getElementById("deviceKey");
 
-  if (!key) {
-    document.getElementById("status").innerText =
-      "Enter device key first.";
-    return;
+const toggleKey =
+  document.getElementById("toggleKey");
+
+
+// ================================
+// SHOW / HIDE DEVICE KEY
+// ================================
+
+toggleKey.addEventListener("click", function () {
+
+  if (deviceKey.type === "password") {
+
+    deviceKey.type = "text";
+
+    toggleKey.innerText = "🙈";
+
+    toggleKey.setAttribute(
+      "aria-label",
+      "Hide device key"
+    );
+
+  } else {
+
+    deviceKey.type = "password";
+
+    toggleKey.innerText = "👁️";
+
+    toggleKey.setAttribute(
+      "aria-label",
+      "Show device key"
+    );
   }
 
-  document.getElementById("status").innerText =
-    "Starting camera...";
-
-  scanner = new Html5QrcodeScanner(
-    "reader",
-    {
-      fps: 10,
-      qrbox: {
-        width: 250,
-        height: 250
-      }
-    },
-    false
-  );
-
-  scanner.render(onScanSuccess, onScanFailure);
 });
+
+
+// ================================
+// STATUS DISPLAY
+// ================================
+
+function setStatus(message, className) {
+
+  statusBox.innerHTML = message;
+
+  statusBox.className = className;
+
+}
+
+
+// ================================
+// ACCEPTED SOUND
+// ================================
+
+function acceptedSound() {
+
+  try {
+
+    const AudioContext =
+      window.AudioContext ||
+      window.webkitAudioContext;
+
+    if (!AudioContext) return;
+
+    const audioContext =
+      new AudioContext();
+
+    const oscillator =
+      audioContext.createOscillator();
+
+    const gain =
+      audioContext.createGain();
+
+    oscillator.type = "sine";
+
+    oscillator.frequency.value = 880;
+
+    gain.gain.setValueAtTime(
+      0.25,
+      audioContext.currentTime
+    );
+
+    gain.gain.exponentialRampToValueAtTime(
+      0.001,
+      audioContext.currentTime + 0.35
+    );
+
+    oscillator.connect(gain);
+
+    gain.connect(
+      audioContext.destination
+    );
+
+    oscillator.start();
+
+    oscillator.stop(
+      audioContext.currentTime + 0.35
+    );
+
+  } catch (error) {
+
+    // Ignore sound error
+
+  }
+
+}
+
+
+// ================================
+// DEVICE FEEDBACK
+// ================================
+
+function deviceFeedback() {
+
+  acceptedSound();
+
+  if (navigator.vibrate) {
+
+    navigator.vibrate([
+      150,
+      80,
+      150
+    ]);
+
+  }
+
+}
+
+
+// ================================
+// START SCANNER
+// ================================
+
+document
+  .getElementById("startBtn")
+  .addEventListener("click", function () {
+
+    const key =
+      deviceKey.value.trim();
+
+    if (!key) {
+
+      setStatus(
+        "❌ ENTER AUTHORIZED DEVICE KEY FIRST",
+        "denied"
+      );
+
+      return;
+    }
+
+    if (scannerStarted) {
+
+      setStatus(
+        "SCANNER IS ALREADY RUNNING",
+        "processing"
+      );
+
+      return;
+    }
+
+    scannerStarted = true;
+
+    setStatus(
+      "STARTING CAMERA...<br>Please allow camera access.",
+      "processing"
+    );
+
+    scanner =
+      new Html5QrcodeScanner(
+        "reader",
+        {
+          fps: 10,
+          qrbox: {
+            width: 250,
+            height: 250
+          }
+        },
+        false
+      );
+
+    scanner.render(
+      onScanSuccess,
+      onScanFailure
+    );
+
+  });
+
+
+// ================================
+// QR SCAN SUCCESS
+// ================================
 
 function onScanSuccess(decodedText) {
 
+  // Prevent multiple scans
   if (processing) return;
 
   processing = true;
 
-  document.getElementById("status").innerText =
-    "Processing...";
+  setStatus(
+    "⏳ PROCESSING...<br>Please wait.",
+    "processing"
+  );
 
   let lrn = "";
 
   try {
 
-    const url = new URL(decodedText);
+    const url =
+      new URL(decodedText);
 
-    lrn = url.searchParams.get("lrn");
+    lrn =
+      url.searchParams.get("lrn");
 
-  } catch (e) {
+  } catch (error) {
 
-    document.getElementById("status").innerText =
-      "Invalid QR Code";
+    setStatus(
+      "❌ INVALID QR CODE",
+      "denied"
+    );
 
     processing = false;
 
     return;
   }
+
 
   if (!lrn) {
 
-    document.getElementById("status").innerText =
-      "LRN not found";
+    setStatus(
+      "❌ LRN NOT FOUND",
+      "denied"
+    );
 
     processing = false;
 
     return;
   }
 
+
   const key =
-    document.getElementById("deviceKey").value.trim();
+    deviceKey.value.trim();
+
+
+  if (!key) {
+
+    setStatus(
+      "❌ DEVICE KEY REQUIRED",
+      "denied"
+    );
+
+    processing = false;
+
+    return;
+  }
+
+
+  // ================================
+  // SEND TO GOOGLE APPS SCRIPT
+  // ================================
 
   const requestUrl =
     APPS_SCRIPT_URL +
-    "?lrn=" + encodeURIComponent(lrn) +
-    "&device=" + encodeURIComponent(key);
+    "?lrn=" +
+    encodeURIComponent(lrn) +
+    "&device=" +
+    encodeURIComponent(key);
+
 
   fetch(requestUrl)
 
-    .then(response => response.text())
+    .then(function(response) {
 
-    .then(result => {
+      return response.text();
 
-      document.getElementById("status").innerHTML =
-        result;
+    })
+
+    .then(function(result) {
+
+      const upperResult =
+        result.toUpperCase();
+
+
+      // ============================
+      // ACCESS DENIED
+      // ============================
+
+      if (
+        upperResult.includes("ACCESS DENIED") ||
+        upperResult.includes("UNAUTHORIZED")
+      ) {
+
+        setStatus(
+          "❌ ACCESS DENIED<br>" +
+          "<span class='cooldown'>" +
+          "Unauthorized device" +
+          "</span>",
+          "denied"
+        );
+
+      }
+
+
+      // ============================
+      // ERROR
+      // ============================
+
+      else if (
+        upperResult.includes("ERROR")
+      ) {
+
+        setStatus(
+          "❌ ERROR<br>" +
+          result,
+          "denied"
+        );
+
+      }
+
+
+      // ============================
+      // ACCEPTED
+      // ============================
+
+      else {
+
+        deviceFeedback();
+
+        setStatus(
+          "✅ ACCEPTED<br><br>" +
+          result +
+          "<br><br>" +
+          "<span class='cooldown'>" +
+          "NEXT SCAN IN 5 SECONDS" +
+          "</span>",
+          "accepted"
+        );
+
+      }
+
+
+      // ============================
+      // 5 SECOND COOLDOWN
+      // ============================
+
+      let seconds = 5;
+
+      const countdown =
+        setInterval(function () {
+
+          seconds--;
+
+          if (seconds > 0) {
+
+            statusBox.innerHTML =
+              statusBox.innerHTML
+                .replace(
+                  /NEXT SCAN IN \d+ SECONDS/,
+                  "NEXT SCAN IN " +
+                  seconds +
+                  " SECONDS"
+                );
+
+          } else {
+
+            clearInterval(countdown);
+
+            processing = false;
+
+            setStatus(
+              "READY — I-SCAN ANG QR CODE",
+              "ready"
+            );
+
+          }
+
+        }, 1000);
+
+    })
+
+
+    // ================================
+    // CONNECTION ERROR
+    // ================================
+
+    .catch(function(error) {
+
+      setStatus(
+        "❌ CONNECTION ERROR<br>" +
+        "<span class='cooldown'>" +
+        "Check internet connection." +
+        "</span>",
+        "denied"
+      );
 
       setTimeout(function () {
 
         processing = false;
 
-        document.getElementById("status").innerText =
-          "Ready to scan.";
+        setStatus(
+          "READY — I-SCAN ANG QR CODE",
+          "ready"
+        );
 
-      }, 3000);
-
-    })
-
-    .catch(error => {
-
-      document.getElementById("status").innerText =
-        "Connection error.";
-
-      processing = false;
+      }, 5000);
 
     });
+
 }
 
+
+// ================================
+// NORMAL QR SCANNER EVENT
+// ================================
+
 function onScanFailure(error) {
+
   // Normal habang naghahanap ng QR.
+
 }
 
 </script>
