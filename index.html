@@ -83,7 +83,7 @@ body::after {
 }
 
 
-/* LOGO PLACEHOLDER */
+/* LOGO */
 
 .schoolLogo {
   width: 105px;
@@ -254,7 +254,7 @@ body::after {
   position: relative;
 
   width: 100%;
-  max-width: 1000px;
+  max-width: 1100px;
 
   margin: auto;
 
@@ -642,9 +642,6 @@ body::after {
     blur(7px);
 }
 
-
-/* CHECK */
-
 .resultCheck {
   width: 58px;
   height: 58px;
@@ -672,9 +669,6 @@ body::after {
   font-weight: 900;
 }
 
-
-/* STUDENT NAME */
-
 #studentName {
   font-size:
     clamp(24px, 5vw, 38px);
@@ -690,9 +684,6 @@ body::after {
   word-break: break-word;
 }
 
-
-/* SECTION */
-
 #studentSection {
   font-size:
     clamp(17px, 3vw, 23px);
@@ -703,9 +694,6 @@ body::after {
 
   opacity: .95;
 }
-
-
-/* EVENT */
 
 #eventText {
   font-size:
@@ -718,9 +706,6 @@ body::after {
   margin: 5px 0;
 }
 
-
-/* TIME */
-
 #timeText {
   font-size:
     clamp(17px, 3vw, 23px);
@@ -729,9 +714,6 @@ body::after {
 
   margin-top: 7px;
 }
-
-
-/* RECORDED */
 
 .recorded {
   display: inline-block;
@@ -795,6 +777,168 @@ body::after {
 
 
 /* =========================
+   ATTENDANCE DASHBOARD
+========================= */
+
+.attendanceDashboard {
+  position: relative;
+  z-index: 2;
+
+  margin-top: 22px;
+}
+
+.dashboardTitle {
+  text-align: center;
+
+  margin:
+    0 0
+    15px;
+
+  color: #123f63;
+
+  font-size:
+    clamp(23px, 5vw, 32px);
+
+  font-weight: 900;
+}
+
+
+/* WHOLE SCHOOL */
+
+.schoolAttendance {
+  background:
+    rgba(255,255,255,.92);
+
+  border:
+    2px solid
+    rgba(18,97,138,.12);
+
+  border-radius: 20px;
+
+  padding: 15px;
+
+  margin-bottom: 18px;
+
+  box-shadow:
+    0 8px 25px
+    rgba(18,63,99,.08);
+
+  overflow-x: auto;
+}
+
+.schoolAttendance h3 {
+  margin:
+    0 0
+    12px;
+
+  text-align: center;
+
+  color: #12618a;
+
+  font-size: 21px;
+}
+
+.attendanceTable {
+  width: 100%;
+
+  border-collapse: collapse;
+
+  min-width: 620px;
+}
+
+.attendanceTable th {
+  background:
+    linear-gradient(
+      135deg,
+      #12618a,
+      #199a8b
+    );
+
+  color: white;
+
+  padding: 10px 8px;
+
+  font-size: 14px;
+
+  white-space: nowrap;
+}
+
+.attendanceTable td {
+  padding: 9px 8px;
+
+  text-align: center;
+
+  border-bottom:
+    1px solid #d9e7ed;
+
+  font-size: 14px;
+
+  font-weight: 700;
+}
+
+.attendanceTable tr:nth-child(even) td {
+  background: rgba(217,241,255,.28);
+}
+
+
+/* SECTION TABLE */
+
+.sectionAttendance {
+  background:
+    rgba(255,255,255,.92);
+
+  border:
+    2px solid
+    rgba(18,97,138,.12);
+
+  border-radius: 20px;
+
+  padding: 15px;
+
+  box-shadow:
+    0 8px 25px
+    rgba(18,63,99,.08);
+
+  overflow-x: auto;
+}
+
+.sectionAttendance h3 {
+  margin:
+    0 0
+    12px;
+
+  text-align: center;
+
+  color: #12618a;
+
+  font-size: 21px;
+}
+
+#sectionTable th,
+#sectionTable td {
+  font-size: 13px;
+}
+
+#sectionTable th:first-child,
+#sectionTable td:first-child {
+  text-align: left;
+  font-weight: 900;
+}
+
+.dashboardStatus {
+  text-align: center;
+
+  margin-top: 12px;
+
+  font-size: 13px;
+
+  font-weight: 700;
+
+  color: #527084;
+}
+
+
+/* =========================
    PHONE
 ========================= */
 
@@ -845,6 +989,10 @@ body::after {
     width: 55px;
     height: 55px;
     font-size: 27px;
+  }
+
+  .attendanceTable {
+    min-width: 620px;
   }
 
 }
@@ -923,7 +1071,6 @@ body::after {
       </span>
     </div>
 
-
     <h1 id="loginTitle">
 
       <span>
@@ -936,7 +1083,6 @@ body::after {
 
     </h1>
 
-
     <label
       class="inputLabel"
       for="deviceKey">
@@ -944,7 +1090,6 @@ body::after {
       Enter Gate Device Code
 
     </label>
-
 
     <div class="passwordBox">
 
@@ -966,7 +1111,6 @@ body::after {
 
     </div>
 
-
     <button
       id="startButton"
       type="button">
@@ -974,7 +1118,6 @@ body::after {
       START SCANNER
 
     </button>
-
 
     <div id="loginMessage"></div>
 
@@ -992,7 +1135,6 @@ body::after {
 
   <div class="scannerShell">
 
-
     <div class="scannerLogo">
 
       SENHS<br>
@@ -1000,7 +1142,6 @@ body::after {
       LOGO
 
     </div>
-
 
     <h1 id="scannerTitle">
 
@@ -1014,9 +1155,12 @@ body::after {
 
     </h1>
 
-
     <div class="schoolLine"></div>
 
+
+    <!-- =====================
+         CAMERA
+    ====================== -->
 
     <div class="cameraCard">
 
@@ -1025,9 +1169,7 @@ body::after {
         <div id="reader"></div>
 
 
-        <!-- =====================
-             PROCESSING OVERLAY
-        ====================== -->
+        <!-- PROCESSING -->
 
         <div id="processingOverlay">
 
@@ -1050,9 +1192,7 @@ body::after {
         </div>
 
 
-        <!-- =====================
-             STUDENT RESULT
-        ====================== -->
+        <!-- RESULT -->
 
         <div id="resultOverlay">
 
@@ -1060,26 +1200,21 @@ body::after {
             ✓
           </div>
 
-
           <div id="studentName">
             Student Name
           </div>
-
 
           <div id="studentSection">
             Grade / Section
           </div>
 
-
           <div id="eventText">
             TIME IN
           </div>
 
-
           <div id="timeText">
             00:00:00 AM
           </div>
-
 
           <div class="recorded">
             RECORDED
@@ -1094,6 +1229,181 @@ body::after {
 
     <div id="readyMessage">
       READY — SCAN QR CODE
+    </div>
+
+
+
+    <!-- =========================
+         ATTENDANCE DASHBOARD
+    ========================== -->
+
+    <div
+      class="attendanceDashboard"
+      id="attendanceDashboard">
+
+
+      <h2 class="dashboardTitle">
+        DAILY ATTENDANCE
+      </h2>
+
+
+      <!-- WHOLE SCHOOL -->
+
+      <div class="schoolAttendance">
+
+        <h3>
+          WHOLE SCHOOL
+        </h3>
+
+        <table class="attendanceTable">
+
+          <thead>
+
+            <tr>
+
+              <th>
+                SESSION
+              </th>
+
+              <th>
+                PRESENT
+              </th>
+
+              <th>
+                LATE
+              </th>
+
+              <th>
+                ABSENT
+              </th>
+
+            </tr>
+
+          </thead>
+
+          <tbody id="schoolAttendanceBody">
+
+            <tr>
+
+              <td>
+                Morning
+              </td>
+
+              <td>
+                0
+              </td>
+
+              <td>
+                0
+              </td>
+
+              <td>
+                0
+              </td>
+
+            </tr>
+
+            <tr>
+
+              <td>
+                Afternoon
+              </td>
+
+              <td>
+                0
+              </td>
+
+              <td>
+                0
+              </td>
+
+              <td>
+                0
+              </td>
+
+            </tr>
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+
+
+      <!-- SECTION -->
+
+      <div class="sectionAttendance">
+
+        <h3>
+          SECTION ATTENDANCE
+        </h3>
+
+        <table
+          class="attendanceTable"
+          id="sectionTable">
+
+          <thead>
+
+            <tr>
+
+              <th>
+                Section
+              </th>
+
+              <th>
+                AM Present
+              </th>
+
+              <th>
+                AM Late
+              </th>
+
+              <th>
+                AM Absent
+              </th>
+
+              <th>
+                PM Present
+              </th>
+
+              <th>
+                PM Late
+              </th>
+
+              <th>
+                PM Absent
+              </th>
+
+            </tr>
+
+          </thead>
+
+          <tbody id="sectionAttendanceBody">
+
+            <tr>
+
+              <td colspan="7">
+                Loading attendance...
+              </td>
+
+            </tr>
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+
+      <div
+        id="dashboardStatus"
+        class="dashboardStatus">
+
+        Attendance data loading...
+
+      </div>
+
     </div>
 
 
@@ -1120,6 +1430,7 @@ let scanner = null;
 
 let scanningLocked = false;
 
+let attendanceTimer = null;
 
 
 /* =========================
@@ -1165,6 +1476,62 @@ const timeText =
 const readyMessage =
   document.getElementById("readyMessage");
 
+const schoolAttendanceBody =
+  document.getElementById(
+    "schoolAttendanceBody"
+  );
+
+const sectionAttendanceBody =
+  document.getElementById(
+    "sectionAttendanceBody"
+  );
+
+const dashboardStatus =
+  document.getElementById(
+    "dashboardStatus"
+  );
+
+
+/* =========================
+   VOICE
+========================= */
+
+function speak(text) {
+
+  try {
+
+    if (
+      !("speechSynthesis" in window)
+    ) {
+      return;
+    }
+
+    window.speechSynthesis.cancel();
+
+    const message =
+      new SpeechSynthesisUtterance(
+        text
+      );
+
+    message.rate = 1.15;
+
+    message.pitch = 1.0;
+
+    message.volume = 1.0;
+
+    window.speechSynthesis.speak(
+      message
+    );
+
+  } catch (error) {
+
+    console.log(
+      "Voice not available."
+    );
+
+  }
+
+}
 
 
 /* =========================
@@ -1200,7 +1567,6 @@ togglePassword.addEventListener(
 );
 
 
-
 /* =========================
    ENTER KEY
 ========================= */
@@ -1217,7 +1583,6 @@ deviceInput.addEventListener(
 
   }
 );
-
 
 
 /* =========================
@@ -1281,6 +1646,10 @@ startButton.addEventListener(
         loginMessage.style.color =
           "#b42318";
 
+        speak(
+          "Invalid device"
+        );
+
         return;
       }
 
@@ -1299,6 +1668,27 @@ startButton.addEventListener(
       startCamera();
 
 
+      /* LOAD ATTENDANCE */
+
+      loadAttendance();
+
+
+      /*
+        Refresh attendance every
+        5 seconds.
+      */
+
+      if (!attendanceTimer) {
+
+        attendanceTimer =
+          setInterval(
+            loadAttendance,
+            5000
+          );
+
+      }
+
+
     } catch (error) {
 
       loginMessage.textContent =
@@ -1311,7 +1701,6 @@ startButton.addEventListener(
 
   }
 );
-
 
 
 /* =========================
@@ -1423,7 +1812,6 @@ function startCamera() {
 }
 
 
-
 /* =========================
    QR SCAN
 ========================= */
@@ -1433,8 +1821,6 @@ async function onScanSuccess(
 ) {
 
 
-  /* DO NOT ACCEPT ANOTHER QR
-     WHILE PROCESSING OR DISPLAYING */
   if (scanningLocked) {
     return;
   }
@@ -1469,7 +1855,32 @@ async function onScanSuccess(
 
   if (!lrn) {
 
-    scanningLocked = false;
+    speak(
+      "Invalid QR"
+    );
+
+    readyMessage.textContent =
+      "INVALID QR CODE";
+
+    readyMessage.style.color =
+      "#b42318";
+
+
+    setTimeout(
+      function() {
+
+        readyMessage.textContent =
+          "READY — SCAN QR CODE";
+
+        readyMessage.style.color =
+          "#12618a";
+
+        scanningLocked =
+          false;
+
+      },
+      2000
+    );
 
     return;
 
@@ -1477,8 +1888,7 @@ async function onScanSuccess(
 
 
   /* =====================
-     SHOW LARGE PROCESSING
-     INSIDE CAMERA
+     PROCESSING
   ====================== */
 
   processingOverlay.style.display =
@@ -1492,6 +1902,11 @@ async function onScanSuccess(
 
   readyMessage.style.color =
     "#12618a";
+
+
+  speak(
+    "Processing"
+  );
 
 
   try {
@@ -1522,20 +1937,28 @@ async function onScanSuccess(
       await response.json();
 
 
-    /* PROCESSING FINISHED */
-
     processingOverlay.style.display =
       "none";
 
 
+    /* =====================
+       INVALID / FAILED
+    ====================== */
+
     if (!data.success) {
+
+      speak(
+        "Invalid QR"
+      );
+
 
       readyMessage.textContent =
         data.message ||
-        "SCAN FAILED";
+        "INVALID QR CODE";
 
       readyMessage.style.color =
         "#b42318";
+
 
       setTimeout(
         function() {
@@ -1553,13 +1976,14 @@ async function onScanSuccess(
         2000
       );
 
+
       return;
 
     }
 
 
     /* =====================
-       DISPLAY STUDENT RESULT
+       STUDENT RESULT
     ====================== */
 
     studentName.textContent =
@@ -1593,12 +2017,70 @@ async function onScanSuccess(
       "#16734a";
 
 
-    /* SOUND */
+    /* =====================
+       VOICE
+    ====================== */
+
+    const event =
+      String(
+        data.event || ""
+      ).toUpperCase();
+
+
+    const status =
+      String(
+        data.status ||
+        data.late ||
+        ""
+      ).toUpperCase();
+
+
+    const isLate =
+      status === "LATE" ||
+      data.late === true;
+
+
+    if (isLate) {
+
+      speak(
+        "Late. Time In recorded"
+      );
+
+    } else if (
+      event === "TIME IN"
+    ) {
+
+      speak(
+        "Time In recorded"
+      );
+
+    } else if (
+      event === "TIME OUT"
+    ) {
+
+      speak(
+        "Time Out recorded"
+      );
+
+    } else {
+
+      speak(
+        "Recorded"
+      );
+
+    }
+
+
+    /* =====================
+       BEEP
+    ====================== */
 
     playBeep();
 
 
-    /* VIBRATION */
+    /* =====================
+       VIBRATION
+    ====================== */
 
     if (
       navigator.vibrate
@@ -1612,7 +2094,18 @@ async function onScanSuccess(
 
 
     /* =====================
-       RESULT FOR 5 SECONDS
+       REFRESH ATTENDANCE
+       AFTER SCAN
+    ====================== */
+
+    setTimeout(
+      loadAttendance,
+      500
+    );
+
+
+    /* =====================
+       RESULT 5 SECONDS
     ====================== */
 
     setTimeout(
@@ -1641,19 +2134,14 @@ async function onScanSuccess(
   } catch (error) {
 
 
-    /*
-      Hide processing overlay
-      after request finishes.
-    */
-
     processingOverlay.style.display =
       "none";
 
 
     /*
-      If browser cannot read
-      the response, do not show
-      a false "NO INTERNET".
+      Important:
+      Do not falsely say
+      "NO INTERNET".
     */
 
     readyMessage.textContent =
@@ -1685,7 +2173,6 @@ async function onScanSuccess(
 }
 
 
-
 /* =========================
    QR FAILURE
 ========================= */
@@ -1699,6 +2186,264 @@ function onScanFailure(error) {
 
 }
 
+
+/* =========================
+   LOAD ATTENDANCE
+========================= */
+
+async function loadAttendance() {
+
+  try {
+
+    const response =
+      await fetch(
+
+        API_URL +
+        "?counts=1" +
+        "&_=" +
+        Date.now(),
+
+        {
+          method: "GET",
+          cache: "no-store"
+        }
+
+      );
+
+
+    const data =
+      await response.json();
+
+
+    if (!data.success) {
+
+      dashboardStatus.textContent =
+        "Attendance data unavailable.";
+
+      return;
+
+    }
+
+
+    updateSchoolAttendance(
+      data.school
+    );
+
+
+    updateSectionAttendance(
+      data.sections
+    );
+
+
+    dashboardStatus.textContent =
+      "Updated: " +
+      data.date +
+      " • Live attendance";
+
+
+  } catch (error) {
+
+    dashboardStatus.textContent =
+      "Attendance update waiting...";
+
+    console.log(
+      "Attendance update error:",
+      error
+    );
+
+  }
+
+}
+
+
+/* =========================
+   WHOLE SCHOOL TABLE
+========================= */
+
+function updateSchoolAttendance(
+  school
+) {
+
+  if (!school) {
+    return;
+  }
+
+
+  schoolAttendanceBody.innerHTML = "";
+
+
+  const morningRow =
+    document.createElement(
+      "tr"
+    );
+
+
+  morningRow.innerHTML =
+    "<td>Morning</td>" +
+    "<td>" +
+    school.morningPresent +
+    "</td>" +
+    "<td>" +
+    school.morningLate +
+    "</td>" +
+    "<td>" +
+    school.morningAbsent +
+    "</td>";
+
+
+  schoolAttendanceBody.appendChild(
+    morningRow
+  );
+
+
+  const afternoonRow =
+    document.createElement(
+      "tr"
+    );
+
+
+  afternoonRow.innerHTML =
+    "<td>Afternoon</td>" +
+    "<td>" +
+    school.afternoonPresent +
+    "</td>" +
+    "<td>" +
+    school.afternoonLate +
+    "</td>" +
+    "<td>" +
+    school.afternoonAbsent +
+    "</td>";
+
+
+  schoolAttendanceBody.appendChild(
+    afternoonRow
+  );
+
+}
+
+
+/* =========================
+   SECTION TABLE
+========================= */
+
+function updateSectionAttendance(
+  sections
+) {
+
+  sectionAttendanceBody.innerHTML =
+    "";
+
+
+  if (
+    !Array.isArray(sections) ||
+    sections.length === 0
+  ) {
+
+    const row =
+      document.createElement(
+        "tr"
+      );
+
+
+    row.innerHTML =
+      '<td colspan="7">' +
+      "No section data available." +
+      "</td>";
+
+
+    sectionAttendanceBody.appendChild(
+      row
+    );
+
+
+    return;
+
+  }
+
+
+  sections.forEach(
+    function(item) {
+
+      const row =
+        document.createElement(
+          "tr"
+        );
+
+
+      row.innerHTML =
+
+        "<td>" +
+        escapeHtml(
+          item.section
+        ) +
+        "</td>" +
+
+        "<td>" +
+        item.morningPresent +
+        "</td>" +
+
+        "<td>" +
+        item.morningLate +
+        "</td>" +
+
+        "<td>" +
+        item.morningAbsent +
+        "</td>" +
+
+        "<td>" +
+        item.afternoonPresent +
+        "</td>" +
+
+        "<td>" +
+        item.afternoonLate +
+        "</td>" +
+
+        "<td>" +
+        item.afternoonAbsent +
+        "</td>";
+
+
+      sectionAttendanceBody.appendChild(
+        row
+      );
+
+    }
+  );
+
+}
+
+
+/* =========================
+   HTML SAFETY
+========================= */
+
+function escapeHtml(
+  value
+) {
+
+  return String(value)
+    .replace(
+      /&/g,
+      "&amp;"
+    )
+    .replace(
+      /</g,
+      "&lt;"
+    )
+    .replace(
+      />/g,
+      "&gt;"
+    )
+    .replace(
+      /"/g,
+      "&quot;"
+    )
+    .replace(
+      /'/g,
+      "&#039;"
+    );
+
+}
 
 
 /* =========================
