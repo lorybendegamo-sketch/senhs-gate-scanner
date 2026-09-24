@@ -477,11 +477,6 @@
     }
 
 
-    /*
-      html5-qrcode creates its own video
-      and scanner UI.
-    */
-
     #reader video {
 
       width: 100% !important;
@@ -539,7 +534,7 @@
 
 
 
-/* =========================
+    /* =========================
        PROCESSING OVERLAY
        ========================= */
 
@@ -893,19 +888,16 @@
 
 
     .present {
-
       color: #15803d;
     }
 
 
     .late {
-
       color: #ca8a04;
     }
 
 
     .absent {
-
       color: #dc2626;
     }
 
@@ -989,7 +981,6 @@
 
 
     .sessionRow:last-child {
-
       border-bottom: 0;
     }
 
@@ -1955,17 +1946,10 @@
       "click",
       async function () {
 
-
-        /* USER GESTURE:
-           unlock speech/audio
-        */
-
         unlockAudio();
-
 
         const key =
           deviceInput.value.trim();
-
 
         if (!key) {
 
@@ -1984,31 +1968,101 @@
         startButton.disabled =
           true;
 
-
         loginMessage.textContent =
           "Checking device...";
 
 
         try {
 
+          const requestUrl =
+            API_URL +
+            "?device=" +
+            encodeURIComponent(key) +
+            "&format=json&_=" +
+            Date.now();
+
+
+          console.log(
+            "DEVICE SENT:",
+            key
+          );
+
+
+          console.log(
+            "REQUEST URL:",
+            requestUrl
+          );
+
 
           const response =
             await fetch(
-              API_URL +
-              "?device=" +
-              encodeURIComponent(
-                key
-              ) +
-              "&format=json",
+              requestUrl,
               {
                 method: "GET",
-                cache: "no-store"
+                cache: "no-store",
+                redirect: "follow"
               }
             );
 
 
-          const result =
-            await response.json();
+          if (!response.ok) {
+
+            throw new Error(
+              "Server HTTP " +
+              response.status
+            );
+
+          }
+
+
+          const responseText =
+            await response.text();
+
+
+          console.log(
+            "RAW SERVER RESPONSE:",
+            responseText
+          );
+
+
+          let result;
+
+
+          try {
+
+            result =
+              JSON.parse(
+                responseText
+              );
+
+          } catch (jsonError) {
+
+            console.error(
+              "JSON PARSE ERROR:",
+              jsonError
+            );
+
+
+            loginMessage.textContent =
+              "Server response error.";
+
+            speak(
+              "Server response error."
+            );
+
+
+            startButton.disabled =
+              false;
+
+            return;
+
+          }
+
+
+          console.log(
+            "SERVER RESULT:",
+            result
+          );
 
 
           if (
@@ -2016,12 +2070,33 @@
             result.authorized !== true
           ) {
 
-            throw new Error(
-              "Unauthorized device"
+            console.log(
+              "AUTHORIZED:",
+              result
+                ? result.authorized
+                : "NO RESULT"
             );
+
+
+            loginMessage.textContent =
+              "Device was not authorized.";
+
+            speak(
+              "Device was not authorized."
+            );
+
+
+            startButton.disabled =
+              false;
+
+            return;
 
           }
 
+
+          /* =========================
+             DEVICE AUTHORIZED
+             ========================= */
 
           authorizedDevice =
             key;
@@ -2070,16 +2145,18 @@
         } catch (error) {
 
           console.error(
+            "DEVICE LOGIN ERROR:",
             error
           );
 
 
           loginMessage.textContent =
-            "Invalid device code or connection error.";
+            "Connection error: " +
+            error.message;
 
 
           speak(
-            "Invalid device."
+            "Connection error."
           );
 
 
@@ -2431,11 +2508,6 @@
           ).trim();
 
 
-        /*
-          QR contains the complete
-          Apps Script URL.
-        */
-
         if (
           text.includes(
             "script.google.com"
@@ -2467,10 +2539,6 @@
         }
 
 
-        /*
-          QR contains only LRN.
-        */
-
         if (
           /^[0-9]{6,20}$/.test(
             text
@@ -2481,11 +2549,6 @@
 
         }
 
-
-        /*
-          Try to find lrn=
-          anywhere in the QR text.
-        */
 
         const match =
           text.match(
