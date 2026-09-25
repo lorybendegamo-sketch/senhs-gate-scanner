@@ -428,51 +428,70 @@
 
   <div class="container">
 
-    <!-- ==================================================
-         PAGE 1 — DEVICE CODE
-         ================================================== -->
+<!-- ==================================================
+     PAGE 1 — DEVICE CODE
+     ================================================== -->
 
-    <div id="devicePage">
+<div id="devicePage">
 
-      <div class="device-watermark">
-        SENHS
-      </div>
+  <div class="device-watermark">
+    SENHS
+  </div>
 
-      <div class="device-content">
+  <div class="device-content">
 
-        <div class="school-name">
-          SAN ESTEBAN NATIONAL HIGH SCHOOL
-        </div>
+    <div class="school-name">
+      SAN ESTEBAN NATIONAL HIGH SCHOOL
+    </div>
 
-        <div class="gate-title">
-          GATE SCANNER
-        </div>
+    <div class="gate-title">
+      GATE SCANNER
+    </div>
 
-        <div class="subtitle">
-          Authorized Gate Device
-        </div>
+    <div class="subtitle">
+      Authorized Gate Device
+    </div>
 
-        <label class="device-label" for="deviceCode">
-          Enter Device Code
-        </label>
+    <label
+      class="device-label"
+      for="deviceCode"
+    >
+      Enter Device Code
+    </label>
 
-        <input
-          id="deviceCode"
-          type="password"
-          placeholder="Enter Device Code"
-          autocomplete="off"
-        >
 
-        <button id="continueBtn">
-          CONTINUE
-        </button>
+    <!-- DEVICE CODE WITH SHOW/HIDE -->
 
-        <div id="deviceMessage"></div>
+    <div class="device-code-wrapper">
 
-      </div>
+      <input
+        id="deviceCode"
+        type="password"
+        placeholder="Enter Device Code"
+        autocomplete="off"
+      >
+
+      <button
+        id="toggleDeviceCode"
+        type="button"
+        aria-label="Show device code"
+        title="Show / Hide Device Code"
+      >
+        👁️
+      </button>
 
     </div>
 
+
+    <button id="continueBtn">
+      CONTINUE
+    </button>
+
+    <div id="deviceMessage"></div>
+
+  </div>
+
+</div>
 
     <!-- ==================================================
          PAGE 2 — CAMERA SCANNER
@@ -588,38 +607,85 @@
   let callbackCounter = 0;
 
 
-  /* =====================================================
-     ELEMENTS
-     ===================================================== */
+/* =====================================================
+   ELEMENTS
+   ===================================================== */
 
-  const devicePage =
-    document.getElementById("devicePage");
+const devicePage =
+  document.getElementById("devicePage");
 
-  const scannerPage =
-    document.getElementById("scannerPage");
+const scannerPage =
+  document.getElementById("scannerPage");
 
-  const deviceCode =
-    document.getElementById("deviceCode");
+const deviceCode =
+  document.getElementById("deviceCode");
 
-  const continueBtn =
-    document.getElementById("continueBtn");
+const continueBtn =
+  document.getElementById("continueBtn");
 
-  const deviceMessage =
-    document.getElementById("deviceMessage");
+const toggleDeviceCode =
+  document.getElementById("toggleDeviceCode");
 
-  const switchCameraBtn =
-    document.getElementById("switchCameraBtn");
+const deviceMessage =
+  document.getElementById("deviceMessage");
 
-  const scanOverlay =
-    document.getElementById("scanOverlay");
+const switchCameraBtn =
+  document.getElementById("switchCameraBtn");
 
-  const overlayContent =
-    document.getElementById("overlayContent");
+const scanOverlay =
+  document.getElementById("scanOverlay");
 
-  const readyBar =
-    document.getElementById("readyBar");
+const overlayContent =
+  document.getElementById("overlayContent");
+
+const readyBar =
+  document.getElementById("readyBar");
 
 
+/* =====================================================
+   DEVICE CODE SHOW / HIDE
+   ===================================================== */
+
+if (toggleDeviceCode) {
+
+  toggleDeviceCode.addEventListener(
+    "click",
+    function() {
+
+      if (deviceCode.type === "password") {
+
+        deviceCode.type =
+          "text";
+
+        toggleDeviceCode.textContent =
+          "🙈";
+
+        toggleDeviceCode.setAttribute(
+          "aria-label",
+          "Hide device code"
+        );
+
+      } else {
+
+        deviceCode.type =
+          "password";
+
+        toggleDeviceCode.textContent =
+          "👁️";
+
+        toggleDeviceCode.setAttribute(
+          "aria-label",
+          "Show device code"
+        );
+
+      }
+
+    }
+  );
+
+}
+
+  
   /* =====================================================
      BEEP SOUND
      ===================================================== */
