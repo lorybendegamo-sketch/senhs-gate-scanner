@@ -1069,145 +1069,145 @@
      ===================================================== */
 
   async function onQrDetected(
-    decodedText
-  ) {
+  decodedText
+) {
 
-    /*
-     * Prevent multiple scans
-     */
-
-    if (processing) {
-      return;
-    }
-
-
-    processing =
-      true;
-
-
-    /*
-     * FIRST BEEP
-     * QR detected
-     */
-
-    beep(
-      1000,
-      130
-    );
-
-
-    /*
-     * STOP SCANNING
-     */
-
-    try {
-
-      if (
-        html5QrCode &&
-        scannerRunning
-      ) {
-
-        await html5QrCode.pause(
-          true
-        );
-
-      }
-
-    } catch (error) {
-
-      console.log(
-        "Pause error:",
-        error
-      );
-    }
-
-
-    readyBar.textContent =
-      "PROCESSING...";
-
-    readyBar.style.color =
-      "#1267a5";
-
-
-    /*
-     * PROCESSING OVERLAY
-     */
-
-    showProcessing();
-
-
-    /*
-     * SEND QR VALUE TO SERVER
-     */
-
-    const lrn =
-      String(decodedText)
-        .trim();
-
-
-    try {
-
-      const requestUrl =
-        APPS_SCRIPT_URL +
-        "?lrn=" +
-        encodeURIComponent(lrn) +
-        "&device=" +
-        encodeURIComponent(deviceKey);
-
-
-      const result =
-        await jsonpRequest(
-          requestUrl
-        );
-
-
-      /*
-       * SHOW RESULT
-       */
-
-      showResult(
-        result
-      );
-
-
-      /*
-       * SECOND BEEP
-       * Result successfully presented
-       */
-
-      if (
-        result &&
-        result.success
-      ) {
-
-        beep(
-          1400,
-          180
-        );
-      }
-
-
-      /*
-       * RESULT STAYS ON SCREEN
-       * No 5-second timer.
-       *
-       * User taps the result to continue.
-       */
-
-    } catch (error) {
-
-      showResult({
-
-        success: false,
-
-        message:
-          error.message ||
-          "Unable to connect to server."
-
-      });
-    }
+  if (processing) {
+    return;
   }
 
+  processing = true;
+
+  beep(
+    1000,
+    130
+  );
+
+  try {
+
+    if (
+      html5QrCode &&
+      scannerRunning
+    ) {
+
+      await html5QrCode.pause(true);
+
+    }
+
+  } catch (error) {
+
+    console.log(
+      "Pause error:",
+      error
+    );
+  }
+
+  readyBar.textContent =
+    "PROCESSING...";
+
+  readyBar.style.color =
+    "#1267a5";
+
+  showProcessing();
+
+  /*
+   * GET LRN FROM QR
+   */
+
+  let lrn =
+    String(decodedText || "").trim();
+
+  /*
+   * If QR contains a URL,
+   * extract LRN from ?lrn=
+   * or ?id=
+   */
+
+  try {
+
+    if (
+      lrn.startsWith("http://") ||
+      lrn.startsWith("https://")
+    ) {
+
+      const qrUrl =
+        new URL(lrn);
+
+      const urlLrn =
+        qrUrl.searchParams.get("lrn");
+
+      const urlId =
+        qrUrl.searchParams.get("id");
+
+      if (urlLrn) {
+
+        lrn =
+          urlLrn.trim();
+
+      } else if (urlId) {
+
+        lrn =
+          urlId.trim();
+      }
+    }
+
+  } catch (error) {
+
+    console.log(
+      "QR URL parsing skipped:",
+      error
+    );
+  }
+
+  lrn =
+    lrn.trim();
+
+  /*
+   * SEND LRN TO SERVER
+   */
+
+  try {
+
+    const requestUrl =
+      APPS_SCRIPT_URL +
+      "?lrn=" +
+      encodeURIComponent(lrn) +
+      "&device=" +
+      encodeURIComponent(deviceKey);
+
+    const result =
+      await jsonpRequest(
+        requestUrl
+      );
+
+    showResult(
+      result
+    );
+
+    if (
+      result &&
+      result.success
+    ) {
+
+      beep(
+        1400,
+        180
+      );
+    }
+
+  } catch (error) {
+
+    showResult({
+
+      success: false,
+
+      message:
+        error.message ||
+        "Unable to connect to server."
+
+    });
+  }
+}
 
   /* =====================================================
      PROCESSING OVERLAY
