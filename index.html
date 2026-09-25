@@ -1320,67 +1320,46 @@
   }
 
 
-  /* =====================================================
-     START SELECTED CAMERA
-     ===================================================== */
+/* =====================================================
+   START SELECTED CAMERA
+   ===================================================== */
 
-  async function startSelectedCamera() {
+async function startSelectedCamera() {
 
-    if (!html5QrCode) {
-      return;
-    }
+  if (!html5QrCode) {
+    return;
+  }
 
+  if (!cameras || cameras.length === 0) {
+    return;
+  }
 
-    if (
-      !cameras ||
-      cameras.length === 0
-    ) {
-      return;
-    }
+  const camera = cameras[currentCameraIndex];
 
+  if (!camera) {
+    return;
+  }
 
-    const camera =
-      cameras[
-        currentCameraIndex
-      ];
+  const cameraId = camera.id;
 
+  try {
 
-    if (!camera) {
-      return;
-    }
-
-
-    const cameraId =
-      camera.id;
-
+    /*
+     * IMPORTANT:
+     * Kapag running na ang scanner, huwag itong i-stop
+     * para lang mag-restart. Ito ang tumutulong na
+     * maiwasan ang paulit-ulit na camera permission request.
+     */
 
     if (scannerRunning) {
-
-      try {
-
-        await html5QrCode.stop();
-
-      } catch (error) {
-
-        console.log(
-          "Stop camera:",
-          error
-        );
-
-      }
-
-      scannerRunning =
-        false;
-
+      return;
     }
-
 
     await html5QrCode.start(
 
       cameraId,
 
       {
-
         fps: 10,
 
         qrbox:
@@ -1395,7 +1374,6 @@
                 viewfinderHeight
               ) * 0.68;
 
-
             return {
               width: size,
               height: size
@@ -1404,32 +1382,21 @@
           },
 
         aspectRatio: 1.0
-
       },
 
       onQrDetected,
 
       function(errorMessage) {
-
-        /*
-         * Normal QR scanning messages.
-         * Do not display them.
-         */
-
+        // Normal QR scanning errors.
+        // Huwag ipakita sa screen.
       }
 
     );
 
-
-    scannerRunning =
-      true;
-
-    processing =
-      false;
-
+    scannerRunning = true;
+    processing = false;
 
     hideOverlay();
-
 
     readyBar.textContent =
       "● READY TO SCAN";
@@ -1437,8 +1404,19 @@
     readyBar.style.color =
       "#16803c";
 
+  } catch (error) {
+
+    console.error(
+      "Camera start error:",
+      error
+    );
+
+    scannerRunning = false;
+
+    throw error;
   }
 
+}
 
   /* =====================================================
      QR DETECTED
@@ -1990,65 +1968,70 @@
 
   }
 
+/* =====================================================
+   RESUME SCANNER
+   ===================================================== */
 
-  /* =====================================================
-     RESUME SCANNER
-     ===================================================== */
+async function resumeScanner() {
 
-  async function resumeScanner() {
+  hideOverlay();
 
-    hideOverlay();
+  readyBar.textContent =
+    "● READY TO SCAN";
 
+  readyBar.style.color =
+    "#16803c";
 
-    readyBar.textContent =
-      "● READY TO SCAN";
+  processing = false;
 
-    readyBar.style.color =
-      "#16803c";
+  try {
 
+    if (
+      html5QrCode &&
+      scannerRunning
+    ) {
 
-    processing =
-      false;
+      /*
+       * Resume lamang.
+       * Hindi na magre-request ulit ng camera permission.
+       */
 
+      await html5QrCode.resume();
 
-    try {
+    } else {
 
-      if (
-        html5QrCode &&
-        scannerRunning
-      ) {
+      /*
+       * Start only when scanner is really stopped.
+       */
 
-        await html5QrCode.resume();
-
-      } else {
-
-        await startSelectedCamera();
-
-      }
-
-    } catch (error) {
-
-      console.error(
-        error
-      );
-
-
-      try {
-
-        await startSelectedCamera();
-
-      } catch (restartError) {
-
-        console.error(
-          restartError
-        );
-
-      }
+      await startSelectedCamera();
 
     }
 
+  } catch (error) {
+
+    console.error(
+      "Resume scanner error:",
+      error
+    );
+
+    scannerRunning = false;
+
+    readyBar.textContent =
+      "CAMERA ERROR";
+
+    readyBar.style.color =
+      "#b71c1c";
+
+    showOverlay(
+      "CAMERA ERROR",
+      "Unable to resume the camera. Please try again.",
+      "error"
+    );
+
   }
 
+}
 
   /* =====================================================
      HIDE OVERLAY
@@ -2066,72 +2049,117 @@
 
 
   /* =====================================================
-     CAMERA SWITCH
-     ===================================================== */
+   CAMERA SWITCH
+   ===================================================== */
 
-  switchCameraBtn.addEventListener(
-    "click",
-    async function() {
+switchCameraBtn.addEventListener(
+  "click",
+  async function() {
 
-      if (
-        processing ||
-        !cameras ||
-        cameras.length < 2
-      ) {
+    if (
+      processing ||
+      !cameras ||
+      cameras.length < 2 ||
+      !html5QrCode
+    ) {
+      return;
+    }
 
-        return;
+    processing = true;
+
+    switchCameraBtn.disabled = true;
+
+    readyBar.textContent =
+      "SWITCHING CAMERA...";
+
+    readyBar.style.color =
+      "#1267a5";
+
+
+    const previousCameraIndex =
+      currentCameraIndex;
+
+
+    try {
+
+      /*
+       * Stop the current scanner only for the
+       * purpose of changing the selected camera.
+       *
+       * The browser's camera permission remains
+       * granted for this website/device.
+       */
+
+      if (scannerRunning) {
+
+        try {
+
+          await html5QrCode.stop();
+
+        } catch (stopError) {
+
+          console.log(
+            "Camera stop:",
+            stopError
+          );
+
+        }
+
+        scannerRunning = false;
 
       }
 
 
-      processing =
-        true;
+      /*
+       * Move to the next available camera.
+       */
+
+      currentCameraIndex =
+        (
+          currentCameraIndex + 1
+        ) %
+        cameras.length;
 
 
-      switchCameraBtn.disabled =
-        true;
+      /*
+       * Start the newly selected camera.
+       *
+       * Since permission was already granted
+       * to this website, the browser should
+       * reuse the existing permission.
+       */
+
+      await startSelectedCamera();
 
 
       readyBar.textContent =
-        "SWITCHING CAMERA...";
+        "● READY TO SCAN";
 
       readyBar.style.color =
-        "#1267a5";
+        "#16803c";
+
+
+    } catch (error) {
+
+      console.error(
+        "Camera switch error:",
+        error
+      );
+
+
+      /*
+       * Return to the previous camera
+       * if the new camera cannot start.
+       */
+
+      currentCameraIndex =
+        previousCameraIndex;
+
+
+      scannerRunning = false;
 
 
       try {
-
-        if (
-          html5QrCode &&
-          scannerRunning
-        ) {
-
-          try {
-
-            await html5QrCode.stop();
-
-          } catch (stopError) {
-
-            console.log(
-              "Camera stop:",
-              stopError
-            );
-
-          }
-
-          scannerRunning =
-            false;
-
-        }
-
-
-        currentCameraIndex =
-          (
-            currentCameraIndex +
-            1
-          ) %
-          cameras.length;
-
 
         await startSelectedCamera();
 
@@ -2143,100 +2171,42 @@
           "#16803c";
 
 
-      } catch (error) {
+      } catch (recoverError) {
 
         console.error(
-          "Camera switch error:",
-          error
+          "Camera recovery error:",
+          recoverError
         );
 
 
-        scannerRunning =
-          false;
+        readyBar.textContent =
+          "CAMERA ERROR";
+
+        readyBar.style.color =
+          "#b71c1c";
 
 
-        try {
-
-          currentCameraIndex =
-            (
-              currentCameraIndex -
-              1 +
-              cameras.length
-            ) %
-            cameras.length;
-
-
-          await startSelectedCamera();
-
-
-        } catch (recoverError) {
-
-          console.error(
-            "Camera recovery error:",
-            recoverError
-          );
-
-
-          readyBar.textContent =
-            "CAMERA ERROR";
-
-          readyBar.style.color =
-            "#b71c1c";
-
-
-          showProcessing();
-
-
-          overlayContent.innerHTML =
-
-            '<div style="' +
-
-              'background:#7f0000;' +
-
-              'color:#ffffff;' +
-
-              'padding:30px 20px;' +
-
-              'border:3px solid #ffffff;' +
-
-              'border-radius:20px;' +
-
-              'font-family:Arial,sans-serif;' +
-
-              'text-align:center;' +
-
-            '">' +
-
-              '<div style="font-size:28px;font-weight:900;">' +
-
-                'CAMERA ERROR' +
-
-              '</div>' +
-
-              '<div style="font-size:18px;margin-top:15px;">' +
-
-                'Unable to switch camera. Please try again.' +
-
-              '</div>' +
-
-            '</div>';
-
-        }
-
-      } finally {
-
-        processing =
-          false;
-
-        switchCameraBtn.disabled =
-          false;
+        showOverlay(
+          "CAMERA ERROR",
+          "Unable to switch camera. Please try again.",
+          "error"
+        );
 
       }
 
+    } finally {
+
+      processing = false;
+
+      switchCameraBtn.disabled =
+        false;
+
     }
-  );
 
+  }
+);
 
+  
   /* =====================================================
      CONTINUE BUTTON
      ===================================================== */
