@@ -1235,238 +1235,172 @@
      RESULT OVERLAY
      ===================================================== */
 
-function showResult(
-  result
-) {
-
-  /*
-   * Clear previous automatic timer
-   */
+function showResult(result) {
 
   if (showResult.timer) {
-
-    clearTimeout(
-      showResult.timer
-    );
-
-    showResult.timer =
-      null;
+    clearTimeout(showResult.timer);
+    showResult.timer = null;
   }
 
+  scanOverlay.style.display = "flex";
 
-  scanOverlay.style.display =
-    "flex";
-
-
-  if (
-    result &&
-    result.success
-  ) {
+  if (result && result.success) {
 
     const name =
-      result.name ||
-      "Student";
+      result.name || "Student";
 
     const section =
-      result.section ||
-      "";
+      result.section || "";
 
     const event =
-      result.event ||
-      "";
-
-    const transaction =
-      result.transaction ||
-      "";
+      result.event || "";
 
     const status =
-      result.status ||
-      "";
+      result.status || "";
 
+    const isLate =
+      status === "LATE";
+
+    /*
+     * BLUE = NORMAL
+     * RED = LATE
+     */
+
+    scanOverlay.style.background =
+      isLate
+        ? "#c62828"
+        : "#1267a5";
 
     let html =
 
-      '<div class="result-title result-success">' +
-        '✓ SCAN RECORDED' +
-      '</div>' +
+      '<div style="' +
+        'text-align:center;' +
+        'width:100%;' +
+        'color:white;' +
+      '">' +
 
-      '<div class="student-name">' +
-        escapeHtml(name) +
-      '</div>' +
+        '<div style="' +
+          'font-size:clamp(24px,4vw,48px);' +
+          'font-weight:800;' +
+          'margin-bottom:25px;' +
+        '">' +
+          'SAN ESTEBAN NATIONAL HIGH SCHOOL' +
+        '</div>' +
 
-      '<div class="student-section">' +
-        escapeHtml(section) +
-      '</div>' +
+        '<div style="' +
+          'font-size:clamp(18px,3vw,32px);' +
+          'font-weight:600;' +
+          'margin-bottom:20px;' +
+        '">' +
+          'SCAN RESULT' +
+        '</div>' +
 
-      '<div class="event-box">' +
-        escapeHtml(event) +
-      '</div>' +
+        '<div style="' +
+          'font-size:clamp(36px,7vw,82px);' +
+          'font-weight:900;' +
+          'line-height:1.1;' +
+          'margin:20px 0;' +
+        '">' +
+          escapeHtml(name) +
+        '</div>' +
 
-      '<div class="transaction">' +
-        'Transaction #' +
-        escapeHtml(String(transaction)) +
-      '</div>';
+        '<div style="' +
+          'font-size:clamp(22px,4vw,42px);' +
+          'font-weight:600;' +
+          'margin-bottom:30px;' +
+        '">' +
+          escapeHtml(section) +
+        '</div>' +
 
+        '<div style="' +
+          'font-size:clamp(30px,5vw,56px);' +
+          'font-weight:900;' +
+          'padding:15px 30px;' +
+          'border:3px solid white;' +
+          'border-radius:15px;' +
+          'display:inline-block;' +
+        '">' +
+          escapeHtml(event) +
+        '</div>';
 
-    if (
-      status === "LATE"
-    ) {
+    if (isLate) {
 
       html +=
 
-        '<div class="late-box">' +
+        '<div style="' +
+          'font-size:clamp(30px,5vw,58px);' +
+          'font-weight:900;' +
+          'margin-top:25px;' +
+        '">' +
           'LATE' +
         '</div>';
     }
 
+    html += '</div>';
 
-    if (result.sms) {
-
-      html +=
-
-        '<div class="sms-status">' +
-          'SMS: ' +
-          escapeHtml(
-            String(result.sms)
-          ) +
-        '</div>';
-    }
-
-
-    html +=
-
-      '<div class="processing-text" style="margin-top:18px;">' +
-        'Tap anywhere or wait 5 seconds' +
-      '</div>';
-
-
-    overlayContent.innerHTML =
-      html;
-
-
-    /*
-     * Tap = scan immediately
-     */
-
-    scanOverlay.onclick =
-      function() {
-
-        if (showResult.timer) {
-
-          clearTimeout(
-            showResult.timer
-          );
-
-          showResult.timer =
-            null;
-        }
-
-        scanOverlay.onclick =
-          null;
-
-        resumeScanner();
-      };
-
-
-    /*
-     * Automatic scan after 5 seconds
-     */
-
-    showResult.timer =
-      setTimeout(
-        function() {
-
-          showResult.timer =
-            null;
-
-          scanOverlay.onclick =
-            null;
-
-          resumeScanner();
-
-        },
-        5000
-      );
-
+    overlayContent.innerHTML = html;
 
   } else {
 
+    scanOverlay.style.background =
+      "#c62828";
+
     const message =
-      result &&
-      result.message
+      result && result.message
         ? result.message
         : "Scan failed.";
 
-
     overlayContent.innerHTML =
 
-      '<div class="result-title result-error">' +
-        '✕ SCAN NOT RECORDED' +
-      '</div>' +
+      '<div style="' +
+        'text-align:center;' +
+        'width:100%;' +
+        'color:white;' +
+      '">' +
 
-      '<div class="processing-text">' +
-        escapeHtml(message) +
-      '</div>' +
+        '<div style="' +
+          'font-size:clamp(24px,4vw,48px);' +
+          'font-weight:800;' +
+          'margin-bottom:30px;' +
+        '">' +
+          'SAN ESTEBAN NATIONAL HIGH SCHOOL' +
+        '</div>' +
 
-      '<div class="processing-text" style="margin-top:18px;">' +
-        'Tap anywhere or wait 5 seconds' +
+        '<div style="' +
+          'font-size:clamp(30px,5vw,58px);' +
+          'font-weight:900;' +
+          'margin-bottom:25px;' +
+        '">' +
+          'SCAN NOT RECORDED' +
+        '</div>' +
+
+        '<div style="' +
+          'font-size:clamp(20px,3vw,36px);' +
+          'font-weight:600;' +
+        '">' +
+          escapeHtml(message) +
+        '</div>' +
+
       '</div>';
 
-
-    /*
-     * Error beep
-     */
-
-    beep(
-      600,
-      180
-    );
-
-
-    /*
-     * Tap = scan immediately
-     */
-
-    scanOverlay.onclick =
-      function() {
-
-        if (showResult.timer) {
-
-          clearTimeout(
-            showResult.timer
-          );
-
-          showResult.timer =
-            null;
-        }
-
-        scanOverlay.onclick =
-          null;
-
-        resumeScanner();
-      };
-
-
-    /*
-     * Automatic scan after 5 seconds
-     */
-
-    showResult.timer =
-      setTimeout(
-        function() {
-
-          showResult.timer =
-            null;
-
-          scanOverlay.onclick =
-            null;
-
-          resumeScanner();
-
-        },
-        5000
-      );
+    beep(600, 180);
   }
+
+  /*
+   * AUTOMATICALLY RETURN TO SCANNER
+   * AFTER 5 SECONDS
+   */
+
+  showResult.timer =
+    setTimeout(function() {
+
+      showResult.timer = null;
+
+      scanOverlay.onclick = null;
+
+      resumeScanner();
+
+    }, 5000);
 }
 
 
