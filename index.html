@@ -1,14 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
 
   <title>SENHS Gate Scanner</title>
 
-  <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+  <script
+    src="https://unpkg.com/html5-qrcode"
+    type="text/javascript"
+  ></script>
 
   <style>
+
     * {
       box-sizing: border-box;
     }
@@ -33,6 +42,7 @@
       max-width: 620px;
       position: relative;
     }
+
 
     /* =========================================
        PAGE 1
@@ -95,9 +105,21 @@
       color: #345;
     }
 
+
+    /* =========================================
+       DEVICE CODE
+       ========================================= */
+
+    .device-code-wrapper {
+      position: relative;
+      width: 100%;
+      margin: 0 auto;
+    }
+
     #deviceCode {
       width: 100%;
       padding: 17px;
+      padding-right: 60px;
       font-size: 18px;
       border: 2px solid #ccd8e5;
       border-radius: 14px;
@@ -109,6 +131,47 @@
     #deviceCode:focus {
       border-color: #1677c8;
     }
+
+    #toggleDeviceCode {
+      position: absolute;
+
+      right: 6px;
+      top: 50%;
+
+      transform: translateY(-50%);
+
+      width: 46px;
+      height: 46px;
+
+      border: none;
+      border-radius: 10px;
+
+      background: transparent;
+
+      color: #222;
+
+      cursor: pointer;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      padding: 0;
+      margin: 0;
+
+      z-index: 10;
+    }
+
+    #toggleDeviceCode:hover {
+      background: rgba(0,0,0,0.06);
+    }
+
+    #toggleDeviceCode:active {
+      transform:
+        translateY(-50%)
+        scale(0.92);
+    }
+
 
     #continueBtn {
       width: 100%;
@@ -141,6 +204,7 @@
       color: #16803c;
     }
 
+
     /* =========================================
        PAGE 2
        ========================================= */
@@ -158,6 +222,7 @@
       box-shadow: 0 10px 35px rgba(0,0,0,0.20);
     }
 
+
     /* SENHS WATERMARK */
 
     .scanner-watermark {
@@ -172,6 +237,7 @@
       pointer-events: none;
       white-space: nowrap;
     }
+
 
     .scanner-header {
       position: relative;
@@ -195,6 +261,7 @@
       color: #111;
     }
 
+
     .camera-area {
       position: relative;
       background: #000;
@@ -211,6 +278,7 @@
       height: auto !important;
       display: block;
     }
+
 
     /* =========================================
        CAMERA SWITCH
@@ -245,6 +313,7 @@
       transform: scale(0.94);
     }
 
+
     /* =========================================
        STATUS BAR
        ========================================= */
@@ -263,6 +332,7 @@
       font-size: 17px;
       font-weight: 900;
     }
+
 
     /* =========================================
        OVERLAY
@@ -285,35 +355,37 @@
       backdrop-filter: blur(4px);
     }
 
-.overlay-box {
-  width: 100%;
-  max-width: 900px;
+    .overlay-box {
+      width: 100%;
+      max-width: 900px;
 
-  background: #0d47a1;
+      background: #0d47a1;
 
-  color: #ffffff;
+      color: #ffffff;
 
-  border-radius: 22px;
+      border-radius: 22px;
 
-  padding: 35px 25px;
+      padding: 35px 25px;
 
-  text-align: center;
+      text-align: center;
 
-  box-shadow: 0 15px 45px rgba(0,0,0,0.45);
+      box-shadow:
+        0 15px 45px
+        rgba(0,0,0,0.45);
 
-  border: 4px solid #ffffff;
+      border: 4px solid #ffffff;
 
-  box-sizing: border-box;
-}
+      box-sizing: border-box;
+    }
 
     .overlay-box.late {
-  background: #b71c1c;
-}
+      background: #b71c1c;
+    }
 
-.overlay-box * {
-  color: #ffffff;
-}
-    
+    .overlay-box * {
+      color: #ffffff;
+    }
+
     .processing-title {
       font-size: 27px;
       font-weight: 900;
@@ -325,6 +397,7 @@
       font-size: 15px;
       color: #667;
     }
+
 
     /* =========================================
        RESULT
@@ -390,266 +463,293 @@
       color: #555;
     }
 
+
     /* =========================================
        RESPONSIVE
        ========================================= */
 
-@media (max-width: 480px) {
+    @media (max-width: 480px) {
 
-  .page {
-    padding: 10px;
-  }
+      .page {
+        padding: 10px;
+      }
 
-  .school-name,
-  .scanner-school {
-    font-size: 17px;
-  }
+      .school-name,
+      .scanner-school {
+        font-size: 17px;
+      }
 
-  .gate-title,
-  .scanner-title {
-    font-size: 27px;
-  }
+      .gate-title,
+      .scanner-title {
+        font-size: 27px;
+      }
 
-  .camera-area,
-  #reader {
-    min-height: 350px;
-  }
+      .camera-area,
+      #reader {
+        min-height: 350px;
+      }
 
-  .scanner-watermark {
-    font-size: 110px;
-  }
-
-
-  /* =========================================
-     MOBILE DEVICE CODE
-     ========================================= */
-
-  .device-code-wrapper {
-    position: relative !important;
-
-    width: 100% !important;
-
-    max-width: 420px !important;
-
-    margin: 0 auto 18px auto !important;
-  }
+      .scanner-watermark {
+        font-size: 110px;
+      }
 
 
-  .device-code-wrapper #deviceCode {
-    width: 100% !important;
+      /* =========================================
+         MOBILE DEVICE CODE
+         ========================================= */
 
-    box-sizing: border-box !important;
+      .device-code-wrapper {
+        position: relative !important;
 
-    padding-right: 60px !important;
-  }
+        width: 100% !important;
 
+        max-width: 420px !important;
 
-  #toggleDeviceCode {
-    position: absolute !important;
+        margin: 0 auto 18px auto !important;
+      }
 
-    display: flex !important;
+      .device-code-wrapper #deviceCode {
+        width: 100% !important;
 
-    visibility: visible !important;
+        box-sizing: border-box !important;
 
-    opacity: 1 !important;
+        padding-right: 60px !important;
+      }
 
-    right: 6px !important;
+      #toggleDeviceCode {
+        position: absolute !important;
 
-    top: 50% !important;
+        display: flex !important;
 
-    transform: translateY(-50%) !important;
+        visibility: visible !important;
 
-    width: 46px !important;
+        opacity: 1 !important;
 
-    height: 46px !important;
+        right: 6px !important;
 
-    z-index: 999 !important;
+        top: 50% !important;
 
-    border: none !important;
+        transform:
+          translateY(-50%) !important;
 
-    background: transparent !important;
+        width: 46px !important;
 
-    color: #222 !important;
+        height: 46px !important;
 
-    font-size: 22px !important;
+        z-index: 999 !important;
 
-    align-items: center !important;
+        border: none !important;
 
-    justify-content: center !important;
+        background: transparent !important;
 
-    padding: 0 !important;
+        color: #222 !important;
 
-    margin: 0 !important;
+        align-items: center !important;
 
-    cursor: pointer !important;
-  }
+        justify-content: center !important;
 
-}
+        padding: 0 !important;
 
-<!-- ==================================================
-     PAGE 1 — DEVICE CODE
-     ================================================== -->
+        margin: 0 !important;
 
-<div id="devicePage">
+        cursor: pointer !important;
+      }
 
-  <div class="device-watermark">
-    SENHS
-  </div>
+    }
 
-  <div class="device-content">
+  </style>
 
-    <div class="school-name">
-      SAN ESTEBAN NATIONAL HIGH SCHOOL
-    </div>
-
-    <div class="gate-title">
-      GATE SCANNER
-    </div>
-
-    <div class="subtitle">
-      Authorized Gate Device
-    </div>
-
-    <label
-      class="device-label"
-      for="deviceCode"
-    >
-      Enter Device Code
-    </label>
+</head>
 
 
-    <!-- DEVICE CODE WITH SHOW/HIDE -->
+<body>
 
-    <div class="device-code-wrapper">
+  <div class="page">
 
-      <input
-        id="deviceCode"
-        type="password"
-        placeholder="Enter Device Code"
-        autocomplete="off"
-      >
-
-<button
-  id="toggleDeviceCode"
-  type="button"
-  aria-label="Show device code"
-  title="Show / Hide Device Code"
->
-  <svg
-    width="24"
-    height="24"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    stroke-width="2"
-    stroke-linecap="round"
-    stroke-linejoin="round"
-    aria-hidden="true"
-  >
-    <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"></path>
-    <circle cx="12" cy="12" r="3"></circle>
-  </svg>
-</button>
-
-    </div>
+    <div class="container">
 
 
-    <button id="continueBtn">
-      CONTINUE
-    </button>
+      <!-- ==================================================
+           PAGE 1 — DEVICE CODE
+           ================================================== -->
 
-    <div id="deviceMessage"></div>
+      <div id="devicePage">
 
-  </div>
-
-</div>
-
-    <!-- ==================================================
-         PAGE 2 — CAMERA SCANNER
-         ================================================== -->
-
-    <div id="scannerPage">
-
-      <div class="scanner-container">
-
-        <div class="scanner-watermark">
+        <div class="device-watermark">
           SENHS
         </div>
 
-        <!-- HEADER -->
+        <div class="device-content">
 
-        <div class="scanner-header">
-
-          <div class="scanner-school">
+          <div class="school-name">
             SAN ESTEBAN NATIONAL HIGH SCHOOL
           </div>
 
-          <div class="scanner-title">
+          <div class="gate-title">
             GATE SCANNER
           </div>
 
-        </div>
+          <div class="subtitle">
+            Authorized Gate Device
+          </div>
 
-
-        <!-- CAMERA -->
-
-        <div class="camera-area">
-
-          <div id="reader"></div>
-
-          <!-- SWITCH CAMERA -->
-
-          <button
-            id="switchCameraBtn"
-            title="Switch Camera"
-            aria-label="Switch Camera"
+          <label
+            class="device-label"
+            for="deviceCode"
           >
-            ↔
+            Enter Device Code
+          </label>
+
+
+          <!-- DEVICE CODE WITH SHOW/HIDE -->
+
+          <div class="device-code-wrapper">
+
+            <input
+              id="deviceCode"
+              type="password"
+              placeholder="Enter Device Code"
+              autocomplete="off"
+            >
+
+            <button
+              id="toggleDeviceCode"
+              type="button"
+              aria-label="Show device code"
+              title="Show / Hide Device Code"
+            >
+
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+
+                <path
+                  d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"
+                ></path>
+
+                <circle
+                  cx="12"
+                  cy="12"
+                  r="3"
+                ></circle>
+
+              </svg>
+
+            </button>
+
+          </div>
+
+
+          <button id="continueBtn">
+            CONTINUE
           </button>
 
+          <div id="deviceMessage"></div>
 
-          <!-- PROCESSING / RESULT OVERLAY -->
+        </div>
 
-          <div
-            id="scanOverlay"
-            class="scan-overlay"
-          >
+      </div>
+
+
+      <!-- ==================================================
+           PAGE 2 — CAMERA SCANNER
+           ================================================== -->
+
+      <div id="scannerPage">
+
+        <div class="scanner-container">
+
+          <div class="scanner-watermark">
+            SENHS
+          </div>
+
+
+          <!-- HEADER -->
+
+          <div class="scanner-header">
+
+            <div class="scanner-school">
+              SAN ESTEBAN NATIONAL HIGH SCHOOL
+            </div>
+
+            <div class="scanner-title">
+              GATE SCANNER
+            </div>
+
+          </div>
+
+
+          <!-- CAMERA -->
+
+          <div class="camera-area">
+
+            <div id="reader"></div>
+
+
+            <!-- SWITCH CAMERA -->
+
+            <button
+              id="switchCameraBtn"
+              title="Switch Camera"
+              aria-label="Switch Camera"
+              type="button"
+            >
+              ↔
+            </button>
+
+
+            <!-- PROCESSING / RESULT OVERLAY -->
 
             <div
-              id="overlayBox"
-              class="overlay-box"
+              id="scanOverlay"
+              class="scan-overlay"
             >
 
               <div
-                id="overlayContent"
-              ></div>
+                id="overlayBox"
+                class="overlay-box"
+              >
+
+                <div
+                  id="overlayContent"
+                ></div>
+
+              </div>
 
             </div>
 
           </div>
 
-        </div>
 
+          <!-- READY -->
 
-        <!-- READY -->
+          <div
+            id="readyBar"
+            class="ready-bar"
+          >
+            ● READY TO SCAN
+          </div>
 
-        <div
-          id="readyBar"
-          class="ready-bar"
-        >
-          ● READY TO SCAN
         </div>
 
       </div>
+
 
     </div>
 
   </div>
 
-</div>
-
 
 <script>
+
 
   /* =====================================================
      CONFIGURATION
@@ -678,86 +778,125 @@
   let callbackCounter = 0;
 
 
-/* =====================================================
-   ELEMENTS
-   ===================================================== */
+  /* =====================================================
+     ELEMENTS
+     ===================================================== */
 
-const devicePage =
-  document.getElementById("devicePage");
+  const devicePage =
+    document.getElementById(
+      "devicePage"
+    );
 
-const scannerPage =
-  document.getElementById("scannerPage");
+  const scannerPage =
+    document.getElementById(
+      "scannerPage"
+    );
 
-const deviceCode =
-  document.getElementById("deviceCode");
+  const deviceCode =
+    document.getElementById(
+      "deviceCode"
+    );
 
-const continueBtn =
-  document.getElementById("continueBtn");
+  const continueBtn =
+    document.getElementById(
+      "continueBtn"
+    );
 
-const toggleDeviceCode =
-  document.getElementById("toggleDeviceCode");
+  const toggleDeviceCode =
+    document.getElementById(
+      "toggleDeviceCode"
+    );
 
-const deviceMessage =
-  document.getElementById("deviceMessage");
+  const deviceMessage =
+    document.getElementById(
+      "deviceMessage"
+    );
 
-const switchCameraBtn =
-  document.getElementById("switchCameraBtn");
+  const switchCameraBtn =
+    document.getElementById(
+      "switchCameraBtn"
+    );
 
-const scanOverlay =
-  document.getElementById("scanOverlay");
+  const scanOverlay =
+    document.getElementById(
+      "scanOverlay"
+    );
 
-const overlayContent =
-  document.getElementById("overlayContent");
+  const overlayContent =
+    document.getElementById(
+      "overlayContent"
+    );
 
-const readyBar =
-  document.getElementById("readyBar");
+  const readyBar =
+    document.getElementById(
+      "readyBar"
+    );
 
 
-/* =====================================================
-   DEVICE CODE SHOW / HIDE
-   ===================================================== */
+  /* =====================================================
+     DEVICE CODE SHOW / HIDE
+     ===================================================== */
 
-toggleDeviceCode.addEventListener(
-  "click",
-  function() {
+  toggleDeviceCode.addEventListener(
+    "click",
+    function() {
 
-    if (deviceCode.type === "password") {
+      if (
+        deviceCode.type ===
+        "password"
+      ) {
 
-      deviceCode.type = "text";
+        deviceCode.type =
+          "text";
 
-      toggleDeviceCode.innerHTML =
-        '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
-        '<path d="M3 3l18 18"></path>' +
-        '<path d="M10.6 10.6a2 2 0 0 0 2.8 2.8"></path>' +
-        '<path d="M9.9 4.2A10.8 10.8 0 0 1 12 4c6.5 0 10 8 10 8a18.2 18.2 0 0 1-3.1 4.4"></path>' +
-        '<path d="M6.6 6.6C3.7 8.7 2 12 2 12s3.5 8 10 8a10.8 10.8 0 0 0 3.3-.5"></path>' +
-        '</svg>';
+        toggleDeviceCode.innerHTML =
 
-      toggleDeviceCode.setAttribute(
-        "aria-label",
-        "Hide device code"
-      );
+          '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
 
-    } else {
+          '<path d="M3 3l18 18"></path>' +
 
-      deviceCode.type = "password";
+          '<path d="M10.6 10.6a2 2 0 0 0 2.8 2.8"></path>' +
 
-      toggleDeviceCode.innerHTML =
-        '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
-        '<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"></path>' +
-        '<circle cx="12" cy="12" r="3"></circle>' +
-        '</svg>';
+          '<path d="M9.9 4.2A10.8 10.8 0 0 1 12 4c6.5 0 10 8 10 8a18.2 18.2 0 0 1-3.1 4.4"></path>' +
 
-      toggleDeviceCode.setAttribute(
-        "aria-label",
-        "Show device code"
-      );
+          '<path d="M6.6 6.6C3.7 8.7 2 12 2 12s3.5 8 10 8a10.8 10.8 0 0 0 3.3-.5"></path>' +
+
+          '</svg>';
+
+
+        toggleDeviceCode.setAttribute(
+          "aria-label",
+          "Hide device code"
+        );
+
+
+      } else {
+
+        deviceCode.type =
+          "password";
+
+        toggleDeviceCode.innerHTML =
+
+          '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
+
+          '<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"></path>' +
+
+          '<circle cx="12" cy="12" r="3"></circle>' +
+
+          '</svg>';
+
+
+        toggleDeviceCode.setAttribute(
+          "aria-label",
+          "Show device code"
+        );
+
+      }
 
     }
+  );
 
-  }
-);
-  
+
   /* =====================================================
      BEEP SOUND
      ===================================================== */
@@ -782,14 +921,18 @@ toggleDeviceCode.addEventListener(
       const gain =
         audioContext.createGain();
 
-      oscillator.type = "sine";
+      oscillator.type =
+        "sine";
 
       oscillator.frequency.value =
         frequency;
 
-      gain.gain.value = 0.18;
+      gain.gain.value =
+        0.18;
 
-      oscillator.connect(gain);
+      oscillator.connect(
+        gain
+      );
 
       gain.connect(
         audioContext.destination
@@ -797,13 +940,16 @@ toggleDeviceCode.addEventListener(
 
       oscillator.start();
 
-      setTimeout(function() {
+      setTimeout(
+        function() {
 
-        oscillator.stop();
+          oscillator.stop();
 
-        audioContext.close();
+          audioContext.close();
 
-      }, duration);
+        },
+        duration
+      );
 
     } catch (error) {
 
@@ -811,7 +957,9 @@ toggleDeviceCode.addEventListener(
         "Beep unavailable:",
         error
       );
+
     }
+
   }
 
 
@@ -819,10 +967,15 @@ toggleDeviceCode.addEventListener(
      JSONP REQUEST
      ===================================================== */
 
-  function jsonpRequest(url) {
+  function jsonpRequest(
+    url
+  ) {
 
     return new Promise(
-      function(resolve, reject) {
+      function(
+        resolve,
+        reject
+      ) {
 
         const callbackName =
           "senhsCallback_" +
@@ -831,51 +984,69 @@ toggleDeviceCode.addEventListener(
           (++callbackCounter);
 
         const script =
-          document.createElement("script");
+          document.createElement(
+            "script"
+          );
 
         const timeout =
-          setTimeout(function() {
+          setTimeout(
+            function() {
 
-            cleanup();
+              cleanup();
 
-            reject(
-              new Error(
-                "Server request timed out."
-              )
-            );
+              reject(
+                new Error(
+                  "Server request timed out."
+                )
+              );
 
-          }, 15000);
+            },
+            15000
+          );
 
 
         function cleanup() {
 
-          clearTimeout(timeout);
+          clearTimeout(
+            timeout
+          );
 
-          if (script.parentNode) {
+          if (
+            script.parentNode
+          ) {
 
             script.parentNode.removeChild(
               script
             );
+
           }
 
           try {
 
-            delete window[callbackName];
+            delete window[
+              callbackName
+            ];
 
           } catch (e) {
 
-            window[callbackName] =
-              undefined;
+            window[
+              callbackName
+            ] = undefined;
+
           }
+
         }
 
 
-        window[callbackName] =
+        window[
+          callbackName
+        ] =
           function(data) {
 
             cleanup();
 
             resolve(data);
+
           };
 
 
@@ -889,6 +1060,7 @@ toggleDeviceCode.addEventListener(
                 "Unable to connect to server."
               )
             );
+
           };
 
 
@@ -906,6 +1078,7 @@ toggleDeviceCode.addEventListener(
 
       }
     );
+
   }
 
 
@@ -923,6 +1096,7 @@ toggleDeviceCode.addEventListener(
 
     deviceMessage.className =
       type || "";
+
   }
 
 
@@ -935,6 +1109,7 @@ toggleDeviceCode.addEventListener(
     const key =
       deviceCode.value.trim();
 
+
     if (!key) {
 
       showDeviceMessage(
@@ -943,13 +1118,16 @@ toggleDeviceCode.addEventListener(
       );
 
       return;
+
     }
 
 
-    continueBtn.disabled = true;
+    continueBtn.disabled =
+      true;
 
     continueBtn.textContent =
       "CHECKING...";
+
 
     showDeviceMessage(
       "Checking device...",
@@ -962,7 +1140,9 @@ toggleDeviceCode.addEventListener(
       const requestUrl =
         APPS_SCRIPT_URL +
         "?device=" +
-        encodeURIComponent(key) +
+        encodeURIComponent(
+          key
+        ) +
         "&format=json";
 
 
@@ -978,16 +1158,15 @@ toggleDeviceCode.addEventListener(
         result.authorized
       ) {
 
-        deviceKey = key;
+        deviceKey =
+          key;
+
 
         showDeviceMessage(
           "Device authorized.",
           "success"
         );
 
-        /*
-         * Automatic transition
-         */
 
         setTimeout(
           function() {
@@ -998,6 +1177,7 @@ toggleDeviceCode.addEventListener(
           300
         );
 
+
       } else {
 
         showDeviceMessage(
@@ -1005,12 +1185,15 @@ toggleDeviceCode.addEventListener(
           "error"
         );
 
+
         continueBtn.disabled =
           false;
 
         continueBtn.textContent =
           "CONTINUE";
+
       }
+
 
     } catch (error) {
 
@@ -1020,12 +1203,15 @@ toggleDeviceCode.addEventListener(
         "error"
       );
 
+
       continueBtn.disabled =
         false;
 
       continueBtn.textContent =
         "CONTINUE";
+
     }
+
   }
 
 
@@ -1047,249 +1233,211 @@ toggleDeviceCode.addEventListener(
     continueBtn.textContent =
       "CONTINUE";
 
+
     await startCamera();
+
   }
 
 
- /* =====================================================
-   START CAMERA
-   ===================================================== */
+  /* =====================================================
+     START CAMERA
+     ===================================================== */
 
-async function startCamera() {
+  async function startCamera() {
 
-  try {
+    try {
 
-    /*
-     * GET AVAILABLE CAMERAS
-     */
+      cameras =
+        await Html5Qrcode.getCameras();
 
-    cameras =
-      await Html5Qrcode.getCameras();
+
+      if (
+        !cameras ||
+        cameras.length === 0
+      ) {
+
+        showOverlay(
+          "ERROR",
+          "No camera was found on this device.",
+          "error"
+        );
+
+        return;
+
+      }
+
+
+      let backIndex =
+        cameras.findIndex(
+          function(camera) {
+
+            return /back|rear|environment/i.test(
+              camera.label || ""
+            );
+
+          }
+        );
+
+
+      if (backIndex >= 0) {
+
+        currentCameraIndex =
+          backIndex;
+
+      } else {
+
+        currentCameraIndex =
+          0;
+
+      }
+
+
+      html5QrCode =
+        new Html5Qrcode(
+          "reader"
+        );
+
+
+      await startSelectedCamera();
+
+
+    } catch (error) {
+
+      console.error(
+        "Start camera error:",
+        error
+      );
+
+
+      showOverlay(
+        "CAMERA ERROR",
+        "Please allow camera permission and try again.",
+        "error"
+      );
+
+    }
+
+  }
+
+
+  /* =====================================================
+     START SELECTED CAMERA
+     ===================================================== */
+
+  async function startSelectedCamera() {
+
+    if (!html5QrCode) {
+      return;
+    }
 
 
     if (
       !cameras ||
       cameras.length === 0
     ) {
-
-      showOverlay(
-        "ERROR",
-        "No camera was found on this device.",
-        "error"
-      );
-
       return;
     }
 
 
-    /*
-     * FIND BACK / REAR CAMERA
-     */
-
-    let backIndex =
-      cameras.findIndex(
-        function(camera) {
-
-          return /back|rear|environment/i.test(
-            camera.label || ""
-          );
-
-        }
-      );
+    const camera =
+      cameras[
+        currentCameraIndex
+      ];
 
 
-    /*
-     * IF BACK CAMERA LABEL IS AVAILABLE
-     */
+    if (!camera) {
+      return;
+    }
 
-    if (backIndex >= 0) {
 
-      currentCameraIndex =
-        backIndex;
+    const cameraId =
+      camera.id;
 
-    } else {
 
-      /*
-       * MOBILE BROWSER MAY HIDE CAMERA LABELS.
-       * START WITH CAMERA 0 AS FALLBACK.
-       */
+    if (scannerRunning) {
 
-      currentCameraIndex = 0;
+      try {
+
+        await html5QrCode.stop();
+
+      } catch (error) {
+
+        console.log(
+          "Stop camera:",
+          error
+        );
+
+      }
+
+      scannerRunning =
+        false;
 
     }
 
 
-    /*
-     * CREATE QR SCANNER
-     */
+    await html5QrCode.start(
 
-    html5QrCode =
-      new Html5Qrcode(
-        "reader"
-      );
+      cameraId,
+
+      {
+
+        fps: 10,
+
+        qrbox:
+          function(
+            viewfinderWidth,
+            viewfinderHeight
+          ) {
+
+            const size =
+              Math.min(
+                viewfinderWidth,
+                viewfinderHeight
+              ) * 0.68;
 
 
-    /*
-     * START SELECTED CAMERA
-     */
+            return {
+              width: size,
+              height: size
+            };
 
-    await startSelectedCamera();
+          },
 
+        aspectRatio: 1.0
 
-  } catch (error) {
+      },
 
-    console.error(
-      "Start camera error:",
-      error
+      onQrDetected,
+
+      function(errorMessage) {
+
+        /*
+         * Normal QR scanning messages.
+         * Do not display them.
+         */
+
+      }
+
     );
 
-
-    showOverlay(
-      "CAMERA ERROR",
-      "Please allow camera permission and try again.",
-      "error"
-    );
-
-  }
-}
-
-
-/* =====================================================
-   START SELECTED CAMERA
-   ===================================================== */
-
-async function startSelectedCamera() {
-
-  if (!html5QrCode) {
-    return;
-  }
-
-
-  if (
-    !cameras ||
-    cameras.length === 0
-  ) {
-    return;
-  }
-
-
-  /*
-   * GET CURRENT CAMERA
-   */
-
-  const camera =
-    cameras[
-      currentCameraIndex
-    ];
-
-
-  if (!camera) {
-    return;
-  }
-
-
-  /*
-   * USE CAMERA DEVICE ID
-   */
-
-  const cameraId =
-    camera.id;
-
-
-  /*
-   * STOP CURRENT SCANNER
-   */
-
-  if (scannerRunning) {
-
-    try {
-
-      await html5QrCode.stop();
-
-    } catch (error) {
-
-      console.log(
-        "Stop camera:",
-        error
-      );
-
-    }
 
     scannerRunning =
+      true;
+
+    processing =
       false;
+
+
+    hideOverlay();
+
+
+    readyBar.textContent =
+      "● READY TO SCAN";
+
+    readyBar.style.color =
+      "#16803c";
+
   }
-
-
-  /*
-   * START CAMERA
-   */
-
-  await html5QrCode.start(
-
-    cameraId,
-
-    {
-
-      fps: 10,
-
-      qrbox:
-        function(
-          viewfinderWidth,
-          viewfinderHeight
-        ) {
-
-          const size =
-            Math.min(
-              viewfinderWidth,
-              viewfinderHeight
-            ) * 0.68;
-
-          return {
-            width: size,
-            height: size
-          };
-
-        },
-
-      aspectRatio: 1.0
-
-    },
-
-    onQrDetected,
-
-    function(errorMessage) {
-
-      /*
-       * NORMAL QR SCANNING MESSAGE.
-       * DO NOT DISPLAY.
-       */
-
-    }
-
-  );
-
-
-  /*
-   * CAMERA IS RUNNING
-   */
-
-  scannerRunning =
-    true;
-
-  processing =
-    false;
-
-
-  hideOverlay();
-
-
-  readyBar.textContent =
-    "● READY TO SCAN";
-
-  readyBar.style.color =
-    "#16803c";
-
-}
 
 
   /* =====================================================
@@ -1297,145 +1445,173 @@ async function startSelectedCamera() {
      ===================================================== */
 
   async function onQrDetected(
-  decodedText
-) {
+    decodedText
+  ) {
 
-  if (processing) {
-    return;
-  }
-
-  processing = true;
-
-  beep(
-    1000,
-    130
-  );
-
-  try {
-
-    if (
-      html5QrCode &&
-      scannerRunning
-    ) {
-
-      await html5QrCode.pause(true);
-
+    if (processing) {
+      return;
     }
 
-  } catch (error) {
 
-    console.log(
-      "Pause error:",
-      error
+    processing =
+      true;
+
+
+    beep(
+      1000,
+      130
     );
-  }
 
-  readyBar.textContent =
-    "PROCESSING...";
 
-  readyBar.style.color =
-    "#1267a5";
+    try {
 
-  showProcessing();
+      if (
+        html5QrCode &&
+        scannerRunning
+      ) {
 
-  /*
-   * GET LRN FROM QR
-   */
+        await html5QrCode.pause(
+          true
+        );
 
-  let lrn =
-    String(decodedText || "").trim();
-
-  /*
-   * If QR contains a URL,
-   * extract LRN from ?lrn=
-   * or ?id=
-   */
-
-  try {
-
-    if (
-      lrn.startsWith("http://") ||
-      lrn.startsWith("https://")
-    ) {
-
-      const qrUrl =
-        new URL(lrn);
-
-      const urlLrn =
-        qrUrl.searchParams.get("lrn");
-
-      const urlId =
-        qrUrl.searchParams.get("id");
-
-      if (urlLrn) {
-
-        lrn =
-          urlLrn.trim();
-
-      } else if (urlId) {
-
-        lrn =
-          urlId.trim();
       }
-    }
 
-  } catch (error) {
+    } catch (error) {
 
-    console.log(
-      "QR URL parsing skipped:",
-      error
-    );
-  }
-
-  lrn =
-    lrn.trim();
-
-  /*
-   * SEND LRN TO SERVER
-   */
-
-  try {
-
-    const requestUrl =
-      APPS_SCRIPT_URL +
-      "?lrn=" +
-      encodeURIComponent(lrn) +
-      "&device=" +
-      encodeURIComponent(deviceKey);
-
-    const result =
-      await jsonpRequest(
-        requestUrl
+      console.log(
+        "Pause error:",
+        error
       );
 
-    showResult(
-      result
-    );
-
-    if (
-      result &&
-      result.success
-    ) {
-
-      beep(
-        1400,
-        180
-      );
     }
 
-  } catch (error) {
 
-    showResult({
+    readyBar.textContent =
+      "PROCESSING...";
 
-      success: false,
+    readyBar.style.color =
+      "#1267a5";
 
-      message:
-        error.message ||
-        "Unable to connect to server."
 
-    });
+    showProcessing();
+
+
+    let lrn =
+      String(
+        decodedText || ""
+      ).trim();
+
+
+    try {
+
+      if (
+        lrn.startsWith(
+          "http://"
+        ) ||
+        lrn.startsWith(
+          "https://"
+        )
+      ) {
+
+        const qrUrl =
+          new URL(
+            lrn
+          );
+
+
+        const urlLrn =
+          qrUrl.searchParams.get(
+            "lrn"
+          );
+
+
+        const urlId =
+          qrUrl.searchParams.get(
+            "id"
+          );
+
+
+        if (urlLrn) {
+
+          lrn =
+            urlLrn.trim();
+
+        } else if (urlId) {
+
+          lrn =
+            urlId.trim();
+
+        }
+
+      }
+
+    } catch (error) {
+
+      console.log(
+        "QR URL parsing skipped:",
+        error
+      );
+
+    }
+
+
+    lrn =
+      lrn.trim();
+
+
+    try {
+
+      const requestUrl =
+        APPS_SCRIPT_URL +
+        "?lrn=" +
+        encodeURIComponent(
+          lrn
+        ) +
+        "&device=" +
+        encodeURIComponent(
+          deviceKey
+        );
+
+
+      const result =
+        await jsonpRequest(
+          requestUrl
+        );
+
+
+      showResult(
+        result
+      );
+
+
+      if (
+        result &&
+        result.success
+      ) {
+
+        beep(
+          1400,
+          180
+        );
+
+      }
+
+    } catch (error) {
+
+      showResult({
+
+        success: false,
+
+        message:
+          error.message ||
+          "Unable to connect to server."
+
+      });
+
+    }
+
   }
-}
+
 
   /* =====================================================
      PROCESSING OVERLAY
@@ -1456,6 +1632,7 @@ async function startSelectedCamera() {
       '<div class="processing-text">' +
         'Please wait while the attendance is being recorded.' +
       '</div>';
+
   }
 
 
@@ -1463,252 +1640,356 @@ async function startSelectedCamera() {
      RESULT OVERLAY
      ===================================================== */
 
-function showResult(result) {
+  function showResult(
+    result
+  ) {
 
-  if (showResult.timer) {
-    clearTimeout(showResult.timer);
-    showResult.timer = null;
-  }
+    if (showResult.timer) {
 
-  scanOverlay.style.display = "flex";
-
-  const isSuccess =
-    result && result.success;
-
-  const isLate =
-    isSuccess &&
-    result.status === "LATE";
-
-  /*
-   * NORMAL = BLUE
-   * LATE / ERROR = RED
-   */
-
-  scanOverlay.style.background =
-    isLate || !isSuccess
-      ? "#b71c1c"
-      : "#0d47a1";
-
-
-  if (isSuccess) {
-
-    const name =
-      result.name || "STUDENT";
-
-    const section =
-      result.section || "";
-
-    const event =
-      result.event || "";
-
-
-    let html =
-
-      '<div style="' +
-        'width:100%;' +
-        'max-width:850px;' +
-        'margin:auto;' +
-        'padding:28px 20px;' +
-        'text-align:center;' +
-        'background:#0d47a1;' +
-        'border:3px solid #ffffff;' +
-        'border-radius:20px;' +
-        'box-sizing:border-box;' +
-        'color:#ffffff;' +
-        'font-family:Arial,sans-serif;' +
-        'box-shadow:0 8px 25px rgba(0,0,0,.40);' +
-      '">' +
-
-        /*
-         * SCHOOL NAME
-         */
-
-        '<div style="' +
-          'font-size:22px;' +
-          'font-weight:900;' +
-          'color:#ffffff;' +
-          'margin-bottom:12px;' +
-          'line-height:1.2;' +
-        '">' +
-          'SAN ESTEBAN NATIONAL HIGH SCHOOL' +
-        '</div>' +
-
-
-        /*
-         * SCAN RESULT
-         */
-
-        '<div style="' +
-          'font-size:18px;' +
-          'font-weight:700;' +
-          'color:#ffffff;' +
-          'margin-bottom:18px;' +
-        '">' +
-          'SCAN RESULT' +
-        '</div>' +
-
-
-        /*
-         * STUDENT NAME
-         */
-
-        '<div style="' +
-          'font-size:34px;' +
-          'font-weight:900;' +
-          'color:#ffffff;' +
-          'line-height:1.15;' +
-          'margin:15px 0;' +
-          'text-shadow:1px 2px 3px rgba(0,0,0,.50);' +
-        '">' +
-          escapeHtml(name) +
-        '</div>' +
-
-
-        /*
-         * SECTION
-         */
-
-        '<div style="' +
-          'font-size:22px;' +
-          'font-weight:700;' +
-          'color:#ffffff;' +
-          'margin-bottom:22px;' +
-        '">' +
-          escapeHtml(section) +
-        '</div>' +
-
-
-        /*
-         * TIME IN / TIME OUT
-         */
-
-        '<div style="' +
-          'display:inline-block;' +
-          'padding:10px 25px;' +
-          'font-size:28px;' +
-          'font-weight:900;' +
-          'color:#ffffff;' +
-          'background:#1565c0;' +
-          'border:2px solid #ffffff;' +
-          'border-radius:12px;' +
-        '">' +
-          escapeHtml(event) +
-        '</div>';
-
-
-    /*
-     * LATE
-     */
-
-    if (isLate) {
-
-      html +=
-
-        '<div style="' +
-          'margin-top:18px;' +
-          'font-size:30px;' +
-          'font-weight:900;' +
-          'color:#ffffff;' +
-          'background:#8b0000;' +
-          'border:2px solid #ffffff;' +
-          'border-radius:12px;' +
-          'padding:8px 25px;' +
-          'display:inline-block;' +
-        '">' +
-          'LATE' +
-        '</div>';
-    }
-
-
-    html += '</div>';
-
-
-    overlayContent.innerHTML =
-      html;
-
-
-  } else {
-
-    /*
-     * ERROR RESULT
-     */
-
-    const message =
-      result && result.message
-        ? result.message
-        : "SCAN FAILED";
-
-
-    overlayContent.innerHTML =
-
-      '<div style="' +
-        'width:100%;' +
-        'max-width:700px;' +
-        'margin:auto;' +
-        'padding:30px 20px;' +
-        'text-align:center;' +
-        'background:#7f0000;' +
-        'border:3px solid #ffffff;' +
-        'border-radius:20px;' +
-        'box-sizing:border-box;' +
-        'color:#ffffff;' +
-        'font-family:Arial,sans-serif;' +
-      '">' +
-
-        '<div style="' +
-          'font-size:22px;' +
-          'font-weight:900;' +
-          'color:#ffffff;' +
-          'margin-bottom:20px;' +
-        '">' +
-          'SAN ESTEBAN NATIONAL HIGH SCHOOL' +
-        '</div>' +
-
-        '<div style="' +
-          'font-size:30px;' +
-          'font-weight:900;' +
-          'color:#ffffff;' +
-          'margin-bottom:18px;' +
-        '">' +
-          'SCAN NOT RECORDED' +
-        '</div>' +
-
-        '<div style="' +
-          'font-size:20px;' +
-          'font-weight:700;' +
-          'color:#ffffff;' +
-        '">' +
-          escapeHtml(message) +
-        '</div>' +
-
-      '</div>';
-
-
-    beep(
-      600,
-      180
-    );
-  }
-
-
-  /*
-   * AUTOMATIC RETURN TO SCANNER
-   * AFTER 5 SECONDS
-   */
-
-  showResult.timer =
-    setTimeout(function() {
+      clearTimeout(
+        showResult.timer
+      );
 
       showResult.timer =
         null;
 
-      scanOverlay.onclick =
-        null;
+    }
 
-      resumeScanner();
 
-    }, 5000);
-}
+    scanOverlay.style.display =
+      "flex";
+
+
+    const isSuccess =
+      result &&
+      result.success;
+
+
+    const isLate =
+      isSuccess &&
+      result.status ===
+      "LATE";
+
+
+    scanOverlay.style.background =
+      isLate ||
+      !isSuccess
+        ? "#b71c1c"
+        : "#0d47a1";
+
+
+    if (isSuccess) {
+
+      const name =
+        result.name ||
+        "STUDENT";
+
+
+      const section =
+        result.section ||
+        "";
+
+
+      const event =
+        result.event ||
+        "";
+
+
+      let html =
+
+        '<div style="' +
+
+          'width:100%;' +
+
+          'max-width:850px;' +
+
+          'margin:auto;' +
+
+          'padding:28px 20px;' +
+
+          'text-align:center;' +
+
+          'background:#0d47a1;' +
+
+          'border:3px solid #ffffff;' +
+
+          'border-radius:20px;' +
+
+          'box-sizing:border-box;' +
+
+          'color:#ffffff;' +
+
+          'font-family:Arial,sans-serif;' +
+
+          'box-shadow:0 8px 25px rgba(0,0,0,.40);' +
+
+        '">' +
+
+
+          '<div style="' +
+
+            'font-size:22px;' +
+
+            'font-weight:900;' +
+
+            'color:#ffffff;' +
+
+            'margin-bottom:12px;' +
+
+            'line-height:1.2;' +
+
+          '">' +
+
+            'SAN ESTEBAN NATIONAL HIGH SCHOOL' +
+
+          '</div>' +
+
+
+          '<div style="' +
+
+            'font-size:18px;' +
+
+            'font-weight:700;' +
+
+            'color:#ffffff;' +
+
+            'margin-bottom:18px;' +
+
+          '">' +
+
+            'SCAN RESULT' +
+
+          '</div>' +
+
+
+          '<div style="' +
+
+            'font-size:34px;' +
+
+            'font-weight:900;' +
+
+            'color:#ffffff;' +
+
+            'line-height:1.15;' +
+
+            'margin:15px 0;' +
+
+            'text-shadow:1px 2px 3px rgba(0,0,0,.50);' +
+
+          '">' +
+
+            escapeHtml(
+              name
+            ) +
+
+          '</div>' +
+
+
+          '<div style="' +
+
+            'font-size:22px;' +
+
+            'font-weight:700;' +
+
+            'color:#ffffff;' +
+
+            'margin-bottom:22px;' +
+
+          '">' +
+
+            escapeHtml(
+              section
+            ) +
+
+          '</div>' +
+
+
+          '<div style="' +
+
+            'display:inline-block;' +
+
+            'padding:10px 25px;' +
+
+            'font-size:28px;' +
+
+            'font-weight:900;' +
+
+            'color:#ffffff;' +
+
+            'background:#1565c0;' +
+
+            'border:2px solid #ffffff;' +
+
+            'border-radius:12px;' +
+
+          '">' +
+
+            escapeHtml(
+              event
+            ) +
+
+          '</div>';
+
+
+      if (isLate) {
+
+        html +=
+
+          '<div style="' +
+
+            'margin-top:18px;' +
+
+            'font-size:30px;' +
+
+            'font-weight:900;' +
+
+            'color:#ffffff;' +
+
+            'background:#8b0000;' +
+
+            'border:2px solid #ffffff;' +
+
+            'border-radius:12px;' +
+
+            'padding:8px 25px;' +
+
+            'display:inline-block;' +
+
+          '">' +
+
+            'LATE' +
+
+          '</div>';
+
+      }
+
+
+      html +=
+        '</div>';
+
+
+      overlayContent.innerHTML =
+        html;
+
+
+    } else {
+
+      const message =
+        result &&
+        result.message
+          ? result.message
+          : "SCAN FAILED";
+
+
+      overlayContent.innerHTML =
+
+        '<div style="' +
+
+          'width:100%;' +
+
+          'max-width:700px;' +
+
+          'margin:auto;' +
+
+          'padding:30px 20px;' +
+
+          'text-align:center;' +
+
+          'background:#7f0000;' +
+
+          'border:3px solid #ffffff;' +
+
+          'border-radius:20px;' +
+
+          'box-sizing:border-box;' +
+
+          'color:#ffffff;' +
+
+          'font-family:Arial,sans-serif;' +
+
+        '">' +
+
+
+          '<div style="' +
+
+            'font-size:22px;' +
+
+            'font-weight:900;' +
+
+            'color:#ffffff;' +
+
+            'margin-bottom:20px;' +
+
+          '">' +
+
+            'SAN ESTEBAN NATIONAL HIGH SCHOOL' +
+
+          '</div>' +
+
+
+          '<div style="' +
+
+            'font-size:30px;' +
+
+            'font-weight:900;' +
+
+            'color:#ffffff;' +
+
+            'margin-bottom:18px;' +
+
+          '">' +
+
+            'SCAN NOT RECORDED' +
+
+          '</div>' +
+
+
+          '<div style="' +
+
+            'font-size:20px;' +
+
+            'font-weight:700;' +
+
+            'color:#ffffff;' +
+
+          '">' +
+
+            escapeHtml(
+              message
+            ) +
+
+          '</div>' +
+
+
+        '</div>';
+
+
+      beep(
+        600,
+        180
+      );
+
+    }
+
+
+    showResult.timer =
+      setTimeout(
+        function() {
+
+          showResult.timer =
+            null;
+
+          scanOverlay.onclick =
+            null;
+
+          resumeScanner();
+
+        },
+        5000
+      );
+
+  }
+
 
   /* =====================================================
      RESUME SCANNER
@@ -1717,6 +1998,7 @@ function showResult(result) {
   async function resumeScanner() {
 
     hideOverlay();
+
 
     readyBar.textContent =
       "● READY TO SCAN";
@@ -1746,11 +2028,10 @@ function showResult(result) {
 
     } catch (error) {
 
-      console.error(error);
+      console.error(
+        error
+      );
 
-      /*
-       * If resume fails, restart camera.
-       */
 
       try {
 
@@ -1761,8 +2042,11 @@ function showResult(result) {
         console.error(
           restartError
         );
+
       }
+
     }
+
   }
 
 
@@ -1777,145 +2061,180 @@ function showResult(result) {
 
     scanOverlay.onclick =
       null;
+
   }
 
 
- /* =========================================
-   CAMERA SWITCH
-   ========================================= */
+  /* =====================================================
+     CAMERA SWITCH
+     ===================================================== */
 
-switchCameraBtn.addEventListener(
-  "click",
-  async function() {
-
-    if (
-      processing ||
-      !cameras ||
-      cameras.length < 2
-    ) {
-      return;
-    }
-
-    processing = true;
-
-    switchCameraBtn.disabled = true;
-
-    readyBar.textContent =
-      "SWITCHING CAMERA...";
-
-    readyBar.style.color =
-      "#1267a5";
-
-    try {
-
-      /*
-       * STOP CURRENT CAMERA
-       */
+  switchCameraBtn.addEventListener(
+    "click",
+    async function() {
 
       if (
-        html5QrCode &&
-        scannerRunning
+        processing ||
+        !cameras ||
+        cameras.length < 2
       ) {
 
-        try {
+        return;
 
-          await html5QrCode.stop();
-
-        } catch (stopError) {
-
-          console.log(
-            "Camera stop:",
-            stopError
-          );
-        }
-
-        scannerRunning = false;
       }
 
 
-      /*
-       * MOVE TO NEXT CAMERA
-       */
-
-      currentCameraIndex =
-        (
-          currentCameraIndex + 1
-        ) % cameras.length;
+      processing =
+        true;
 
 
-      /*
-       * START NEXT CAMERA
-       */
+      switchCameraBtn.disabled =
+        true;
 
-      await startSelectedCamera();
-
-
-      /*
-       * CAMERA READY
-       */
 
       readyBar.textContent =
-        "● READY TO SCAN";
+        "SWITCHING CAMERA...";
 
       readyBar.style.color =
-        "#16803c";
+        "#1267a5";
 
-
-    } catch (error) {
-
-      console.error(
-        "Camera switch error:",
-        error
-      );
-
-      scannerRunning = false;
-
-
-      /*
-       * TRY TO RETURN TO PREVIOUS CAMERA
-       */
 
       try {
 
+        if (
+          html5QrCode &&
+          scannerRunning
+        ) {
+
+          try {
+
+            await html5QrCode.stop();
+
+          } catch (stopError) {
+
+            console.log(
+              "Camera stop:",
+              stopError
+            );
+
+          }
+
+          scannerRunning =
+            false;
+
+        }
+
+
         currentCameraIndex =
           (
-            currentCameraIndex -
-            1 +
-            cameras.length
-          ) % cameras.length;
+            currentCameraIndex +
+            1
+          ) %
+          cameras.length;
+
 
         await startSelectedCamera();
 
-      } catch (recoverError) {
-
-        console.error(
-          "Camera recovery error:",
-          recoverError
-        );
 
         readyBar.textContent =
-          "CAMERA ERROR";
+          "● READY TO SCAN";
 
         readyBar.style.color =
-          "#b71c1c";
+          "#16803c";
 
-        showOverlay(
-          "CAMERA ERROR",
-          "Unable to switch camera. Please try again.",
-          "error"
+
+      } catch (error) {
+
+        console.error(
+          "Camera switch error:",
+          error
         );
+
+
+        scannerRunning =
+          false;
+
+
+        try {
+
+          currentCameraIndex =
+            (
+              currentCameraIndex -
+              1 +
+              cameras.length
+            ) %
+            cameras.length;
+
+
+          await startSelectedCamera();
+
+
+        } catch (recoverError) {
+
+          console.error(
+            "Camera recovery error:",
+            recoverError
+          );
+
+
+          readyBar.textContent =
+            "CAMERA ERROR";
+
+          readyBar.style.color =
+            "#b71c1c";
+
+
+          showProcessing();
+
+
+          overlayContent.innerHTML =
+
+            '<div style="' +
+
+              'background:#7f0000;' +
+
+              'color:#ffffff;' +
+
+              'padding:30px 20px;' +
+
+              'border:3px solid #ffffff;' +
+
+              'border-radius:20px;' +
+
+              'font-family:Arial,sans-serif;' +
+
+              'text-align:center;' +
+
+            '">' +
+
+              '<div style="font-size:28px;font-weight:900;">' +
+
+                'CAMERA ERROR' +
+
+              '</div>' +
+
+              '<div style="font-size:18px;margin-top:15px;">' +
+
+                'Unable to switch camera. Please try again.' +
+
+              '</div>' +
+
+            '</div>';
+
+        }
+
+      } finally {
+
+        processing =
+          false;
+
+        switchCameraBtn.disabled =
+          false;
+
       }
 
-    } finally {
-
-      processing = false;
-
-      switchCameraBtn.disabled = false;
-
     }
-
-  }
-);
+  );
 
 
   /* =====================================================
@@ -1937,12 +2256,14 @@ switchCameraBtn.addEventListener(
     function(event) {
 
       if (
-        event.key === "Enter"
+        event.key ===
+        "Enter"
       ) {
 
         event.preventDefault();
 
         verifyDevice();
+
       }
 
     }
@@ -1983,6 +2304,7 @@ switchCameraBtn.addEventListener(
         /'/g,
         "&#039;"
       );
+
   }
 
 </script>
