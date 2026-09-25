@@ -529,14 +529,27 @@
         autocomplete="off"
       >
 
-      <button
-        id="toggleDeviceCode"
-        type="button"
-        aria-label="Show device code"
-        title="Show / Hide Device Code"
-      >
-        👁️
-      </button>
+<button
+  id="toggleDeviceCode"
+  type="button"
+  aria-label="Show device code"
+  title="Show / Hide Device Code"
+>
+  <svg
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    aria-hidden="true"
+  >
+    <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"></path>
+    <circle cx="12" cy="12" r="3"></circle>
+  </svg>
+</button>
 
     </div>
 
@@ -704,45 +717,46 @@ const readyBar =
    DEVICE CODE SHOW / HIDE
    ===================================================== */
 
-if (toggleDeviceCode) {
+toggleDeviceCode.addEventListener(
+  "click",
+  function() {
 
-  toggleDeviceCode.addEventListener(
-    "click",
-    function() {
+    if (deviceCode.type === "password") {
 
-      if (deviceCode.type === "password") {
+      deviceCode.type = "text";
 
-        deviceCode.type =
-          "text";
+      toggleDeviceCode.innerHTML =
+        '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
+        '<path d="M3 3l18 18"></path>' +
+        '<path d="M10.6 10.6a2 2 0 0 0 2.8 2.8"></path>' +
+        '<path d="M9.9 4.2A10.8 10.8 0 0 1 12 4c6.5 0 10 8 10 8a18.2 18.2 0 0 1-3.1 4.4"></path>' +
+        '<path d="M6.6 6.6C3.7 8.7 2 12 2 12s3.5 8 10 8a10.8 10.8 0 0 0 3.3-.5"></path>' +
+        '</svg>';
 
-        toggleDeviceCode.textContent =
-          "🙈";
+      toggleDeviceCode.setAttribute(
+        "aria-label",
+        "Hide device code"
+      );
 
-        toggleDeviceCode.setAttribute(
-          "aria-label",
-          "Hide device code"
-        );
+    } else {
 
-      } else {
+      deviceCode.type = "password";
 
-        deviceCode.type =
-          "password";
+      toggleDeviceCode.innerHTML =
+        '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
+        '<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"></path>' +
+        '<circle cx="12" cy="12" r="3"></circle>' +
+        '</svg>';
 
-        toggleDeviceCode.textContent =
-          "👁️";
-
-        toggleDeviceCode.setAttribute(
-          "aria-label",
-          "Show device code"
-        );
-
-      }
+      toggleDeviceCode.setAttribute(
+        "aria-label",
+        "Show device code"
+      );
 
     }
-  );
 
-}
-
+  }
+);
   
   /* =====================================================
      BEEP SOUND
