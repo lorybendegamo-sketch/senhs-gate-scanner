@@ -729,23 +729,89 @@
           </div>
 
 
-          <!-- READY -->
+<!-- READY -->
 
-          <div
-            id="readyBar"
-            class="ready-bar"
-          >
-            ● READY TO SCAN
-          </div>
-
-        </div>
-
-      </div>
+<div
+  id="readyBar"
+  class="ready-bar"
+>
+  ● READY TO SCAN
+</div>
 
 
+<!-- ==================================================
+     ATTENDANCE MONITOR
+     ================================================== -->
+
+<div id="attendanceMonitor">
+
+  <div class="attendance-title">
+    SCHOOL SUMMARY
+  </div>
+
+  <div class="school-summary">
+
+    <div class="summary-card">
+      <div class="summary-label">TOTAL</div>
+      <div id="schoolTotal" class="summary-number">0</div>
+    </div>
+
+    <div class="summary-card">
+      <div class="summary-label">AM PRESENT</div>
+      <div id="schoolAmPresent" class="summary-number">0</div>
+    </div>
+
+    <div class="summary-card">
+      <div class="summary-label">AM ABSENT</div>
+      <div id="schoolAmAbsent" class="summary-number">0</div>
+    </div>
+
+    <div class="summary-card">
+      <div class="summary-label">AM LATE</div>
+      <div id="schoolAmLate" class="summary-number">0</div>
+    </div>
+
+    <div class="summary-card">
+      <div class="summary-label">PM PRESENT</div>
+      <div id="schoolPmPresent" class="summary-number">0</div>
+    </div>
+
+    <div class="summary-card">
+      <div class="summary-label">PM ABSENT</div>
+      <div id="schoolPmAbsent" class="summary-number">0</div>
+    </div>
+
+    <div class="summary-card">
+      <div class="summary-label">PM LATE</div>
+      <div id="schoolPmLate" class="summary-number">0</div>
     </div>
 
   </div>
+
+
+  <div class="attendance-title section-title">
+    SECTION ATTENDANCE
+  </div>
+
+  <div id="sectionAttendance">
+    Loading attendance...
+  </div>
+
+  <div id="attendanceUpdated">
+    Updating...
+  </div>
+
+</div>
+
+
+</div>
+
+</div>
+
+
+</div>
+
+</div>
 
 
 <script>
