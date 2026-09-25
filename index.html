@@ -339,8 +339,33 @@
 
 
     /* =========================================
-       COLORFUL SCHOOL SUMMARY
+       JHS / SHS SCHOOL SUMMARY
        ========================================= */
+
+    .school-group {
+      width: 100%;
+      margin-bottom: 16px;
+    }
+
+    .school-group-title {
+      width: 100%;
+      margin-bottom: 8px;
+      padding: 9px 10px;
+      border-radius: 10px;
+      text-align: center;
+      color: #ffffff;
+      font-size: 16px;
+      font-weight: 900;
+      letter-spacing: 0.4px;
+    }
+
+    .school-group.jhs .school-group-title {
+      background: #1565c0;
+    }
+
+    .school-group.shs .school-group-title {
+      background: #6a1b9a;
+    }
 
     .school-summary {
       display: grid;
@@ -885,136 +910,314 @@
               SCHOOL SUMMARY
             </div>
 
-            <div class="school-summary">
 
-              <!-- TOTAL -->
+            <!-- =========================================
+                 JHS SUMMARY
+                 GRADES 7–10
+                 ========================================= -->
 
-              <div class="summary-card total">
-                <div class="summary-label">
-                  TOTAL
-                </div>
+            <div class="school-group jhs">
 
-                <div
-                  id="schoolTotal"
-                  class="summary-number"
-                >
-                  0
-                </div>
+              <div class="school-group-title">
+                JHS — GRADES 7–10
               </div>
 
+              <div class="school-summary">
 
-              <!-- AM PRESENT -->
+                <!-- TOTAL -->
 
-              <div class="summary-card am-present">
-                <div class="summary-label">
-                  AM PRESENT
+                <div class="summary-card total">
+
+                  <div class="summary-label">
+                    TOTAL
+                  </div>
+
+                  <div
+                    id="jhsTotal"
+                    class="summary-number"
+                  >
+                    0
+                  </div>
+
                 </div>
+
+
+                <!-- AM PRESENT -->
+
+                <div class="summary-card am-present">
+
+                  <div class="summary-label">
+                    AM PRESENT
+                  </div>
+
+                  <div
+                    id="jhsAmPresent"
+                    class="summary-number"
+                  >
+                    0
+                  </div>
+
+                </div>
+
+
+                <!-- AM ABSENT -->
+
+                <div class="summary-card am-absent">
+
+                  <div class="summary-label">
+                    AM ABSENT
+                  </div>
+
+                  <div
+                    id="jhsAmAbsent"
+                    class="summary-number"
+                  >
+                    0
+                  </div>
+
+                </div>
+
+
+                <!-- AM LATE -->
+
+                <div class="summary-card am-late">
+
+                  <div class="summary-label">
+                    AM LATE
+                  </div>
+
+                  <div
+                    id="jhsAmLate"
+                    class="summary-number"
+                  >
+                    0
+                  </div>
+
+                </div>
+
+
+                <!-- PM PRESENT -->
 
                 <div
-                  id="schoolAmPresent"
-                  class="summary-number"
+                  id="jhsPmPresentCard"
+                  class="summary-card pm-present"
                 >
-                  0
+
+                  <div class="summary-label">
+                    PM PRESENT
+                  </div>
+
+                  <div
+                    id="jhsPmPresent"
+                    class="summary-number"
+                  >
+                    0
+                  </div>
+
                 </div>
-              </div>
 
 
-              <!-- AM ABSENT -->
-
-              <div class="summary-card am-absent">
-                <div class="summary-label">
-                  AM ABSENT
-                </div>
+                <!-- PM ABSENT -->
 
                 <div
-                  id="schoolAmAbsent"
-                  class="summary-number"
+                  id="jhsPmAbsentCard"
+                  class="summary-card pm-absent"
                 >
-                  0
+
+                  <div class="summary-label">
+                    PM ABSENT
+                  </div>
+
+                  <div
+                    id="jhsPmAbsent"
+                    class="summary-number"
+                  >
+                    0
+                  </div>
+
                 </div>
-              </div>
 
 
-              <!-- AM LATE -->
-
-              <div class="summary-card am-late">
-                <div class="summary-label">
-                  AM LATE
-                </div>
+                <!-- PM LATE -->
 
                 <div
-                  id="schoolAmLate"
-                  class="summary-number"
+                  id="jhsPmLateCard"
+                  class="summary-card pm-late"
                 >
-                  0
-                </div>
-              </div>
 
+                  <div class="summary-label">
+                    PM LATE
+                  </div>
 
-              <!-- PM PRESENT -->
+                  <div
+                    id="jhsPmLate"
+                    class="summary-number"
+                  >
+                    0
+                  </div>
 
-              <div
-                id="schoolPmPresentCard"
-                class="summary-card pm-present"
-              >
-
-                <div class="summary-label">
-                  PM PRESENT
-                </div>
-
-                <div
-                  id="schoolPmPresent"
-                  class="summary-number"
-                >
-                  0
-                </div>
-
-              </div>
-
-
-              <!-- PM ABSENT -->
-
-              <div
-                id="schoolPmAbsentCard"
-                class="summary-card pm-absent"
-              >
-
-                <div class="summary-label">
-                  PM ABSENT
-                </div>
-
-                <div
-                  id="schoolPmAbsent"
-                  class="summary-number"
-                >
-                  0
-                </div>
-
-              </div>
-
-
-              <!-- PM LATE -->
-
-              <div
-                id="schoolPmLateCard"
-                class="summary-card pm-late"
-              >
-
-                <div class="summary-label">
-                  PM LATE
-                </div>
-
-                <div
-                  id="schoolPmLate"
-                  class="summary-number"
-                >
-                  0
                 </div>
 
               </div>
 
             </div>
 
+
+            <!-- =========================================
+                 SHS SUMMARY
+                 GRADES 11–12
+                 ========================================= -->
+
+            <div class="school-group shs">
+
+              <div class="school-group-title">
+                SHS — GRADES 11–12
+              </div>
+
+              <div class="school-summary">
+
+                <!-- TOTAL -->
+
+                <div class="summary-card total">
+
+                  <div class="summary-label">
+                    TOTAL
+                  </div>
+
+                  <div
+                    id="shsTotal"
+                    class="summary-number"
+                  >
+                    0
+                  </div>
+
+                </div>
+
+
+                <!-- AM PRESENT -->
+
+                <div class="summary-card am-present">
+
+                  <div class="summary-label">
+                    AM PRESENT
+                  </div>
+
+                  <div
+                    id="shsAmPresent"
+                    class="summary-number"
+                  >
+                    0
+                  </div>
+
+                </div>
+
+
+                <!-- AM ABSENT -->
+
+                <div class="summary-card am-absent">
+
+                  <div class="summary-label">
+                    AM ABSENT
+                  </div>
+
+                  <div
+                    id="shsAmAbsent"
+                    class="summary-number"
+                  >
+                    0
+                  </div>
+
+                </div>
+
+
+                <!-- AM LATE -->
+
+                <div class="summary-card am-late">
+
+                  <div class="summary-label">
+                    AM LATE
+                  </div>
+
+                  <div
+                    id="shsAmLate"
+                    class="summary-number"
+                  >
+                    0
+                  </div>
+
+                </div>
+
+
+                <!-- PM PRESENT -->
+
+                <div
+                  id="shsPmPresentCard"
+                  class="summary-card pm-present"
+                >
+
+                  <div class="summary-label">
+                    PM PRESENT
+                  </div>
+
+                  <div
+                    id="shsPmPresent"
+                    class="summary-number"
+                  >
+                    0
+                  </div>
+
+                </div>
+
+
+                <!-- PM ABSENT -->
+
+                <div
+                  id="shsPmAbsentCard"
+                  class="summary-card pm-absent"
+                >
+
+                  <div class="summary-label">
+                    PM ABSENT
+                  </div>
+
+                  <div
+                    id="shsPmAbsent"
+                    class="summary-number"
+                  >
+                    0
+                  </div>
+
+                </div>
+
+
+                <!-- PM LATE -->
+
+                <div
+                  id="shsPmLateCard"
+                  class="summary-card pm-late"
+                >
+
+                  <div class="summary-label">
+                    PM LATE
+                  </div>
+
+                  <div
+                    id="shsPmLate"
+                    class="summary-number"
+                  >
+                    0
+                  </div>
+
+                </div>
+
+              </div>
+
+            </div>
+
+
+            <!-- =========================================
+                 SECTION ATTENDANCE
+                 ========================================= -->
 
             <div
               class="attendance-title section-title"
@@ -1563,13 +1766,13 @@
 
   /* =====================================================
      PM DISPLAY CONTROL
-     
+
      BEFORE 12:05 PM:
-     PM SCHOOL SUMMARY CARDS HIDDEN
-     PM SECTION TABLE COLUMNS HIDDEN
-     
+       PM SCHOOL SUMMARY CARDS HIDDEN
+       PM SECTION TABLE COLUMNS HIDDEN
+
      12:05 PM ONWARD:
-     PM INFORMATION VISIBLE
+       PM INFORMATION VISIBLE
      ===================================================== */
 
   function isPMDisplayTime() {
@@ -1592,6 +1795,10 @@
   }
 
 
+  /* =====================================================
+     UPDATE PM CARD VISIBILITY
+     ===================================================== */
+
   function updateSchoolSummaryPMDisplay() {
 
     const showPM =
@@ -1601,15 +1808,27 @@
     const pmCards = [
 
       document.getElementById(
-        "schoolPmPresentCard"
+        "jhsPmPresentCard"
       ),
 
       document.getElementById(
-        "schoolPmAbsentCard"
+        "jhsPmAbsentCard"
       ),
 
       document.getElementById(
-        "schoolPmLateCard"
+        "jhsPmLateCard"
+      ),
+
+      document.getElementById(
+        "shsPmPresentCard"
+      ),
+
+      document.getElementById(
+        "shsPmAbsentCard"
+      ),
+
+      document.getElementById(
+        "shsPmLateCard"
       )
 
     ];
@@ -1629,6 +1848,237 @@
 
       }
     );
+
+  }
+
+
+  /* =====================================================
+     CREATE EMPTY SUMMARY
+     ===================================================== */
+
+  function createEmptySummary() {
+
+    return {
+
+      total: 0,
+
+      amPresent: 0,
+
+      amAbsent: 0,
+
+      amLate: 0,
+
+      pmPresent: 0,
+
+      pmAbsent: 0,
+
+      pmLate: 0
+
+    };
+
+  }
+
+
+  /* =====================================================
+     GROUP SCHOOL SUMMARY
+
+     JHS = GRADES 7–10
+     SHS = GRADES 11–12
+
+     ADMIN / NON-GRADE SECTIONS ARE NOT INCLUDED
+     IN JHS OR SHS SUMMARY.
+     ===================================================== */
+
+  function getJhsShsSummary(
+    sections
+  ) {
+
+    const jhs =
+      createEmptySummary();
+
+    const shs =
+      createEmptySummary();
+
+
+    (sections || []).forEach(
+      function(section) {
+
+        const sectionName =
+          String(
+            section.section || ""
+          ).trim();
+
+
+        const grade =
+          getGradeNumber(
+            sectionName
+          );
+
+
+        let target =
+          null;
+
+
+        if (
+          grade >= 7 &&
+          grade <= 10
+        ) {
+
+          target =
+            jhs;
+
+        } else if (
+          grade >= 11 &&
+          grade <= 12
+        ) {
+
+          target =
+            shs;
+
+        }
+
+
+        /*
+         * Ignore ADMIN and any other
+         * non-grade section.
+         */
+
+        if (!target) {
+          return;
+        }
+
+
+        target.total +=
+          Number(
+            section.total || 0
+          );
+
+
+        /*
+         * IMPORTANT:
+         *
+         * AM PRESENT already includes
+         * students classified as LATE.
+         *
+         * Therefore, do NOT add amLate
+         * to amPresent.
+         */
+
+        target.amPresent +=
+          Number(
+            section.amPresent || 0
+          );
+
+
+        target.amAbsent +=
+          Number(
+            section.amAbsent || 0
+          );
+
+
+        target.amLate +=
+          Number(
+            section.amLate || 0
+          );
+
+
+        target.pmPresent +=
+          Number(
+            section.pmPresent || 0
+          );
+
+
+        target.pmAbsent +=
+          Number(
+            section.pmAbsent || 0
+          );
+
+
+        target.pmLate +=
+          Number(
+            section.pmLate || 0
+          );
+
+      }
+    );
+
+
+    return {
+
+      jhs:
+        jhs,
+
+      shs:
+        shs
+
+    };
+
+  }
+
+
+  /* =====================================================
+     DISPLAY GROUP SUMMARY
+     ===================================================== */
+
+  function displayGroupSummary(
+    prefix,
+    data
+  ) {
+
+    document.getElementById(
+      prefix + "Total"
+    ).textContent =
+      Number(
+        data.total || 0
+      );
+
+
+    document.getElementById(
+      prefix + "AmPresent"
+    ).textContent =
+      Number(
+        data.amPresent || 0
+      );
+
+
+    document.getElementById(
+      prefix + "AmAbsent"
+    ).textContent =
+      Number(
+        data.amAbsent || 0
+      );
+
+
+    document.getElementById(
+      prefix + "AmLate"
+    ).textContent =
+      Number(
+        data.amLate || 0
+      );
+
+
+    document.getElementById(
+      prefix + "PmPresent"
+    ).textContent =
+      Number(
+        data.pmPresent || 0
+      );
+
+
+    document.getElementById(
+      prefix + "PmAbsent"
+    ).textContent =
+      Number(
+        data.pmAbsent || 0
+      );
+
+
+    document.getElementById(
+      prefix + "PmLate"
+    ).textContent =
+      Number(
+        data.pmLate || 0
+      );
 
   }
 
@@ -1664,77 +2114,39 @@
       }
 
 
-      const school =
-        result.wholeSchool ||
-        {};
-
-
       /* =========================================
-         SCHOOL SUMMARY
+         GET JHS / SHS SUMMARY
          ========================================= */
 
-      document.getElementById(
-        "schoolTotal"
-      ).textContent =
-        Number(
-          school.total || 0
-        );
-
-
-      document.getElementById(
-        "schoolAmPresent"
-      ).textContent =
-        Number(
-          school.amPresent || 0
-        );
-
-
-      document.getElementById(
-        "schoolAmAbsent"
-      ).textContent =
-        Number(
-          school.amAbsent || 0
-        );
-
-
-      document.getElementById(
-        "schoolAmLate"
-      ).textContent =
-        Number(
-          school.amLate || 0
+      const grouped =
+        getJhsShsSummary(
+          result.sections || []
         );
 
 
       /* =========================================
-         PM DATA
-         
-         The values are loaded from the server,
-         but the cards remain hidden before 12:05 PM.
+         JHS SCHOOL SUMMARY
          ========================================= */
 
-      document.getElementById(
-        "schoolPmPresent"
-      ).textContent =
-        Number(
-          school.pmPresent || 0
-        );
+      displayGroupSummary(
+        "jhs",
+        grouped.jhs
+      );
 
 
-      document.getElementById(
-        "schoolPmAbsent"
-      ).textContent =
-        Number(
-          school.pmAbsent || 0
-        );
+      /* =========================================
+         SHS SCHOOL SUMMARY
+         ========================================= */
+
+      displayGroupSummary(
+        "shs",
+        grouped.shs
+      );
 
 
-      document.getElementById(
-        "schoolPmLate"
-      ).textContent =
-        Number(
-          school.pmLate || 0
-        );
-
+      /* =========================================
+         PM VISIBILITY
+         ========================================= */
 
       updateSchoolSummaryPMDisplay();
 
@@ -1865,11 +2277,13 @@
 
   /* =====================================================
      RENDER SECTION ATTENDANCE TABLE
-     
+
      BEFORE 12:05 PM:
+
        SECTION | TOTAL | AM P | AM A | AM L
-     
+
      12:05 PM ONWARD:
+
        SECTION | TOTAL | AM P | AM A | AM L |
        PM P | PM A | PM L
      ===================================================== */
