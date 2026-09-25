@@ -1566,74 +1566,142 @@ function showResult(result) {
   }
 
 
-  /* =====================================================
-     SWITCH CAMERA
-     ===================================================== */
+ /* =========================================
+   CAMERA SWITCH
+   ========================================= */
 
-  switchCameraBtn.addEventListener(
-    "click",
-    async function() {
+switchCameraBtn.addEventListener(
+  "click",
+  async function() {
+
+    if (
+      processing ||
+      !cameras ||
+      cameras.length < 2
+    ) {
+      return;
+    }
+
+    processing = true;
+
+    switchCameraBtn.disabled = true;
+
+    readyBar.textContent =
+      "SWITCHING CAMERA...";
+
+    readyBar.style.color =
+      "#1267a5";
+
+    try {
+
+      /*
+       * STOP CURRENT CAMERA
+       */
 
       if (
-        processing ||
-        !cameras ||
-        cameras.length < 2
+        html5QrCode &&
+        scannerRunning
       ) {
 
-        return;
-      }
-
-
-      processing =
-        true;
-
-
-      readyBar.textContent =
-        "SWITCHING CAMERA...";
-
-      readyBar.style.color =
-        "#1267a5";
-
-
-      try {
-
-        if (
-          html5QrCode &&
-          scannerRunning
-        ) {
+        try {
 
           await html5QrCode.stop();
 
-          scannerRunning =
-            false;
+        } catch (stopError) {
+
+          console.log(
+            "Camera stop:",
+            stopError
+          );
         }
 
+        scannerRunning = false;
+      }
+
+
+      /*
+       * MOVE TO NEXT CAMERA
+       */
+
+      currentCameraIndex =
+        (
+          currentCameraIndex + 1
+        ) % cameras.length;
+
+
+      /*
+       * START NEXT CAMERA
+       */
+
+      await startSelectedCamera();
+
+
+      /*
+       * CAMERA READY
+       */
+
+      readyBar.textContent =
+        "● READY TO SCAN";
+
+      readyBar.style.color =
+        "#16803c";
+
+
+    } catch (error) {
+
+      console.error(
+        "Camera switch error:",
+        error
+      );
+
+      scannerRunning = false;
+
+
+      /*
+       * TRY TO RETURN TO PREVIOUS CAMERA
+       */
+
+      try {
 
         currentCameraIndex =
           (
-            currentCameraIndex + 1
-          ) %
-          cameras.length;
-
+            currentCameraIndex -
+            1 +
+            cameras.length
+          ) % cameras.length;
 
         await startSelectedCamera();
 
-      } catch (error) {
+      } catch (recoverError) {
 
-        console.error(error);
-
-        processing =
-          false;
+        console.error(
+          "Camera recovery error:",
+          recoverError
+        );
 
         readyBar.textContent =
-          "● READY TO SCAN";
+          "CAMERA ERROR";
 
         readyBar.style.color =
-          "#16803c";
+          "#b71c1c";
+
+        showOverlay(
+          "CAMERA ERROR",
+          "Unable to switch camera. Please try again.",
+          "error"
+        );
       }
 
+    } finally {
+
+      processing = false;
+
+      switchCameraBtn.disabled = false;
+
     }
-  );
+
+  }
+);
 
 
   /* =====================================================
