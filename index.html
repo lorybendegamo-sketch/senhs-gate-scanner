@@ -1,17 +1,27 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1">
+
   <title>SENHS Gate Scanner</title>
 
   <script src="https://unpkg.com/html5-qrcode"></script>
 
   <style>
+
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       font-family: Arial, sans-serif;
       text-align: center;
       padding: 15px;
       margin: 0;
+      background: #f4f7f5;
+      color: #222;
     }
 
     h2 {
@@ -29,9 +39,9 @@
       width: 100%;
       padding: 14px 50px 14px 14px;
       font-size: 18px;
-      box-sizing: border-box;
       border: 1px solid #aaa;
       border-radius: 8px;
+      outline: none;
     }
 
     #toggleKey {
@@ -53,6 +63,13 @@
       border: none;
       border-radius: 8px;
       cursor: pointer;
+      background: #176b3a;
+      color: white;
+    }
+
+    #startBtn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
     }
 
     #reader {
@@ -65,10 +82,10 @@
       margin: 20px auto;
       padding: 18px;
       max-width: 450px;
-      font-size: 21px;
+      font-size: 20px;
       font-weight: bold;
       border-radius: 10px;
-      box-sizing: border-box;
+      line-height: 1.4;
     }
 
     .ready {
@@ -92,10 +109,12 @@
     }
 
     .cooldown {
-      font-size: 18px;
+      font-size: 17px;
       margin-top: 8px;
     }
+
   </style>
+
 </head>
 
 <body>
@@ -103,6 +122,7 @@
 <h2>SENHS GATE SCANNER</h2>
 
 <div class="key-container">
+
   <input
     id="deviceKey"
     type="password"
@@ -115,6 +135,7 @@
     type="button"
     aria-label="Show device key"
   >👁️</button>
+
 </div>
 
 <button id="startBtn" type="button">
@@ -127,14 +148,18 @@
 
 <div id="reader"></div>
 
+
 <script>
 
 const APPS_SCRIPT_URL =
 "https://script.google.com/macros/s/AKfycbyXwfLu_wjourRT3BwQDTwA-H9vIJfu5LvqbjjbG3jwv5JVb0mi_1SO5CRPq60S5KdaCg/exec";
 
+
 let processing = false;
 let scanner = null;
 let scannerStarted = false;
+let callbackCounter = 0;
+
 
 const statusBox =
   document.getElementById("status");
@@ -145,42 +170,39 @@ const deviceKey =
 const toggleKey =
   document.getElementById("toggleKey");
 
+const startBtn =
+  document.getElementById("startBtn");
 
-// ================================
+
+// =====================================
 // SHOW / HIDE DEVICE KEY
-// ================================
+// =====================================
 
-toggleKey.addEventListener("click", function () {
+toggleKey.addEventListener(
+  "click",
+  function () {
 
-  if (deviceKey.type === "password") {
+    if (deviceKey.type === "password") {
 
-    deviceKey.type = "text";
+      deviceKey.type = "text";
 
-    toggleKey.innerText = "🙈";
+      toggleKey.innerText = "🙈";
 
-    toggleKey.setAttribute(
-      "aria-label",
-      "Hide device key"
-    );
+    } else {
 
-  } else {
+      deviceKey.type = "password";
 
-    deviceKey.type = "password";
+      toggleKey.innerText = "👁️";
 
-    toggleKey.innerText = "👁️";
+    }
 
-    toggleKey.setAttribute(
-      "aria-label",
-      "Show device key"
-    );
   }
+);
 
-});
 
-
-// ================================
-// STATUS DISPLAY
-// ================================
+// =====================================
+// STATUS
+// =====================================
 
 function setStatus(message, className) {
 
@@ -191,9 +213,9 @@ function setStatus(message, className) {
 }
 
 
-// ================================
-// ACCEPTED SOUND
-// ================================
+// =====================================
+// SOUND
+// =====================================
 
 function acceptedSound() {
 
@@ -240,18 +262,14 @@ function acceptedSound() {
       audioContext.currentTime + 0.35
     );
 
-  } catch (error) {
-
-    // Ignore sound error
-
-  }
+  } catch (error) {}
 
 }
 
 
-// ================================
-// DEVICE FEEDBACK
-// ================================
+// =====================================
+// FEEDBACK
+// =====================================
 
 function deviceFeedback() {
 
@@ -270,16 +288,121 @@ function deviceFeedback() {
 }
 
 
-// ================================
-// START SCANNER
-// ================================
+// =====================================
+// JSONP REQUEST
+// =====================================
 
-document
-  .getElementById("startBtn")
-  .addEventListener("click", function () {
+function jsonpRequest(url) {
+
+  return new Promise(
+    function(resolve, reject) {
+
+      const callbackName =
+        "senhsCallback_" +
+        Date.now() +
+        "_" +
+        (++callbackCounter);
+
+      const script =
+        document.createElement("script");
+
+      let finished = false;
+
+      const timeout =
+        setTimeout(
+          function() {
+
+            if (finished) return;
+
+            finished = true;
+
+            cleanup();
+
+            reject(
+              new Error(
+                "Server connection timeout."
+              )
+            );
+
+          },
+          15000
+        );
+
+
+      function cleanup() {
+
+        clearTimeout(timeout);
+
+        if (script.parentNode) {
+          script.parentNode.removeChild(script);
+        }
+
+        try {
+          delete window[callbackName];
+        } catch (error) {
+          window[callbackName] = undefined;
+        }
+
+      }
+
+
+      window[callbackName] =
+        function(data) {
+
+          if (finished) return;
+
+          finished = true;
+
+          cleanup();
+
+          resolve(data);
+
+        };
+
+
+      script.onerror =
+        function() {
+
+          if (finished) return;
+
+          finished = true;
+
+          cleanup();
+
+          reject(
+            new Error(
+              "Unable to connect to server."
+            )
+          );
+
+        };
+
+
+      script.src =
+        url +
+        "&callback=" +
+        encodeURIComponent(callbackName);
+
+
+      document.body.appendChild(script);
+
+    }
+  );
+
+}
+
+
+// =====================================
+// START SCANNER
+// =====================================
+
+startBtn.addEventListener(
+  "click",
+  function() {
 
     const key =
       deviceKey.value.trim();
+
 
     if (!key) {
 
@@ -291,6 +414,7 @@ document
       return;
     }
 
+
     if (scannerStarted) {
 
       setStatus(
@@ -301,12 +425,17 @@ document
       return;
     }
 
+
     scannerStarted = true;
 
+    startBtn.disabled = true;
+
     setStatus(
-      "STARTING CAMERA...<br>Please allow camera access.",
+      "STARTING CAMERA...<br>" +
+      "Please allow camera access.",
       "processing"
     );
+
 
     scanner =
       new Html5QrcodeScanner(
@@ -321,31 +450,40 @@ document
         false
       );
 
+
     scanner.render(
       onScanSuccess,
       onScanFailure
     );
 
-  });
+  }
+);
 
 
-// ================================
-// QR SCAN SUCCESS
-// ================================
+// =====================================
+// QR SCAN
+// =====================================
 
 function onScanSuccess(decodedText) {
 
-  // Prevent multiple scans
   if (processing) return;
 
   processing = true;
 
+
   setStatus(
-    "⏳ PROCESSING...<br>Please wait.",
+    "⏳ PROCESSING...<br>" +
+    "Please wait.",
     "processing"
   );
 
+
   let lrn = "";
+
+
+  // ===================================
+  // GET LRN FROM QR
+  // ===================================
 
   try {
 
@@ -353,25 +491,28 @@ function onScanSuccess(decodedText) {
       new URL(decodedText);
 
     lrn =
-      url.searchParams.get("lrn");
+      url.searchParams.get("lrn") || "";
 
   } catch (error) {
 
-    setStatus(
-      "❌ INVALID QR CODE",
-      "denied"
-    );
+    // Allow plain LRN QR
 
-    processing = false;
+    const plain =
+      String(decodedText).trim();
 
-    return;
+    if (/^\d{8,15}$/.test(plain)) {
+
+      lrn = plain;
+
+    }
+
   }
 
 
   if (!lrn) {
 
     setStatus(
-      "❌ LRN NOT FOUND",
+      "❌ INVALID QR CODE",
       "denied"
     );
 
@@ -398,9 +539,9 @@ function onScanSuccess(decodedText) {
   }
 
 
-  // ================================
-  // SEND TO GOOGLE APPS SCRIPT
-  // ================================
+  // ===================================
+  // BUILD REQUEST
+  // ===================================
 
   const requestUrl =
     APPS_SCRIPT_URL +
@@ -410,103 +551,163 @@ function onScanSuccess(decodedText) {
     encodeURIComponent(key);
 
 
-  fetch(requestUrl)
+  // ===================================
+  // JSONP REQUEST
+  // ===================================
 
-    .then(function(response) {
+  jsonpRequest(requestUrl)
 
-      return response.text();
+    .then(
+      function(result) {
 
-    })
+        if (!result) {
 
-    .then(function(result) {
+          throw new Error(
+            "Empty server response."
+          );
 
-      const upperResult =
-        result.toUpperCase();
-
-
-      // ============================
-      // ACCESS DENIED
-      // ============================
-
-      if (
-        upperResult.includes("ACCESS DENIED") ||
-        upperResult.includes("UNAUTHORIZED")
-      ) {
-
-        setStatus(
-          "❌ ACCESS DENIED<br>" +
-          "<span class='cooldown'>" +
-          "Unauthorized device" +
-          "</span>",
-          "denied"
-        );
-
-      }
+        }
 
 
-      // ============================
-      // ERROR
-      // ============================
+        // ==============================
+        // UNAUTHORIZED
+        // ==============================
 
-      else if (
-        upperResult.includes("ERROR")
-      ) {
+        if (
+          result.authorized === false &&
+          result.success === false
+        ) {
 
-        setStatus(
-          "❌ ERROR<br>" +
-          result,
-          "denied"
-        );
+          setStatus(
+            "❌ ACCESS DENIED<br>" +
+            "<span class='cooldown'>" +
+            (result.message ||
+             "Unauthorized device.") +
+            "</span>",
+            "denied"
+          );
 
-      }
+          startCooldown();
+
+          return;
+
+        }
 
 
-      // ============================
-      // ACCEPTED
-      // ============================
+        // ==============================
+        // SERVER ERROR
+        // ==============================
 
-      else {
+        if (result.success === false) {
+
+          setStatus(
+            "❌ ERROR<br>" +
+            "<span class='cooldown'>" +
+            (result.message ||
+             "Unable to process scan.") +
+            "</span>",
+            "denied"
+          );
+
+          startCooldown();
+
+          return;
+
+        }
+
+
+        // ==============================
+        // SUCCESS
+        // ==============================
 
         deviceFeedback();
 
+
+        const event =
+          result.event ||
+          result.status ||
+          "SCAN ACCEPTED";
+
+
+        const name =
+          result.name ||
+          "";
+
+
+        const section =
+          result.section ||
+          "";
+
+
+        const transaction =
+          result.transaction
+            ? "Transaction #" +
+              result.transaction
+            : "";
+
+
+        const time =
+          result.timestamp ||
+          result.time ||
+          "";
+
+
+        const sms =
+          result.sms
+            ? "<br>SMS: " + result.sms
+            : "";
+
+
         setStatus(
-          "✅ ACCEPTED<br><br>" +
-          result +
+          "✅ " +
+          event +
           "<br><br>" +
+
+          name +
+
+          (section
+            ? "<br>" + section
+            : "") +
+
+          (transaction
+            ? "<br>" + transaction
+            : "") +
+
+          (time
+            ? "<br>" + time
+            : "") +
+
+          sms +
+
+          "<br><br>" +
+
           "<span class='cooldown'>" +
           "NEXT SCAN IN 5 SECONDS" +
           "</span>",
+
           "accepted"
         );
 
+
+        startCooldown();
+
       }
+    )
+
+    .catch(
+      function(error) {
+
+        setStatus(
+          "❌ CONNECTION ERROR<br>" +
+          "<span class='cooldown'>" +
+          "Unable to connect to server." +
+          "</span>",
+          "denied"
+        );
 
 
-      // ============================
-      // 5 SECOND COOLDOWN
-      // ============================
-
-      let seconds = 5;
-
-      const countdown =
-        setInterval(function () {
-
-          seconds--;
-
-          if (seconds > 0) {
-
-            statusBox.innerHTML =
-              statusBox.innerHTML
-                .replace(
-                  /NEXT SCAN IN \d+ SECONDS/,
-                  "NEXT SCAN IN " +
-                  seconds +
-                  " SECONDS"
-                );
-
-          } else {
-
-            clearInterval(countdown);
+        setTimeout(
+          function() {
 
             processing = false;
 
@@ -515,46 +716,66 @@ function onScanSuccess(decodedText) {
               "ready"
             );
 
-          }
-
-        }, 1000);
-
-    })
-
-
-    // ================================
-    // CONNECTION ERROR
-    // ================================
-
-    .catch(function(error) {
-
-      setStatus(
-        "❌ CONNECTION ERROR<br>" +
-        "<span class='cooldown'>" +
-        "Check internet connection." +
-        "</span>",
-        "denied"
-      );
-
-      setTimeout(function () {
-
-        processing = false;
-
-        setStatus(
-          "READY — I-SCAN ANG QR CODE",
-          "ready"
+          },
+          5000
         );
 
-      }, 5000);
-
-    });
+      }
+    );
 
 }
 
 
-// ================================
-// NORMAL QR SCANNER EVENT
-// ================================
+// =====================================
+// COOLDOWN
+// =====================================
+
+function startCooldown() {
+
+  let seconds = 5;
+
+
+  const countdown =
+    setInterval(
+      function() {
+
+        seconds--;
+
+
+        if (seconds > 0) {
+
+          statusBox.innerHTML =
+            statusBox.innerHTML
+              .replace(
+                /NEXT SCAN IN \d+ SECONDS/,
+                "NEXT SCAN IN " +
+                seconds +
+                " SECONDS"
+              );
+
+        } else {
+
+          clearInterval(countdown);
+
+          processing = false;
+
+          setStatus(
+            "READY — I-SCAN ANG QR CODE",
+            "ready"
+          );
+
+        }
+
+      },
+      1000
+    );
+
+}
+
+
+// =====================================
+// QR SCANNER FAILURE
+// =====================================
 
 function onScanFailure(error) {
 
