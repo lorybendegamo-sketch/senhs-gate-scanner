@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -316,94 +317,216 @@
       position: relative;
       z-index: 5;
       width: 100%;
-      padding: 16px 12px 22px;
+      padding: 18px 12px 22px;
       background: #07131e;
     }
 
     .attendance-title {
-      font-size: 20px;
+      font-size: 21px;
       font-weight: 900;
       text-align: center;
-      margin: 4px 0 10px;
+      margin: 4px 0 12px;
+      padding: 11px;
+      border-radius: 12px;
+      background: #1267a5;
       color: #ffffff;
-      letter-spacing: 0.4px;
+      letter-spacing: 0.5px;
     }
 
     .section-title {
       margin-top: 22px;
     }
 
+
+    /* =========================================
+       COLORFUL SCHOOL SUMMARY
+       ========================================= */
+
     .school-summary {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 8px;
+      gap: 9px;
       width: 100%;
     }
 
     .summary-card {
-      background: rgba(255,255,255,0.10);
-      border: 1px solid rgba(255,255,255,0.22);
-      border-radius: 10px;
-      padding: 10px 5px;
+      min-height: 88px;
+      border-radius: 14px;
+      padding: 11px 5px;
       text-align: center;
+      color: #ffffff;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.18);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
     }
 
     .summary-label {
       font-size: 10px;
-      font-weight: 800;
-      color: #dce8f2;
+      font-weight: 900;
       line-height: 1.2;
+      color: #ffffff;
     }
 
     .summary-number {
-      font-size: 22px;
+      font-size: 28px;
       font-weight: 900;
       color: #ffffff;
-      margin-top: 4px;
+      margin-top: 5px;
     }
+
+    /* TOTAL */
+    .summary-card:nth-child(1) {
+      background: #1976d2;
+    }
+
+    /* AM PRESENT */
+    .summary-card:nth-child(2) {
+      background: #16803c;
+    }
+
+    /* AM ABSENT */
+    .summary-card:nth-child(3) {
+      background: #d32f2f;
+    }
+
+    /* AM LATE */
+    .summary-card:nth-child(4) {
+      background: #f57c00;
+    }
+
+    /* PM PRESENT */
+    .summary-card:nth-child(5) {
+      background: #00897b;
+    }
+
+    /* PM ABSENT */
+    .summary-card:nth-child(6) {
+      background: #c62828;
+    }
+
+    /* PM LATE */
+    .summary-card:nth-child(7) {
+      background: #ef6c00;
+    }
+
+
+    /* =========================================
+       SECTION ATTENDANCE TABLE
+       ========================================= */
 
     #sectionAttendance {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
+      display: block;
+      width: 100%;
     }
 
-    .section-card {
-      background: rgba(255,255,255,0.09);
-      border: 1px solid rgba(255,255,255,0.20);
-      border-radius: 10px;
-      padding: 10px;
+    .section-table-wrap {
+      width: 100%;
+      overflow-x: auto;
+      border-radius: 12px;
+      background: #ffffff;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.18);
+      -webkit-overflow-scrolling: touch;
     }
 
-    .section-name {
-      font-size: 17px;
-      font-weight: 900;
-      color: #ffffff;
-      margin-bottom: 8px;
-    }
-
-    .section-stats {
-      display: grid;
-      grid-template-columns: repeat(6, 1fr);
-      gap: 5px;
-    }
-
-    .section-stat {
+    .section-table {
+      width: 100%;
+      min-width: 610px;
+      border-collapse: collapse;
+      table-layout: auto;
       text-align: center;
+      font-size: 13px;
     }
 
-    .section-stat-label {
-      font-size: 9px;
-      color: #cbd8e2;
-      line-height: 1.2;
-    }
-
-    .section-stat-number {
-      font-size: 16px;
-      font-weight: 900;
+    .section-table th {
+      padding: 10px 7px;
       color: #ffffff;
-      margin-top: 2px;
+      font-weight: 900;
+      border: 1px solid #ffffff;
+      white-space: nowrap;
+      line-height: 1.15;
     }
+
+    /* SECTION + TOTAL */
+    .section-table th:nth-child(1),
+    .section-table th:nth-child(2) {
+      background: #1565c0;
+    }
+
+    /* AM PRESENT */
+    .section-table th:nth-child(3) {
+      background: #16803c;
+    }
+
+    /* AM ABSENT */
+    .section-table th:nth-child(4) {
+      background: #d32f2f;
+    }
+
+    /* AM LATE */
+    .section-table th:nth-child(5) {
+      background: #f57c00;
+    }
+
+    /* PM PRESENT */
+    .section-table th:nth-child(6) {
+      background: #00897b;
+    }
+
+    /* PM ABSENT */
+    .section-table th:nth-child(7) {
+      background: #c62828;
+    }
+
+    /* PM LATE */
+    .section-table th:nth-child(8) {
+      background: #ef6c00;
+    }
+
+    .section-table td {
+      padding: 9px 7px;
+      border: 1px solid #d5e0ea;
+      font-weight: 800;
+      background: #ffffff;
+      white-space: nowrap;
+    }
+
+    .section-table tbody tr:nth-child(even) td {
+      background: #eef6ff;
+    }
+
+    .section-table-name {
+      text-align: left !important;
+      color: #124b7c;
+      font-weight: 900 !important;
+    }
+
+    /* AM COLORS */
+    .section-table td:nth-child(3) {
+      color: #16803c;
+    }
+
+    .section-table td:nth-child(4) {
+      color: #c62828;
+    }
+
+    .section-table td:nth-child(5) {
+      color: #ef6c00;
+    }
+
+    /* PM COLORS */
+    .section-table td:nth-child(6) {
+      color: #00897b;
+    }
+
+    .section-table td:nth-child(7) {
+      color: #c62828;
+    }
+
+    .section-table td:nth-child(8) {
+      color: #ef6c00;
+    }
+
 
     #attendanceUpdated {
       text-align: center;
@@ -476,6 +599,7 @@
       }
 
       .summary-card {
+        min-height: 82px;
         padding: 9px 4px;
       }
 
@@ -484,16 +608,17 @@
       }
 
       .summary-number {
-        font-size: 21px;
+        font-size: 25px;
       }
 
-      .section-stats {
-        grid-template-columns: repeat(3, 1fr);
-        row-gap: 8px;
+      .section-table {
+        font-size: 12px;
+        min-width: 610px;
       }
 
-      .section-name {
-        font-size: 16px;
+      .section-table th,
+      .section-table td {
+        padding: 8px 6px;
       }
 
     }
@@ -758,50 +883,116 @@
             <div class="school-summary">
 
               <div class="summary-card">
-                <div class="summary-label">TOTAL</div>
-                <div id="schoolTotal" class="summary-number">0</div>
+                <div class="summary-label">
+                  TOTAL
+                </div>
+
+                <div
+                  id="schoolTotal"
+                  class="summary-number"
+                >
+                  0
+                </div>
               </div>
 
-              <div class="summary-card">
-                <div class="summary-label">AM PRESENT</div>
-                <div id="schoolAmPresent" class="summary-number">0</div>
-              </div>
 
               <div class="summary-card">
-                <div class="summary-label">AM ABSENT</div>
-                <div id="schoolAmAbsent" class="summary-number">0</div>
+                <div class="summary-label">
+                  AM PRESENT
+                </div>
+
+                <div
+                  id="schoolAmPresent"
+                  class="summary-number"
+                >
+                  0
+                </div>
               </div>
 
-              <div class="summary-card">
-                <div class="summary-label">AM LATE</div>
-                <div id="schoolAmLate" class="summary-number">0</div>
-              </div>
 
               <div class="summary-card">
-                <div class="summary-label">PM PRESENT</div>
-                <div id="schoolPmPresent" class="summary-number">0</div>
+                <div class="summary-label">
+                  AM ABSENT
+                </div>
+
+                <div
+                  id="schoolAmAbsent"
+                  class="summary-number"
+                >
+                  0
+                </div>
               </div>
 
-              <div class="summary-card">
-                <div class="summary-label">PM ABSENT</div>
-                <div id="schoolPmAbsent" class="summary-number">0</div>
-              </div>
 
               <div class="summary-card">
-                <div class="summary-label">PM LATE</div>
-                <div id="schoolPmLate" class="summary-number">0</div>
+                <div class="summary-label">
+                  AM LATE
+                </div>
+
+                <div
+                  id="schoolAmLate"
+                  class="summary-number"
+                >
+                  0
+                </div>
+              </div>
+
+
+              <div class="summary-card">
+                <div class="summary-label">
+                  PM PRESENT
+                </div>
+
+                <div
+                  id="schoolPmPresent"
+                  class="summary-number"
+                >
+                  0
+                </div>
+              </div>
+
+
+              <div class="summary-card">
+                <div class="summary-label">
+                  PM ABSENT
+                </div>
+
+                <div
+                  id="schoolPmAbsent"
+                  class="summary-number"
+                >
+                  0
+                </div>
+              </div>
+
+
+              <div class="summary-card">
+                <div class="summary-label">
+                  PM LATE
+                </div>
+
+                <div
+                  id="schoolPmLate"
+                  class="summary-number"
+                >
+                  0
+                </div>
               </div>
 
             </div>
 
 
-            <div class="attendance-title section-title">
+            <div
+              class="attendance-title section-title"
+            >
               SECTION ATTENDANCE
             </div>
+
 
             <div id="sectionAttendance">
               Loading attendance...
             </div>
+
 
             <div id="attendanceUpdated">
               Updating...
@@ -1320,11 +1511,8 @@
     await startCamera();
 
 
-    /*
-     * Start automatic attendance monitoring.
-     */
-
     loadAttendanceSummary();
+
 
     if (!attendanceTimer) {
 
@@ -1335,6 +1523,52 @@
         );
 
     }
+
+  }
+
+
+  /* =====================================================
+     PM DISPLAY CONTROL
+     ===================================================== */
+
+  function isPMDisplayTime() {
+
+    const now =
+      new Date();
+
+    const currentMinutes =
+      now.getHours() * 60 +
+      now.getMinutes();
+
+    const pmStartMinutes =
+      12 * 60 + 5;
+
+    return (
+      currentMinutes >=
+      pmStartMinutes
+    );
+
+  }
+
+
+  function updateSchoolSummaryPMDisplay() {
+
+    const showPM =
+      isPMDisplayTime();
+
+    const pmCards =
+      document.querySelectorAll(
+        ".summary-card:nth-child(n+5)"
+      );
+
+    pmCards.forEach(
+      function(card) {
+
+        card.style.display =
+          showPM ? "" : "none";
+
+      }
+    );
 
   }
 
@@ -1429,6 +1663,9 @@
         Number(
           school.pmLate || 0
         );
+
+
+      updateSchoolSummaryPMDisplay();
 
 
       renderSectionAttendance(
@@ -1552,7 +1789,7 @@
 
 
   /* =====================================================
-     RENDER SECTION ATTENDANCE
+     RENDER SECTION ATTENDANCE TABLE
      ===================================================== */
 
   function renderSectionAttendance(
@@ -1578,7 +1815,51 @@
     }
 
 
-    let html = "";
+    const showPM =
+      isPMDisplayTime();
+
+
+    let html =
+
+      '<div class="section-table-wrap">' +
+
+        '<table class="section-table">' +
+
+          '<thead>' +
+
+            '<tr>' +
+
+              '<th>SECTION</th>' +
+
+              '<th>TOTAL</th>' +
+
+              '<th>AM<br>P</th>' +
+
+              '<th>AM<br>A</th>' +
+
+              '<th>AM<br>L</th>';
+
+
+    if (showPM) {
+
+      html +=
+
+              '<th>PM<br>P</th>' +
+
+              '<th>PM<br>A</th>' +
+
+              '<th>PM<br>L</th>';
+
+    }
+
+
+    html +=
+
+            '</tr>' +
+
+          '</thead>' +
+
+          '<tbody>';
 
 
     sorted.forEach(
@@ -1586,65 +1867,96 @@
 
         html +=
 
-          '<div class="section-card">' +
+          '<tr>' +
 
-            '<div class="section-name">' +
+            '<td class="section-table-name">' +
+
               escapeHtml(
                 section.section ||
                 ""
               ) +
-            '</div>' +
 
-            '<div class="section-stats">' +
+            '</td>' +
 
-              '<div class="section-stat">' +
-                '<div class="section-stat-label">TOTAL</div>' +
-                '<div class="section-stat-number">' +
-                  Number(section.total || 0) +
-                '</div>' +
-              '</div>' +
+            '<td>' +
 
-              '<div class="section-stat">' +
-                '<div class="section-stat-label">AM PRESENT</div>' +
-                '<div class="section-stat-number">' +
-                  Number(section.amPresent || 0) +
-                '</div>' +
-              '</div>' +
+              Number(
+                section.total || 0
+              ) +
 
-              '<div class="section-stat">' +
-                '<div class="section-stat-label">AM ABSENT</div>' +
-                '<div class="section-stat-number">' +
-                  Number(section.amAbsent || 0) +
-                '</div>' +
-              '</div>' +
+            '</td>' +
 
-              '<div class="section-stat">' +
-                '<div class="section-stat-label">AM LATE</div>' +
-                '<div class="section-stat-number">' +
-                  Number(section.amLate || 0) +
-                '</div>' +
-              '</div>' +
+            '<td>' +
 
-              '<div class="section-stat">' +
-                '<div class="section-stat-label">PM PRESENT</div>' +
-                '<div class="section-stat-number">' +
-                  Number(section.pmPresent || 0) +
-                '</div>' +
-              '</div>' +
+              Number(
+                section.amPresent || 0
+              ) +
 
-              '<div class="section-stat">' +
-                '<div class="section-stat-label">PM ABSENT</div>' +
-                '<div class="section-stat-number">' +
-                  Number(section.pmAbsent || 0) +
-                '</div>' +
-              '</div>' +
+            '</td>' +
 
-            '</div>' +
+            '<td>' +
 
-          '</div>';
+              Number(
+                section.amAbsent || 0
+              ) +
+
+            '</td>' +
+
+            '<td>' +
+
+              Number(
+                section.amLate || 0
+              ) +
+
+            '</td>';
+
+
+        if (showPM) {
+
+          html +=
+
+            '<td>' +
+
+              Number(
+                section.pmPresent || 0
+              ) +
+
+            '</td>' +
+
+            '<td>' +
+
+              Number(
+                section.pmAbsent || 0
+              ) +
+
+            '</td>' +
+
+            '<td>' +
+
+              Number(
+                section.pmLate || 0
+              ) +
+
+            '</td>';
+
+        }
+
+
+        html +=
+
+          '</tr>';
 
       }
     );
+
+
+    html +=
+
+          '</tbody>' +
+
+        '</table>' +
+
+      '</div>';
 
 
     sectionAttendance.innerHTML =
@@ -1988,11 +2300,6 @@
           180
         );
 
-
-        /*
-         * Update attendance immediately
-         * after a successful scan.
-         */
 
         setTimeout(
           loadAttendanceSummary,
@@ -2630,3 +2937,4 @@
 
 </body>
 </html>
+```
