@@ -76,17 +76,17 @@
     }
 
     .school-name {
-      font-size: 22px;
-      font-weight: 800;
+      font-size: 30px;
+      font-weight: 900;
       letter-spacing: 0.5px;
-      line-height: 1.25;
+      line-height: 1.2;
       color: #124b7c;
     }
 
     .gate-title {
       margin-top: 6px;
-      font-size: 32px;
-      font-weight: 900;
+      font-size: 24px;
+      font-weight: 800;
       color: #123;
     }
 
@@ -134,31 +134,21 @@
 
     #toggleDeviceCode {
       position: absolute;
-
       right: 6px;
       top: 50%;
-
       transform: translateY(-50%);
-
       width: 46px;
       height: 46px;
-
       border: none;
       border-radius: 10px;
-
       background: transparent;
-
       color: #222;
-
       cursor: pointer;
-
       display: flex;
       align-items: center;
       justify-content: center;
-
       padding: 0;
       margin: 0;
-
       z-index: 10;
     }
 
@@ -171,7 +161,6 @@
         translateY(-50%)
         scale(0.92);
     }
-
 
     #continueBtn {
       width: 100%;
@@ -222,9 +211,6 @@
       box-shadow: 0 10px 35px rgba(0,0,0,0.20);
     }
 
-
-    /* SENHS WATERMARK */
-
     .scanner-watermark {
       position: absolute;
       z-index: 1;
@@ -238,7 +224,6 @@
       white-space: nowrap;
     }
 
-
     .scanner-header {
       position: relative;
       z-index: 5;
@@ -248,7 +233,7 @@
     }
 
     .scanner-school {
-      font-size: 19px;
+      font-size: 25px;
       font-weight: 900;
       color: #124b7c;
       line-height: 1.2;
@@ -256,11 +241,10 @@
 
     .scanner-title {
       margin-top: 5px;
-      font-size: 30px;
-      font-weight: 900;
+      font-size: 21px;
+      font-weight: 800;
       color: #111;
     }
-
 
     .camera-area {
       position: relative;
@@ -289,21 +273,15 @@
       z-index: 20;
       right: 16px;
       top: 16px;
-
       width: 52px;
       height: 52px;
-
       border: none;
       border-radius: 50%;
-
       background: rgba(0,0,0,0.65);
       color: white;
-
       font-size: 27px;
       font-weight: bold;
-
       cursor: pointer;
-
       display: flex;
       align-items: center;
       justify-content: center;
@@ -321,16 +299,117 @@
     .ready-bar {
       position: relative;
       z-index: 5;
-
       padding: 14px;
-
       text-align: center;
-
       background: rgba(255,255,255,0.96);
-
       color: #16803c;
       font-size: 17px;
       font-weight: 900;
+    }
+
+
+    /* =========================================
+       ATTENDANCE MONITOR
+       ========================================= */
+
+    #attendanceMonitor {
+      position: relative;
+      z-index: 5;
+      width: 100%;
+      padding: 16px 12px 22px;
+      background: #07131e;
+    }
+
+    .attendance-title {
+      font-size: 20px;
+      font-weight: 900;
+      text-align: center;
+      margin: 4px 0 10px;
+      color: #ffffff;
+      letter-spacing: 0.4px;
+    }
+
+    .section-title {
+      margin-top: 22px;
+    }
+
+    .school-summary {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      width: 100%;
+    }
+
+    .summary-card {
+      background: rgba(255,255,255,0.10);
+      border: 1px solid rgba(255,255,255,0.22);
+      border-radius: 10px;
+      padding: 10px 5px;
+      text-align: center;
+    }
+
+    .summary-label {
+      font-size: 10px;
+      font-weight: 800;
+      color: #dce8f2;
+      line-height: 1.2;
+    }
+
+    .summary-number {
+      font-size: 22px;
+      font-weight: 900;
+      color: #ffffff;
+      margin-top: 4px;
+    }
+
+    #sectionAttendance {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .section-card {
+      background: rgba(255,255,255,0.09);
+      border: 1px solid rgba(255,255,255,0.20);
+      border-radius: 10px;
+      padding: 10px;
+    }
+
+    .section-name {
+      font-size: 17px;
+      font-weight: 900;
+      color: #ffffff;
+      margin-bottom: 8px;
+    }
+
+    .section-stats {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 5px;
+    }
+
+    .section-stat {
+      text-align: center;
+    }
+
+    .section-stat-label {
+      font-size: 9px;
+      color: #cbd8e2;
+      line-height: 1.2;
+    }
+
+    .section-stat-number {
+      font-size: 16px;
+      font-weight: 900;
+      color: #ffffff;
+      margin-top: 2px;
+    }
+
+    #attendanceUpdated {
+      text-align: center;
+      font-size: 10px;
+      color: #9fb0bd;
+      margin-top: 10px;
     }
 
 
@@ -341,16 +420,11 @@
     .scan-overlay {
       position: absolute;
       z-index: 30;
-
       inset: 0;
-
       display: none;
-
       align-items: center;
       justify-content: center;
-
       padding: 20px;
-
       background: rgba(0,0,0,0.72);
       backdrop-filter: blur(4px);
     }
@@ -358,23 +432,15 @@
     .overlay-box {
       width: 100%;
       max-width: 900px;
-
       background: #0d47a1;
-
       color: #ffffff;
-
       border-radius: 22px;
-
       padding: 35px 25px;
-
       text-align: center;
-
       box-shadow:
         0 15px 45px
         rgba(0,0,0,0.45);
-
       border: 4px solid #ffffff;
-
       box-sizing: border-box;
     }
 
@@ -400,73 +466,38 @@
 
 
     /* =========================================
-       RESULT
-       ========================================= */
-
-    .result-title {
-      font-size: 28px;
-      font-weight: 900;
-      margin-bottom: 14px;
-    }
-
-    .result-success {
-      color: #16803c;
-    }
-
-    .result-error {
-      color: #c62828;
-    }
-
-    .student-name {
-      font-size: 24px;
-      font-weight: 900;
-      color: #123;
-      margin-top: 8px;
-    }
-
-    .student-section {
-      font-size: 18px;
-      font-weight: bold;
-      color: #555;
-      margin-top: 5px;
-    }
-
-    .event-box {
-      margin-top: 18px;
-      padding: 14px;
-      border-radius: 14px;
-      background: #edf6ff;
-      color: #1267a5;
-      font-size: 25px;
-      font-weight: 900;
-    }
-
-    .transaction {
-      margin-top: 10px;
-      font-size: 15px;
-      color: #555;
-    }
-
-    .late-box {
-      margin-top: 15px;
-      padding: 12px;
-      border-radius: 12px;
-      background: #fff0f0;
-      color: #c62828;
-      font-size: 22px;
-      font-weight: 900;
-    }
-
-    .sms-status {
-      margin-top: 10px;
-      font-size: 14px;
-      color: #555;
-    }
-
-
-    /* =========================================
        RESPONSIVE
        ========================================= */
+
+    @media (max-width: 600px) {
+
+      .school-summary {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .summary-card {
+        padding: 9px 4px;
+      }
+
+      .summary-label {
+        font-size: 9px;
+      }
+
+      .summary-number {
+        font-size: 21px;
+      }
+
+      .section-stats {
+        grid-template-columns: repeat(3, 1fr);
+        row-gap: 8px;
+      }
+
+      .section-name {
+        font-size: 16px;
+      }
+
+    }
+
 
     @media (max-width: 480px) {
 
@@ -474,14 +505,20 @@
         padding: 10px;
       }
 
-      .school-name,
-      .scanner-school {
-        font-size: 17px;
+      .school-name {
+        font-size: 25px;
       }
 
-      .gate-title,
+      .gate-title {
+        font-size: 22px;
+      }
+
+      .scanner-school {
+        font-size: 22px;
+      }
+
       .scanner-title {
-        font-size: 27px;
+        font-size: 20px;
       }
 
       .camera-area,
@@ -493,65 +530,37 @@
         font-size: 110px;
       }
 
-
-      /* =========================================
-         MOBILE DEVICE CODE
-         ========================================= */
-
       .device-code-wrapper {
         position: relative !important;
-
         width: 100% !important;
-
         max-width: 420px !important;
-
         margin: 0 auto 18px auto !important;
       }
 
       .device-code-wrapper #deviceCode {
         width: 100% !important;
-
         box-sizing: border-box !important;
-
         padding-right: 60px !important;
       }
 
       #toggleDeviceCode {
         position: absolute !important;
-
         display: flex !important;
-
         visibility: visible !important;
-
         opacity: 1 !important;
-
         right: 6px !important;
-
         top: 50% !important;
-
-        transform:
-          translateY(-50%) !important;
-
+        transform: translateY(-50%) !important;
         width: 46px !important;
-
         height: 46px !important;
-
         z-index: 999 !important;
-
         border: none !important;
-
         background: transparent !important;
-
         color: #222 !important;
-
         align-items: center !important;
-
         justify-content: center !important;
-
         padding: 0 !important;
-
         margin: 0 !important;
-
         cursor: pointer !important;
       }
 
@@ -599,9 +608,6 @@
           >
             Enter Device Code
           </label>
-
-
-          <!-- DEVICE CODE WITH SHOW/HIDE -->
 
           <div class="device-code-wrapper">
 
@@ -729,89 +735,88 @@
           </div>
 
 
-<!-- READY -->
+          <!-- READY -->
 
-<div
-  id="readyBar"
-  class="ready-bar"
->
-  ● READY TO SCAN
-</div>
+          <div
+            id="readyBar"
+            class="ready-bar"
+          >
+            ● READY TO SCAN
+          </div>
 
 
-<!-- ==================================================
-     ATTENDANCE MONITOR
-     ================================================== -->
+          <!-- ==================================================
+               ATTENDANCE MONITOR
+               ================================================== -->
 
-<div id="attendanceMonitor">
+          <div id="attendanceMonitor">
 
-  <div class="attendance-title">
-    SCHOOL SUMMARY
+            <div class="attendance-title">
+              SCHOOL SUMMARY
+            </div>
+
+            <div class="school-summary">
+
+              <div class="summary-card">
+                <div class="summary-label">TOTAL</div>
+                <div id="schoolTotal" class="summary-number">0</div>
+              </div>
+
+              <div class="summary-card">
+                <div class="summary-label">AM PRESENT</div>
+                <div id="schoolAmPresent" class="summary-number">0</div>
+              </div>
+
+              <div class="summary-card">
+                <div class="summary-label">AM ABSENT</div>
+                <div id="schoolAmAbsent" class="summary-number">0</div>
+              </div>
+
+              <div class="summary-card">
+                <div class="summary-label">AM LATE</div>
+                <div id="schoolAmLate" class="summary-number">0</div>
+              </div>
+
+              <div class="summary-card">
+                <div class="summary-label">PM PRESENT</div>
+                <div id="schoolPmPresent" class="summary-number">0</div>
+              </div>
+
+              <div class="summary-card">
+                <div class="summary-label">PM ABSENT</div>
+                <div id="schoolPmAbsent" class="summary-number">0</div>
+              </div>
+
+              <div class="summary-card">
+                <div class="summary-label">PM LATE</div>
+                <div id="schoolPmLate" class="summary-number">0</div>
+              </div>
+
+            </div>
+
+
+            <div class="attendance-title section-title">
+              SECTION ATTENDANCE
+            </div>
+
+            <div id="sectionAttendance">
+              Loading attendance...
+            </div>
+
+            <div id="attendanceUpdated">
+              Updating...
+            </div>
+
+          </div>
+
+
+        </div>
+
+      </div>
+
+    </div>
+
   </div>
-
-  <div class="school-summary">
-
-    <div class="summary-card">
-      <div class="summary-label">TOTAL</div>
-      <div id="schoolTotal" class="summary-number">0</div>
-    </div>
-
-    <div class="summary-card">
-      <div class="summary-label">AM PRESENT</div>
-      <div id="schoolAmPresent" class="summary-number">0</div>
-    </div>
-
-    <div class="summary-card">
-      <div class="summary-label">AM ABSENT</div>
-      <div id="schoolAmAbsent" class="summary-number">0</div>
-    </div>
-
-    <div class="summary-card">
-      <div class="summary-label">AM LATE</div>
-      <div id="schoolAmLate" class="summary-number">0</div>
-    </div>
-
-    <div class="summary-card">
-      <div class="summary-label">PM PRESENT</div>
-      <div id="schoolPmPresent" class="summary-number">0</div>
-    </div>
-
-    <div class="summary-card">
-      <div class="summary-label">PM ABSENT</div>
-      <div id="schoolPmAbsent" class="summary-number">0</div>
-    </div>
-
-    <div class="summary-card">
-      <div class="summary-label">PM LATE</div>
-      <div id="schoolPmLate" class="summary-number">0</div>
-    </div>
-
-  </div>
-
-
-  <div class="attendance-title section-title">
-    SECTION ATTENDANCE
-  </div>
-
-  <div id="sectionAttendance">
-    Loading attendance...
-  </div>
-
-  <div id="attendanceUpdated">
-    Updating...
-  </div>
-
-</div>
-
-
-</div>
-
-</div>
-
-
-</div>
-
-</div>
 
 
 <script>
@@ -842,6 +847,8 @@
   let processing = false;
 
   let callbackCounter = 0;
+
+  let attendanceTimer = null;
 
 
   /* =====================================================
@@ -896,6 +903,16 @@
   const readyBar =
     document.getElementById(
       "readyBar"
+    );
+
+  const sectionAttendance =
+    document.getElementById(
+      "sectionAttendance"
+    );
+
+  const attendanceUpdated =
+    document.getElementById(
+      "attendanceUpdated"
     );
 
 
@@ -1302,6 +1319,337 @@
 
     await startCamera();
 
+
+    /*
+     * Start automatic attendance monitoring.
+     */
+
+    loadAttendanceSummary();
+
+    if (!attendanceTimer) {
+
+      attendanceTimer =
+        setInterval(
+          loadAttendanceSummary,
+          5000
+        );
+
+    }
+
+  }
+
+
+  /* =====================================================
+     ATTENDANCE SUMMARY
+     ===================================================== */
+
+  async function loadAttendanceSummary() {
+
+    try {
+
+      const requestUrl =
+        APPS_SCRIPT_URL +
+        "?summary=today";
+
+
+      const result =
+        await jsonpRequest(
+          requestUrl
+        );
+
+
+      if (
+        !result ||
+        !result.success
+      ) {
+
+        throw new Error(
+          "Unable to load attendance."
+        );
+
+      }
+
+
+      const school =
+        result.wholeSchool ||
+        {};
+
+
+      document.getElementById(
+        "schoolTotal"
+      ).textContent =
+        Number(
+          school.total || 0
+        );
+
+
+      document.getElementById(
+        "schoolAmPresent"
+      ).textContent =
+        Number(
+          school.amPresent || 0
+        );
+
+
+      document.getElementById(
+        "schoolAmAbsent"
+      ).textContent =
+        Number(
+          school.amAbsent || 0
+        );
+
+
+      document.getElementById(
+        "schoolAmLate"
+      ).textContent =
+        Number(
+          school.amLate || 0
+        );
+
+
+      document.getElementById(
+        "schoolPmPresent"
+      ).textContent =
+        Number(
+          school.pmPresent || 0
+        );
+
+
+      document.getElementById(
+        "schoolPmAbsent"
+      ).textContent =
+        Number(
+          school.pmAbsent || 0
+        );
+
+
+      document.getElementById(
+        "schoolPmLate"
+      ).textContent =
+        Number(
+          school.pmLate || 0
+        );
+
+
+      renderSectionAttendance(
+        result.sections || []
+      );
+
+
+      attendanceUpdated.textContent =
+        "Updated " +
+        new Date().toLocaleTimeString(
+          [],
+          {
+            hour: "2-digit",
+            minute: "2-digit",
+            second: "2-digit"
+          }
+        );
+
+
+    } catch (error) {
+
+      console.error(
+        "Attendance update error:",
+        error
+      );
+
+      attendanceUpdated.textContent =
+        "Unable to update attendance.";
+
+    }
+
+  }
+
+
+  /* =====================================================
+     SECTION SORTING
+     GRADE 7 → 12
+     ===================================================== */
+
+  function getGradeNumber(
+    sectionName
+  ) {
+
+    const match =
+      String(
+        sectionName || ""
+      ).match(
+        /\b(7|8|9|10|11|12)\b/
+      );
+
+
+    if (!match) {
+
+      return 99;
+
+    }
+
+
+    return Number(
+      match[1]
+    );
+
+  }
+
+
+  function sortSections(
+    sections
+  ) {
+
+    return sections
+      .slice()
+      .sort(
+        function(a, b) {
+
+          const nameA =
+            String(
+              a.section || ""
+            );
+
+          const nameB =
+            String(
+              b.section || ""
+            );
+
+
+          const gradeA =
+            getGradeNumber(
+              nameA
+            );
+
+          const gradeB =
+            getGradeNumber(
+              nameB
+            );
+
+
+          if (
+            gradeA !==
+            gradeB
+          ) {
+
+            return gradeA -
+              gradeB;
+
+          }
+
+
+          return nameA.localeCompare(
+            nameB,
+            undefined,
+            {
+              numeric: true,
+              sensitivity: "base"
+            }
+          );
+
+        }
+      );
+
+  }
+
+
+  /* =====================================================
+     RENDER SECTION ATTENDANCE
+     ===================================================== */
+
+  function renderSectionAttendance(
+    sections
+  ) {
+
+    const sorted =
+      sortSections(
+        sections
+      );
+
+
+    if (
+      sorted.length ===
+      0
+    ) {
+
+      sectionAttendance.innerHTML =
+        '<div style="color:#ffffff;text-align:center;padding:15px;">No section data available.</div>';
+
+      return;
+
+    }
+
+
+    let html = "";
+
+
+    sorted.forEach(
+      function(section) {
+
+        html +=
+
+          '<div class="section-card">' +
+
+            '<div class="section-name">' +
+              escapeHtml(
+                section.section ||
+                ""
+              ) +
+            '</div>' +
+
+            '<div class="section-stats">' +
+
+              '<div class="section-stat">' +
+                '<div class="section-stat-label">TOTAL</div>' +
+                '<div class="section-stat-number">' +
+                  Number(section.total || 0) +
+                '</div>' +
+              '</div>' +
+
+              '<div class="section-stat">' +
+                '<div class="section-stat-label">AM PRESENT</div>' +
+                '<div class="section-stat-number">' +
+                  Number(section.amPresent || 0) +
+                '</div>' +
+              '</div>' +
+
+              '<div class="section-stat">' +
+                '<div class="section-stat-label">AM ABSENT</div>' +
+                '<div class="section-stat-number">' +
+                  Number(section.amAbsent || 0) +
+                '</div>' +
+              '</div>' +
+
+              '<div class="section-stat">' +
+                '<div class="section-stat-label">AM LATE</div>' +
+                '<div class="section-stat-number">' +
+                  Number(section.amLate || 0) +
+                '</div>' +
+              '</div>' +
+
+              '<div class="section-stat">' +
+                '<div class="section-stat-label">PM PRESENT</div>' +
+                '<div class="section-stat-number">' +
+                  Number(section.pmPresent || 0) +
+                '</div>' +
+              '</div>' +
+
+              '<div class="section-stat">' +
+                '<div class="section-stat-label">PM ABSENT</div>' +
+                '<div class="section-stat-number">' +
+                  Number(section.pmAbsent || 0) +
+                '</div>' +
+              '</div>' +
+
+            '</div>' +
+
+          '</div>';
+
+      }
+    );
+
+
+    sectionAttendance.innerHTML =
+      html;
+
   }
 
 
@@ -1386,103 +1734,105 @@
   }
 
 
-/* =====================================================
-   START SELECTED CAMERA
-   ===================================================== */
+  /* =====================================================
+     START SELECTED CAMERA
+     ===================================================== */
 
-async function startSelectedCamera() {
+  async function startSelectedCamera() {
 
-  if (!html5QrCode) {
-    return;
-  }
-
-  if (!cameras || cameras.length === 0) {
-    return;
-  }
-
-  const camera = cameras[currentCameraIndex];
-
-  if (!camera) {
-    return;
-  }
-
-  const cameraId = camera.id;
-
-  try {
-
-    /*
-     * IMPORTANT:
-     * Kapag running na ang scanner, huwag itong i-stop
-     * para lang mag-restart. Ito ang tumutulong na
-     * maiwasan ang paulit-ulit na camera permission request.
-     */
-
-    if (scannerRunning) {
+    if (!html5QrCode) {
       return;
     }
 
-    await html5QrCode.start(
+    if (!cameras || cameras.length === 0) {
+      return;
+    }
 
-      cameraId,
+    const camera =
+      cameras[
+        currentCameraIndex
+      ];
 
-      {
-        fps: 10,
+    if (!camera) {
+      return;
+    }
 
-        qrbox:
-          function(
-            viewfinderWidth,
-            viewfinderHeight
-          ) {
+    const cameraId =
+      camera.id;
 
-            const size =
-              Math.min(
-                viewfinderWidth,
-                viewfinderHeight
-              ) * 0.68;
+    try {
 
-            return {
-              width: size,
-              height: size
-            };
-
-          },
-
-        aspectRatio: 1.0
-      },
-
-      onQrDetected,
-
-      function(errorMessage) {
-        // Normal QR scanning errors.
-        // Huwag ipakita sa screen.
+      if (scannerRunning) {
+        return;
       }
 
-    );
+      await html5QrCode.start(
 
-    scannerRunning = true;
-    processing = false;
+        cameraId,
 
-    hideOverlay();
+        {
+          fps: 10,
 
-    readyBar.textContent =
-      "● READY TO SCAN";
+          qrbox:
+            function(
+              viewfinderWidth,
+              viewfinderHeight
+            ) {
 
-    readyBar.style.color =
-      "#16803c";
+              const size =
+                Math.min(
+                  viewfinderWidth,
+                  viewfinderHeight
+                ) * 0.68;
 
-  } catch (error) {
+              return {
+                width: size,
+                height: size
+              };
 
-    console.error(
-      "Camera start error:",
-      error
-    );
+            },
 
-    scannerRunning = false;
+          aspectRatio: 1.0
+        },
 
-    throw error;
+        onQrDetected,
+
+        function(errorMessage) {
+          // Normal QR scanning errors.
+        }
+
+      );
+
+      scannerRunning =
+        true;
+
+      processing =
+        false;
+
+      hideOverlay();
+
+      readyBar.textContent =
+        "● READY TO SCAN";
+
+      readyBar.style.color =
+        "#16803c";
+
+    } catch (error) {
+
+      console.error(
+        "Camera start error:",
+        error
+      );
+
+      scannerRunning =
+        false;
+
+      throw error;
+
+    }
+
   }
 
-}
 
   /* =====================================================
      QR DETECTED
@@ -1638,6 +1988,17 @@ async function startSelectedCamera() {
           180
         );
 
+
+        /*
+         * Update attendance immediately
+         * after a successful scan.
+         */
+
+        setTimeout(
+          loadAttendanceSummary,
+          500
+        );
+
       }
 
     } catch (error) {
@@ -1768,42 +2129,6 @@ async function startSelectedCamera() {
           'box-shadow:0 8px 25px rgba(0,0,0,.40);' +
 
         '">' +
-
-
-          '<div style="' +
-
-            'font-size:22px;' +
-
-            'font-weight:900;' +
-
-            'color:#ffffff;' +
-
-            'margin-bottom:12px;' +
-
-            'line-height:1.2;' +
-
-          '">' +
-
-            'SAN ESTEBAN NATIONAL HIGH SCHOOL' +
-
-          '</div>' +
-
-
-          '<div style="' +
-
-            'font-size:18px;' +
-
-            'font-weight:700;' +
-
-            'color:#ffffff;' +
-
-            'margin-bottom:18px;' +
-
-          '">' +
-
-            'SCAN RESULT' +
-
-          '</div>' +
 
 
           '<div style="' +
@@ -1956,23 +2281,6 @@ async function startSelectedCamera() {
 
           '<div style="' +
 
-            'font-size:22px;' +
-
-            'font-weight:900;' +
-
-            'color:#ffffff;' +
-
-            'margin-bottom:20px;' +
-
-          '">' +
-
-            'SAN ESTEBAN NATIONAL HIGH SCHOOL' +
-
-          '</div>' +
-
-
-          '<div style="' +
-
             'font-size:30px;' +
 
             'font-weight:900;' +
@@ -2034,70 +2342,65 @@ async function startSelectedCamera() {
 
   }
 
-/* =====================================================
-   RESUME SCANNER
-   ===================================================== */
 
-async function resumeScanner() {
+  /* =====================================================
+     RESUME SCANNER
+     ===================================================== */
 
-  hideOverlay();
+  async function resumeScanner() {
 
-  readyBar.textContent =
-    "● READY TO SCAN";
+    hideOverlay();
 
-  readyBar.style.color =
-    "#16803c";
+    readyBar.textContent =
+      "● READY TO SCAN";
 
-  processing = false;
+    readyBar.style.color =
+      "#16803c";
 
-  try {
+    processing =
+      false;
 
-    if (
-      html5QrCode &&
-      scannerRunning
-    ) {
+    try {
 
-      /*
-       * Resume lamang.
-       * Hindi na magre-request ulit ng camera permission.
-       */
+      if (
+        html5QrCode &&
+        scannerRunning
+      ) {
 
-      await html5QrCode.resume();
+        await html5QrCode.resume();
 
-    } else {
+      } else {
 
-      /*
-       * Start only when scanner is really stopped.
-       */
+        await startSelectedCamera();
 
-      await startSelectedCamera();
+      }
+
+    } catch (error) {
+
+      console.error(
+        "Resume scanner error:",
+        error
+      );
+
+      scannerRunning =
+        false;
+
+      readyBar.textContent =
+        "CAMERA ERROR";
+
+      readyBar.style.color =
+        "#b71c1c";
+
+      showOverlay(
+        "CAMERA ERROR",
+        "Unable to resume the camera. Please try again.",
+        "error"
+      );
 
     }
 
-  } catch (error) {
-
-    console.error(
-      "Resume scanner error:",
-      error
-    );
-
-    scannerRunning = false;
-
-    readyBar.textContent =
-      "CAMERA ERROR";
-
-    readyBar.style.color =
-      "#b71c1c";
-
-    showOverlay(
-      "CAMERA ERROR",
-      "Unable to resume the camera. Please try again.",
-      "error"
-    );
-
   }
 
-}
 
   /* =====================================================
      HIDE OVERLAY
@@ -2115,117 +2418,68 @@ async function resumeScanner() {
 
 
   /* =====================================================
-   CAMERA SWITCH
-   ===================================================== */
+     CAMERA SWITCH
+     ===================================================== */
 
-switchCameraBtn.addEventListener(
-  "click",
-  async function() {
+  switchCameraBtn.addEventListener(
+    "click",
+    async function() {
 
-    if (
-      processing ||
-      !cameras ||
-      cameras.length < 2 ||
-      !html5QrCode
-    ) {
-      return;
-    }
-
-    processing = true;
-
-    switchCameraBtn.disabled = true;
-
-    readyBar.textContent =
-      "SWITCHING CAMERA...";
-
-    readyBar.style.color =
-      "#1267a5";
-
-
-    const previousCameraIndex =
-      currentCameraIndex;
-
-
-    try {
-
-      /*
-       * Stop the current scanner only for the
-       * purpose of changing the selected camera.
-       *
-       * The browser's camera permission remains
-       * granted for this website/device.
-       */
-
-      if (scannerRunning) {
-
-        try {
-
-          await html5QrCode.stop();
-
-        } catch (stopError) {
-
-          console.log(
-            "Camera stop:",
-            stopError
-          );
-
-        }
-
-        scannerRunning = false;
-
+      if (
+        processing ||
+        !cameras ||
+        cameras.length < 2 ||
+        !html5QrCode
+      ) {
+        return;
       }
 
+      processing =
+        true;
 
-      /*
-       * Move to the next available camera.
-       */
-
-      currentCameraIndex =
-        (
-          currentCameraIndex + 1
-        ) %
-        cameras.length;
-
-
-      /*
-       * Start the newly selected camera.
-       *
-       * Since permission was already granted
-       * to this website, the browser should
-       * reuse the existing permission.
-       */
-
-      await startSelectedCamera();
-
+      switchCameraBtn.disabled =
+        true;
 
       readyBar.textContent =
-        "● READY TO SCAN";
+        "SWITCHING CAMERA...";
 
       readyBar.style.color =
-        "#16803c";
+        "#1267a5";
 
 
-    } catch (error) {
-
-      console.error(
-        "Camera switch error:",
-        error
-      );
-
-
-      /*
-       * Return to the previous camera
-       * if the new camera cannot start.
-       */
-
-      currentCameraIndex =
-        previousCameraIndex;
-
-
-      scannerRunning = false;
+      const previousCameraIndex =
+        currentCameraIndex;
 
 
       try {
+
+        if (scannerRunning) {
+
+          try {
+
+            await html5QrCode.stop();
+
+          } catch (stopError) {
+
+            console.log(
+              "Camera stop:",
+              stopError
+            );
+
+          }
+
+          scannerRunning =
+            false;
+
+        }
+
+
+        currentCameraIndex =
+          (
+            currentCameraIndex + 1
+          ) %
+          cameras.length;
+
 
         await startSelectedCamera();
 
@@ -2237,42 +2491,71 @@ switchCameraBtn.addEventListener(
           "#16803c";
 
 
-      } catch (recoverError) {
+      } catch (error) {
 
         console.error(
-          "Camera recovery error:",
-          recoverError
+          "Camera switch error:",
+          error
         );
 
 
-        readyBar.textContent =
-          "CAMERA ERROR";
-
-        readyBar.style.color =
-          "#b71c1c";
+        currentCameraIndex =
+          previousCameraIndex;
 
 
-        showOverlay(
-          "CAMERA ERROR",
-          "Unable to switch camera. Please try again.",
-          "error"
-        );
+        scannerRunning =
+          false;
+
+
+        try {
+
+          await startSelectedCamera();
+
+
+          readyBar.textContent =
+            "● READY TO SCAN";
+
+          readyBar.style.color =
+            "#16803c";
+
+
+        } catch (recoverError) {
+
+          console.error(
+            "Camera recovery error:",
+            recoverError
+          );
+
+
+          readyBar.textContent =
+            "CAMERA ERROR";
+
+          readyBar.style.color =
+            "#b71c1c";
+
+
+          showOverlay(
+            "CAMERA ERROR",
+            "Unable to switch camera. Please try again.",
+            "error"
+          );
+
+        }
+
+      } finally {
+
+        processing =
+          false;
+
+        switchCameraBtn.disabled =
+          false;
 
       }
 
-    } finally {
-
-      processing = false;
-
-      switchCameraBtn.disabled =
-        false;
-
     }
+  );
 
-  }
-);
 
-  
   /* =====================================================
      CONTINUE BUTTON
      ===================================================== */
