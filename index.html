@@ -1266,9 +1266,8 @@ function showResult(result) {
     result.status === "LATE";
 
   /*
-   * BACKGROUND
-   * BLUE = NORMAL
-   * RED  = LATE / ERROR
+   * NORMAL = BLUE
+   * LATE / ERROR = RED
    */
 
   scanOverlay.style.background =
@@ -1276,9 +1275,6 @@ function showResult(result) {
       ? "#b71c1c"
       : "#0d47a1";
 
-  /*
-   * OVERLAY CONTENT
-   */
 
   if (isSuccess) {
 
@@ -1291,143 +1287,180 @@ function showResult(result) {
     const event =
       result.event || "";
 
+
     let html =
 
       '<div style="' +
-        'width:92%;' +
-        'max-width:1100px;' +
+        'width:100%;' +
+        'max-width:850px;' +
         'margin:auto;' +
-        'padding:35px 25px;' +
+        'padding:28px 20px;' +
         'text-align:center;' +
-        'background:#0b2f5b;' +
-        'border:4px solid #ffffff;' +
-        'border-radius:25px;' +
+        'background:#0d47a1;' +
+        'border:3px solid #ffffff;' +
+        'border-radius:20px;' +
         'box-sizing:border-box;' +
         'color:#ffffff;' +
         'font-family:Arial,sans-serif;' +
-        'box-shadow:0 10px 35px rgba(0,0,0,.45);' +
+        'box-shadow:0 8px 25px rgba(0,0,0,.40);' +
       '">' +
 
+        /*
+         * SCHOOL NAME
+         */
+
         '<div style="' +
-          'font-size:clamp(24px,4vw,48px);' +
+          'font-size:22px;' +
           'font-weight:900;' +
           'color:#ffffff;' +
-          'margin-bottom:18px;' +
-          'line-height:1.15;' +
+          'margin-bottom:12px;' +
+          'line-height:1.2;' +
         '">' +
           'SAN ESTEBAN NATIONAL HIGH SCHOOL' +
         '</div>' +
 
+
+        /*
+         * SCAN RESULT
+         */
+
         '<div style="' +
-          'font-size:clamp(18px,3vw,30px);' +
+          'font-size:18px;' +
           'font-weight:700;' +
           'color:#ffffff;' +
-          'margin-bottom:25px;' +
+          'margin-bottom:18px;' +
         '">' +
           'SCAN RESULT' +
         '</div>' +
 
+
+        /*
+         * STUDENT NAME
+         */
+
         '<div style="' +
-          'font-size:clamp(38px,7vw,82px);' +
+          'font-size:34px;' +
           'font-weight:900;' +
           'color:#ffffff;' +
-          'line-height:1.05;' +
-          'margin:20px 0;' +
-          'text-shadow:2px 3px 5px rgba(0,0,0,.6);' +
+          'line-height:1.15;' +
+          'margin:15px 0;' +
+          'text-shadow:1px 2px 3px rgba(0,0,0,.50);' +
         '">' +
           escapeHtml(name) +
         '</div>' +
 
+
+        /*
+         * SECTION
+         */
+
         '<div style="' +
-          'font-size:clamp(22px,4vw,40px);' +
+          'font-size:22px;' +
           'font-weight:700;' +
           'color:#ffffff;' +
-          'margin-bottom:30px;' +
+          'margin-bottom:22px;' +
         '">' +
           escapeHtml(section) +
         '</div>' +
 
+
+        /*
+         * TIME IN / TIME OUT
+         */
+
         '<div style="' +
           'display:inline-block;' +
-          'padding:14px 35px;' +
-          'font-size:clamp(30px,5vw,55px);' +
+          'padding:10px 25px;' +
+          'font-size:28px;' +
           'font-weight:900;' +
           'color:#ffffff;' +
           'background:#1565c0;' +
-          'border:3px solid #ffffff;' +
-          'border-radius:15px;' +
-          'text-shadow:2px 2px 3px rgba(0,0,0,.5);' +
+          'border:2px solid #ffffff;' +
+          'border-radius:12px;' +
         '">' +
           escapeHtml(event) +
         '</div>';
+
+
+    /*
+     * LATE
+     */
 
     if (isLate) {
 
       html +=
 
         '<div style="' +
-          'margin-top:25px;' +
-          'font-size:clamp(30px,5vw,58px);' +
+          'margin-top:18px;' +
+          'font-size:30px;' +
           'font-weight:900;' +
           'color:#ffffff;' +
           'background:#8b0000;' +
-          'border:3px solid #ffffff;' +
-          'border-radius:15px;' +
-          'padding:10px 30px;' +
+          'border:2px solid #ffffff;' +
+          'border-radius:12px;' +
+          'padding:8px 25px;' +
           'display:inline-block;' +
         '">' +
           'LATE' +
         '</div>';
     }
 
+
     html += '</div>';
 
-    overlayContent.innerHTML = html;
+
+    overlayContent.innerHTML =
+      html;
+
 
   } else {
+
+    /*
+     * ERROR RESULT
+     */
 
     const message =
       result && result.message
         ? result.message
         : "SCAN FAILED";
 
+
     overlayContent.innerHTML =
 
       '<div style="' +
-        'width:92%;' +
-        'max-width:900px;' +
+        'width:100%;' +
+        'max-width:700px;' +
         'margin:auto;' +
-        'padding:40px 25px;' +
+        'padding:30px 20px;' +
         'text-align:center;' +
         'background:#7f0000;' +
-        'border:4px solid #ffffff;' +
-        'border-radius:25px;' +
+        'border:3px solid #ffffff;' +
+        'border-radius:20px;' +
         'box-sizing:border-box;' +
         'color:#ffffff;' +
         'font-family:Arial,sans-serif;' +
-        'box-shadow:0 10px 35px rgba(0,0,0,.45);' +
       '">' +
 
         '<div style="' +
-          'font-size:clamp(24px,4vw,48px);' +
+          'font-size:22px;' +
           'font-weight:900;' +
           'color:#ffffff;' +
-          'margin-bottom:25px;' +
+          'margin-bottom:20px;' +
         '">' +
           'SAN ESTEBAN NATIONAL HIGH SCHOOL' +
         '</div>' +
 
         '<div style="' +
-          'font-size:clamp(30px,5vw,58px);' +
+          'font-size:30px;' +
           'font-weight:900;' +
           'color:#ffffff;' +
-          'margin-bottom:25px;' +
+          'margin-bottom:18px;' +
         '">' +
           'SCAN NOT RECORDED' +
         '</div>' +
 
         '<div style="' +
-          'font-size:clamp(20px,3vw,36px);' +
+          'font-size:20px;' +
           'font-weight:700;' +
           'color:#ffffff;' +
         '">' +
@@ -1436,26 +1469,32 @@ function showResult(result) {
 
       '</div>';
 
-    beep(600, 180);
+
+    beep(
+      600,
+      180
+    );
   }
+
 
   /*
    * AUTOMATIC RETURN TO SCANNER
-   * 5 SECONDS
+   * AFTER 5 SECONDS
    */
 
   showResult.timer =
     setTimeout(function() {
 
-      showResult.timer = null;
+      showResult.timer =
+        null;
 
-      scanOverlay.onclick = null;
+      scanOverlay.onclick =
+        null;
 
       resumeScanner();
 
     }, 5000);
 }
-
 
   /* =====================================================
      RESUME SCANNER
