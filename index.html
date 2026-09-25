@@ -1,787 +1,1586 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-
-  <meta name="viewport"
-        content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <title>SENHS Gate Scanner</title>
 
-  <script src="https://unpkg.com/html5-qrcode"></script>
+  <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
 
   <style>
-
     * {
       box-sizing: border-box;
     }
 
     body {
-      font-family: Arial, sans-serif;
-      text-align: center;
-      padding: 15px;
       margin: 0;
-      background: #f4f7f5;
-      color: #222;
+      font-family: Arial, Helvetica, sans-serif;
+      background: #f3f7fb;
+      color: #123;
     }
 
-    h2 {
-      margin-bottom: 18px;
+    .page {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
     }
 
-    .key-container {
-      position: relative;
-      width: 90%;
-      max-width: 400px;
-      margin: auto;
-    }
-
-    #deviceKey {
+    .container {
       width: 100%;
-      padding: 14px 50px 14px 14px;
-      font-size: 18px;
-      border: 1px solid #aaa;
-      border-radius: 8px;
-      outline: none;
+      max-width: 620px;
+      position: relative;
     }
 
-    #toggleKey {
+    /* =========================================
+       PAGE 1
+       ========================================= */
+
+    #devicePage {
+      background: white;
+      border-radius: 24px;
+      padding: 35px 25px;
+      box-shadow: 0 10px 35px rgba(0,0,0,0.12);
+      text-align: center;
+      overflow: hidden;
+    }
+
+    .device-watermark {
       position: absolute;
-      right: 5px;
-      top: 5px;
-      height: 42px;
-      width: 45px;
-      border: none;
-      background: transparent;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 170px;
+      font-weight: 900;
+      color: rgba(0, 70, 140, 0.045);
+      pointer-events: none;
+      white-space: nowrap;
+      z-index: 0;
+    }
+
+    .device-content {
+      position: relative;
+      z-index: 1;
+    }
+
+    .school-name {
       font-size: 22px;
-      cursor: pointer;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      line-height: 1.25;
+      color: #124b7c;
     }
 
-    #startBtn {
-      padding: 14px 22px;
+    .gate-title {
+      margin-top: 6px;
+      font-size: 32px;
+      font-weight: 900;
+      color: #123;
+    }
+
+    .subtitle {
+      margin-top: 8px;
+      color: #667;
+      font-size: 15px;
+    }
+
+    .device-label {
+      display: block;
+      margin-top: 35px;
+      margin-bottom: 8px;
+      text-align: left;
+      font-weight: bold;
+      color: #345;
+    }
+
+    #deviceCode {
+      width: 100%;
+      padding: 17px;
       font-size: 18px;
-      margin: 12px 0 15px;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      background: #176b3a;
-      color: white;
+      border: 2px solid #ccd8e5;
+      border-radius: 14px;
+      outline: none;
+      text-align: center;
+      letter-spacing: 1px;
     }
 
-    #startBtn:disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
+    #deviceCode:focus {
+      border-color: #1677c8;
+    }
+
+    #continueBtn {
+      width: 100%;
+      margin-top: 18px;
+      padding: 17px;
+      border: none;
+      border-radius: 14px;
+      background: #1267a5;
+      color: white;
+      font-size: 18px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    #continueBtn:active {
+      transform: scale(0.98);
+    }
+
+    #deviceMessage {
+      min-height: 25px;
+      margin-top: 15px;
+      font-weight: bold;
+    }
+
+    .error {
+      color: #c62828;
+    }
+
+    .success {
+      color: #16803c;
+    }
+
+    /* =========================================
+       PAGE 2
+       ========================================= */
+
+    #scannerPage {
+      display: none;
+    }
+
+    .scanner-container {
+      position: relative;
+      width: 100%;
+      overflow: hidden;
+      border-radius: 24px;
+      background: #07131e;
+      box-shadow: 0 10px 35px rgba(0,0,0,0.20);
+    }
+
+    /* SENHS WATERMARK */
+
+    .scanner-watermark {
+      position: absolute;
+      z-index: 1;
+      left: 50%;
+      top: 48%;
+      transform: translate(-50%, -50%);
+      font-size: 180px;
+      font-weight: 900;
+      color: rgba(255,255,255,0.055);
+      pointer-events: none;
+      white-space: nowrap;
+    }
+
+    .scanner-header {
+      position: relative;
+      z-index: 5;
+      text-align: center;
+      padding: 20px 15px 16px;
+      background: rgba(255,255,255,0.96);
+    }
+
+    .scanner-school {
+      font-size: 19px;
+      font-weight: 900;
+      color: #124b7c;
+      line-height: 1.2;
+    }
+
+    .scanner-title {
+      margin-top: 5px;
+      font-size: 30px;
+      font-weight: 900;
+      color: #111;
+    }
+
+    .camera-area {
+      position: relative;
+      background: #000;
+      min-height: 400px;
     }
 
     #reader {
       width: 100%;
-      max-width: 450px;
-      margin: auto;
+      min-height: 400px;
     }
 
-    #status {
-      margin: 20px auto;
-      padding: 18px;
-      max-width: 450px;
-      font-size: 20px;
+    #reader video {
+      width: 100% !important;
+      height: auto !important;
+      display: block;
+    }
+
+    /* =========================================
+       CAMERA SWITCH
+       ========================================= */
+
+    #switchCameraBtn {
+      position: absolute;
+      z-index: 20;
+      right: 16px;
+      top: 16px;
+
+      width: 52px;
+      height: 52px;
+
+      border: none;
+      border-radius: 50%;
+
+      background: rgba(0,0,0,0.65);
+      color: white;
+
+      font-size: 27px;
       font-weight: bold;
-      border-radius: 10px;
-      line-height: 1.4;
+
+      cursor: pointer;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
-    .ready {
-      background: #eeeeee;
-      color: #222;
+    #switchCameraBtn:active {
+      transform: scale(0.94);
     }
 
-    .processing {
-      background: #fff3cd;
-      color: #664d03;
-    }
+    /* =========================================
+       STATUS BAR
+       ========================================= */
 
-    .accepted {
-      background: #d4edda;
-      color: #155724;
-    }
+    .ready-bar {
+      position: relative;
+      z-index: 5;
 
-    .denied {
-      background: #f8d7da;
-      color: #721c24;
-    }
+      padding: 14px;
 
-    .cooldown {
+      text-align: center;
+
+      background: rgba(255,255,255,0.96);
+
+      color: #16803c;
       font-size: 17px;
+      font-weight: 900;
+    }
+
+    /* =========================================
+       OVERLAY
+       ========================================= */
+
+    .scan-overlay {
+      position: absolute;
+      z-index: 30;
+
+      inset: 0;
+
+      display: none;
+
+      align-items: center;
+      justify-content: center;
+
+      padding: 20px;
+
+      background: rgba(0,0,0,0.72);
+      backdrop-filter: blur(4px);
+    }
+
+    .overlay-box {
+      width: 100%;
+      max-width: 430px;
+
+      background: rgba(255,255,255,0.97);
+
+      border-radius: 22px;
+
+      padding: 28px 22px;
+
+      text-align: center;
+
+      box-shadow: 0 15px 45px rgba(0,0,0,0.30);
+    }
+
+    .processing-title {
+      font-size: 27px;
+      font-weight: 900;
+      color: #1267a5;
+    }
+
+    .processing-text {
+      margin-top: 8px;
+      font-size: 15px;
+      color: #667;
+    }
+
+    /* =========================================
+       RESULT
+       ========================================= */
+
+    .result-title {
+      font-size: 28px;
+      font-weight: 900;
+      margin-bottom: 14px;
+    }
+
+    .result-success {
+      color: #16803c;
+    }
+
+    .result-error {
+      color: #c62828;
+    }
+
+    .student-name {
+      font-size: 24px;
+      font-weight: 900;
+      color: #123;
       margin-top: 8px;
     }
 
-  </style>
+    .student-section {
+      font-size: 18px;
+      font-weight: bold;
+      color: #555;
+      margin-top: 5px;
+    }
 
+    .event-box {
+      margin-top: 18px;
+      padding: 14px;
+      border-radius: 14px;
+      background: #edf6ff;
+      color: #1267a5;
+      font-size: 25px;
+      font-weight: 900;
+    }
+
+    .transaction {
+      margin-top: 10px;
+      font-size: 15px;
+      color: #555;
+    }
+
+    .late-box {
+      margin-top: 15px;
+      padding: 12px;
+      border-radius: 12px;
+      background: #fff0f0;
+      color: #c62828;
+      font-size: 22px;
+      font-weight: 900;
+    }
+
+    .sms-status {
+      margin-top: 10px;
+      font-size: 14px;
+      color: #555;
+    }
+
+    /* =========================================
+       RESPONSIVE
+       ========================================= */
+
+    @media (max-width: 480px) {
+
+      .page {
+        padding: 10px;
+      }
+
+      .school-name,
+      .scanner-school {
+        font-size: 17px;
+      }
+
+      .gate-title,
+      .scanner-title {
+        font-size: 27px;
+      }
+
+      .camera-area,
+      #reader {
+        min-height: 350px;
+      }
+
+      .scanner-watermark {
+        font-size: 110px;
+      }
+    }
+  </style>
 </head>
 
 <body>
 
-<h2>SENHS GATE SCANNER</h2>
+<div class="page">
 
-<div class="key-container">
+  <div class="container">
 
-  <input
-    id="deviceKey"
-    type="password"
-    placeholder="Enter Gate Device Key"
-    autocomplete="off"
-  >
+    <!-- ==================================================
+         PAGE 1 — DEVICE CODE
+         ================================================== -->
 
-  <button
-    id="toggleKey"
-    type="button"
-    aria-label="Show device key"
-  >👁️</button>
+    <div id="devicePage">
+
+      <div class="device-watermark">
+        SENHS
+      </div>
+
+      <div class="device-content">
+
+        <div class="school-name">
+          SAN ESTEBAN NATIONAL HIGH SCHOOL
+        </div>
+
+        <div class="gate-title">
+          GATE SCANNER
+        </div>
+
+        <div class="subtitle">
+          Authorized Gate Device
+        </div>
+
+        <label class="device-label" for="deviceCode">
+          Enter Device Code
+        </label>
+
+        <input
+          id="deviceCode"
+          type="password"
+          placeholder="Enter Device Code"
+          autocomplete="off"
+        >
+
+        <button id="continueBtn">
+          CONTINUE
+        </button>
+
+        <div id="deviceMessage"></div>
+
+      </div>
+
+    </div>
+
+
+    <!-- ==================================================
+         PAGE 2 — CAMERA SCANNER
+         ================================================== -->
+
+    <div id="scannerPage">
+
+      <div class="scanner-container">
+
+        <div class="scanner-watermark">
+          SENHS
+        </div>
+
+        <!-- HEADER -->
+
+        <div class="scanner-header">
+
+          <div class="scanner-school">
+            SAN ESTEBAN NATIONAL HIGH SCHOOL
+          </div>
+
+          <div class="scanner-title">
+            GATE SCANNER
+          </div>
+
+        </div>
+
+
+        <!-- CAMERA -->
+
+        <div class="camera-area">
+
+          <div id="reader"></div>
+
+          <!-- SWITCH CAMERA -->
+
+          <button
+            id="switchCameraBtn"
+            title="Switch Camera"
+            aria-label="Switch Camera"
+          >
+            ↔
+          </button>
+
+
+          <!-- PROCESSING / RESULT OVERLAY -->
+
+          <div
+            id="scanOverlay"
+            class="scan-overlay"
+          >
+
+            <div
+              id="overlayBox"
+              class="overlay-box"
+            >
+
+              <div
+                id="overlayContent"
+              ></div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <!-- READY -->
+
+        <div
+          id="readyBar"
+          class="ready-bar"
+        >
+          ● READY TO SCAN
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
 
 </div>
-
-<button id="startBtn" type="button">
-  START SCANNER
-</button>
-
-<div id="status" class="ready">
-  Enter authorized device key.
-</div>
-
-<div id="reader"></div>
 
 
 <script>
 
-const APPS_SCRIPT_URL =
-"https://script.google.com/macros/s/AKfycbyXwfLu_wjourRT3BwQDTwA-H9vIJfu5LvqbjjbG3jwv5JVb0mi_1SO5CRPq60S5KdaCg/exec";
+  /* =====================================================
+     CONFIGURATION
+     ===================================================== */
+
+  const APPS_SCRIPT_URL =
+    "https://script.google.com/macros/s/AKfycbyXwfLu_wjourRT3BwQDTwA-H9vIJfu5LvqbjjbG3jwv5JVb0mi_1SO5CRPq60S5KdaCg/exec";
 
 
-let processing = false;
-let scanner = null;
-let scannerStarted = false;
-let callbackCounter = 0;
+  /* =====================================================
+     VARIABLES
+     ===================================================== */
+
+  let deviceKey = "";
+
+  let html5QrCode = null;
+
+  let cameras = [];
+
+  let currentCameraIndex = 0;
+
+  let scannerRunning = false;
+
+  let processing = false;
+
+  let callbackCounter = 0;
 
 
-const statusBox =
-  document.getElementById("status");
+  /* =====================================================
+     ELEMENTS
+     ===================================================== */
 
-const deviceKey =
-  document.getElementById("deviceKey");
+  const devicePage =
+    document.getElementById("devicePage");
 
-const toggleKey =
-  document.getElementById("toggleKey");
+  const scannerPage =
+    document.getElementById("scannerPage");
 
-const startBtn =
-  document.getElementById("startBtn");
+  const deviceCode =
+    document.getElementById("deviceCode");
+
+  const continueBtn =
+    document.getElementById("continueBtn");
+
+  const deviceMessage =
+    document.getElementById("deviceMessage");
+
+  const switchCameraBtn =
+    document.getElementById("switchCameraBtn");
+
+  const scanOverlay =
+    document.getElementById("scanOverlay");
+
+  const overlayContent =
+    document.getElementById("overlayContent");
+
+  const readyBar =
+    document.getElementById("readyBar");
 
 
-// =====================================
-// SHOW / HIDE DEVICE KEY
-// =====================================
+  /* =====================================================
+     BEEP SOUND
+     ===================================================== */
 
-toggleKey.addEventListener(
-  "click",
-  function () {
+  function beep(
+    frequency = 900,
+    duration = 120
+  ) {
 
-    if (deviceKey.type === "password") {
+    try {
 
-      deviceKey.type = "text";
+      const AudioContext =
+        window.AudioContext ||
+        window.webkitAudioContext;
 
-      toggleKey.innerText = "🙈";
+      const audioContext =
+        new AudioContext();
 
-    } else {
+      const oscillator =
+        audioContext.createOscillator();
 
-      deviceKey.type = "password";
+      const gain =
+        audioContext.createGain();
 
-      toggleKey.innerText = "👁️";
+      oscillator.type = "sine";
 
+      oscillator.frequency.value =
+        frequency;
+
+      gain.gain.value = 0.18;
+
+      oscillator.connect(gain);
+
+      gain.connect(
+        audioContext.destination
+      );
+
+      oscillator.start();
+
+      setTimeout(function() {
+
+        oscillator.stop();
+
+        audioContext.close();
+
+      }, duration);
+
+    } catch (error) {
+
+      console.log(
+        "Beep unavailable:",
+        error
+      );
     }
-
-  }
-);
-
-
-// =====================================
-// STATUS
-// =====================================
-
-function setStatus(message, className) {
-
-  statusBox.innerHTML = message;
-
-  statusBox.className = className;
-
-}
-
-
-// =====================================
-// SOUND
-// =====================================
-
-function acceptedSound() {
-
-  try {
-
-    const AudioContext =
-      window.AudioContext ||
-      window.webkitAudioContext;
-
-    if (!AudioContext) return;
-
-    const audioContext =
-      new AudioContext();
-
-    const oscillator =
-      audioContext.createOscillator();
-
-    const gain =
-      audioContext.createGain();
-
-    oscillator.type = "sine";
-
-    oscillator.frequency.value = 880;
-
-    gain.gain.setValueAtTime(
-      0.25,
-      audioContext.currentTime
-    );
-
-    gain.gain.exponentialRampToValueAtTime(
-      0.001,
-      audioContext.currentTime + 0.35
-    );
-
-    oscillator.connect(gain);
-
-    gain.connect(
-      audioContext.destination
-    );
-
-    oscillator.start();
-
-    oscillator.stop(
-      audioContext.currentTime + 0.35
-    );
-
-  } catch (error) {}
-
-}
-
-
-// =====================================
-// FEEDBACK
-// =====================================
-
-function deviceFeedback() {
-
-  acceptedSound();
-
-  if (navigator.vibrate) {
-
-    navigator.vibrate([
-      150,
-      80,
-      150
-    ]);
-
   }
 
-}
 
+  /* =====================================================
+     JSONP REQUEST
+     ===================================================== */
 
-// =====================================
-// JSONP REQUEST
-// =====================================
+  function jsonpRequest(url) {
 
-function jsonpRequest(url) {
+    return new Promise(
+      function(resolve, reject) {
 
-  return new Promise(
-    function(resolve, reject) {
+        const callbackName =
+          "senhsCallback_" +
+          Date.now() +
+          "_" +
+          (++callbackCounter);
 
-      const callbackName =
-        "senhsCallback_" +
-        Date.now() +
-        "_" +
-        (++callbackCounter);
+        const script =
+          document.createElement("script");
 
-      const script =
-        document.createElement("script");
-
-      let finished = false;
-
-      const timeout =
-        setTimeout(
-          function() {
-
-            if (finished) return;
-
-            finished = true;
+        const timeout =
+          setTimeout(function() {
 
             cleanup();
 
             reject(
               new Error(
-                "Server connection timeout."
+                "Server request timed out."
               )
             );
 
-          },
-          15000
-        );
+          }, 15000);
 
 
-      function cleanup() {
+        function cleanup() {
 
-        clearTimeout(timeout);
+          clearTimeout(timeout);
 
-        if (script.parentNode) {
-          script.parentNode.removeChild(script);
+          if (script.parentNode) {
+
+            script.parentNode.removeChild(
+              script
+            );
+          }
+
+          try {
+
+            delete window[callbackName];
+
+          } catch (e) {
+
+            window[callbackName] =
+              undefined;
+          }
         }
 
-        try {
-          delete window[callbackName];
-        } catch (error) {
-          window[callbackName] = undefined;
-        }
 
-      }
+        window[callbackName] =
+          function(data) {
 
+            cleanup();
 
-      window[callbackName] =
-        function(data) {
-
-          if (finished) return;
-
-          finished = true;
-
-          cleanup();
-
-          resolve(data);
-
-        };
+            resolve(data);
+          };
 
 
-      script.onerror =
-        function() {
+        script.onerror =
+          function() {
 
-          if (finished) return;
+            cleanup();
 
-          finished = true;
+            reject(
+              new Error(
+                "Unable to connect to server."
+              )
+            );
+          };
 
-          cleanup();
 
-          reject(
-            new Error(
-              "Unable to connect to server."
-            )
+        script.src =
+          url +
+          "&callback=" +
+          encodeURIComponent(
+            callbackName
           );
 
-        };
+
+        document.body.appendChild(
+          script
+        );
+
+      }
+    );
+  }
 
 
-      script.src =
-        url +
-        "&callback=" +
-        encodeURIComponent(callbackName);
+  /* =====================================================
+     SHOW DEVICE MESSAGE
+     ===================================================== */
+
+  function showDeviceMessage(
+    message,
+    type
+  ) {
+
+    deviceMessage.textContent =
+      message;
+
+    deviceMessage.className =
+      type || "";
+  }
 
 
-      document.body.appendChild(script);
+  /* =====================================================
+     VERIFY DEVICE
+     ===================================================== */
 
-    }
-  );
-
-}
-
-
-// =====================================
-// START SCANNER
-// =====================================
-
-startBtn.addEventListener(
-  "click",
-  function() {
+  async function verifyDevice() {
 
     const key =
-      deviceKey.value.trim();
-
+      deviceCode.value.trim();
 
     if (!key) {
 
-      setStatus(
-        "❌ ENTER AUTHORIZED DEVICE KEY FIRST",
-        "denied"
+      showDeviceMessage(
+        "Please enter the Device Code.",
+        "error"
       );
 
       return;
     }
 
 
-    if (scannerStarted) {
+    continueBtn.disabled = true;
 
-      setStatus(
-        "SCANNER IS ALREADY RUNNING",
-        "processing"
-      );
+    continueBtn.textContent =
+      "CHECKING...";
 
-      return;
-    }
-
-
-    scannerStarted = true;
-
-    startBtn.disabled = true;
-
-    setStatus(
-      "STARTING CAMERA...<br>" +
-      "Please allow camera access.",
-      "processing"
+    showDeviceMessage(
+      "Checking device...",
+      ""
     );
 
 
-    scanner =
-      new Html5QrcodeScanner(
-        "reader",
-        {
-          fps: 10,
-          qrbox: {
-            width: 250,
-            height: 250
-          }
-        },
-        false
-      );
+    try {
 
+      const requestUrl =
+        APPS_SCRIPT_URL +
+        "?device=" +
+        encodeURIComponent(key) +
+        "&format=json";
 
-    scanner.render(
-      onScanSuccess,
-      onScanFailure
-    );
 
-  }
-);
-
-
-// =====================================
-// QR SCAN
-// =====================================
-
-function onScanSuccess(decodedText) {
-
-  if (processing) return;
-
-  processing = true;
-
-
-  setStatus(
-    "⏳ PROCESSING...<br>" +
-    "Please wait.",
-    "processing"
-  );
-
-
-  let lrn = "";
-
-
-  // ===================================
-  // GET LRN FROM QR
-  // ===================================
-
-  try {
-
-    const url =
-      new URL(decodedText);
-
-    lrn =
-      url.searchParams.get("lrn") || "";
-
-  } catch (error) {
-
-    // Allow plain LRN QR
-
-    const plain =
-      String(decodedText).trim();
-
-    if (/^\d{8,15}$/.test(plain)) {
-
-      lrn = plain;
-
-    }
-
-  }
-
-
-  if (!lrn) {
-
-    setStatus(
-      "❌ INVALID QR CODE",
-      "denied"
-    );
-
-    processing = false;
-
-    return;
-  }
-
-
-  const key =
-    deviceKey.value.trim();
-
-
-  if (!key) {
-
-    setStatus(
-      "❌ DEVICE KEY REQUIRED",
-      "denied"
-    );
-
-    processing = false;
-
-    return;
-  }
-
-
-  // ===================================
-  // BUILD REQUEST
-  // ===================================
-
-  const requestUrl =
-    APPS_SCRIPT_URL +
-    "?lrn=" +
-    encodeURIComponent(lrn) +
-    "&device=" +
-    encodeURIComponent(key);
-
-
-  // ===================================
-  // JSONP REQUEST
-  // ===================================
-
-  jsonpRequest(requestUrl)
-
-    .then(
-      function(result) {
-
-        if (!result) {
-
-          throw new Error(
-            "Empty server response."
-          );
-
-        }
-
-
-        // ==============================
-        // UNAUTHORIZED
-        // ==============================
-
-        if (
-          result.authorized === false &&
-          result.success === false
-        ) {
-
-          setStatus(
-            "❌ ACCESS DENIED<br>" +
-            "<span class='cooldown'>" +
-            (result.message ||
-             "Unauthorized device.") +
-            "</span>",
-            "denied"
-          );
-
-          startCooldown();
-
-          return;
-
-        }
-
-
-        // ==============================
-        // SERVER ERROR
-        // ==============================
-
-        if (result.success === false) {
-
-          setStatus(
-            "❌ ERROR<br>" +
-            "<span class='cooldown'>" +
-            (result.message ||
-             "Unable to process scan.") +
-            "</span>",
-            "denied"
-          );
-
-          startCooldown();
-
-          return;
-
-        }
-
-
-        // ==============================
-        // SUCCESS
-        // ==============================
-
-        deviceFeedback();
-
-
-        const event =
-          result.event ||
-          result.status ||
-          "SCAN ACCEPTED";
-
-
-        const name =
-          result.name ||
-          "";
-
-
-        const section =
-          result.section ||
-          "";
-
-
-        const transaction =
-          result.transaction
-            ? "Transaction #" +
-              result.transaction
-            : "";
-
-
-        const time =
-          result.timestamp ||
-          result.time ||
-          "";
-
-
-        const sms =
-          result.sms
-            ? "<br>SMS: " + result.sms
-            : "";
-
-
-        setStatus(
-          "✅ " +
-          event +
-          "<br><br>" +
-
-          name +
-
-          (section
-            ? "<br>" + section
-            : "") +
-
-          (transaction
-            ? "<br>" + transaction
-            : "") +
-
-          (time
-            ? "<br>" + time
-            : "") +
-
-          sms +
-
-          "<br><br>" +
-
-          "<span class='cooldown'>" +
-          "NEXT SCAN IN 5 SECONDS" +
-          "</span>",
-
-          "accepted"
+      const result =
+        await jsonpRequest(
+          requestUrl
         );
 
 
-        startCooldown();
+      if (
+        result &&
+        result.success &&
+        result.authorized
+      ) {
 
-      }
-    )
+        deviceKey = key;
 
-    .catch(
-      function(error) {
-
-        setStatus(
-          "❌ CONNECTION ERROR<br>" +
-          "<span class='cooldown'>" +
-          "Unable to connect to server." +
-          "</span>",
-          "denied"
+        showDeviceMessage(
+          "Device authorized.",
+          "success"
         );
 
+        /*
+         * Automatic transition
+         */
 
         setTimeout(
           function() {
 
-            processing = false;
-
-            setStatus(
-              "READY — I-SCAN ANG QR CODE",
-              "ready"
-            );
+            openScannerPage();
 
           },
-          5000
+          300
+        );
+
+      } else {
+
+        showDeviceMessage(
+          "Access denied. Device not recognized.",
+          "error"
+        );
+
+        continueBtn.disabled =
+          false;
+
+        continueBtn.textContent =
+          "CONTINUE";
+      }
+
+    } catch (error) {
+
+      showDeviceMessage(
+        error.message ||
+        "Unable to connect to server.",
+        "error"
+      );
+
+      continueBtn.disabled =
+        false;
+
+      continueBtn.textContent =
+        "CONTINUE";
+    }
+  }
+
+
+  /* =====================================================
+     OPEN CAMERA PAGE
+     ===================================================== */
+
+  async function openScannerPage() {
+
+    devicePage.style.display =
+      "none";
+
+    scannerPage.style.display =
+      "block";
+
+    continueBtn.disabled =
+      false;
+
+    continueBtn.textContent =
+      "CONTINUE";
+
+    await startCamera();
+  }
+
+
+  /* =====================================================
+     START CAMERA
+     ===================================================== */
+
+  async function startCamera() {
+
+    try {
+
+      cameras =
+        await Html5Qrcode.getCameras();
+
+
+      if (
+        !cameras ||
+        cameras.length === 0
+      ) {
+
+        showOverlay(
+          "ERROR",
+          "No camera was found on this device.",
+          "error"
+        );
+
+        return;
+      }
+
+
+      /*
+       * Prefer back camera
+       */
+
+      let backIndex =
+        cameras.findIndex(
+          function(camera) {
+
+            return /back|rear|environment/i
+              .test(
+                camera.label || ""
+              );
+          }
+        );
+
+
+      if (backIndex >= 0) {
+
+        currentCameraIndex =
+          backIndex;
+
+      } else {
+
+        currentCameraIndex = 0;
+      }
+
+
+      html5QrCode =
+        new Html5Qrcode(
+          "reader"
+        );
+
+
+      await startSelectedCamera();
+
+    } catch (error) {
+
+      console.error(error);
+
+      showOverlay(
+        "CAMERA ERROR",
+        "Please allow camera permission and try again.",
+        "error"
+      );
+    }
+  }
+
+
+  /* =====================================================
+     START SELECTED CAMERA
+     ===================================================== */
+
+  async function startSelectedCamera() {
+
+    if (!html5QrCode) {
+      return;
+    }
+
+
+    const cameraId =
+      cameras[
+        currentCameraIndex
+      ].id;
+
+
+    if (scannerRunning) {
+
+      try {
+
+        await html5QrCode.stop();
+
+      } catch (e) {
+
+        console.log(e);
+      }
+
+      scannerRunning =
+        false;
+    }
+
+
+    await html5QrCode.start(
+
+      cameraId,
+
+      {
+        fps: 10,
+
+        qrbox: function(
+          viewfinderWidth,
+          viewfinderHeight
+        ) {
+
+          const size =
+            Math.min(
+              viewfinderWidth,
+              viewfinderHeight
+            ) * 0.68;
+
+          return {
+            width: size,
+            height: size
+          };
+        },
+
+        aspectRatio: 1.0
+
+      },
+
+      onQrDetected,
+
+      function(errorMessage) {
+
+        /*
+         * Normal QR scanning messages.
+         * Do not display them.
+         */
+      }
+
+    );
+
+
+    scannerRunning =
+      true;
+
+    processing =
+      false;
+
+    hideOverlay();
+
+    readyBar.textContent =
+      "● READY TO SCAN";
+
+    readyBar.style.color =
+      "#16803c";
+  }
+
+
+  /* =====================================================
+     QR DETECTED
+     ===================================================== */
+
+  async function onQrDetected(
+    decodedText
+  ) {
+
+    /*
+     * Prevent multiple scans
+     */
+
+    if (processing) {
+      return;
+    }
+
+
+    processing =
+      true;
+
+
+    /*
+     * FIRST BEEP
+     * QR detected
+     */
+
+    beep(
+      1000,
+      130
+    );
+
+
+    /*
+     * STOP SCANNING
+     */
+
+    try {
+
+      if (
+        html5QrCode &&
+        scannerRunning
+      ) {
+
+        await html5QrCode.pause(
+          true
         );
 
       }
-    );
 
-}
+    } catch (error) {
 
-
-// =====================================
-// COOLDOWN
-// =====================================
-
-function startCooldown() {
-
-  let seconds = 5;
+      console.log(
+        "Pause error:",
+        error
+      );
+    }
 
 
-  const countdown =
-    setInterval(
-      function() {
+    readyBar.textContent =
+      "PROCESSING...";
 
-        seconds--;
+    readyBar.style.color =
+      "#1267a5";
 
 
-        if (seconds > 0) {
+    /*
+     * PROCESSING OVERLAY
+     */
 
-          statusBox.innerHTML =
-            statusBox.innerHTML
-              .replace(
-                /NEXT SCAN IN \d+ SECONDS/,
-                "NEXT SCAN IN " +
-                seconds +
-                " SECONDS"
-              );
+    showProcessing();
 
-        } else {
 
-          clearInterval(countdown);
+    /*
+     * SEND QR VALUE TO SERVER
+     */
 
-          processing = false;
+    const lrn =
+      String(decodedText)
+        .trim();
 
-          setStatus(
-            "READY — I-SCAN ANG QR CODE",
-            "ready"
-          );
 
+    try {
+
+      const requestUrl =
+        APPS_SCRIPT_URL +
+        "?lrn=" +
+        encodeURIComponent(lrn) +
+        "&device=" +
+        encodeURIComponent(deviceKey);
+
+
+      const result =
+        await jsonpRequest(
+          requestUrl
+        );
+
+
+      /*
+       * SHOW RESULT
+       */
+
+      showResult(
+        result
+      );
+
+
+      /*
+       * SECOND BEEP
+       * Result successfully presented
+       */
+
+      if (
+        result &&
+        result.success
+      ) {
+
+        beep(
+          1400,
+          180
+        );
+      }
+
+
+      /*
+       * RESULT STAYS ON SCREEN
+       * No 5-second timer.
+       *
+       * User taps the result to continue.
+       */
+
+    } catch (error) {
+
+      showResult({
+
+        success: false,
+
+        message:
+          error.message ||
+          "Unable to connect to server."
+
+      });
+    }
+  }
+
+
+  /* =====================================================
+     PROCESSING OVERLAY
+     ===================================================== */
+
+  function showProcessing() {
+
+    scanOverlay.style.display =
+      "flex";
+
+
+    overlayContent.innerHTML =
+
+      '<div class="processing-title">' +
+        'PROCESSING...' +
+      '</div>' +
+
+      '<div class="processing-text">' +
+        'Please wait while the attendance is being recorded.' +
+      '</div>';
+  }
+
+
+  /* =====================================================
+     RESULT OVERLAY
+     ===================================================== */
+
+  function showResult(
+    result
+  ) {
+
+    scanOverlay.style.display =
+      "flex";
+
+
+    if (
+      result &&
+      result.success
+    ) {
+
+      const name =
+        result.name ||
+        "Student";
+
+      const section =
+        result.section ||
+        "";
+
+      const event =
+        result.event ||
+        "";
+
+      const transaction =
+        result.transaction ||
+        "";
+
+      const status =
+        result.status ||
+        "";
+
+
+      let html =
+
+        '<div class="result-title result-success">' +
+          '✓ SCAN RECORDED' +
+        '</div>' +
+
+        '<div class="student-name">' +
+          escapeHtml(name) +
+        '</div>' +
+
+        '<div class="student-section">' +
+          escapeHtml(section) +
+        '</div>' +
+
+        '<div class="event-box">' +
+          escapeHtml(event) +
+        '</div>' +
+
+        '<div class="transaction">' +
+          'Transaction #' +
+          escapeHtml(String(transaction)) +
+        '</div>';
+
+
+      if (
+        status === "LATE"
+      ) {
+
+        html +=
+
+          '<div class="late-box">' +
+            'LATE' +
+          '</div>';
+      }
+
+
+      if (result.sms) {
+
+        html +=
+
+          '<div class="sms-status">' +
+            'SMS: ' +
+            escapeHtml(
+              String(result.sms)
+            ) +
+          '</div>';
+      }
+
+
+      html +=
+
+        '<div class="processing-text" style="margin-top:18px;">' +
+          'Tap anywhere to scan again' +
+        '</div>';
+
+
+      overlayContent.innerHTML =
+        html;
+
+
+      scanOverlay.onclick =
+        function() {
+
+          scanOverlay.onclick =
+            null;
+
+          resumeScanner();
+        };
+
+
+    } else {
+
+      const message =
+        result &&
+        result.message
+          ? result.message
+          : "Scan failed.";
+
+
+      overlayContent.innerHTML =
+
+        '<div class="result-title result-error">' +
+          '✕ SCAN NOT RECORDED' +
+        '</div>' +
+
+        '<div class="processing-text">' +
+          escapeHtml(message) +
+        '</div>' +
+
+        '<div class="processing-text" style="margin-top:18px;">' +
+          'Tap anywhere to try again' +
+        '</div>';
+
+
+      scanOverlay.onclick =
+        function() {
+
+          scanOverlay.onclick =
+            null;
+
+          resumeScanner();
+        };
+    }
+  }
+
+
+  /* =====================================================
+     RESUME SCANNER
+     ===================================================== */
+
+  async function resumeScanner() {
+
+    hideOverlay();
+
+    readyBar.textContent =
+      "● READY TO SCAN";
+
+    readyBar.style.color =
+      "#16803c";
+
+
+    processing =
+      false;
+
+
+    try {
+
+      if (
+        html5QrCode &&
+        scannerRunning
+      ) {
+
+        await html5QrCode.resume();
+
+      } else {
+
+        await startSelectedCamera();
+
+      }
+
+    } catch (error) {
+
+      console.error(error);
+
+      /*
+       * If resume fails, restart camera.
+       */
+
+      try {
+
+        await startSelectedCamera();
+
+      } catch (restartError) {
+
+        console.error(
+          restartError
+        );
+      }
+    }
+  }
+
+
+  /* =====================================================
+     HIDE OVERLAY
+     ===================================================== */
+
+  function hideOverlay() {
+
+    scanOverlay.style.display =
+      "none";
+
+    scanOverlay.onclick =
+      null;
+  }
+
+
+  /* =====================================================
+     SWITCH CAMERA
+     ===================================================== */
+
+  switchCameraBtn.addEventListener(
+    "click",
+    async function() {
+
+      if (
+        processing ||
+        !cameras ||
+        cameras.length < 2
+      ) {
+
+        return;
+      }
+
+
+      processing =
+        true;
+
+
+      readyBar.textContent =
+        "SWITCHING CAMERA...";
+
+      readyBar.style.color =
+        "#1267a5";
+
+
+      try {
+
+        if (
+          html5QrCode &&
+          scannerRunning
+        ) {
+
+          await html5QrCode.stop();
+
+          scannerRunning =
+            false;
         }
 
-      },
-      1000
-    );
 
-}
+        currentCameraIndex =
+          (
+            currentCameraIndex + 1
+          ) %
+          cameras.length;
 
 
-// =====================================
-// QR SCANNER FAILURE
-// =====================================
+        await startSelectedCamera();
 
-function onScanFailure(error) {
+      } catch (error) {
 
-  // Normal habang naghahanap ng QR.
+        console.error(error);
 
-}
+        processing =
+          false;
+
+        readyBar.textContent =
+          "● READY TO SCAN";
+
+        readyBar.style.color =
+          "#16803c";
+      }
+
+    }
+  );
+
+
+  /* =====================================================
+     CONTINUE BUTTON
+     ===================================================== */
+
+  continueBtn.addEventListener(
+    "click",
+    verifyDevice
+  );
+
+
+  /* =====================================================
+     ENTER KEY
+     ===================================================== */
+
+  deviceCode.addEventListener(
+    "keydown",
+    function(event) {
+
+      if (
+        event.key === "Enter"
+      ) {
+
+        event.preventDefault();
+
+        verifyDevice();
+      }
+
+    }
+  );
+
+
+  /* =====================================================
+     HTML ESCAPE
+     ===================================================== */
+
+  function escapeHtml(
+    value
+  ) {
+
+    return String(value)
+
+      .replace(
+        /&/g,
+        "&amp;"
+      )
+
+      .replace(
+        /</g,
+        "&lt;"
+      )
+
+      .replace(
+        />/g,
+        "&gt;"
+      )
+
+      .replace(
+        /"/g,
+        "&quot;"
+      )
+
+      .replace(
+        /'/g,
+        "&#039;"
+      );
+  }
 
 </script>
 
