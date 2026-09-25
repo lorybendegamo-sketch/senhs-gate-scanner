@@ -375,38 +375,31 @@
       margin-top: 5px;
     }
 
-    /* TOTAL */
-    .summary-card:nth-child(1) {
+    .summary-card.total {
       background: #1976d2;
     }
 
-    /* AM PRESENT */
-    .summary-card:nth-child(2) {
+    .summary-card.am-present {
       background: #16803c;
     }
 
-    /* AM ABSENT */
-    .summary-card:nth-child(3) {
+    .summary-card.am-absent {
       background: #d32f2f;
     }
 
-    /* AM LATE */
-    .summary-card:nth-child(4) {
+    .summary-card.am-late {
       background: #f57c00;
     }
 
-    /* PM PRESENT */
-    .summary-card:nth-child(5) {
+    .summary-card.pm-present {
       background: #00897b;
     }
 
-    /* PM ABSENT */
-    .summary-card:nth-child(6) {
+    .summary-card.pm-absent {
       background: #c62828;
     }
 
-    /* PM LATE */
-    .summary-card:nth-child(7) {
+    .summary-card.pm-late {
       background: #ef6c00;
     }
 
@@ -447,40 +440,36 @@
       line-height: 1.15;
     }
 
-    /* SECTION + TOTAL */
-    .section-table th:nth-child(1),
-    .section-table th:nth-child(2) {
+    .section-table th.section-head {
       background: #1565c0;
     }
 
-    /* AM PRESENT */
-    .section-table th:nth-child(3) {
-      background: #16803c;
+    .section-table th.total-head {
+      background: #3949ab;
     }
 
-    /* AM ABSENT */
-    .section-table th:nth-child(4) {
-      background: #d32f2f;
+    .section-table th.am-present-head {
+      background: #2e7d32;
     }
 
-    /* AM LATE */
-    .section-table th:nth-child(5) {
-      background: #f57c00;
-    }
-
-    /* PM PRESENT */
-    .section-table th:nth-child(6) {
-      background: #00897b;
-    }
-
-    /* PM ABSENT */
-    .section-table th:nth-child(7) {
+    .section-table th.am-absent-head {
       background: #c62828;
     }
 
-    /* PM LATE */
-    .section-table th:nth-child(8) {
+    .section-table th.am-late-head {
       background: #ef6c00;
+    }
+
+    .section-table th.pm-present-head {
+      background: #00897b;
+    }
+
+    .section-table th.pm-absent-head {
+      background: #ad1457;
+    }
+
+    .section-table th.pm-late-head {
+      background: #f57c00;
     }
 
     .section-table td {
@@ -495,36 +484,49 @@
       background: #eef6ff;
     }
 
+    .section-table tbody tr:hover td {
+      background: #e2f0ff;
+    }
+
     .section-table-name {
       text-align: left !important;
       color: #124b7c;
       font-weight: 900 !important;
     }
 
-    /* AM COLORS */
-    .section-table td:nth-child(3) {
-      color: #16803c;
+    .total-cell {
+      color: #3949ab !important;
+      background: #eef2ff !important;
     }
 
-    .section-table td:nth-child(4) {
-      color: #c62828;
+    .am-present-cell {
+      color: #16803c !important;
+      background: #e8f5e9 !important;
     }
 
-    .section-table td:nth-child(5) {
-      color: #ef6c00;
+    .am-absent-cell {
+      color: #c62828 !important;
+      background: #ffebee !important;
     }
 
-    /* PM COLORS */
-    .section-table td:nth-child(6) {
-      color: #00897b;
+    .am-late-cell {
+      color: #ef6c00 !important;
+      background: #fff3e0 !important;
     }
 
-    .section-table td:nth-child(7) {
-      color: #c62828;
+    .pm-present-cell {
+      color: #00695c !important;
+      background: #e0f2f1 !important;
     }
 
-    .section-table td:nth-child(8) {
-      color: #ef6c00;
+    .pm-absent-cell {
+      color: #880e4f !important;
+      background: #fce4ec !important;
+    }
+
+    .pm-late-cell {
+      color: #e65100 !important;
+      background: #fff3e0 !important;
     }
 
 
@@ -779,7 +781,10 @@
           </div>
 
 
-          <button id="continueBtn">
+          <button
+            id="continueBtn"
+            type="button"
+          >
             CONTINUE
           </button>
 
@@ -882,7 +887,9 @@
 
             <div class="school-summary">
 
-              <div class="summary-card">
+              <!-- TOTAL -->
+
+              <div class="summary-card total">
                 <div class="summary-label">
                   TOTAL
                 </div>
@@ -896,7 +903,9 @@
               </div>
 
 
-              <div class="summary-card">
+              <!-- AM PRESENT -->
+
+              <div class="summary-card am-present">
                 <div class="summary-label">
                   AM PRESENT
                 </div>
@@ -910,7 +919,9 @@
               </div>
 
 
-              <div class="summary-card">
+              <!-- AM ABSENT -->
+
+              <div class="summary-card am-absent">
                 <div class="summary-label">
                   AM ABSENT
                 </div>
@@ -924,7 +935,9 @@
               </div>
 
 
-              <div class="summary-card">
+              <!-- AM LATE -->
+
+              <div class="summary-card am-late">
                 <div class="summary-label">
                   AM LATE
                 </div>
@@ -938,7 +951,13 @@
               </div>
 
 
-              <div class="summary-card">
+              <!-- PM PRESENT -->
+
+              <div
+                id="schoolPmPresentCard"
+                class="summary-card pm-present"
+              >
+
                 <div class="summary-label">
                   PM PRESENT
                 </div>
@@ -949,10 +968,17 @@
                 >
                   0
                 </div>
+
               </div>
 
 
-              <div class="summary-card">
+              <!-- PM ABSENT -->
+
+              <div
+                id="schoolPmAbsentCard"
+                class="summary-card pm-absent"
+              >
+
                 <div class="summary-label">
                   PM ABSENT
                 </div>
@@ -963,10 +989,17 @@
                 >
                   0
                 </div>
+
               </div>
 
 
-              <div class="summary-card">
+              <!-- PM LATE -->
+
+              <div
+                id="schoolPmLateCard"
+                class="summary-card pm-late"
+              >
+
                 <div class="summary-label">
                   PM LATE
                 </div>
@@ -977,6 +1010,7 @@
                 >
                   0
                 </div>
+
               </div>
 
             </div>
@@ -1529,6 +1563,13 @@
 
   /* =====================================================
      PM DISPLAY CONTROL
+     
+     BEFORE 12:05 PM:
+     PM SCHOOL SUMMARY CARDS HIDDEN
+     PM SECTION TABLE COLUMNS HIDDEN
+     
+     12:05 PM ONWARD:
+     PM INFORMATION VISIBLE
      ===================================================== */
 
   function isPMDisplayTime() {
@@ -1541,7 +1582,7 @@
       now.getMinutes();
 
     const pmStartMinutes =
-      12 * 60 + 5;
+      (12 * 60) + 5;
 
     return (
       currentMinutes >=
@@ -1556,16 +1597,35 @@
     const showPM =
       isPMDisplayTime();
 
-    const pmCards =
-      document.querySelectorAll(
-        ".summary-card:nth-child(n+5)"
-      );
+
+    const pmCards = [
+
+      document.getElementById(
+        "schoolPmPresentCard"
+      ),
+
+      document.getElementById(
+        "schoolPmAbsentCard"
+      ),
+
+      document.getElementById(
+        "schoolPmLateCard"
+      )
+
+    ];
+
 
     pmCards.forEach(
       function(card) {
 
+        if (!card) {
+          return;
+        }
+
         card.style.display =
-          showPM ? "" : "none";
+          showPM
+            ? ""
+            : "none";
 
       }
     );
@@ -1609,6 +1669,10 @@
         {};
 
 
+      /* =========================================
+         SCHOOL SUMMARY
+         ========================================= */
+
       document.getElementById(
         "schoolTotal"
       ).textContent =
@@ -1641,6 +1705,13 @@
         );
 
 
+      /* =========================================
+         PM DATA
+         
+         The values are loaded from the server,
+         but the cards remain hidden before 12:05 PM.
+         ========================================= */
+
       document.getElementById(
         "schoolPmPresent"
       ).textContent =
@@ -1667,6 +1738,10 @@
 
       updateSchoolSummaryPMDisplay();
 
+
+      /* =========================================
+         SECTION ATTENDANCE
+         ========================================= */
 
       renderSectionAttendance(
         result.sections || []
@@ -1790,6 +1865,13 @@
 
   /* =====================================================
      RENDER SECTION ATTENDANCE TABLE
+     
+     BEFORE 12:05 PM:
+       SECTION | TOTAL | AM P | AM A | AM L
+     
+     12:05 PM ONWARD:
+       SECTION | TOTAL | AM P | AM A | AM L |
+       PM P | PM A | PM L
      ===================================================== */
 
   function renderSectionAttendance(
@@ -1829,26 +1911,30 @@
 
             '<tr>' +
 
-              '<th>SECTION</th>' +
+              '<th class="section-head">SECTION</th>' +
 
-              '<th>TOTAL</th>' +
+              '<th class="total-head">TOTAL</th>' +
 
-              '<th>AM<br>P</th>' +
+              '<th class="am-present-head">AM<br>P</th>' +
 
-              '<th>AM<br>A</th>' +
+              '<th class="am-absent-head">AM<br>A</th>' +
 
-              '<th>AM<br>L</th>';
+              '<th class="am-late-head">AM<br>L</th>';
 
+
+    /* =========================================
+       PM HEADERS ONLY FROM 12:05 PM
+       ========================================= */
 
     if (showPM) {
 
       html +=
 
-              '<th>PM<br>P</th>' +
+              '<th class="pm-present-head">PM<br>P</th>' +
 
-              '<th>PM<br>A</th>' +
+              '<th class="pm-absent-head">PM<br>A</th>' +
 
-              '<th>PM<br>L</th>';
+              '<th class="pm-late-head">PM<br>L</th>';
 
     }
 
@@ -1878,7 +1964,7 @@
 
             '</td>' +
 
-            '<td>' +
+            '<td class="total-cell">' +
 
               Number(
                 section.total || 0
@@ -1886,7 +1972,7 @@
 
             '</td>' +
 
-            '<td>' +
+            '<td class="am-present-cell">' +
 
               Number(
                 section.amPresent || 0
@@ -1894,7 +1980,7 @@
 
             '</td>' +
 
-            '<td>' +
+            '<td class="am-absent-cell">' +
 
               Number(
                 section.amAbsent || 0
@@ -1902,7 +1988,7 @@
 
             '</td>' +
 
-            '<td>' +
+            '<td class="am-late-cell">' +
 
               Number(
                 section.amLate || 0
@@ -1911,11 +1997,15 @@
             '</td>';
 
 
+        /* =========================================
+           PM CELLS ONLY FROM 12:05 PM
+           ========================================= */
+
         if (showPM) {
 
           html +=
 
-            '<td>' +
+            '<td class="pm-present-cell">' +
 
               Number(
                 section.pmPresent || 0
@@ -1923,7 +2013,7 @@
 
             '</td>' +
 
-            '<td>' +
+            '<td class="pm-absent-cell">' +
 
               Number(
                 section.pmAbsent || 0
@@ -1931,7 +2021,7 @@
 
             '</td>' +
 
-            '<td>' +
+            '<td class="pm-late-cell">' +
 
               Number(
                 section.pmLate || 0
