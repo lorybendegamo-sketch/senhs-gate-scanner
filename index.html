@@ -394,39 +394,97 @@
        RESPONSIVE
        ========================================= */
 
-    @media (max-width: 480px) {
+@media (max-width: 480px) {
 
-      .page {
-        padding: 10px;
-      }
+  .page {
+    padding: 10px;
+  }
 
-      .school-name,
-      .scanner-school {
-        font-size: 17px;
-      }
+  .school-name,
+  .scanner-school {
+    font-size: 17px;
+  }
 
-      .gate-title,
-      .scanner-title {
-        font-size: 27px;
-      }
+  .gate-title,
+  .scanner-title {
+    font-size: 27px;
+  }
 
-      .camera-area,
-      #reader {
-        min-height: 350px;
-      }
+  .camera-area,
+  #reader {
+    min-height: 350px;
+  }
 
-      .scanner-watermark {
-        font-size: 110px;
-      }
-    }
-  </style>
-</head>
+  .scanner-watermark {
+    font-size: 110px;
+  }
 
-<body>
 
-<div class="page">
+  /* =========================================
+     MOBILE DEVICE CODE
+     ========================================= */
 
-  <div class="container">
+  .device-code-wrapper {
+    position: relative !important;
+
+    width: 100% !important;
+
+    max-width: 420px !important;
+
+    margin: 0 auto 18px auto !important;
+  }
+
+
+  .device-code-wrapper #deviceCode {
+    width: 100% !important;
+
+    box-sizing: border-box !important;
+
+    padding-right: 60px !important;
+  }
+
+
+  #toggleDeviceCode {
+    position: absolute !important;
+
+    display: flex !important;
+
+    visibility: visible !important;
+
+    opacity: 1 !important;
+
+    right: 6px !important;
+
+    top: 50% !important;
+
+    transform: translateY(-50%) !important;
+
+    width: 46px !important;
+
+    height: 46px !important;
+
+    z-index: 999 !important;
+
+    border: none !important;
+
+    background: transparent !important;
+
+    color: #222 !important;
+
+    font-size: 22px !important;
+
+    align-items: center !important;
+
+    justify-content: center !important;
+
+    padding: 0 !important;
+
+    margin: 0 !important;
+
+    cursor: pointer !important;
+  }
+
+}
 
 <!-- ==================================================
      PAGE 1 — DEVICE CODE
