@@ -2,13 +2,23 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SENHS GATE SCANNER</title>
 
-  <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>SENHS Gate Scanner</title>
+
+  <script
+    src="https://unpkg.com/html5-qrcode"
+    type="text/javascript"
+  ></script>
 
   <style>
+
     * {
       box-sizing: border-box;
     }
@@ -16,1177 +26,1193 @@
     body {
       margin: 0;
       font-family: Arial, Helvetica, sans-serif;
-      background: #f3f6f9;
-      color: #1f2937;
+      background: #f3f7fb;
+      color: #123;
     }
 
-    .header {
-      background: #0b5d3b;
-      color: white;
-      padding: 14px 16px;
-      text-align: center;
-      font-weight: bold;
-    }
-
-    .header-title {
-      font-size: 22px;
-    }
-
-    .header-subtitle {
-      font-size: 13px;
-      margin-top: 3px;
-      opacity: 0.95;
+    .page {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
     }
 
     .container {
       width: 100%;
-      max-width: 1100px;
-      margin: auto;
-      padding: 12px;
+      max-width: 620px;
+      position: relative;
     }
 
-    .card {
+
+    /* =========================================
+       PAGE 1
+       ========================================= */
+
+    #devicePage {
       background: white;
-      border-radius: 12px;
-      padding: 14px;
-      margin-bottom: 12px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      border-radius: 24px;
+      padding: 35px 25px;
+      box-shadow: 0 10px 35px rgba(0,0,0,0.12);
+      text-align: center;
+      overflow: hidden;
     }
 
-    .section-title {
-      font-size: 18px;
-      font-weight: bold;
-      margin-bottom: 10px;
-      color: #0b5d3b;
+    .device-watermark {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 170px;
+      font-weight: 900;
+      color: rgba(0, 70, 140, 0.045);
+      pointer-events: none;
+      white-space: nowrap;
+      z-index: 0;
     }
 
-    .device-row {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
+    .device-content {
+      position: relative;
+      z-index: 1;
     }
 
-    select,
-    input,
-    button {
-      min-height: 42px;
-      border-radius: 8px;
-      border: 1px solid #cbd5e1;
-      padding: 8px 10px;
+    .school-name {
+      font-size: 30px;
+      font-weight: 900;
+      letter-spacing: 0.5px;
+      line-height: 1.2;
+      color: #124b7c;
+    }
+
+    .gate-title {
+      margin-top: 6px;
+      font-size: 24px;
+      font-weight: 800;
+      color: #123;
+    }
+
+    .subtitle {
+      margin-top: 8px;
+      color: #667;
       font-size: 15px;
     }
 
-    select,
-    input {
-      background: white;
+    .device-label {
+      display: block;
+      margin-top: 35px;
+      margin-bottom: 8px;
+      text-align: left;
+      font-weight: bold;
+      color: #345;
     }
 
-    button {
-      cursor: pointer;
-      background: #0b5d3b;
-      color: white;
+
+    /* =========================================
+       DEVICE CODE
+       ========================================= */
+
+    .device-code-wrapper {
+      position: relative;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    #deviceCode {
+      width: 100%;
+      padding: 17px;
+      padding-right: 60px;
+      font-size: 18px;
+      border: 2px solid #ccd8e5;
+      border-radius: 14px;
+      outline: none;
+      text-align: center;
+      letter-spacing: 1px;
+    }
+
+    #deviceCode:focus {
+      border-color: #1677c8;
+    }
+
+    #toggleDeviceCode {
+      position: absolute;
+      right: 6px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 46px;
+      height: 46px;
       border: none;
+      border-radius: 10px;
+      background: transparent;
+      color: #222;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      margin: 0;
+      z-index: 10;
+    }
+
+    #toggleDeviceCode:hover {
+      background: rgba(0,0,0,0.06);
+    }
+
+    #toggleDeviceCode:active {
+      transform:
+        translateY(-50%)
+        scale(0.92);
+    }
+
+    #continueBtn {
+      width: 100%;
+      margin-top: 18px;
+      padding: 17px;
+      border: none;
+      border-radius: 14px;
+      background: #1267a5;
+      color: white;
+      font-size: 18px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    #continueBtn:active {
+      transform: scale(0.98);
+    }
+
+    #deviceMessage {
+      min-height: 25px;
+      margin-top: 15px;
       font-weight: bold;
     }
 
-    button.secondary {
-      background: #475569;
+    .error {
+      color: #c62828;
     }
 
-    button.danger {
-      background: #b91c1c;
+    .success {
+      color: #16803c;
     }
 
-    button.warning {
-      background: #b45309;
+
+    /* =========================================
+       PAGE 2
+       ========================================= */
+
+    #scannerPage {
+      display: none;
     }
 
-    button:disabled {
-      opacity: 0.55;
-      cursor: not-allowed;
+    .scanner-container {
+      position: relative;
+      width: 100%;
+      overflow: hidden;
+      border-radius: 24px;
+      background: #07131e;
+      box-shadow: 0 10px 35px rgba(0,0,0,0.20);
     }
 
-    .status {
-      margin-top: 10px;
-      padding: 10px;
-      border-radius: 8px;
-      background: #f1f5f9;
-      font-size: 14px;
-      word-break: break-word;
+    .scanner-watermark {
+      position: absolute;
+      z-index: 1;
+      left: 50%;
+      top: 48%;
+      transform: translate(-50%, -50%);
+      font-size: 180px;
+      font-weight: 900;
+      color: rgba(255,255,255,0.055);
+      pointer-events: none;
+      white-space: nowrap;
     }
 
-    .status.success {
-      background: #dcfce7;
-      color: #166534;
+    .scanner-header {
+      position: relative;
+      z-index: 5;
+      text-align: center;
+      padding: 20px 15px 16px;
+      background: rgba(255,255,255,0.96);
     }
 
-    .status.error {
-      background: #fee2e2;
-      color: #991b1b;
+    .scanner-school {
+      font-size: 25px;
+      font-weight: 900;
+      color: #124b7c;
+      line-height: 1.2;
     }
 
-    .status.warning {
-      background: #fef3c7;
-      color: #92400e;
+    .scanner-title {
+      margin-top: 5px;
+      font-size: 21px;
+      font-weight: 800;
+      color: #111;
+    }
+
+    .camera-area {
+      position: relative;
+      background: #000;
+      min-height: 400px;
     }
 
     #reader {
       width: 100%;
-      max-width: 500px;
-      margin: auto;
-      overflow: hidden;
-      border-radius: 12px;
+      min-height: 400px;
     }
 
-    .scanner-controls {
+    #reader video {
+      width: 100% !important;
+      height: auto !important;
+      display: block;
+    }
+
+
+    /* =========================================
+       CAMERA SWITCH
+       ========================================= */
+
+    #switchCameraBtn {
+      position: absolute;
+      z-index: 20;
+      right: 16px;
+      top: 16px;
+      width: 52px;
+      height: 52px;
+      border: none;
+      border-radius: 50%;
+      background: rgba(0,0,0,0.65);
+      color: white;
+      font-size: 27px;
+      font-weight: bold;
+      cursor: pointer;
       display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
+      align-items: center;
       justify-content: center;
-      margin-top: 10px;
     }
 
-    .result-box {
+    #switchCameraBtn:active {
+      transform: scale(0.94);
+    }
+
+
+    /* =========================================
+       STATUS BAR
+       ========================================= */
+
+    .ready-bar {
+      position: relative;
+      z-index: 5;
+      padding: 14px;
       text-align: center;
-      padding: 12px;
-      border-radius: 10px;
-      background: #f8fafc;
-      margin-top: 10px;
+      background: rgba(255,255,255,0.96);
+      color: #16803c;
+      font-size: 17px;
+      font-weight: 900;
     }
 
-    .event-big {
-      font-size: 24px;
-      font-weight: bold;
-      margin: 5px 0;
+
+    /* =========================================
+       ATTENDANCE MONITOR
+       ========================================= */
+
+    #attendanceMonitor {
+      position: relative;
+      z-index: 5;
+      width: 100%;
+      padding: 18px 12px 22px;
+      background: #07131e;
     }
 
-    .time-big {
-      font-size: 28px;
-      font-weight: bold;
+    .attendance-title {
+      font-size: 21px;
+      font-weight: 900;
+      text-align: center;
+      margin: 4px 0 12px;
+      padding: 11px;
+      border-radius: 12px;
+      background: #1267a5;
+      color: #ffffff;
+      letter-spacing: 0.5px;
     }
 
-    .summary-grid {
+    .section-title {
+      margin-top: 22px;
+    }
+
+
+    /* =========================================
+       COLORFUL SCHOOL SUMMARY
+       ========================================= */
+
+    .school-summary {
       display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 10px;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 9px;
+      width: 100%;
     }
 
-    .summary-group {
-      border: 1px solid #dbe3ea;
-      border-radius: 10px;
-      padding: 10px;
-      background: #f8fafc;
-    }
-
-    .summary-group-title {
-      font-size: 18px;
-      font-weight: bold;
-      color: #0b5d3b;
-      margin-bottom: 8px;
+    .summary-card {
+      min-height: 88px;
+      border-radius: 14px;
+      padding: 11px 5px;
       text-align: center;
-    }
-
-    .summary-items {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 7px;
-    }
-
-    .summary-item {
-      background: white;
-      border-radius: 8px;
-      padding: 8px 4px;
-      text-align: center;
-      border: 1px solid #e2e8f0;
+      color: #ffffff;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.18);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
     }
 
     .summary-label {
-      font-size: 11px;
-      font-weight: bold;
-      color: #64748b;
+      font-size: 10px;
+      font-weight: 900;
+      line-height: 1.2;
+      color: #ffffff;
     }
 
-    .summary-value {
-      font-size: 21px;
-      font-weight: bold;
-      margin-top: 3px;
+    .summary-number {
+      font-size: 28px;
+      font-weight: 900;
+      color: #ffffff;
+      margin-top: 5px;
     }
 
-    .table-wrap {
+    .summary-card.total {
+      background: #1976d2;
+    }
+
+    .summary-card.am-present {
+      background: #16803c;
+    }
+
+    .summary-card.am-absent {
+      background: #d32f2f;
+    }
+
+    .summary-card.am-late {
+      background: #f57c00;
+    }
+
+    .summary-card.pm-present {
+      background: #00897b;
+    }
+
+    .summary-card.pm-absent {
+      background: #c62828;
+    }
+
+    .summary-card.pm-late {
+      background: #ef6c00;
+    }
+
+
+    /* =========================================
+       SECTION ATTENDANCE TABLE
+       ========================================= */
+
+    #sectionAttendance {
+      display: block;
+      width: 100%;
+    }
+
+    .section-table-wrap {
       width: 100%;
       overflow-x: auto;
+      border-radius: 12px;
+      background: #ffffff;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.18);
+      -webkit-overflow-scrolling: touch;
     }
 
-    table {
+    .section-table {
       width: 100%;
+      min-width: 610px;
       border-collapse: collapse;
-      min-width: 650px;
-    }
-
-    th,
-    td {
-      border: 1px solid #d1d5db;
-      padding: 7px 6px;
+      table-layout: auto;
       text-align: center;
       font-size: 13px;
     }
 
-    th {
-      background: #0b5d3b;
-      color: white;
-      font-weight: bold;
+    .section-table th {
+      padding: 10px 7px;
+      color: #ffffff;
+      font-weight: 900;
+      border: 1px solid #ffffff;
+      white-space: nowrap;
+      line-height: 1.15;
     }
 
-    tr:nth-child(even) td {
-      background: #f8fafc;
+    .section-table th.section-head {
+      background: #1565c0;
     }
 
-    .grade-title {
-      margin-top: 15px;
-      font-size: 17px;
-      font-weight: bold;
-      color: #0b5d3b;
+    .section-table th.total-head {
+      background: #3949ab;
     }
 
-    .hidden {
-      display: none !important;
+    .section-table th.am-present-head {
+      background: #2e7d32;
     }
 
-    .last-update {
-      font-size: 12px;
-      color: #64748b;
-      text-align: right;
-      margin-top: 8px;
+    .section-table th.am-absent-head {
+      background: #c62828;
     }
 
-    .login-panel {
-      display: grid;
-      gap: 8px;
+    .section-table th.am-late-head {
+      background: #ef6c00;
     }
 
-    .login-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr auto;
-      gap: 8px;
+    .section-table th.pm-present-head {
+      background: #00897b;
     }
 
-    @media (max-width: 700px) {
-      .summary-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .login-row {
-        grid-template-columns: 1fr;
-      }
-
-      .header-title {
-        font-size: 19px;
-      }
+    .section-table th.pm-absent-head {
+      background: #ad1457;
     }
 
-    .overlay {
-      position: fixed;
+    .section-table th.pm-late-head {
+      background: #f57c00;
+    }
+
+    .section-table td {
+      padding: 9px 7px;
+      border: 1px solid #d5e0ea;
+      font-weight: 800;
+      background: #ffffff;
+      white-space: nowrap;
+    }
+
+    .section-table tbody tr:nth-child(even) td {
+      background: #eef6ff;
+    }
+
+    .section-table tbody tr:hover td {
+      background: #e2f0ff;
+    }
+
+    .section-table-name {
+      text-align: left !important;
+      color: #124b7c;
+      font-weight: 900 !important;
+    }
+
+    .total-cell {
+      color: #3949ab !important;
+      background: #eef2ff !important;
+    }
+
+    .am-present-cell {
+      color: #16803c !important;
+      background: #e8f5e9 !important;
+    }
+
+    .am-absent-cell {
+      color: #c62828 !important;
+      background: #ffebee !important;
+    }
+
+    .am-late-cell {
+      color: #ef6c00 !important;
+      background: #fff3e0 !important;
+    }
+
+    .pm-present-cell {
+      color: #00695c !important;
+      background: #e0f2f1 !important;
+    }
+
+    .pm-absent-cell {
+      color: #880e4f !important;
+      background: #fce4ec !important;
+    }
+
+    .pm-late-cell {
+      color: #e65100 !important;
+      background: #fff3e0 !important;
+    }
+
+
+    #attendanceUpdated {
+      text-align: center;
+      font-size: 10px;
+      color: #9fb0bd;
+      margin-top: 10px;
+    }
+
+
+    /* =========================================
+       OVERLAY
+       ========================================= */
+
+    .scan-overlay {
+      position: absolute;
+      z-index: 30;
       inset: 0;
-      background: rgba(0,0,0,0.55);
       display: none;
       align-items: center;
       justify-content: center;
-      z-index: 9999;
       padding: 20px;
-    }
-
-    .overlay.show {
-      display: flex;
+      background: rgba(0,0,0,0.72);
+      backdrop-filter: blur(4px);
     }
 
     .overlay-box {
       width: 100%;
-      max-width: 420px;
-      background: white;
-      border-radius: 15px;
-      padding: 20px;
+      max-width: 900px;
+      background: #0d47a1;
+      color: #ffffff;
+      border-radius: 22px;
+      padding: 35px 25px;
       text-align: center;
+      box-shadow:
+        0 15px 45px
+        rgba(0,0,0,0.45);
+      border: 4px solid #ffffff;
+      box-sizing: border-box;
     }
 
-    .overlay-event {
-      font-size: 38px;
-      font-weight: bold;
-      color: #0b5d3b;
-      margin: 10px 0;
+    .overlay-box.late {
+      background: #b71c1c;
     }
 
-    .overlay-name {
-      font-size: 20px;
-      font-weight: bold;
+    .overlay-box * {
+      color: #ffffff;
     }
 
-    .overlay-time {
-      font-size: 30px;
+    .processing-title {
+      font-size: 27px;
+      font-weight: 900;
+      color: #1267a5;
+    }
+
+    .processing-text {
       margin-top: 8px;
+      font-size: 15px;
+      color: #667;
     }
+
+
+    /* =========================================
+       RESPONSIVE
+       ========================================= */
+
+    @media (max-width: 600px) {
+
+      .school-summary {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .summary-card {
+        min-height: 82px;
+        padding: 9px 4px;
+      }
+
+      .summary-label {
+        font-size: 9px;
+      }
+
+      .summary-number {
+        font-size: 25px;
+      }
+
+      .section-table {
+        font-size: 12px;
+        min-width: 610px;
+      }
+
+      .section-table th,
+      .section-table td {
+        padding: 8px 6px;
+      }
+
+    }
+
+
+    @media (max-width: 480px) {
+
+      .page {
+        padding: 10px;
+      }
+
+      .school-name {
+        font-size: 25px;
+      }
+
+      .gate-title {
+        font-size: 22px;
+      }
+
+      .scanner-school {
+        font-size: 22px;
+      }
+
+      .scanner-title {
+        font-size: 20px;
+      }
+
+      .camera-area,
+      #reader {
+        min-height: 350px;
+      }
+
+      .scanner-watermark {
+        font-size: 110px;
+      }
+
+      .device-code-wrapper {
+        position: relative !important;
+        width: 100% !important;
+        max-width: 420px !important;
+        margin: 0 auto 18px auto !important;
+      }
+
+      .device-code-wrapper #deviceCode {
+        width: 100% !important;
+        box-sizing: border-box !important;
+        padding-right: 60px !important;
+      }
+
+      #toggleDeviceCode {
+        position: absolute !important;
+        display: flex !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        right: 6px !important;
+        top: 50% !important;
+        transform: translateY(-50%) !important;
+        width: 46px !important;
+        height: 46px !important;
+        z-index: 999 !important;
+        border: none !important;
+        background: transparent !important;
+        color: #222 !important;
+        align-items: center !important;
+        justify-content: center !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        cursor: pointer !important;
+      }
+
+    }
+
   </style>
+
 </head>
+
 
 <body>
 
-  <div class="header">
-    <div class="header-title">SAN ESTEBAN NATIONAL HIGH SCHOOL</div>
-    <div class="header-subtitle">SENHS GATE SCANNER — QR ATTENDANCE</div>
-  </div>
+  <div class="page">
 
-  <div class="container">
+    <div class="container">
 
-    <!-- DEVICE LOGIN -->
-    <div class="card">
-      <div class="section-title">DEVICE</div>
 
-      <div class="login-panel">
-        <div class="login-row">
-          <select id="deviceSelect">
-            <option value="">Select Device</option>
-            <option value="1">DEVICE 1</option>
-            <option value="2">DEVICE 2</option>
-            <option value="3">DEVICE 3</option>
-            <option value="4">DEVICE 4</option>
-            <option value="5">DEVICE 5</option>
-            <option value="6">DEVICE 6</option>
-          </select>
+      <!-- ==================================================
+           PAGE 1 — DEVICE CODE
+           ================================================== -->
 
-          <input
-            type="password"
-            id="deviceKey"
-            placeholder="Device Key"
-            autocomplete="off"
+      <div id="devicePage">
+
+        <div class="device-watermark">
+          SENHS
+        </div>
+
+        <div class="device-content">
+
+          <div class="school-name">
+            SAN ESTEBAN NATIONAL HIGH SCHOOL
+          </div>
+
+          <div class="gate-title">
+            GATE SCANNER
+          </div>
+
+          <div class="subtitle">
+            Authorized Gate Device
+          </div>
+
+          <label
+            class="device-label"
+            for="deviceCode"
           >
+            Enter Device Code
+          </label>
 
-          <button id="loginBtn" onclick="verifyDevice()">
-            CONNECT
+          <div class="device-code-wrapper">
+
+            <input
+              id="deviceCode"
+              type="password"
+              placeholder="Enter Device Code"
+              autocomplete="off"
+            >
+
+            <button
+              id="toggleDeviceCode"
+              type="button"
+              aria-label="Show device code"
+              title="Show / Hide Device Code"
+            >
+
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+
+                <path
+                  d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"
+                ></path>
+
+                <circle
+                  cx="12"
+                  cy="12"
+                  r="3"
+                ></circle>
+
+              </svg>
+
+            </button>
+
+          </div>
+
+
+          <button
+            id="continueBtn"
+            type="button"
+          >
+            CONTINUE
           </button>
+
+          <div id="deviceMessage"></div>
+
         </div>
 
-        <div id="deviceStatus" class="status">
-          Device not connected.
-        </div>
-      </div>
-    </div>
-
-    <!-- SCANNER -->
-    <div class="card">
-      <div class="section-title">QR SCANNER</div>
-
-      <div id="reader"></div>
-
-      <div class="scanner-controls">
-        <button id="startBtn" onclick="startScanner()" disabled>
-          START SCANNER
-        </button>
-
-        <button
-          id="stopBtn"
-          class="secondary"
-          onclick="stopScanner()"
-          disabled
-        >
-          STOP
-        </button>
-
-        <button
-          id="switchCameraBtn"
-          class="secondary"
-          onclick="switchCamera()"
-          disabled
-        >
-          SWITCH CAMERA
-        </button>
       </div>
 
-      <div id="scannerStatus" class="status">
-        Please connect a device first.
-      </div>
 
-      <div class="result-box">
-        <div id="lastEvent" class="event-big">---</div>
-        <div id="lastName">Waiting for scan...</div>
-        <div id="lastSection"></div>
-        <div id="lastTime" class="time-big">--:--:--</div>
-        <div id="lastTransaction"></div>
-      </div>
-    </div>
+      <!-- ==================================================
+           PAGE 2 — CAMERA SCANNER
+           ================================================== -->
 
-    <!-- SCHOOL SUMMARY -->
-    <div class="card">
-      <div class="section-title">SCHOOL SUMMARY</div>
+      <div id="scannerPage">
 
-      <div id="schoolSummary" class="summary-grid">
+        <div class="scanner-container">
 
-        <div class="summary-group">
-          <div class="summary-group-title">JHS (Grade 7–10)</div>
-
-          <div class="summary-items">
-            <div class="summary-item">
-              <div class="summary-label">TOTAL</div>
-              <div id="jhsTotal" class="summary-value">0</div>
-            </div>
-
-            <div class="summary-item">
-              <div class="summary-label">AM PRESENT</div>
-              <div id="jhsAmPresent" class="summary-value">0</div>
-            </div>
-
-            <div class="summary-item">
-              <div class="summary-label">AM ABSENT</div>
-              <div id="jhsAmAbsent" class="summary-value">0</div>
-            </div>
-
-            <div class="summary-item">
-              <div class="summary-label">AM LATE</div>
-              <div id="jhsAmLate" class="summary-value">0</div>
-            </div>
-
-            <div id="jhsPmPresentBox" class="summary-item pm-summary">
-              <div class="summary-label">PM PRESENT</div>
-              <div id="jhsPmPresent" class="summary-value">0</div>
-            </div>
-
-            <div id="jhsPmAbsentBox" class="summary-item pm-summary">
-              <div class="summary-label">PM ABSENT</div>
-              <div id="jhsPmAbsent" class="summary-value">0</div>
-            </div>
-
-            <div id="jhsPmLateBox" class="summary-item pm-summary">
-              <div class="summary-label">PM LATE</div>
-              <div id="jhsPmLate" class="summary-value">0</div>
-            </div>
+          <div class="scanner-watermark">
+            SENHS
           </div>
-        </div>
 
-        <div class="summary-group">
-          <div class="summary-group-title">SHS (Grade 11–12)</div>
 
-          <div class="summary-items">
-            <div class="summary-item">
-              <div class="summary-label">TOTAL</div>
-              <div id="shsTotal" class="summary-value">0</div>
+          <!-- HEADER -->
+
+          <div class="scanner-header">
+
+            <div class="scanner-school">
+              SAN ESTEBAN NATIONAL HIGH SCHOOL
             </div>
 
-            <div class="summary-item">
-              <div class="summary-label">AM PRESENT</div>
-              <div id="shsAmPresent" class="summary-value">0</div>
+            <div class="scanner-title">
+              GATE SCANNER
             </div>
 
-            <div class="summary-item">
-              <div class="summary-label">AM ABSENT</div>
-              <div id="shsAmAbsent" class="summary-value">0</div>
-            </div>
-
-            <div class="summary-item">
-              <div class="summary-label">AM LATE</div>
-              <div id="shsAmLate" class="summary-value">0</div>
-            </div>
-
-            <div id="shsPmPresentBox" class="summary-item pm-summary">
-              <div class="summary-label">PM PRESENT</div>
-              <div id="shsPmPresent" class="summary-value">0</div>
-            </div>
-
-            <div id="shsPmAbsentBox" class="summary-item pm-summary">
-              <div class="summary-label">PM ABSENT</div>
-              <div id="shsPmAbsent" class="summary-value">0</div>
-            </div>
-
-            <div id="shsPmLateBox" class="summary-item pm-summary">
-              <div class="summary-label">PM LATE</div>
-              <div id="shsPmLate" class="summary-value">0</div>
-            </div>
           </div>
+
+
+          <!-- CAMERA -->
+
+          <div class="camera-area">
+
+            <div id="reader"></div>
+
+
+            <!-- SWITCH CAMERA -->
+
+            <button
+              id="switchCameraBtn"
+              title="Switch Camera"
+              aria-label="Switch Camera"
+              type="button"
+            >
+              ↔
+            </button>
+
+
+            <!-- PROCESSING / RESULT OVERLAY -->
+
+            <div
+              id="scanOverlay"
+              class="scan-overlay"
+            >
+
+              <div
+                id="overlayBox"
+                class="overlay-box"
+              >
+
+                <div
+                  id="overlayContent"
+                ></div>
+
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <!-- READY -->
+
+          <div
+            id="readyBar"
+            class="ready-bar"
+          >
+            ● READY TO SCAN
+          </div>
+
+
+          <!-- ==================================================
+               ATTENDANCE MONITOR
+               ================================================== -->
+
+          <div id="attendanceMonitor">
+
+            <div class="attendance-title">
+              SCHOOL SUMMARY
+            </div>
+
+            <div class="school-summary">
+
+              <!-- TOTAL -->
+
+              <div class="summary-card total">
+                <div class="summary-label">
+                  TOTAL
+                </div>
+
+                <div
+                  id="schoolTotal"
+                  class="summary-number"
+                >
+                  0
+                </div>
+              </div>
+
+
+              <!-- AM PRESENT -->
+
+              <div class="summary-card am-present">
+                <div class="summary-label">
+                  AM PRESENT
+                </div>
+
+                <div
+                  id="schoolAmPresent"
+                  class="summary-number"
+                >
+                  0
+                </div>
+              </div>
+
+
+              <!-- AM ABSENT -->
+
+              <div class="summary-card am-absent">
+                <div class="summary-label">
+                  AM ABSENT
+                </div>
+
+                <div
+                  id="schoolAmAbsent"
+                  class="summary-number"
+                >
+                  0
+                </div>
+              </div>
+
+
+              <!-- AM LATE -->
+
+              <div class="summary-card am-late">
+                <div class="summary-label">
+                  AM LATE
+                </div>
+
+                <div
+                  id="schoolAmLate"
+                  class="summary-number"
+                >
+                  0
+                </div>
+              </div>
+
+
+              <!-- PM PRESENT -->
+
+              <div
+                id="schoolPmPresentCard"
+                class="summary-card pm-present"
+              >
+
+                <div class="summary-label">
+                  PM PRESENT
+                </div>
+
+                <div
+                  id="schoolPmPresent"
+                  class="summary-number"
+                >
+                  0
+                </div>
+
+              </div>
+
+
+              <!-- PM ABSENT -->
+
+              <div
+                id="schoolPmAbsentCard"
+                class="summary-card pm-absent"
+              >
+
+                <div class="summary-label">
+                  PM ABSENT
+                </div>
+
+                <div
+                  id="schoolPmAbsent"
+                  class="summary-number"
+                >
+                  0
+                </div>
+
+              </div>
+
+
+              <!-- PM LATE -->
+
+              <div
+                id="schoolPmLateCard"
+                class="summary-card pm-late"
+              >
+
+                <div class="summary-label">
+                  PM LATE
+                </div>
+
+                <div
+                  id="schoolPmLate"
+                  class="summary-number"
+                >
+                  0
+                </div>
+
+              </div>
+
+            </div>
+
+
+            <div
+              class="attendance-title section-title"
+            >
+              SECTION ATTENDANCE
+            </div>
+
+
+            <div id="sectionAttendance">
+              Loading attendance...
+            </div>
+
+
+            <div id="attendanceUpdated">
+              Updating...
+            </div>
+
+          </div>
+
+
         </div>
 
       </div>
 
-      <div id="summaryStatus" class="status">
-        Loading attendance summary...
-      </div>
-
-      <div id="lastUpdate" class="last-update"></div>
     </div>
 
-    <!-- SECTION ATTENDANCE -->
-    <div class="card">
-      <div class="section-title">SECTION ATTENDANCE</div>
-
-      <div class="table-wrap">
-        <table id="sectionTable">
-          <thead id="sectionTableHead"></thead>
-          <tbody id="sectionTableBody"></tbody>
-        </table>
-      </div>
-
-      <!-- GRADE LEVEL TOTALS -->
-      <div class="grade-title">
-        GRADE LEVEL TOTALS
-      </div>
-
-      <div class="table-wrap">
-        <table id="gradeTable">
-          <thead id="gradeTableHead"></thead>
-          <tbody id="gradeTableBody"></tbody>
-        </table>
-      </div>
-    </div>
-
-  </div>
-
-  <!-- RESULT OVERLAY -->
-  <div id="resultOverlay" class="overlay">
-    <div class="overlay-box">
-      <div id="overlayEvent" class="overlay-event">TIME IN</div>
-      <div id="overlayName" class="overlay-name"></div>
-      <div id="overlaySection"></div>
-      <div id="overlayTime" class="overlay-time"></div>
-      <div id="overlayTransaction"></div>
-    </div>
   </div>
 
 
 <script>
-  /*
-    ============================================================
-    SENHS QR GATE SCANNER
-    ============================================================
-  */
+
+
+  /* =====================================================
+     CONFIGURATION
+     ===================================================== */
 
   const APPS_SCRIPT_URL =
-    "https://script.google.com/macros/s/AKfycbyXWfLu_wjourRT3BwQDTwA-H9vIJfu5LvqbjjbG3jwv5JVb0mi_1SO5CRPq60S5KdaCg/exec";
+    "https://script.google.com/macros/s/AKfycbyXwfLu_wjourRT3BwQDTwA-H9vIJfu5LvqbjjbG3jwv5JVb0mi_1SO5CRPq60S5KdaCg/exec";
 
-  let selectedDevice = "";
+
+  /* =====================================================
+     VARIABLES
+     ===================================================== */
+
   let deviceKey = "";
 
   let html5QrCode = null;
+
   let cameras = [];
+
   let currentCameraIndex = 0;
+
   let scannerRunning = false;
-  let scanLocked = false;
+
+  let processing = false;
 
   let callbackCounter = 0;
+
   let attendanceTimer = null;
 
-  /*
-    ------------------------------------------------------------
-    PM DISPLAY
-    PM columns/cards appear ONLY at 12:05 PM onward.
-    ------------------------------------------------------------
-  */
-  function isPMDisplayTime() {
-    const now = new Date();
 
-    const currentMinutes =
-      now.getHours() * 60 + now.getMinutes();
+  /* =====================================================
+     ELEMENTS
+     ===================================================== */
 
-    const pmStartMinutes =
-      (12 * 60) + 5;
+  const devicePage =
+    document.getElementById(
+      "devicePage"
+    );
 
-    return currentMinutes >= pmStartMinutes;
-  }
+  const scannerPage =
+    document.getElementById(
+      "scannerPage"
+    );
 
+  const deviceCode =
+    document.getElementById(
+      "deviceCode"
+    );
 
-  /*
-    ------------------------------------------------------------
-    ROBUST JSONP REQUEST
-    IMPORTANT:
-    Do NOT send format=json here.
-    The Apps Script response must be JSONP because this page
-    is hosted on GitHub Pages.
-    ------------------------------------------------------------
-  */
-  function jsonpRequest(url) {
-    return new Promise(function(resolve, reject) {
+  const continueBtn =
+    document.getElementById(
+      "continueBtn"
+    );
 
-      const callbackName =
-        "senhsCallback_" +
-        Date.now() +
-        "_" +
-        (++callbackCounter);
+  const toggleDeviceCode =
+    document.getElementById(
+      "toggleDeviceCode"
+    );
 
-      const script = document.createElement("script");
+  const deviceMessage =
+    document.getElementById(
+      "deviceMessage"
+    );
 
-      let finished = false;
+  const switchCameraBtn =
+    document.getElementById(
+      "switchCameraBtn"
+    );
 
-      const separator =
-        url.includes("?") ? "&" : "?";
+  const scanOverlay =
+    document.getElementById(
+      "scanOverlay"
+    );
 
-      const requestUrl =
-        url +
-        separator +
-        "_=" + Date.now() +
-        "&callback=" +
-        encodeURIComponent(callbackName);
+  const overlayContent =
+    document.getElementById(
+      "overlayContent"
+    );
 
+  const readyBar =
+    document.getElementById(
+      "readyBar"
+    );
 
-      const timeout = setTimeout(function() {
-        finishError(
-          new Error("Server request timed out.")
-        );
-      }, 15000);
+  const sectionAttendance =
+    document.getElementById(
+      "sectionAttendance"
+    );
 
-
-      function cleanup() {
-        clearTimeout(timeout);
-
-        if (script.parentNode) {
-          script.parentNode.removeChild(script);
-        }
-
-        try {
-          delete window[callbackName];
-        } catch (e) {
-          window[callbackName] = undefined;
-        }
-      }
+  const attendanceUpdated =
+    document.getElementById(
+      "attendanceUpdated"
+    );
 
 
-      function finishSuccess(data) {
-        if (finished) return;
+  /* =====================================================
+     DEVICE CODE SHOW / HIDE
+     ===================================================== */
 
-        finished = true;
-        cleanup();
-
-        resolve(data);
-      }
-
-
-      function finishError(error) {
-        if (finished) return;
-
-        finished = true;
-        cleanup();
-
-        reject(error);
-      }
-
-
-      window[callbackName] = function(data) {
-        finishSuccess(data);
-      };
-
-
-      script.onerror = function() {
-        finishError(
-          new Error("Unable to connect to server.")
-        );
-      };
-
-
-      script.src = requestUrl;
-
-      document.body.appendChild(script);
-    });
-  }
-
-
-  /*
-    ------------------------------------------------------------
-    DEVICE LOGIN
-    ------------------------------------------------------------
-  */
-  async function verifyDevice() {
-
-    const deviceNumber =
-      document.getElementById("deviceSelect").value;
-
-    const key =
-      document.getElementById("deviceKey").value.trim();
-
-    const status =
-      document.getElementById("deviceStatus");
-
-    if (!deviceNumber) {
-      status.className = "status error";
-      status.textContent =
-        "Please select a device.";
-      return;
-    }
-
-    if (!key) {
-      status.className = "status error";
-      status.textContent =
-        "Please enter the device key.";
-      return;
-    }
-
-    selectedDevice = deviceNumber;
-    deviceKey = key;
-
-    status.className = "status warning";
-    status.textContent =
-      "Connecting to server...";
-
-
-    try {
-
-      /*
-        IMPORTANT:
-        No format=json here.
-        jsonpRequest() automatically adds callback.
-      */
-      const requestUrl =
-        APPS_SCRIPT_URL +
-        "?device=" +
-        encodeURIComponent(deviceKey);
-
-      const result =
-        await jsonpRequest(requestUrl);
-
+  toggleDeviceCode.addEventListener(
+    "click",
+    function() {
 
       if (
-        result &&
-        result.success === true &&
-        result.authorized === true
+        deviceCode.type ===
+        "password"
       ) {
 
-        status.className =
-          "status success";
+        deviceCode.type =
+          "text";
 
-        status.textContent =
-          "Device " +
-          selectedDevice +
-          " authorized. Scanner ready.";
+        toggleDeviceCode.innerHTML =
 
-        document.getElementById("startBtn").disabled =
-          false;
+          '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
 
-        document.getElementById("switchCameraBtn").disabled =
-          false;
+          '<path d="M3 3l18 18"></path>' +
 
-        document.getElementById("scannerStatus").className =
-          "status success";
+          '<path d="M10.6 10.6a2 2 0 0 0 2.8 2.8"></path>' +
 
-        document.getElementById("scannerStatus").textContent =
-          "Device authorized. Ready to scan QR.";
+          '<path d="M9.9 4.2A10.8 10.8 0 0 1 12 4c6.5 0 10 8 10 8a18.2 18.2 0 0 1-3.1 4.4"></path>' +
 
-        await prepareScanner();
+          '<path d="M6.6 6.6C3.7 8.7 2 12 2 12s3.5 8 10 8a10.8 10.8 0 0 0 3.3-.5"></path>' +
+
+          '</svg>';
+
+
+        toggleDeviceCode.setAttribute(
+          "aria-label",
+          "Hide device code"
+        );
+
 
       } else {
 
-        status.className =
-          "status error";
+        deviceCode.type =
+          "password";
 
-        status.textContent =
-          result && result.message
-            ? result.message
-            : "Device not authorized.";
+        toggleDeviceCode.innerHTML =
 
-        document.getElementById("startBtn").disabled =
-          true;
+          '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
 
-        document.getElementById("switchCameraBtn").disabled =
-          true;
-      }
+          '<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"></path>' +
 
-    } catch (error) {
+          '<circle cx="12" cy="12" r="3"></circle>' +
 
-      console.error(error);
+          '</svg>';
 
-      status.className =
-        "status error";
 
-      status.textContent =
-        "Unable to connect to server. " +
-        (error && error.message
-          ? error.message
-          : "");
-
-    }
-  }
-
-
-  /*
-    ------------------------------------------------------------
-    PREPARE CAMERA
-    ------------------------------------------------------------
-  */
-  async function prepareScanner() {
-
-    try {
-
-      cameras =
-        await Html5Qrcode.getCameras();
-
-      if (!cameras || cameras.length === 0) {
-
-        document.getElementById("scannerStatus").className =
-          "status error";
-
-        document.getElementById("scannerStatus").textContent =
-          "No camera found.";
-
-        return;
-      }
-
-      currentCameraIndex = 0;
-
-      document.getElementById("scannerStatus").className =
-        "status success";
-
-      document.getElementById("scannerStatus").textContent =
-        "Camera found. Press START SCANNER.";
-
-    } catch (error) {
-
-      console.error(error);
-
-      document.getElementById("scannerStatus").className =
-        "status error";
-
-      document.getElementById("scannerStatus").textContent =
-        "Camera permission/error: " +
-        error.message;
-    }
-  }
-
-
-  /*
-    ------------------------------------------------------------
-    START SCANNER
-    ------------------------------------------------------------
-  */
-  async function startScanner() {
-
-    if (scannerRunning) return;
-
-    if (!deviceKey) {
-      alert("Connect a device first.");
-      return;
-    }
-
-    try {
-
-      if (!cameras || cameras.length === 0) {
-        cameras =
-          await Html5Qrcode.getCameras();
-      }
-
-      if (!cameras || cameras.length === 0) {
-        throw new Error("No camera found.");
-      }
-
-      if (!html5QrCode) {
-        html5QrCode =
-          new Html5Qrcode("reader");
-      }
-
-      const cameraId =
-        cameras[currentCameraIndex].id;
-
-
-      await html5QrCode.start(
-        cameraId,
-        {
-          fps: 10,
-          qrbox: {
-            width: 250,
-            height: 250
-          }
-        },
-        onScanSuccess,
-        onScanFailure
-      );
-
-
-      scannerRunning = true;
-
-      document.getElementById("startBtn").disabled =
-        true;
-
-      document.getElementById("stopBtn").disabled =
-        false;
-
-      document.getElementById("switchCameraBtn").disabled =
-        cameras.length < 2;
-
-      document.getElementById("scannerStatus").className =
-        "status success";
-
-      document.getElementById("scannerStatus").textContent =
-        "Scanner is active.";
-
-    } catch (error) {
-
-      console.error(error);
-
-      document.getElementById("scannerStatus").className =
-        "status error";
-
-      document.getElementById("scannerStatus").textContent =
-        "Unable to start camera: " +
-        error.message;
-    }
-  }
-
-
-  /*
-    ------------------------------------------------------------
-    STOP SCANNER
-    ------------------------------------------------------------
-  */
-  async function stopScanner() {
-
-    if (!html5QrCode || !scannerRunning) {
-      return;
-    }
-
-    try {
-
-      await html5QrCode.stop();
-
-      scannerRunning = false;
-
-      document.getElementById("startBtn").disabled =
-        false;
-
-      document.getElementById("stopBtn").disabled =
-        true;
-
-      document.getElementById("scannerStatus").className =
-        "status warning";
-
-      document.getElementById("scannerStatus").textContent =
-        "Scanner stopped.";
-
-    } catch (error) {
-
-      console.error(error);
-    }
-  }
-
-
-  /*
-    ------------------------------------------------------------
-    SWITCH CAMERA
-    ------------------------------------------------------------
-  */
-  async function switchCamera() {
-
-    if (!cameras || cameras.length < 2) {
-      return;
-    }
-
-    const wasRunning =
-      scannerRunning;
-
-    if (wasRunning) {
-      await stopScanner();
-    }
-
-    currentCameraIndex++;
-
-    if (
-      currentCameraIndex >= cameras.length
-    ) {
-      currentCameraIndex = 0;
-    }
-
-    if (wasRunning) {
-      await startScanner();
-    }
-  }
-
-
-  /*
-    ------------------------------------------------------------
-    QR SCAN SUCCESS
-    ------------------------------------------------------------
-  */
-  async function onScanSuccess(decodedText) {
-
-    if (scanLocked) return;
-
-    const lrn =
-      String(decodedText || "").trim();
-
-    if (!lrn) return;
-
-    scanLocked = true;
-
-    document.getElementById("scannerStatus").className =
-      "status warning";
-
-    document.getElementById("scannerStatus").textContent =
-      "Processing " + lrn + "...";
-
-
-    try {
-
-      /*
-        IMPORTANT:
-        No format=json.
-        jsonpRequest() adds callback automatically.
-      */
-      const requestUrl =
-        APPS_SCRIPT_URL +
-        "?lrn=" +
-        encodeURIComponent(lrn) +
-        "&device=" +
-        encodeURIComponent(deviceKey);
-
-      const result =
-        await jsonpRequest(requestUrl);
-
-
-      if (
-        result &&
-        result.success === true
-      ) {
-
-        showScanResult(result);
-
-        playBeep();
-
-        document.getElementById("scannerStatus").className =
-          "status success";
-
-        document.getElementById("scannerStatus").textContent =
-          "Scan recorded successfully.";
-
-        /*
-          Refresh summary immediately.
-        */
-        loadAttendanceSummary();
-
-      } else {
-
-        document.getElementById("scannerStatus").className =
-          "status error";
-
-        document.getElementById("scannerStatus").textContent =
-          result && result.message
-            ? result.message
-            : "Scan failed.";
+        toggleDeviceCode.setAttribute(
+          "aria-label",
+          "Show device code"
+        );
 
       }
 
-    } catch (error) {
-
-      console.error(error);
-
-      document.getElementById("scannerStatus").className =
-        "status error";
-
-      document.getElementById("scannerStatus").textContent =
-        "Unable to connect to server.";
-
     }
+  );
 
 
-    /*
-      Prevent duplicate reads of the same QR
-      but scanner remains active.
-    */
-    setTimeout(function() {
-      scanLocked = false;
+  /* =====================================================
+     BEEP SOUND
+     ===================================================== */
 
-      if (scannerRunning) {
-        document.getElementById("scannerStatus").className =
-          "status success";
-
-        document.getElementById("scannerStatus").textContent =
-          "Ready for next scan.";
-      }
-
-    }, 1500);
-  }
-
-
-  function onScanFailure(error) {
-    /*
-      Intentionally empty.
-      html5-qrcode calls this continuously while
-      looking for a QR code.
-    */
-  }
-
-
-  /*
-    ------------------------------------------------------------
-    SHOW SCAN RESULT
-    ------------------------------------------------------------
-  */
-  function showScanResult(result) {
-
-    const event =
-      result.event ||
-      "---";
-
-    const name =
-      result.name ||
-      "";
-
-    const section =
-      result.section ||
-      "";
-
-    const time =
-      result.time ||
-      "";
-
-    const transaction =
-      result.transaction ||
-      "";
-
-
-    document.getElementById("lastEvent").textContent =
-      event;
-
-    document.getElementById("lastName").textContent =
-      name;
-
-    document.getElementById("lastSection").textContent =
-      section;
-
-    document.getElementById("lastTime").textContent =
-      time;
-
-    document.getElementById("lastTransaction").textContent =
-      transaction
-        ? "Transaction #" + transaction
-        : "";
-
-
-    document.getElementById("overlayEvent").textContent =
-      event;
-
-    document.getElementById("overlayName").textContent =
-      name;
-
-    document.getElementById("overlaySection").textContent =
-      section;
-
-    document.getElementById("overlayTime").textContent =
-      time;
-
-    document.getElementById("overlayTransaction").textContent =
-      transaction
-        ? "Transaction #" + transaction
-        : "";
-
-
-    const overlay =
-      document.getElementById("resultOverlay");
-
-    overlay.classList.add("show");
-
-
-    setTimeout(function() {
-      overlay.classList.remove("show");
-    }, 5000);
-  }
-
-
-  /*
-    ------------------------------------------------------------
-    BEEP
-    ------------------------------------------------------------
-  */
-  function playBeep() {
+  function beep(
+    frequency = 900,
+    duration = 120
+  ) {
 
     try {
 
@@ -1194,612 +1220,336 @@
         window.AudioContext ||
         window.webkitAudioContext;
 
-      if (!AudioContext) return;
-
-      const context =
+      const audioContext =
         new AudioContext();
 
       const oscillator =
-        context.createOscillator();
+        audioContext.createOscillator();
 
       const gain =
-        context.createGain();
+        audioContext.createGain();
 
-      oscillator.type = "sine";
+      oscillator.type =
+        "sine";
 
       oscillator.frequency.value =
-        900;
+        frequency;
 
       gain.gain.value =
-        0.15;
+        0.18;
 
-      oscillator.connect(gain);
+      oscillator.connect(
+        gain
+      );
 
-      gain.connect(context.destination);
+      gain.connect(
+        audioContext.destination
+      );
 
       oscillator.start();
 
-      oscillator.stop(
-        context.currentTime + 0.15
+      setTimeout(
+        function() {
+
+          oscillator.stop();
+
+          audioContext.close();
+
+        },
+        duration
       );
-
-    } catch (e) {
-      console.log(e);
-    }
-  }
-
-
-  /*
-    ------------------------------------------------------------
-    GRADE NUMBER
-    ------------------------------------------------------------
-  */
-  function getGradeNumber(sectionName) {
-
-    const match =
-      String(sectionName || "")
-        .match(/\b(7|8|9|10|11|12)\b/);
-
-    if (!match) return 99;
-
-    return Number(match[1]);
-  }
-
-
-  /*
-    ------------------------------------------------------------
-    SORT SECTIONS
-    ------------------------------------------------------------
-  */
-  function sortSections(sections) {
-
-    return [...sections].sort(function(a, b) {
-
-      const gradeA =
-        getGradeNumber(a.section);
-
-      const gradeB =
-        getGradeNumber(b.section);
-
-      if (gradeA !== gradeB) {
-        return gradeA - gradeB;
-      }
-
-      return String(a.section)
-        .localeCompare(
-          String(b.section)
-        );
-    });
-  }
-
-
-  /*
-    ------------------------------------------------------------
-    SCHOOL GROUP CALCULATION
-    JHS = 7,8,9,10
-    SHS = 11,12
-    ADMIN and other non-grade sections ignored.
-    ------------------------------------------------------------
-  */
-  function calculateSchoolGroups(sections) {
-
-    const jhs = {
-      total: 0,
-      amPresent: 0,
-      amAbsent: 0,
-      amLate: 0,
-      pmPresent: 0,
-      pmAbsent: 0,
-      pmLate: 0
-    };
-
-    const shs = {
-      total: 0,
-      amPresent: 0,
-      amAbsent: 0,
-      amLate: 0,
-      pmPresent: 0,
-      pmAbsent: 0,
-      pmLate: 0
-    };
-
-
-    sections.forEach(function(item) {
-
-      const grade =
-        getGradeNumber(item.section);
-
-      let target = null;
-
-      if (grade >= 7 && grade <= 10) {
-        target = jhs;
-      }
-
-      if (grade === 11 || grade === 12) {
-        target = shs;
-      }
-
-      if (!target) return;
-
-
-      target.total += Number(item.total || 0);
-
-      target.amPresent +=
-        Number(item.amPresent || 0);
-
-      target.amAbsent +=
-        Number(item.amAbsent || 0);
-
-      target.amLate +=
-        Number(item.amLate || 0);
-
-      target.pmPresent +=
-        Number(item.pmPresent || 0);
-
-      target.pmAbsent +=
-        Number(item.pmAbsent || 0);
-
-      target.pmLate +=
-        Number(item.pmLate || 0);
-
-    });
-
-
-    return {
-      jhs: jhs,
-      shs: shs
-    };
-  }
-
-
-  /*
-    ------------------------------------------------------------
-    UPDATE PM DISPLAY
-    ------------------------------------------------------------
-  */
-  function updatePMDisplay() {
-
-    const showPM =
-      isPMDisplayTime();
-
-    document
-      .querySelectorAll(".pm-summary")
-      .forEach(function(el) {
-
-        el.classList.toggle(
-          "hidden",
-          !showPM
-        );
-
-      });
-
-    return showPM;
-  }
-
-
-  /*
-    ------------------------------------------------------------
-    SECTION ATTENDANCE
-    ------------------------------------------------------------
-  */
-  function renderSectionAttendance(sections) {
-
-    const sorted =
-      sortSections(sections);
-
-    const showPM =
-      isPMDisplayTime();
-
-
-    const head =
-      document.getElementById(
-        "sectionTableHead"
-      );
-
-    const body =
-      document.getElementById(
-        "sectionTableBody"
-      );
-
-
-    if (showPM) {
-
-      head.innerHTML = `
-        <tr>
-          <th>SECTION</th>
-          <th>TOTAL</th>
-          <th>AM P</th>
-          <th>AM A</th>
-          <th>AM L</th>
-          <th>PM P</th>
-          <th>PM A</th>
-          <th>PM L</th>
-        </tr>
-      `;
-
-    } else {
-
-      head.innerHTML = `
-        <tr>
-          <th>SECTION</th>
-          <th>TOTAL</th>
-          <th>AM P</th>
-          <th>AM A</th>
-          <th>AM L</th>
-        </tr>
-      `;
-    }
-
-
-    body.innerHTML = "";
-
-
-    sorted.forEach(function(item) {
-
-      const tr =
-        document.createElement("tr");
-
-
-      if (showPM) {
-
-        tr.innerHTML = `
-          <td>${escapeHtml(item.section)}</td>
-          <td>${Number(item.total || 0)}</td>
-          <td>${Number(item.amPresent || 0)}</td>
-          <td>${Number(item.amAbsent || 0)}</td>
-          <td>${Number(item.amLate || 0)}</td>
-          <td>${Number(item.pmPresent || 0)}</td>
-          <td>${Number(item.pmAbsent || 0)}</td>
-          <td>${Number(item.pmLate || 0)}</td>
-        `;
-
-      } else {
-
-        tr.innerHTML = `
-          <td>${escapeHtml(item.section)}</td>
-          <td>${Number(item.total || 0)}</td>
-          <td>${Number(item.amPresent || 0)}</td>
-          <td>${Number(item.amAbsent || 0)}</td>
-          <td>${Number(item.amLate || 0)}</td>
-        `;
-      }
-
-
-      body.appendChild(tr);
-
-    });
-
-
-    renderGradeLevelTotals(sorted, showPM);
-  }
-
-
-  /*
-    ------------------------------------------------------------
-    GRADE LEVEL TOTALS
-    Grade 7–12
-    ------------------------------------------------------------
-  */
-  function renderGradeLevelTotals(
-    sections,
-    showPM
-  ) {
-
-    const grades = {
-      7: createGradeObject(),
-      8: createGradeObject(),
-      9: createGradeObject(),
-      10: createGradeObject(),
-      11: createGradeObject(),
-      12: createGradeObject()
-    };
-
-
-    sections.forEach(function(item) {
-
-      const grade =
-        getGradeNumber(item.section);
-
-      if (!grades[grade]) return;
-
-
-      grades[grade].total +=
-        Number(item.total || 0);
-
-      grades[grade].amPresent +=
-        Number(item.amPresent || 0);
-
-      grades[grade].amAbsent +=
-        Number(item.amAbsent || 0);
-
-      grades[grade].amLate +=
-        Number(item.amLate || 0);
-
-      grades[grade].pmPresent +=
-        Number(item.pmPresent || 0);
-
-      grades[grade].pmAbsent +=
-        Number(item.pmAbsent || 0);
-
-      grades[grade].pmLate +=
-        Number(item.pmLate || 0);
-
-    });
-
-
-    const head =
-      document.getElementById(
-        "gradeTableHead"
-      );
-
-    const body =
-      document.getElementById(
-        "gradeTableBody"
-      );
-
-
-    if (showPM) {
-
-      head.innerHTML = `
-        <tr>
-          <th>GRADE</th>
-          <th>TOTAL</th>
-          <th>AM P</th>
-          <th>AM A</th>
-          <th>AM L</th>
-          <th>PM P</th>
-          <th>PM A</th>
-          <th>PM L</th>
-        </tr>
-      `;
-
-    } else {
-
-      head.innerHTML = `
-        <tr>
-          <th>GRADE</th>
-          <th>TOTAL</th>
-          <th>AM P</th>
-          <th>AM A</th>
-          <th>AM L</th>
-        </tr>
-      `;
-    }
-
-
-    body.innerHTML = "";
-
-
-    [7, 8, 9, 10, 11, 12]
-      .forEach(function(grade) {
-
-        const item =
-          grades[grade];
-
-
-        const tr =
-          document.createElement("tr");
-
-
-        if (showPM) {
-
-          tr.innerHTML = `
-            <td>Grade ${grade}</td>
-            <td>${item.total}</td>
-            <td>${item.amPresent}</td>
-            <td>${item.amAbsent}</td>
-            <td>${item.amLate}</td>
-            <td>${item.pmPresent}</td>
-            <td>${item.pmAbsent}</td>
-            <td>${item.pmLate}</td>
-          `;
-
-        } else {
-
-          tr.innerHTML = `
-            <td>Grade ${grade}</td>
-            <td>${item.total}</td>
-            <td>${item.amPresent}</td>
-            <td>${item.amAbsent}</td>
-            <td>${item.amLate}</td>
-          `;
-        }
-
-
-        body.appendChild(tr);
-
-      });
-  }
-
-
-  function createGradeObject() {
-
-    return {
-      total: 0,
-      amPresent: 0,
-      amAbsent: 0,
-      amLate: 0,
-      pmPresent: 0,
-      pmAbsent: 0,
-      pmLate: 0
-    };
-  }
-
-
-  /*
-    ------------------------------------------------------------
-    LOAD ATTENDANCE SUMMARY
-    ------------------------------------------------------------
-  */
-  async function loadAttendanceSummary() {
-
-    try {
-
-      /*
-        IMPORTANT:
-        No format=json.
-        The JSONP callback is added automatically.
-      */
-      const requestUrl =
-        APPS_SCRIPT_URL +
-        "?summary=today";
-
-
-      const result =
-        await jsonpRequest(requestUrl);
-
-
-      if (
-        !result ||
-        result.success !== true
-      ) {
-
-        throw new Error(
-          result && result.message
-            ? result.message
-            : "Invalid server response."
-        );
-      }
-
-
-      const sections =
-        Array.isArray(result.sections)
-          ? result.sections
-          : [];
-
-
-      const groups =
-        calculateSchoolGroups(
-          sections
-        );
-
-
-      /*
-        JHS
-      */
-      document.getElementById("jhsTotal").textContent =
-        groups.jhs.total;
-
-      document.getElementById("jhsAmPresent").textContent =
-        groups.jhs.amPresent;
-
-      document.getElementById("jhsAmAbsent").textContent =
-        groups.jhs.amAbsent;
-
-      document.getElementById("jhsAmLate").textContent =
-        groups.jhs.amLate;
-
-      document.getElementById("jhsPmPresent").textContent =
-        groups.jhs.pmPresent;
-
-      document.getElementById("jhsPmAbsent").textContent =
-        groups.jhs.pmAbsent;
-
-      document.getElementById("jhsPmLate").textContent =
-        groups.jhs.pmLate;
-
-
-      /*
-        SHS
-      */
-      document.getElementById("shsTotal").textContent =
-        groups.shs.total;
-
-      document.getElementById("shsAmPresent").textContent =
-        groups.shs.amPresent;
-
-      document.getElementById("shsAmAbsent").textContent =
-        groups.shs.amAbsent;
-
-      document.getElementById("shsAmLate").textContent =
-        groups.shs.amLate;
-
-      document.getElementById("shsPmPresent").textContent =
-        groups.shs.pmPresent;
-
-      document.getElementById("shsPmAbsent").textContent =
-        groups.shs.pmAbsent;
-
-      document.getElementById("shsPmLate").textContent =
-        groups.shs.pmLate;
-
-
-      /*
-        PM visibility is automatically determined
-        by current time.
-      */
-      updatePMDisplay();
-
-      renderSectionAttendance(
-        sections
-      );
-
-
-      document.getElementById("summaryStatus").className =
-        "status success";
-
-      document.getElementById("summaryStatus").textContent =
-        "Attendance summary loaded for " +
-        (result.date || "today") +
-        ".";
-
-
-      const now =
-        new Date();
-
-      document.getElementById("lastUpdate").textContent =
-        "Last update: " +
-        now.toLocaleTimeString();
 
     } catch (error) {
 
-      console.error(error);
-
-      document.getElementById("summaryStatus").className =
-        "status error";
-
-      document.getElementById("summaryStatus").textContent =
-        "Unable to load attendance summary.";
+      console.log(
+        "Beep unavailable:",
+        error
+      );
 
     }
+
   }
 
 
-  /*
-    ------------------------------------------------------------
-    ESCAPE HTML
-    ------------------------------------------------------------
-  */
-  function escapeHtml(value) {
+  /* =====================================================
+     JSONP REQUEST
+     ===================================================== */
 
-    return String(value == null ? "" : value)
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;")
-      .replace(/'/g, "&#039;");
+  function jsonpRequest(
+    url
+  ) {
+
+    return new Promise(
+      function(
+        resolve,
+        reject
+      ) {
+
+        const callbackName =
+          "senhsCallback_" +
+          Date.now() +
+          "_" +
+          (++callbackCounter);
+
+        const script =
+          document.createElement(
+            "script"
+          );
+
+        const timeout =
+          setTimeout(
+            function() {
+
+              cleanup();
+
+              reject(
+                new Error(
+                  "Server request timed out."
+                )
+              );
+
+            },
+            15000
+          );
+
+
+        function cleanup() {
+
+          clearTimeout(
+            timeout
+          );
+
+          if (
+            script.parentNode
+          ) {
+
+            script.parentNode.removeChild(
+              script
+            );
+
+          }
+
+          try {
+
+            delete window[
+              callbackName
+            ];
+
+          } catch (e) {
+
+            window[
+              callbackName
+            ] = undefined;
+
+          }
+
+        }
+
+
+        window[
+          callbackName
+        ] =
+          function(data) {
+
+            cleanup();
+
+            resolve(data);
+
+          };
+
+
+        script.onerror =
+          function() {
+
+            cleanup();
+
+            reject(
+              new Error(
+                "Unable to connect to server."
+              )
+            );
+
+          };
+
+
+        script.src =
+          url +
+          "&callback=" +
+          encodeURIComponent(
+            callbackName
+          );
+
+
+        document.body.appendChild(
+          script
+        );
+
+      }
+    );
+
   }
 
 
-  /*
-    ------------------------------------------------------------
-    INITIALIZATION
-    ------------------------------------------------------------
-  */
-  window.addEventListener(
-    "load",
-    function() {
+  /* =====================================================
+     SHOW DEVICE MESSAGE
+     ===================================================== */
 
-      updatePMDisplay();
+  function showDeviceMessage(
+    message,
+    type
+  ) {
 
-      loadAttendanceSummary();
+    deviceMessage.textContent =
+      message;
+
+    deviceMessage.className =
+      type || "";
+
+  }
 
 
-      /*
-        Refresh every 5 seconds.
-        This also automatically reveals PM columns
-        once the clock reaches 12:05 PM.
-      */
+  /* =====================================================
+     VERIFY DEVICE
+     ===================================================== */
+
+  async function verifyDevice() {
+
+    const key =
+      deviceCode.value.trim();
+
+
+    if (!key) {
+
+      showDeviceMessage(
+        "Please enter the Device Code.",
+        "error"
+      );
+
+      return;
+
+    }
+
+
+    continueBtn.disabled =
+      true;
+
+    continueBtn.textContent =
+      "CHECKING...";
+
+
+    showDeviceMessage(
+      "Checking device...",
+      ""
+    );
+
+
+    try {
+
+      const requestUrl =
+        APPS_SCRIPT_URL +
+        "?device=" +
+        encodeURIComponent(
+          key
+        ) +
+        "&format=json";
+
+
+      const result =
+        await jsonpRequest(
+          requestUrl
+        );
+
+
+      if (
+        result &&
+        result.success &&
+        result.authorized
+      ) {
+
+        deviceKey =
+          key;
+
+
+        showDeviceMessage(
+          "Device authorized.",
+          "success"
+        );
+
+
+        setTimeout(
+          function() {
+
+            openScannerPage();
+
+          },
+          300
+        );
+
+
+      } else {
+
+        showDeviceMessage(
+          "Access denied. Device not recognized.",
+          "error"
+        );
+
+
+        continueBtn.disabled =
+          false;
+
+        continueBtn.textContent =
+          "CONTINUE";
+
+      }
+
+
+    } catch (error) {
+
+      showDeviceMessage(
+        error.message ||
+        "Unable to connect to server.",
+        "error"
+      );
+
+
+      continueBtn.disabled =
+        false;
+
+      continueBtn.textContent =
+        "CONTINUE";
+
+    }
+
+  }
+
+
+  /* =====================================================
+     OPEN CAMERA PAGE
+     ===================================================== */
+
+  async function openScannerPage() {
+
+    devicePage.style.display =
+      "none";
+
+    scannerPage.style.display =
+      "block";
+
+    continueBtn.disabled =
+      false;
+
+    continueBtn.textContent =
+      "CONTINUE";
+
+
+    await startCamera();
+
+
+    loadAttendanceSummary();
+
+
+    if (!attendanceTimer) {
+
       attendanceTimer =
         setInterval(
           loadAttendanceSummary,
@@ -1807,7 +1557,1471 @@
         );
 
     }
+
+  }
+
+
+  /* =====================================================
+     PM DISPLAY CONTROL
+     
+     BEFORE 12:05 PM:
+     PM SCHOOL SUMMARY CARDS HIDDEN
+     PM SECTION TABLE COLUMNS HIDDEN
+     
+     12:05 PM ONWARD:
+     PM INFORMATION VISIBLE
+     ===================================================== */
+
+  function isPMDisplayTime() {
+
+    const now =
+      new Date();
+
+    const currentMinutes =
+      now.getHours() * 60 +
+      now.getMinutes();
+
+    const pmStartMinutes =
+      (12 * 60) + 5;
+
+    return (
+      currentMinutes >=
+      pmStartMinutes
+    );
+
+  }
+
+
+  function updateSchoolSummaryPMDisplay() {
+
+    const showPM =
+      isPMDisplayTime();
+
+
+    const pmCards = [
+
+      document.getElementById(
+        "schoolPmPresentCard"
+      ),
+
+      document.getElementById(
+        "schoolPmAbsentCard"
+      ),
+
+      document.getElementById(
+        "schoolPmLateCard"
+      )
+
+    ];
+
+
+    pmCards.forEach(
+      function(card) {
+
+        if (!card) {
+          return;
+        }
+
+        card.style.display =
+          showPM
+            ? ""
+            : "none";
+
+      }
+    );
+
+  }
+
+
+  /* =====================================================
+     ATTENDANCE SUMMARY
+     ===================================================== */
+
+  async function loadAttendanceSummary() {
+
+    try {
+
+      const requestUrl =
+        APPS_SCRIPT_URL +
+        "?summary=today";
+
+
+      const result =
+        await jsonpRequest(
+          requestUrl
+        );
+
+
+      if (
+        !result ||
+        !result.success
+      ) {
+
+        throw new Error(
+          "Unable to load attendance."
+        );
+
+      }
+
+
+      const school =
+        result.wholeSchool ||
+        {};
+
+
+      /* =========================================
+         SCHOOL SUMMARY
+         ========================================= */
+
+      document.getElementById(
+        "schoolTotal"
+      ).textContent =
+        Number(
+          school.total || 0
+        );
+
+
+      document.getElementById(
+        "schoolAmPresent"
+      ).textContent =
+        Number(
+          school.amPresent || 0
+        );
+
+
+      document.getElementById(
+        "schoolAmAbsent"
+      ).textContent =
+        Number(
+          school.amAbsent || 0
+        );
+
+
+      document.getElementById(
+        "schoolAmLate"
+      ).textContent =
+        Number(
+          school.amLate || 0
+        );
+
+
+      /* =========================================
+         PM DATA
+         
+         The values are loaded from the server,
+         but the cards remain hidden before 12:05 PM.
+         ========================================= */
+
+      document.getElementById(
+        "schoolPmPresent"
+      ).textContent =
+        Number(
+          school.pmPresent || 0
+        );
+
+
+      document.getElementById(
+        "schoolPmAbsent"
+      ).textContent =
+        Number(
+          school.pmAbsent || 0
+        );
+
+
+      document.getElementById(
+        "schoolPmLate"
+      ).textContent =
+        Number(
+          school.pmLate || 0
+        );
+
+
+      updateSchoolSummaryPMDisplay();
+
+
+      /* =========================================
+         SECTION ATTENDANCE
+         ========================================= */
+
+      renderSectionAttendance(
+        result.sections || []
+      );
+
+
+      attendanceUpdated.textContent =
+        "Updated " +
+        new Date().toLocaleTimeString(
+          [],
+          {
+            hour: "2-digit",
+            minute: "2-digit",
+            second: "2-digit"
+          }
+        );
+
+
+    } catch (error) {
+
+      console.error(
+        "Attendance update error:",
+        error
+      );
+
+      attendanceUpdated.textContent =
+        "Unable to update attendance.";
+
+    }
+
+  }
+
+
+  /* =====================================================
+     SECTION SORTING
+     GRADE 7 → 12
+     ===================================================== */
+
+  function getGradeNumber(
+    sectionName
+  ) {
+
+    const match =
+      String(
+        sectionName || ""
+      ).match(
+        /\b(7|8|9|10|11|12)\b/
+      );
+
+
+    if (!match) {
+
+      return 99;
+
+    }
+
+
+    return Number(
+      match[1]
+    );
+
+  }
+
+
+  function sortSections(
+    sections
+  ) {
+
+    return sections
+      .slice()
+      .sort(
+        function(a, b) {
+
+          const nameA =
+            String(
+              a.section || ""
+            );
+
+          const nameB =
+            String(
+              b.section || ""
+            );
+
+
+          const gradeA =
+            getGradeNumber(
+              nameA
+            );
+
+          const gradeB =
+            getGradeNumber(
+              nameB
+            );
+
+
+          if (
+            gradeA !==
+            gradeB
+          ) {
+
+            return gradeA -
+              gradeB;
+
+          }
+
+
+          return nameA.localeCompare(
+            nameB,
+            undefined,
+            {
+              numeric: true,
+              sensitivity: "base"
+            }
+          );
+
+        }
+      );
+
+  }
+
+
+  /* =====================================================
+     RENDER SECTION ATTENDANCE TABLE
+     
+     BEFORE 12:05 PM:
+       SECTION | TOTAL | AM P | AM A | AM L
+     
+     12:05 PM ONWARD:
+       SECTION | TOTAL | AM P | AM A | AM L |
+       PM P | PM A | PM L
+     ===================================================== */
+
+  function renderSectionAttendance(
+    sections
+  ) {
+
+    const sorted =
+      sortSections(
+        sections
+      );
+
+
+    if (
+      sorted.length ===
+      0
+    ) {
+
+      sectionAttendance.innerHTML =
+        '<div style="color:#ffffff;text-align:center;padding:15px;">No section data available.</div>';
+
+      return;
+
+    }
+
+
+    const showPM =
+      isPMDisplayTime();
+
+
+    let html =
+
+      '<div class="section-table-wrap">' +
+
+        '<table class="section-table">' +
+
+          '<thead>' +
+
+            '<tr>' +
+
+              '<th class="section-head">SECTION</th>' +
+
+              '<th class="total-head">TOTAL</th>' +
+
+              '<th class="am-present-head">AM<br>P</th>' +
+
+              '<th class="am-absent-head">AM<br>A</th>' +
+
+              '<th class="am-late-head">AM<br>L</th>';
+
+
+    /* =========================================
+       PM HEADERS ONLY FROM 12:05 PM
+       ========================================= */
+
+    if (showPM) {
+
+      html +=
+
+              '<th class="pm-present-head">PM<br>P</th>' +
+
+              '<th class="pm-absent-head">PM<br>A</th>' +
+
+              '<th class="pm-late-head">PM<br>L</th>';
+
+    }
+
+
+    html +=
+
+            '</tr>' +
+
+          '</thead>' +
+
+          '<tbody>';
+
+
+    sorted.forEach(
+      function(section) {
+
+        html +=
+
+          '<tr>' +
+
+            '<td class="section-table-name">' +
+
+              escapeHtml(
+                section.section ||
+                ""
+              ) +
+
+            '</td>' +
+
+            '<td class="total-cell">' +
+
+              Number(
+                section.total || 0
+              ) +
+
+            '</td>' +
+
+            '<td class="am-present-cell">' +
+
+              Number(
+                section.amPresent || 0
+              ) +
+
+            '</td>' +
+
+            '<td class="am-absent-cell">' +
+
+              Number(
+                section.amAbsent || 0
+              ) +
+
+            '</td>' +
+
+            '<td class="am-late-cell">' +
+
+              Number(
+                section.amLate || 0
+              ) +
+
+            '</td>';
+
+
+        /* =========================================
+           PM CELLS ONLY FROM 12:05 PM
+           ========================================= */
+
+        if (showPM) {
+
+          html +=
+
+            '<td class="pm-present-cell">' +
+
+              Number(
+                section.pmPresent || 0
+              ) +
+
+            '</td>' +
+
+            '<td class="pm-absent-cell">' +
+
+              Number(
+                section.pmAbsent || 0
+              ) +
+
+            '</td>' +
+
+            '<td class="pm-late-cell">' +
+
+              Number(
+                section.pmLate || 0
+              ) +
+
+            '</td>';
+
+        }
+
+
+        html +=
+
+          '</tr>';
+
+      }
+    );
+
+
+    html +=
+
+          '</tbody>' +
+
+        '</table>' +
+
+      '</div>';
+
+
+    sectionAttendance.innerHTML =
+      html;
+
+  }
+
+
+  /* =====================================================
+     START CAMERA
+     ===================================================== */
+
+  async function startCamera() {
+
+    try {
+
+      cameras =
+        await Html5Qrcode.getCameras();
+
+
+      if (
+        !cameras ||
+        cameras.length === 0
+      ) {
+
+        showOverlay(
+          "ERROR",
+          "No camera was found on this device.",
+          "error"
+        );
+
+        return;
+
+      }
+
+
+      let backIndex =
+        cameras.findIndex(
+          function(camera) {
+
+            return /back|rear|environment/i.test(
+              camera.label || ""
+            );
+
+          }
+        );
+
+
+      if (backIndex >= 0) {
+
+        currentCameraIndex =
+          backIndex;
+
+      } else {
+
+        currentCameraIndex =
+          0;
+
+      }
+
+
+      html5QrCode =
+        new Html5Qrcode(
+          "reader"
+        );
+
+
+      await startSelectedCamera();
+
+
+    } catch (error) {
+
+      console.error(
+        "Start camera error:",
+        error
+      );
+
+
+      showOverlay(
+        "CAMERA ERROR",
+        "Please allow camera permission and try again.",
+        "error"
+      );
+
+    }
+
+  }
+
+
+  /* =====================================================
+     START SELECTED CAMERA
+     ===================================================== */
+
+  async function startSelectedCamera() {
+
+    if (!html5QrCode) {
+      return;
+    }
+
+    if (!cameras || cameras.length === 0) {
+      return;
+    }
+
+    const camera =
+      cameras[
+        currentCameraIndex
+      ];
+
+    if (!camera) {
+      return;
+    }
+
+    const cameraId =
+      camera.id;
+
+    try {
+
+      if (scannerRunning) {
+        return;
+      }
+
+      await html5QrCode.start(
+
+        cameraId,
+
+        {
+          fps: 10,
+
+          qrbox:
+            function(
+              viewfinderWidth,
+              viewfinderHeight
+            ) {
+
+              const size =
+                Math.min(
+                  viewfinderWidth,
+                  viewfinderHeight
+                ) * 0.68;
+
+              return {
+                width: size,
+                height: size
+              };
+
+            },
+
+          aspectRatio: 1.0
+        },
+
+        onQrDetected,
+
+        function(errorMessage) {
+          // Normal QR scanning errors.
+        }
+
+      );
+
+      scannerRunning =
+        true;
+
+      processing =
+        false;
+
+      hideOverlay();
+
+      readyBar.textContent =
+        "● READY TO SCAN";
+
+      readyBar.style.color =
+        "#16803c";
+
+    } catch (error) {
+
+      console.error(
+        "Camera start error:",
+        error
+      );
+
+      scannerRunning =
+        false;
+
+      throw error;
+
+    }
+
+  }
+
+
+  /* =====================================================
+     QR DETECTED
+     ===================================================== */
+
+  async function onQrDetected(
+    decodedText
+  ) {
+
+    if (processing) {
+      return;
+    }
+
+
+    processing =
+      true;
+
+
+    beep(
+      1000,
+      130
+    );
+
+
+    try {
+
+      if (
+        html5QrCode &&
+        scannerRunning
+      ) {
+
+        await html5QrCode.pause(
+          true
+        );
+
+      }
+
+    } catch (error) {
+
+      console.log(
+        "Pause error:",
+        error
+      );
+
+    }
+
+
+    readyBar.textContent =
+      "PROCESSING...";
+
+    readyBar.style.color =
+      "#1267a5";
+
+
+    showProcessing();
+
+
+    let lrn =
+      String(
+        decodedText || ""
+      ).trim();
+
+
+    try {
+
+      if (
+        lrn.startsWith(
+          "http://"
+        ) ||
+        lrn.startsWith(
+          "https://"
+        )
+      ) {
+
+        const qrUrl =
+          new URL(
+            lrn
+          );
+
+
+        const urlLrn =
+          qrUrl.searchParams.get(
+            "lrn"
+          );
+
+
+        const urlId =
+          qrUrl.searchParams.get(
+            "id"
+          );
+
+
+        if (urlLrn) {
+
+          lrn =
+            urlLrn.trim();
+
+        } else if (urlId) {
+
+          lrn =
+            urlId.trim();
+
+        }
+
+      }
+
+    } catch (error) {
+
+      console.log(
+        "QR URL parsing skipped:",
+        error
+      );
+
+    }
+
+
+    lrn =
+      lrn.trim();
+
+
+    try {
+
+      const requestUrl =
+        APPS_SCRIPT_URL +
+        "?lrn=" +
+        encodeURIComponent(
+          lrn
+        ) +
+        "&device=" +
+        encodeURIComponent(
+          deviceKey
+        );
+
+
+      const result =
+        await jsonpRequest(
+          requestUrl
+        );
+
+
+      showResult(
+        result
+      );
+
+
+      if (
+        result &&
+        result.success
+      ) {
+
+        beep(
+          1400,
+          180
+        );
+
+
+        setTimeout(
+          loadAttendanceSummary,
+          500
+        );
+
+      }
+
+    } catch (error) {
+
+      showResult({
+
+        success: false,
+
+        message:
+          error.message ||
+          "Unable to connect to server."
+
+      });
+
+    }
+
+  }
+
+
+  /* =====================================================
+     PROCESSING OVERLAY
+     ===================================================== */
+
+  function showProcessing() {
+
+    scanOverlay.style.display =
+      "flex";
+
+
+    overlayContent.innerHTML =
+
+      '<div class="processing-title">' +
+        'PROCESSING...' +
+      '</div>' +
+
+      '<div class="processing-text">' +
+        'Please wait while the attendance is being recorded.' +
+      '</div>';
+
+  }
+
+
+  /* =====================================================
+     RESULT OVERLAY
+     ===================================================== */
+
+  function showResult(
+    result
+  ) {
+
+    if (showResult.timer) {
+
+      clearTimeout(
+        showResult.timer
+      );
+
+      showResult.timer =
+        null;
+
+    }
+
+
+    scanOverlay.style.display =
+      "flex";
+
+
+    const isSuccess =
+      result &&
+      result.success;
+
+
+    const isLate =
+      isSuccess &&
+      result.status ===
+      "LATE";
+
+
+    scanOverlay.style.background =
+      isLate ||
+      !isSuccess
+        ? "#b71c1c"
+        : "#0d47a1";
+
+
+    if (isSuccess) {
+
+      const name =
+        result.name ||
+        "STUDENT";
+
+
+      const section =
+        result.section ||
+        "";
+
+
+      const event =
+        result.event ||
+        "";
+
+
+      let html =
+
+        '<div style="' +
+
+          'width:100%;' +
+
+          'max-width:850px;' +
+
+          'margin:auto;' +
+
+          'padding:28px 20px;' +
+
+          'text-align:center;' +
+
+          'background:#0d47a1;' +
+
+          'border:3px solid #ffffff;' +
+
+          'border-radius:20px;' +
+
+          'box-sizing:border-box;' +
+
+          'color:#ffffff;' +
+
+          'font-family:Arial,sans-serif;' +
+
+          'box-shadow:0 8px 25px rgba(0,0,0,.40);' +
+
+        '">' +
+
+
+          '<div style="' +
+
+            'font-size:34px;' +
+
+            'font-weight:900;' +
+
+            'color:#ffffff;' +
+
+            'line-height:1.15;' +
+
+            'margin:15px 0;' +
+
+            'text-shadow:1px 2px 3px rgba(0,0,0,.50);' +
+
+          '">' +
+
+            escapeHtml(
+              name
+            ) +
+
+          '</div>' +
+
+
+          '<div style="' +
+
+            'font-size:22px;' +
+
+            'font-weight:700;' +
+
+            'color:#ffffff;' +
+
+            'margin-bottom:22px;' +
+
+          '">' +
+
+            escapeHtml(
+              section
+            ) +
+
+          '</div>' +
+
+
+          '<div style="' +
+
+            'display:inline-block;' +
+
+            'padding:10px 25px;' +
+
+            'font-size:28px;' +
+
+            'font-weight:900;' +
+
+            'color:#ffffff;' +
+
+            'background:#1565c0;' +
+
+            'border:2px solid #ffffff;' +
+
+            'border-radius:12px;' +
+
+          '">' +
+
+            escapeHtml(
+              event
+            ) +
+
+          '</div>';
+
+
+      if (isLate) {
+
+        html +=
+
+          '<div style="' +
+
+            'margin-top:18px;' +
+
+            'font-size:30px;' +
+
+            'font-weight:900;' +
+
+            'color:#ffffff;' +
+
+            'background:#8b0000;' +
+
+            'border:2px solid #ffffff;' +
+
+            'border-radius:12px;' +
+
+            'padding:8px 25px;' +
+
+            'display:inline-block;' +
+
+          '">' +
+
+            'LATE' +
+
+          '</div>';
+
+      }
+
+
+      html +=
+        '</div>';
+
+
+      overlayContent.innerHTML =
+        html;
+
+
+    } else {
+
+      const message =
+        result &&
+        result.message
+          ? result.message
+          : "SCAN FAILED";
+
+
+      overlayContent.innerHTML =
+
+        '<div style="' +
+
+          'width:100%;' +
+
+          'max-width:700px;' +
+
+          'margin:auto;' +
+
+          'padding:30px 20px;' +
+
+          'text-align:center;' +
+
+          'background:#7f0000;' +
+
+          'border:3px solid #ffffff;' +
+
+          'border-radius:20px;' +
+
+          'box-sizing:border-box;' +
+
+          'color:#ffffff;' +
+
+          'font-family:Arial,sans-serif;' +
+
+        '">' +
+
+
+          '<div style="' +
+
+            'font-size:30px;' +
+
+            'font-weight:900;' +
+
+            'color:#ffffff;' +
+
+            'margin-bottom:18px;' +
+
+          '">' +
+
+            'SCAN NOT RECORDED' +
+
+          '</div>' +
+
+
+          '<div style="' +
+
+            'font-size:20px;' +
+
+            'font-weight:700;' +
+
+            'color:#ffffff;' +
+
+          '">' +
+
+            escapeHtml(
+              message
+            ) +
+
+          '</div>' +
+
+
+        '</div>';
+
+
+      beep(
+        600,
+        180
+      );
+
+    }
+
+
+    showResult.timer =
+      setTimeout(
+        function() {
+
+          showResult.timer =
+            null;
+
+          scanOverlay.onclick =
+            null;
+
+          resumeScanner();
+
+        },
+        5000
+      );
+
+  }
+
+
+  /* =====================================================
+     RESUME SCANNER
+     ===================================================== */
+
+  async function resumeScanner() {
+
+    hideOverlay();
+
+    readyBar.textContent =
+      "● READY TO SCAN";
+
+    readyBar.style.color =
+      "#16803c";
+
+    processing =
+      false;
+
+    try {
+
+      if (
+        html5QrCode &&
+        scannerRunning
+      ) {
+
+        await html5QrCode.resume();
+
+      } else {
+
+        await startSelectedCamera();
+
+      }
+
+    } catch (error) {
+
+      console.error(
+        "Resume scanner error:",
+        error
+      );
+
+      scannerRunning =
+        false;
+
+      readyBar.textContent =
+        "CAMERA ERROR";
+
+      readyBar.style.color =
+        "#b71c1c";
+
+      showOverlay(
+        "CAMERA ERROR",
+        "Unable to resume the camera. Please try again.",
+        "error"
+      );
+
+    }
+
+  }
+
+
+  /* =====================================================
+     HIDE OVERLAY
+     ===================================================== */
+
+  function hideOverlay() {
+
+    scanOverlay.style.display =
+      "none";
+
+    scanOverlay.onclick =
+      null;
+
+  }
+
+
+  /* =====================================================
+     CAMERA SWITCH
+     ===================================================== */
+
+  switchCameraBtn.addEventListener(
+    "click",
+    async function() {
+
+      if (
+        processing ||
+        !cameras ||
+        cameras.length < 2 ||
+        !html5QrCode
+      ) {
+        return;
+      }
+
+      processing =
+        true;
+
+      switchCameraBtn.disabled =
+        true;
+
+      readyBar.textContent =
+        "SWITCHING CAMERA...";
+
+      readyBar.style.color =
+        "#1267a5";
+
+
+      const previousCameraIndex =
+        currentCameraIndex;
+
+
+      try {
+
+        if (scannerRunning) {
+
+          try {
+
+            await html5QrCode.stop();
+
+          } catch (stopError) {
+
+            console.log(
+              "Camera stop:",
+              stopError
+            );
+
+          }
+
+          scannerRunning =
+            false;
+
+        }
+
+
+        currentCameraIndex =
+          (
+            currentCameraIndex + 1
+          ) %
+          cameras.length;
+
+
+        await startSelectedCamera();
+
+
+        readyBar.textContent =
+          "● READY TO SCAN";
+
+        readyBar.style.color =
+          "#16803c";
+
+
+      } catch (error) {
+
+        console.error(
+          "Camera switch error:",
+          error
+        );
+
+
+        currentCameraIndex =
+          previousCameraIndex;
+
+
+        scannerRunning =
+          false;
+
+
+        try {
+
+          await startSelectedCamera();
+
+
+          readyBar.textContent =
+            "● READY TO SCAN";
+
+          readyBar.style.color =
+            "#16803c";
+
+
+        } catch (recoverError) {
+
+          console.error(
+            "Camera recovery error:",
+            recoverError
+          );
+
+
+          readyBar.textContent =
+            "CAMERA ERROR";
+
+          readyBar.style.color =
+            "#b71c1c";
+
+
+          showOverlay(
+            "CAMERA ERROR",
+            "Unable to switch camera. Please try again.",
+            "error"
+          );
+
+        }
+
+      } finally {
+
+        processing =
+          false;
+
+        switchCameraBtn.disabled =
+          false;
+
+      }
+
+    }
   );
+
+
+  /* =====================================================
+     CONTINUE BUTTON
+     ===================================================== */
+
+  continueBtn.addEventListener(
+    "click",
+    verifyDevice
+  );
+
+
+  /* =====================================================
+     ENTER KEY
+     ===================================================== */
+
+  deviceCode.addEventListener(
+    "keydown",
+    function(event) {
+
+      if (
+        event.key ===
+        "Enter"
+      ) {
+
+        event.preventDefault();
+
+        verifyDevice();
+
+      }
+
+    }
+  );
+
+
+  /* =====================================================
+     HTML ESCAPE
+     ===================================================== */
+
+  function escapeHtml(
+    value
+  ) {
+
+    return String(value)
+
+      .replace(
+        /&/g,
+        "&amp;"
+      )
+
+      .replace(
+        /</g,
+        "&lt;"
+      )
+
+      .replace(
+        />/g,
+        "&gt;"
+      )
+
+      .replace(
+        /"/g,
+        "&quot;"
+      )
+
+      .replace(
+        /'/g,
+        "&#039;"
+      );
+
+  }
 
 </script>
 
