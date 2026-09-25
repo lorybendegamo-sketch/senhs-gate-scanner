@@ -913,122 +913,189 @@
   }
 
 
-  /* =====================================================
-     START CAMERA
-     ===================================================== */
+ /* =====================================================
+   START CAMERA
+   ===================================================== */
 
-  async function startCamera() {
+async function startCamera() {
 
-    try {
+  try {
 
-      cameras =
-        await Html5Qrcode.getCameras();
+    /*
+     * GET AVAILABLE CAMERAS
+     */
 
-
-      if (
-        !cameras ||
-        cameras.length === 0
-      ) {
-
-        showOverlay(
-          "ERROR",
-          "No camera was found on this device.",
-          "error"
-        );
-
-        return;
-      }
+    cameras =
+      await Html5Qrcode.getCameras();
 
 
-      /*
-       * Prefer back camera
-       */
-
-      let backIndex =
-        cameras.findIndex(
-          function(camera) {
-
-            return /back|rear|environment/i
-              .test(
-                camera.label || ""
-              );
-          }
-        );
-
-
-      if (backIndex >= 0) {
-
-        currentCameraIndex =
-          backIndex;
-
-      } else {
-
-        currentCameraIndex = 0;
-      }
-
-
-      html5QrCode =
-        new Html5Qrcode(
-          "reader"
-        );
-
-
-      await startSelectedCamera();
-
-    } catch (error) {
-
-      console.error(error);
+    if (
+      !cameras ||
+      cameras.length === 0
+    ) {
 
       showOverlay(
-        "CAMERA ERROR",
-        "Please allow camera permission and try again.",
+        "ERROR",
+        "No camera was found on this device.",
         "error"
       );
-    }
-  }
 
-
-  /* =====================================================
-     START SELECTED CAMERA
-     ===================================================== */
-
-  async function startSelectedCamera() {
-
-    if (!html5QrCode) {
       return;
     }
 
 
-    const cameraId =
-      cameras[
-        currentCameraIndex
-      ].id;
+    /*
+     * FIND BACK / REAR CAMERA
+     */
+
+    let backIndex =
+      cameras.findIndex(
+        function(camera) {
+
+          return /back|rear|environment/i.test(
+            camera.label || ""
+          );
+
+        }
+      );
 
 
-    if (scannerRunning) {
+    /*
+     * IF BACK CAMERA LABEL IS AVAILABLE
+     */
 
-      try {
+    if (backIndex >= 0) {
 
-        await html5QrCode.stop();
+      currentCameraIndex =
+        backIndex;
 
-      } catch (e) {
+    } else {
 
-        console.log(e);
-      }
+      /*
+       * MOBILE BROWSER MAY HIDE CAMERA LABELS.
+       * START WITH CAMERA 0 AS FALLBACK.
+       */
 
-      scannerRunning =
-        false;
+      currentCameraIndex = 0;
+
     }
 
 
-    await html5QrCode.start(
+    /*
+     * CREATE QR SCANNER
+     */
 
-      cameraId,
+    html5QrCode =
+      new Html5Qrcode(
+        "reader"
+      );
 
-      {
-        fps: 10,
 
-        qrbox: function(
+    /*
+     * START SELECTED CAMERA
+     */
+
+    await startSelectedCamera();
+
+
+  } catch (error) {
+
+    console.error(
+      "Start camera error:",
+      error
+    );
+
+
+    showOverlay(
+      "CAMERA ERROR",
+      "Please allow camera permission and try again.",
+      "error"
+    );
+
+  }
+}
+
+
+/* =====================================================
+   START SELECTED CAMERA
+   ===================================================== */
+
+async function startSelectedCamera() {
+
+  if (!html5QrCode) {
+    return;
+  }
+
+
+  if (
+    !cameras ||
+    cameras.length === 0
+  ) {
+    return;
+  }
+
+
+  /*
+   * GET CURRENT CAMERA
+   */
+
+  const camera =
+    cameras[
+      currentCameraIndex
+    ];
+
+
+  if (!camera) {
+    return;
+  }
+
+
+  /*
+   * USE CAMERA DEVICE ID
+   */
+
+  const cameraId =
+    camera.id;
+
+
+  /*
+   * STOP CURRENT SCANNER
+   */
+
+  if (scannerRunning) {
+
+    try {
+
+      await html5QrCode.stop();
+
+    } catch (error) {
+
+      console.log(
+        "Stop camera:",
+        error
+      );
+
+    }
+
+    scannerRunning =
+      false;
+  }
+
+
+  /*
+   * START CAMERA
+   */
+
+  await html5QrCode.start(
+
+    cameraId,
+
+    {
+
+      fps: 10,
+
+      qrbox:
+        function(
           viewfinderWidth,
           viewfinderHeight
         ) {
@@ -1043,39 +1110,48 @@
             width: size,
             height: size
           };
+
         },
 
-        aspectRatio: 1.0
+      aspectRatio: 1.0
 
-      },
+    },
 
-      onQrDetected,
+    onQrDetected,
 
-      function(errorMessage) {
+    function(errorMessage) {
 
-        /*
-         * Normal QR scanning messages.
-         * Do not display them.
-         */
-      }
+      /*
+       * NORMAL QR SCANNING MESSAGE.
+       * DO NOT DISPLAY.
+       */
 
-    );
+    }
+
+  );
 
 
-    scannerRunning =
-      true;
+  /*
+   * CAMERA IS RUNNING
+   */
 
-    processing =
-      false;
+  scannerRunning =
+    true;
 
-    hideOverlay();
+  processing =
+    false;
 
-    readyBar.textContent =
-      "● READY TO SCAN";
 
-    readyBar.style.color =
-      "#16803c";
-  }
+  hideOverlay();
+
+
+  readyBar.textContent =
+    "● READY TO SCAN";
+
+  readyBar.style.color =
+    "#16803c";
+
+}
 
 
   /* =====================================================
