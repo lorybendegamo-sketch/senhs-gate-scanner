@@ -1235,144 +1235,239 @@
      RESULT OVERLAY
      ===================================================== */
 
-  function showResult(
-    result
+function showResult(
+  result
+) {
+
+  /*
+   * Clear previous automatic timer
+   */
+
+  if (showResult.timer) {
+
+    clearTimeout(
+      showResult.timer
+    );
+
+    showResult.timer =
+      null;
+  }
+
+
+  scanOverlay.style.display =
+    "flex";
+
+
+  if (
+    result &&
+    result.success
   ) {
 
-    scanOverlay.style.display =
-      "flex";
+    const name =
+      result.name ||
+      "Student";
+
+    const section =
+      result.section ||
+      "";
+
+    const event =
+      result.event ||
+      "";
+
+    const transaction =
+      result.transaction ||
+      "";
+
+    const status =
+      result.status ||
+      "";
+
+
+    let html =
+
+      '<div class="result-title result-success">' +
+        '✓ SCAN RECORDED' +
+      '</div>' +
+
+      '<div class="student-name">' +
+        escapeHtml(name) +
+      '</div>' +
+
+      '<div class="student-section">' +
+        escapeHtml(section) +
+      '</div>' +
+
+      '<div class="event-box">' +
+        escapeHtml(event) +
+      '</div>' +
+
+      '<div class="transaction">' +
+        'Transaction #' +
+        escapeHtml(String(transaction)) +
+      '</div>';
 
 
     if (
-      result &&
-      result.success
+      status === "LATE"
     ) {
-
-      const name =
-        result.name ||
-        "Student";
-
-      const section =
-        result.section ||
-        "";
-
-      const event =
-        result.event ||
-        "";
-
-      const transaction =
-        result.transaction ||
-        "";
-
-      const status =
-        result.status ||
-        "";
-
-
-      let html =
-
-        '<div class="result-title result-success">' +
-          '✓ SCAN RECORDED' +
-        '</div>' +
-
-        '<div class="student-name">' +
-          escapeHtml(name) +
-        '</div>' +
-
-        '<div class="student-section">' +
-          escapeHtml(section) +
-        '</div>' +
-
-        '<div class="event-box">' +
-          escapeHtml(event) +
-        '</div>' +
-
-        '<div class="transaction">' +
-          'Transaction #' +
-          escapeHtml(String(transaction)) +
-        '</div>';
-
-
-      if (
-        status === "LATE"
-      ) {
-
-        html +=
-
-          '<div class="late-box">' +
-            'LATE' +
-          '</div>';
-      }
-
-
-      if (result.sms) {
-
-        html +=
-
-          '<div class="sms-status">' +
-            'SMS: ' +
-            escapeHtml(
-              String(result.sms)
-            ) +
-          '</div>';
-      }
-
 
       html +=
 
-        '<div class="processing-text" style="margin-top:18px;">' +
-          'Tap anywhere to scan again' +
+        '<div class="late-box">' +
+          'LATE' +
         '</div>';
-
-
-      overlayContent.innerHTML =
-        html;
-
-
-      scanOverlay.onclick =
-        function() {
-
-          scanOverlay.onclick =
-            null;
-
-          resumeScanner();
-        };
-
-
-    } else {
-
-      const message =
-        result &&
-        result.message
-          ? result.message
-          : "Scan failed.";
-
-
-      overlayContent.innerHTML =
-
-        '<div class="result-title result-error">' +
-          '✕ SCAN NOT RECORDED' +
-        '</div>' +
-
-        '<div class="processing-text">' +
-          escapeHtml(message) +
-        '</div>' +
-
-        '<div class="processing-text" style="margin-top:18px;">' +
-          'Tap anywhere to try again' +
-        '</div>';
-
-
-      scanOverlay.onclick =
-        function() {
-
-          scanOverlay.onclick =
-            null;
-
-          resumeScanner();
-        };
     }
+
+
+    if (result.sms) {
+
+      html +=
+
+        '<div class="sms-status">' +
+          'SMS: ' +
+          escapeHtml(
+            String(result.sms)
+          ) +
+        '</div>';
+    }
+
+
+    html +=
+
+      '<div class="processing-text" style="margin-top:18px;">' +
+        'Tap anywhere or wait 5 seconds' +
+      '</div>';
+
+
+    overlayContent.innerHTML =
+      html;
+
+
+    /*
+     * Tap = scan immediately
+     */
+
+    scanOverlay.onclick =
+      function() {
+
+        if (showResult.timer) {
+
+          clearTimeout(
+            showResult.timer
+          );
+
+          showResult.timer =
+            null;
+        }
+
+        scanOverlay.onclick =
+          null;
+
+        resumeScanner();
+      };
+
+
+    /*
+     * Automatic scan after 5 seconds
+     */
+
+    showResult.timer =
+      setTimeout(
+        function() {
+
+          showResult.timer =
+            null;
+
+          scanOverlay.onclick =
+            null;
+
+          resumeScanner();
+
+        },
+        5000
+      );
+
+
+  } else {
+
+    const message =
+      result &&
+      result.message
+        ? result.message
+        : "Scan failed.";
+
+
+    overlayContent.innerHTML =
+
+      '<div class="result-title result-error">' +
+        '✕ SCAN NOT RECORDED' +
+      '</div>' +
+
+      '<div class="processing-text">' +
+        escapeHtml(message) +
+      '</div>' +
+
+      '<div class="processing-text" style="margin-top:18px;">' +
+        'Tap anywhere or wait 5 seconds' +
+      '</div>';
+
+
+    /*
+     * Error beep
+     */
+
+    beep(
+      600,
+      180
+    );
+
+
+    /*
+     * Tap = scan immediately
+     */
+
+    scanOverlay.onclick =
+      function() {
+
+        if (showResult.timer) {
+
+          clearTimeout(
+            showResult.timer
+          );
+
+          showResult.timer =
+            null;
+        }
+
+        scanOverlay.onclick =
+          null;
+
+        resumeScanner();
+      };
+
+
+    /*
+     * Automatic scan after 5 seconds
+     */
+
+    showResult.timer =
+      setTimeout(
+        function() {
+
+          showResult.timer =
+            null;
+
+          scanOverlay.onclick =
+            null;
+
+          resumeScanner();
+
+        },
+        5000
+      );
   }
+}
 
 
   /* =====================================================
