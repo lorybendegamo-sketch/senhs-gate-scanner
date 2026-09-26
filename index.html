@@ -2937,454 +2937,492 @@ async function startSelectedCamera() {
   }
 
 
-  /* =====================================================
-     RESULT OVERLAY
-     ===================================================== */
+/* =====================================================
+   RESULT OVERLAY
+   ===================================================== */
 
-  function showResult(
-    result
-  ) {
+function showResult(
+  result
+) {
 
-    if (showResult.timer) {
+  if (showResult.timer) {
 
-      clearTimeout(
-        showResult.timer
-      );
+    clearTimeout(
+      showResult.timer
+    );
 
-      showResult.timer =
-        null;
-
-    }
-
-
-    scanOverlay.style.display =
-      "flex";
-
-
-    const isSuccess =
-      result &&
-      result.success;
-
-
-    const isLate =
-      isSuccess &&
-      result.status ===
-      "LATE";
-
-
-    scanOverlay.style.background =
-      isLate ||
-      !isSuccess
-        ? "#b71c1c"
-        : "#0d47a1";
-
-
-    if (isSuccess) {
-
-      const name =
-        result.name ||
-        "STUDENT";
-
-
-      const section =
-        result.section ||
-        "";
-
-
-      const event =
-        result.event ||
-        "";
-
-
-      let html =
-
-        '<div style="' +
-
-          'width:100%;' +
-
-          'max-width:850px;' +
-
-          'margin:auto;' +
-
-          'padding:28px 20px;' +
-
-          'text-align:center;' +
-
-          'background:#0d47a1;' +
-
-          'border:3px solid #ffffff;' +
-
-          'border-radius:20px;' +
-
-          'box-sizing:border-box;' +
-
-          'color:#ffffff;' +
-
-          'font-family:Arial,sans-serif;' +
-
-          'box-shadow:0 8px 25px rgba(0,0,0,.40);' +
-
-        '">' +
-
-
-          '<div style="' +
-
-            'font-size:34px;' +
-
-            'font-weight:900;' +
-
-            'color:#ffffff;' +
-
-            'line-height:1.15;' +
-
-            'margin:15px 0;' +
-
-            'text-shadow:1px 2px 3px rgba(0,0,0,.50);' +
-
-          '">' +
-
-            escapeHtml(
-              name
-            ) +
-
-          '</div>' +
-
-
-          '<div style="' +
-
-            'font-size:22px;' +
-
-            'font-weight:700;' +
-
-            'color:#ffffff;' +
-
-            'margin-bottom:22px;' +
-
-          '">' +
-
-            escapeHtml(
-              section
-            ) +
-
-          '</div>' +
-
-
-          '<div style="' +
-
-            'display:inline-block;' +
-
-            'padding:10px 25px;' +
-
-            'font-size:28px;' +
-
-            'font-weight:900;' +
-
-            'color:#ffffff;' +
-
-            'background:#1565c0;' +
-
-            'border:2px solid #ffffff;' +
-
-            'border-radius:12px;' +
-
-          '">' +
-
-            escapeHtml(
-              event
-            ) +
-
-          '</div>';
-
-
-      if (isLate) {
-
-        html +=
-
-          '<div style="' +
-
-            'margin-top:18px;' +
-
-            'font-size:30px;' +
-
-            'font-weight:900;' +
-
-            'color:#ffffff;' +
-
-            'background:#8b0000;' +
-
-            'border:2px solid #ffffff;' +
-
-            'border-radius:12px;' +
-
-            'padding:8px 25px;' +
-
-            'display:inline-block;' +
-
-          '">' +
-
-            'LATE' +
-
-          '</div>';
-
-      }
-
-
-      html +=
-        '</div>';
-
-
-      overlayContent.innerHTML =
-        html;
-
-
-    } else {
-
-      const message =
-        result &&
-        result.message
-          ? result.message
-          : "SCAN FAILED";
-
-
-      overlayContent.innerHTML =
-
-        '<div style="' +
-
-          'width:100%;' +
-
-          'max-width:700px;' +
-
-          'margin:auto;' +
-
-          'padding:30px 20px;' +
-
-          'text-align:center;' +
-
-          'background:#7f0000;' +
-
-          'border:3px solid #ffffff;' +
-
-          'border-radius:20px;' +
-
-          'box-sizing:border-box;' +
-
-          'color:#ffffff;' +
-
-          'font-family:Arial,sans-serif;' +
-
-        '">' +
-
-
-          '<div style="' +
-
-            'font-size:30px;' +
-
-            'font-weight:900;' +
-
-            'color:#ffffff;' +
-
-            'margin-bottom:18px;' +
-
-          '">' +
-
-            'SCAN NOT RECORDED' +
-
-          '</div>' +
-
-
-          '<div style="' +
-
-            'font-size:20px;' +
-
-            'font-weight:700;' +
-
-            'color:#ffffff;' +
-
-          '">' +
-
-            escapeHtml(
-              message
-            ) +
-
-          '</div>' +
-
-
-        '</div>';
-
-
-      beep(
-        600,
-        180
-      );
-
-    }
-
-
-const processingTime =
-  window.qrProcessingStart
-    ? ((performance.now() - window.qrProcessingStart) / 1000).toFixed(2)
-    : "0.00";
-
-console.log(
-  "QR PROCESSING TIME: " +
-  processingTime +
-  " seconds"
-);
-
-showResult.timer =
-  setTimeout(
-    function() {
-
-      showResult.timer =
-        null;
-
-      scanOverlay.onclick =
-        null;
-
-      resumeScanner();
-
-    },
-    3000
-  );
-
-
-  /* =====================================================
-     RESUME SCANNER
-     ===================================================== */
-
-  async function resumeScanner() {
-
-    hideOverlay();
-
-    readyBar.textContent =
-      "● READY TO SCAN";
-
-    readyBar.style.color =
-      "#16803c";
-
-    processing =
-      false;
-
-    try {
-
-      if (
-        html5QrCode &&
-        scannerRunning
-      ) {
-
-        await html5QrCode.resume();
-
-      } else {
-
-        await startSelectedCamera();
-
-      }
-
-    } catch (error) {
-
-      console.error(
-        "Resume scanner error:",
-        error
-      );
-
-      scannerRunning =
-        false;
-
-      readyBar.textContent =
-        "CAMERA ERROR";
-
-      readyBar.style.color =
-        "#b71c1c";
-
-      showOverlay(
-        "CAMERA ERROR",
-        "Unable to resume the camera. Please try again.",
-        "error"
-      );
-
-    }
-
-  }
-
-
-  /* =====================================================
-     HIDE OVERLAY
-     ===================================================== */
-
-  function hideOverlay() {
-
-    scanOverlay.style.display =
-      "none";
-
-    scanOverlay.onclick =
+    showResult.timer =
       null;
 
   }
 
 
-  /* =====================================================
-     CAMERA SWITCH
-     ===================================================== */
-
-  switchCameraBtn.addEventListener(
-    "click",
-    async function() {
-
-      if (
-        processing ||
-        !cameras ||
-        cameras.length < 2 ||
-        !html5QrCode
-      ) {
-        return;
-      }
-
-      processing =
-        true;
-
-      switchCameraBtn.disabled =
-        true;
-
-      readyBar.textContent =
-        "SWITCHING CAMERA...";
-
-      readyBar.style.color =
-        "#1267a5";
+  scanOverlay.style.display =
+    "flex";
 
 
-      const previousCameraIndex =
-        currentCameraIndex;
+  const isSuccess =
+    result &&
+    result.success;
 
 
-      try {
+  const isLate =
+    isSuccess &&
+    result.status ===
+    "LATE";
 
-        if (scannerRunning) {
 
-          try {
+  scanOverlay.style.background =
+    isLate ||
+    !isSuccess
+      ? "#b71c1c"
+      : "#0d47a1";
 
-            await html5QrCode.stop();
 
-          } catch (stopError) {
+  if (isSuccess) {
 
-            console.log(
-              "Camera stop:",
-              stopError
-            );
+    const name =
+      result.name ||
+      "STUDENT";
 
-          }
 
-          scannerRunning =
-            false;
+    const section =
+      result.section ||
+      "";
+
+
+    const event =
+      result.event ||
+      "";
+
+
+    let html =
+
+      '<div style="' +
+
+        'width:100%;' +
+
+        'max-width:850px;' +
+
+        'margin:auto;' +
+
+        'padding:28px 20px;' +
+
+        'text-align:center;' +
+
+        'background:#0d47a1;' +
+
+        'border:3px solid #ffffff;' +
+
+        'border-radius:20px;' +
+
+        'box-sizing:border-box;' +
+
+        'color:#ffffff;' +
+
+        'font-family:Arial,sans-serif;' +
+
+        'box-shadow:0 8px 25px rgba(0,0,0,.40);' +
+
+      '">' +
+
+
+        '<div style="' +
+
+          'font-size:34px;' +
+
+          'font-weight:900;' +
+
+          'color:#ffffff;' +
+
+          'line-height:1.15;' +
+
+          'margin:15px 0;' +
+
+          'text-shadow:1px 2px 3px rgba(0,0,0,.50);' +
+
+        '">' +
+
+          escapeHtml(
+            name
+          ) +
+
+        '</div>' +
+
+
+        '<div style="' +
+
+          'font-size:22px;' +
+
+          'font-weight:700;' +
+
+          'color:#ffffff;' +
+
+          'margin-bottom:22px;' +
+
+        '">' +
+
+          escapeHtml(
+            section
+          ) +
+
+        '</div>' +
+
+
+        '<div style="' +
+
+          'display:inline-block;' +
+
+          'padding:10px 25px;' +
+
+          'font-size:28px;' +
+
+          'font-weight:900;' +
+
+          'color:#ffffff;' +
+
+          'background:#1565c0;' +
+
+          'border:2px solid #ffffff;' +
+
+          'border-radius:12px;' +
+
+        '">' +
+
+          escapeHtml(
+            event
+          ) +
+
+        '</div>';
+
+
+    if (isLate) {
+
+      html +=
+
+        '<div style="' +
+
+          'margin-top:18px;' +
+
+          'font-size:30px;' +
+
+          'font-weight:900;' +
+
+          'color:#ffffff;' +
+
+          'background:#8b0000;' +
+
+          'border:2px solid #ffffff;' +
+
+          'border-radius:12px;' +
+
+          'padding:8px 25px;' +
+
+          'display:inline-block;' +
+
+        '">' +
+
+          'LATE' +
+
+        '</div>';
+
+    }
+
+
+    html +=
+      '</div>';
+
+
+    overlayContent.innerHTML =
+      html;
+
+
+  } else {
+
+    const message =
+      result &&
+      result.message
+        ? result.message
+        : "SCAN FAILED";
+
+
+    overlayContent.innerHTML =
+
+      '<div style="' +
+
+        'width:100%;' +
+
+        'max-width:700px;' +
+
+        'margin:auto;' +
+
+        'padding:30px 20px;' +
+
+        'text-align:center;' +
+
+        'background:#7f0000;' +
+
+        'border:3px solid #ffffff;' +
+
+        'border-radius:20px;' +
+
+        'box-sizing:border-box;' +
+
+        'color:#ffffff;' +
+
+        'font-family:Arial,sans-serif;' +
+
+      '">' +
+
+
+        '<div style="' +
+
+          'font-size:30px;' +
+
+          'font-weight:900;' +
+
+          'color:#ffffff;' +
+
+          'margin-bottom:18px;' +
+
+        '">' +
+
+          'SCAN NOT RECORDED' +
+
+        '</div>' +
+
+
+        '<div style="' +
+
+          'font-size:20px;' +
+
+          'font-weight:700;' +
+
+          'color:#ffffff;' +
+
+        '">' +
+
+          escapeHtml(
+            message
+          ) +
+
+        '</div>' +
+
+
+      '</div>';
+
+
+    beep(
+      600,
+      180
+    );
+
+  }
+
+
+  const processingTime =
+    window.qrProcessingStart
+      ? (
+          (
+            performance.now() -
+            window.qrProcessingStart
+          ) /
+          1000
+        ).toFixed(2)
+      : "0.00";
+
+
+  console.log(
+    "QR PROCESSING TIME: " +
+    processingTime +
+    " seconds"
+  );
+
+
+  showResult.timer =
+    setTimeout(
+      function() {
+
+        showResult.timer =
+          null;
+
+        scanOverlay.onclick =
+          null;
+
+        resumeScanner();
+
+      },
+      3000
+    );
+
+}
+
+
+/* =====================================================
+   RESUME SCANNER
+   ===================================================== */
+
+async function resumeScanner() {
+
+  hideOverlay();
+
+  readyBar.textContent =
+    "● READY TO SCAN";
+
+  readyBar.style.color =
+    "#16803c";
+
+  processing =
+    false;
+
+  try {
+
+    if (
+      html5QrCode &&
+      scannerRunning
+    ) {
+
+      await html5QrCode.resume();
+
+    } else {
+
+      await startSelectedCamera();
+
+    }
+
+  } catch (error) {
+
+    console.error(
+      "Resume scanner error:",
+      error
+    );
+
+    scannerRunning =
+      false;
+
+    readyBar.textContent =
+      "CAMERA ERROR";
+
+    readyBar.style.color =
+      "#b71c1c";
+
+    showOverlay(
+      "CAMERA ERROR",
+      "Unable to resume the camera. Please try again.",
+      "error"
+    );
+
+  }
+
+}
+
+
+/* =====================================================
+   HIDE OVERLAY
+   ===================================================== */
+
+function hideOverlay() {
+
+  scanOverlay.style.display =
+    "none";
+
+  scanOverlay.onclick =
+    null;
+
+}
+
+
+/* =====================================================
+   CAMERA SWITCH
+   ===================================================== */
+
+switchCameraBtn.addEventListener(
+  "click",
+  async function() {
+
+    if (
+      processing ||
+      !cameras ||
+      cameras.length < 2 ||
+      !html5QrCode
+    ) {
+      return;
+    }
+
+    processing =
+      true;
+
+    switchCameraBtn.disabled =
+      true;
+
+    readyBar.textContent =
+      "SWITCHING CAMERA...";
+
+    readyBar.style.color =
+      "#1267a5";
+
+
+    const previousCameraIndex =
+      currentCameraIndex;
+
+
+    try {
+
+      if (scannerRunning) {
+
+        try {
+
+          await html5QrCode.stop();
+
+        } catch (stopError) {
+
+          console.log(
+            "Camera stop:",
+            stopError
+          );
 
         }
 
+        scannerRunning =
+          false;
 
-        currentCameraIndex =
-          (
-            currentCameraIndex + 1
-          ) %
-          cameras.length;
+      }
 
+
+      currentCameraIndex =
+        (
+          currentCameraIndex + 1
+        ) %
+        cameras.length;
+
+
+      await startSelectedCamera();
+
+
+      readyBar.textContent =
+        "● READY TO SCAN";
+
+      readyBar.style.color =
+        "#16803c";
+
+
+    } catch (error) {
+
+      console.error(
+        "Camera switch error:",
+        error
+      );
+
+
+      currentCameraIndex =
+        previousCameraIndex;
+
+
+      scannerRunning =
+        false;
+
+
+      try {
 
         await startSelectedCamera();
 
@@ -3396,177 +3434,202 @@ showResult.timer =
           "#16803c";
 
 
-      } catch (error) {
+      } catch (recoverError) {
 
         console.error(
-          "Camera switch error:",
-          error
+          "Camera recovery error:",
+          recoverError
         );
 
 
-        currentCameraIndex =
-          previousCameraIndex;
+        readyBar.textContent =
+          "CAMERA ERROR";
+
+        readyBar.style.color =
+          "#b71c1c";
 
 
-        scannerRunning =
-          false;
-
-
-        try {
-
-          await startSelectedCamera();
-
-
-          readyBar.textContent =
-            "● READY TO SCAN";
-
-          readyBar.style.color =
-            "#16803c";
-
-
-        } catch (recoverError) {
-
-          console.error(
-            "Camera recovery error:",
-            recoverError
-          );
-
-
-          readyBar.textContent =
-            "CAMERA ERROR";
-
-          readyBar.style.color =
-            "#b71c1c";
-
-
-          showOverlay(
-            "CAMERA ERROR",
-            "Unable to switch camera. Please try again.",
-            "error"
-          );
-
-        }
-
-      } finally {
-
-        processing =
-          false;
-
-        switchCameraBtn.disabled =
-          false;
+        showOverlay(
+          "CAMERA ERROR",
+          "Unable to switch camera. Please try again.",
+          "error"
+        );
 
       }
 
-    }
-  );
+    } finally {
 
+      processing =
+        false;
 
-  /* =====================================================
-     CONTINUE BUTTON
-     ===================================================== */
-
-  continueBtn.addEventListener(
-    "click",
-    verifyDevice
-  );
-
-
-  /* =====================================================
-     ENTER KEY
-     ===================================================== */
-
-  deviceCode.addEventListener(
-    "keydown",
-    function(event) {
-
-      if (
-        event.key ===
-        "Enter"
-      ) {
-
-        event.preventDefault();
-
-        verifyDevice();
-
-      }
+      switchCameraBtn.disabled =
+        false;
 
     }
-  );
-
-
-  /* =====================================================
-     HTML ESCAPE
-     ===================================================== */
-
-  function escapeHtml(
-    value
-  ) {
-
-    return String(value)
-
-      .replace(
-        /&/g,
-        "&amp;"
-      )
-
-      .replace(
-        /</g,
-        "&lt;"
-      )
-
-      .replace(
-        />/g,
-        "&gt;"
-      )
-
-      .replace(
-        /"/g,
-        "&quot;"
-      )
-
-      .replace(
-        /'/g,
-        "&#039;"
-      );
 
   }
+);
 
-function updatePSTClock() {
-  const now = new Date();
 
-  const time = new Intl.DateTimeFormat("en-US", {
-    timeZone: "Asia/Manila",
-    hour: "2-digit",
-    minute: "2-digit",
-    second: "2-digit",
-    hour12: true
-  }).format(now);
+/* =====================================================
+   CONTINUE BUTTON
+   ===================================================== */
 
-  const date = new Intl.DateTimeFormat("en-US", {
-    timeZone: "Asia/Manila",
-    weekday: "long",
-    month: "long",
-    day: "numeric",
-    year: "numeric"
-  }).format(now);
+continueBtn.addEventListener(
+  "click",
+  verifyDevice
+);
 
-  const timeElement = document.getElementById("pstTime");
-  const dateElement = document.getElementById("pstDate");
 
-  if (timeElement) {
-    timeElement.textContent = time;
+/* =====================================================
+   ENTER KEY
+   ===================================================== */
+
+deviceCode.addEventListener(
+  "keydown",
+  function(event) {
+
+    if (
+      event.key ===
+      "Enter"
+    ) {
+
+      event.preventDefault();
+
+      verifyDevice();
+
+    }
+
   }
+);
 
-  if (dateElement) {
-    dateElement.textContent = date;
-  }
+
+/* =====================================================
+   HTML ESCAPE
+   ===================================================== */
+
+function escapeHtml(
+  value
+) {
+
+  return String(value)
+
+    .replace(
+      /&/g,
+      "&amp;"
+    )
+
+    .replace(
+      /</g,
+      "&lt;"
+    )
+
+    .replace(
+      />/g,
+      "&gt;"
+    )
+
+    .replace(
+      /"/g,
+      "&quot;"
+    )
+
+    .replace(
+      /'/g,
+      "&#039;"
+    );
+
 }
 
-setInterval(updatePSTClock, 1000);
+
+function updatePSTClock() {
+
+  const now =
+    new Date();
+
+
+  const time =
+    new Intl.DateTimeFormat(
+      "en-US",
+      {
+        timeZone:
+          "Asia/Manila",
+
+        hour:
+          "2-digit",
+
+        minute:
+          "2-digit",
+
+        second:
+          "2-digit",
+
+        hour12:
+          true
+      }
+    ).format(now);
+
+
+  const date =
+    new Intl.DateTimeFormat(
+      "en-US",
+      {
+        timeZone:
+          "Asia/Manila",
+
+        weekday:
+          "long",
+
+        month:
+          "long",
+
+        day:
+          "numeric",
+
+        year:
+          "numeric"
+      }
+    ).format(now);
+
+
+  const timeElement =
+    document.getElementById(
+      "pstTime"
+    );
+
+
+  const dateElement =
+    document.getElementById(
+      "pstDate"
+    );
+
+
+  if (timeElement) {
+
+    timeElement.textContent =
+      time;
+
+  }
+
+
+  if (dateElement) {
+
+    dateElement.textContent =
+      date;
+
+  }
+
+}
+
+
+setInterval(
+  updatePSTClock,
+  1000
+);
+
 updatePSTClock();
-  
+
 </script>
 
 </body>
-</html>
-```
+</html> 
