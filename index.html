@@ -3514,36 +3514,26 @@
   }
 
 function updatePSTClock() {
-
   const now = new Date();
 
-  const time = now.toLocaleTimeString(
-    "en-PH",
-    {
-      timeZone: "Asia/Manila",
-      hour: "2-digit",
-      minute: "2-digit",
-      second: "2-digit",
-      hour12: true
-    }
-  );
+  const time = new Intl.DateTimeFormat("en-US", {
+    timeZone: "Asia/Manila",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    hour12: true
+  }).format(now);
 
-  const date = now.toLocaleDateString(
-    "en-PH",
-    {
-      timeZone: "Asia/Manila",
-      weekday: "long",
-      month: "long",
-      day: "numeric",
-      year: "numeric"
-    }
-  );
+  const date = new Intl.DateTimeFormat("en-US", {
+    timeZone: "Asia/Manila",
+    weekday: "long",
+    month: "long",
+    day: "numeric",
+    year: "numeric"
+  }).format(now);
 
-  const timeElement =
-    document.getElementById("pstTime");
-
-  const dateElement =
-    document.getElementById("pstDate");
+  const timeElement = document.getElementById("pstTime");
+  const dateElement = document.getElementById("pstDate");
 
   if (timeElement) {
     timeElement.textContent = time;
@@ -3554,12 +3544,8 @@ function updatePSTClock() {
   }
 }
 
+setInterval(updatePSTClock, 1000);
 updatePSTClock();
-
-setInterval(
-  updatePSTClock,
-  1000
-);
   
 </script>
 
