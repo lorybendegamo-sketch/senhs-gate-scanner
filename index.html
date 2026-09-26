@@ -2623,6 +2623,16 @@
       scannerRunning =
         true;
 
+      const video =
+  document.querySelector(
+    "#qr-reader video"
+  );
+
+if (video) {
+  video.style.transform =
+    "scaleX(-1)";
+}
+
       processing =
         false;
 
