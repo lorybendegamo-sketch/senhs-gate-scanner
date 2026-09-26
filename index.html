@@ -795,94 +795,173 @@
     <div class="container">
 
 
-      <!-- ==================================================
-           PAGE 1 — DEVICE CODE
-           ================================================== -->
+<!-- ==================================================
+     PAGE 1 — DEVICE CODE
+     ================================================== -->
 
-      <div id="devicePage">
+<div id="devicePage">
 
-        <div class="device-watermark">
-          SENHS
-        </div>
+  <div class="device-watermark">
+    SENHS
+  </div>
 
-        <div class="device-content">
+  <div class="device-content">
 
-          <div class="school-name">
-            SAN ESTEBAN NATIONAL HIGH SCHOOL
-          </div>
+    <div class="school-name">
+      SAN ESTEBAN NATIONAL HIGH SCHOOL
+    </div>
 
-          <div class="gate-title">
-            GATE SCANNER
-          </div>
+    <div class="gate-title">
+      GATE SCANNER
+    </div>
 
-          <div class="subtitle">
-            Authorized Gate Device
-          </div>
+    <div class="subtitle">
+      Authorized Gate Device
+    </div>
 
-          <label
-            class="device-label"
-            for="deviceCode"
-          >
-            Enter Device Code
-          </label>
+    <label
+      class="device-label"
+      for="deviceCode"
+    >
+      Enter Device Code
+    </label>
 
-          <div class="device-code-wrapper">
+    <div class="device-code-wrapper">
 
-            <input
-              id="deviceCode"
-              type="password"
-              placeholder="Enter Device Code"
-              autocomplete="off"
-            >
+      <input
+        id="deviceCode"
+        type="password"
+        placeholder="Enter Device Code"
+        autocomplete="off"
+      >
 
-            <button
-              id="toggleDeviceCode"
-              type="button"
-              aria-label="Show device code"
-              title="Show / Hide Device Code"
-            >
+      <button
+        id="toggleDeviceCode"
+        type="button"
+        aria-label="Show device code"
+        title="Show / Hide Device Code"
+      >
 
-              <svg
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                aria-hidden="true"
-              >
+        <svg
+          id="deviceEyeIcon"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
 
-                <path
-                  d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"
-                ></path>
+          <path
+            d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"
+          ></path>
 
-                <circle
-                  cx="12"
-                  cy="12"
-                  r="3"
-                ></circle>
+          <circle
+            cx="12"
+            cy="12"
+            r="3"
+          ></circle>
 
-              </svg>
+        </svg>
 
-            </button>
+      </button>
 
-          </div>
+    </div>
 
 
-          <button
-            id="continueBtn"
-            type="button"
-          >
-            CONTINUE
-          </button>
+    <button
+      id="continueBtn"
+      type="button"
+    >
+      CONTINUE
+    </button>
 
-          <div id="deviceMessage"></div>
 
-        </div>
+    <div id="deviceMessage"></div>
 
-      </div>
+  </div>
+
+</div>
+
+
+<script>
+
+/* =====================================================
+   SHOW / HIDE DEVICE CODE
+   ===================================================== */
+
+const toggleDeviceCode =
+  document.getElementById(
+    "toggleDeviceCode"
+  );
+
+const deviceCode =
+  document.getElementById(
+    "deviceCode"
+  );
+
+
+if (
+  toggleDeviceCode &&
+  deviceCode
+) {
+
+  toggleDeviceCode.addEventListener(
+    "click",
+    function() {
+
+      if (
+        deviceCode.type ===
+        "password"
+      ) {
+
+        deviceCode.type =
+          "text";
+
+        toggleDeviceCode.setAttribute(
+          "aria-label",
+          "Hide device code"
+        );
+
+        toggleDeviceCode.setAttribute(
+          "title",
+          "Hide Device Code"
+        );
+
+      } else {
+
+        deviceCode.type =
+          "password";
+
+        toggleDeviceCode.setAttribute(
+          "aria-label",
+          "Show device code"
+        );
+
+        toggleDeviceCode.setAttribute(
+          "title",
+          "Show Device Code"
+        );
+
+      }
+
+      /*
+       * IMPORTANT:
+       * Hindi natin binabago ang value
+       * ng deviceCode.
+       *
+       * Kaya kahit ilang beses:
+       * SHOW → HIDE → SHOW → HIDE
+       * mananatili ang parehong device code.
+       */
+
+    }
+  );
+
+}
 
 
       <!-- ==================================================
