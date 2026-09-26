@@ -947,98 +947,10 @@ if (
 
       }
 
-      /*
-       * IMPORTANT:
-       * Hindi natin binabago ang value
-       * ng deviceCode.
-       *
-       * Kaya kahit ilang beses:
-       * SHOW → HIDE → SHOW → HIDE
-       * mananatili ang parehong device code.
-       */
-
     }
   );
 
 }
-
-
-<script>
-
-/* =====================================================
-   SHOW / HIDE DEVICE CODE
-   ===================================================== */
-
-const toggleDeviceCode =
-  document.getElementById(
-    "toggleDeviceCode"
-  );
-
-const deviceCode =
-  document.getElementById(
-    "deviceCode"
-  );
-
-
-if (
-  toggleDeviceCode &&
-  deviceCode
-) {
-
-  toggleDeviceCode.addEventListener(
-    "click",
-    function() {
-
-      if (
-        deviceCode.type ===
-        "password"
-      ) {
-
-        deviceCode.type =
-          "text";
-
-        toggleDeviceCode.setAttribute(
-          "aria-label",
-          "Hide device code"
-        );
-
-        toggleDeviceCode.setAttribute(
-          "title",
-          "Hide Device Code"
-        );
-
-      } else {
-
-        deviceCode.type =
-          "password";
-
-        toggleDeviceCode.setAttribute(
-          "aria-label",
-          "Show device code"
-        );
-
-        toggleDeviceCode.setAttribute(
-          "title",
-          "Show Device Code"
-        );
-
-      }
-
-      /*
-       * IMPORTANT:
-       * Hindi natin binabago ang value
-       * ng deviceCode.
-       *
-       * Kaya kahit ilang beses:
-       * SHOW → HIDE → SHOW → HIDE
-       * mananatili ang parehong device code.
-       */
-
-    }
-  );
-
-}
-
 
       <!-- ==================================================
            PAGE 2 — CAMERA SCANNER
