@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
   <meta charset="UTF-8">
 
   <meta
@@ -17,7 +16,6 @@
   ></script>
 
   <style>
-
     * {
       box-sizing: border-box;
     }
@@ -56,9 +54,9 @@
       position: relative;
     }
 
-    /* =========================================
+    /* =========================
        PAGE 1
-       ========================================= */
+       ========================= */
 
     #devicePage {
       position: relative;
@@ -80,8 +78,6 @@
       box-shadow: 0 10px 35px rgba(0,0,0,0.12);
       text-align: center;
       overflow: hidden;
-
-      box-sizing: border-box;
     }
 
     .device-watermark {
@@ -91,7 +87,7 @@
       transform: translate(-50%, -50%);
       font-size: 170px;
       font-weight: 900;
-      color: rgba(0, 70, 140, 0.045);
+      color: rgba(0,70,140,0.045);
       pointer-events: none;
       white-space: nowrap;
       z-index: 0;
@@ -131,10 +127,6 @@
       font-weight: bold;
       color: #345;
     }
-
-    /* =========================================
-       DEVICE CODE
-       ========================================= */
 
     .device-code-wrapper {
       position: relative;
@@ -182,12 +174,6 @@
       background: rgba(0,0,0,0.06);
     }
 
-    #toggleDeviceCode:active {
-      transform:
-        translateY(-50%)
-        scale(0.92);
-    }
-
     #continueBtn {
       width: 100%;
       margin-top: 18px;
@@ -199,6 +185,11 @@
       font-size: 18px;
       font-weight: 800;
       cursor: pointer;
+    }
+
+    #continueBtn:disabled {
+      opacity: 0.7;
+      cursor: wait;
     }
 
     #continueBtn:active {
@@ -219,9 +210,9 @@
       color: #16803c;
     }
 
-    /* =========================================
+    /* =========================
        PAGE 2
-       ========================================= */
+       ========================= */
 
     #scannerPage {
       display: none;
@@ -325,10 +316,6 @@
       display: block;
     }
 
-    /* =========================================
-       CAMERA SWITCH
-       ========================================= */
-
     #switchCameraBtn {
       position: absolute;
       z-index: 20;
@@ -348,13 +335,10 @@
       justify-content: center;
     }
 
-    #switchCameraBtn:active {
-      transform: scale(0.94);
+    #switchCameraBtn:disabled {
+      opacity: 0.5;
+      cursor: wait;
     }
-
-    /* =========================================
-       STATUS BAR
-       ========================================= */
 
     .ready-bar {
       position: relative;
@@ -367,9 +351,9 @@
       font-weight: 900;
     }
 
-    /* =========================================
-       ATTENDANCE MONITOR
-       ========================================= */
+    /* =========================
+       ATTENDANCE
+       ========================= */
 
     #attendanceMonitor {
       position: relative;
@@ -394,10 +378,6 @@
     .section-title {
       margin-top: 22px;
     }
-
-    /* =========================================
-       JHS / SHS SCHOOL SUMMARY
-       ========================================= */
 
     .school-group {
       width: 100%;
@@ -485,10 +465,6 @@
       background: #ef6c00;
     }
 
-    /* =========================================
-       SECTION ATTENDANCE TABLE
-       ========================================= */
-
     #sectionAttendance {
       display: block;
       width: 100%;
@@ -565,10 +541,6 @@
       background: #eef6ff;
     }
 
-    .section-table tbody tr:hover td {
-      background: #e2f0ff;
-    }
-
     .section-table-name {
       text-align: left !important;
       color: #124b7c;
@@ -617,9 +589,9 @@
       margin-top: 10px;
     }
 
-    /* =========================================
+    /* =========================
        OVERLAY
-       ========================================= */
+       ========================= */
 
     .scan-overlay {
       position: absolute;
@@ -633,47 +605,19 @@
       backdrop-filter: blur(4px);
     }
 
-    .overlay-box {
-      width: 100%;
-      max-width: 900px;
-      background: #0d47a1;
-      color: #ffffff;
-      border-radius: 22px;
-      padding: 35px 25px;
-      text-align: center;
-      box-shadow:
-        0 15px 45px
-        rgba(0,0,0,0.45);
-      border: 4px solid #ffffff;
-      box-sizing: border-box;
-    }
-
-    .overlay-box.late {
-      background: #b71c1c;
-    }
-
-    .overlay-box * {
-      color: #ffffff;
-    }
-
     .processing-title {
       font-size: 27px;
       font-weight: 900;
-      color: #1267a5;
+      color: #ffffff;
     }
 
     .processing-text {
       margin-top: 8px;
       font-size: 15px;
-      color: #667;
+      color: #ffffff;
     }
 
-    /* =========================================
-       RESPONSIVE
-       ========================================= */
-
     @media (max-width: 600px) {
-
       .school-summary {
         grid-template-columns: repeat(2, 1fr);
       }
@@ -700,11 +644,9 @@
       .section-table td {
         padding: 8px 6px;
       }
-
     }
 
     @media (max-width: 480px) {
-
       .page {
         padding: 10px;
       }
@@ -735,539 +677,302 @@
       }
 
       .device-code-wrapper {
-        position: relative !important;
         width: 100% !important;
         max-width: 420px !important;
         margin: 0 auto 18px auto !important;
       }
-
-      .device-code-wrapper #deviceCode {
-        width: 100% !important;
-        box-sizing: border-box !important;
-        padding-right: 60px !important;
-      }
-
-      #toggleDeviceCode {
-        position: absolute !important;
-        display: flex !important;
-        visibility: visible !important;
-        opacity: 1 !important;
-        right: 6px !important;
-        top: 50% !important;
-        transform: translateY(-50%) !important;
-        width: 46px !important;
-        height: 46px !important;
-        z-index: 999 !important;
-        border: none !important;
-        background: transparent !important;
-        color: #222 !important;
-        align-items: center !important;
-        justify-content: center !important;
-        padding: 0 !important;
-        margin: 0 !important;
-        cursor: pointer !important;
-      }
-
     }
-
   </style>
-
 </head>
 
 <body>
 
-  <div class="page">
+<div class="page">
+<div class="container">
 
-    <div class="container">
+  <!-- =========================
+       DEVICE PAGE
+       ========================= -->
 
-      <!-- ==================================================
-           PAGE 1 — DEVICE CODE
-           ================================================== -->
+  <div id="devicePage">
 
-      <div id="devicePage">
+    <div class="device-watermark">SENHS</div>
 
-        <div class="device-watermark">
-          SENHS
+    <div class="device-content">
+
+      <div class="school-name">
+        SAN ESTEBAN NATIONAL HIGH SCHOOL
+      </div>
+
+      <div class="gate-title">
+        GATE SCANNER
+      </div>
+
+      <div class="subtitle">
+        Authorized Gate Device
+      </div>
+
+      <label
+        class="device-label"
+        for="deviceCode"
+      >
+        Enter Device Code
+      </label>
+
+      <div class="device-code-wrapper">
+
+        <input
+          id="deviceCode"
+          type="password"
+          placeholder="Enter Device Code"
+          autocomplete="off"
+        >
+
+        <button
+          id="toggleDeviceCode"
+          type="button"
+          aria-label="Show device code"
+        >
+          👁
+        </button>
+
+      </div>
+
+      <button
+        id="continueBtn"
+        type="button"
+      >
+        CONTINUE
+      </button>
+
+      <div id="deviceMessage"></div>
+
+    </div>
+  </div>
+
+
+  <!-- =========================
+       SCANNER PAGE
+       ========================= -->
+
+  <div id="scannerPage">
+
+    <div class="scanner-container">
+
+      <div class="scanner-watermark">
+        SENHS
+      </div>
+
+      <div class="scanner-header">
+
+        <div class="scanner-school">
+          SAN ESTEBAN NATIONAL HIGH SCHOOL
         </div>
 
-        <div class="device-content">
+        <div class="scanner-title">
+          GATE SCANNER
+        </div>
 
-          <div class="school-name">
-            SAN ESTEBAN NATIONAL HIGH SCHOOL
-          </div>
+        <div class="pst-label">
+          PHILIPPINE STANDARD TIME
+        </div>
 
-          <div class="gate-title">
-            GATE SCANNER
-          </div>
+        <div
+          id="pstTime"
+          class="pst-time"
+        >
+          --:--:-- --
+        </div>
 
-          <div class="subtitle">
-            Authorized Gate Device
-          </div>
+        <div
+          id="pstDate"
+          class="pst-date"
+        >
+          -- -- ----
+        </div>
 
-          <label
-            class="device-label"
-            for="deviceCode"
-          >
-            Enter Device Code
-          </label>
+      </div>
 
-          <div class="device-code-wrapper">
 
-            <input
-              id="deviceCode"
-              type="password"
-              placeholder="Enter Device Code"
-              autocomplete="off"
-            >
+      <div class="camera-area">
 
-            <button
-              id="toggleDeviceCode"
-              type="button"
-              aria-label="Show device code"
-              title="Show / Hide Device Code"
-            >
+        <div id="reader"></div>
 
-              <svg
-                id="deviceEyeIcon"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                aria-hidden="true"
-              >
+        <button
+          id="switchCameraBtn"
+          title="Switch Camera"
+          aria-label="Switch Camera"
+          type="button"
+        >
+          ↔
+        </button>
 
-                <path
-                  d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"
-                ></path>
+        <div
+          id="scanOverlay"
+          class="scan-overlay"
+        >
 
-                <circle
-                  cx="12"
-                  cy="12"
-                  r="3"
-                ></circle>
-
-              </svg>
-
-            </button>
-
-          </div>
-
-          <button
-            id="continueBtn"
-            type="button"
-          >
-            CONTINUE
-          </button>
-
-          <div id="deviceMessage"></div>
+          <div id="overlayContent"></div>
 
         </div>
 
       </div>
 
 
-      <!-- ==================================================
-           PAGE 2 — CAMERA SCANNER
-           ================================================== -->
+      <div
+        id="readyBar"
+        class="ready-bar"
+      >
+        ● READY TO SCAN
+      </div>
 
-      <div id="scannerPage">
 
-        <div class="scanner-container">
+      <!-- =========================
+           ATTENDANCE MONITOR
+           ========================= -->
 
-          <div class="scanner-watermark">
-            SENHS
+      <div id="attendanceMonitor">
+
+        <div class="attendance-title">
+          SCHOOL SUMMARY
+        </div>
+
+
+        <!-- JHS -->
+
+        <div class="school-group jhs">
+
+          <div class="school-group-title">
+            JHS — GRADES 7–10
           </div>
 
-          <!-- HEADER -->
+          <div class="school-summary">
 
-          <div class="scanner-header">
-
-            <div class="scanner-school">
-              SAN ESTEBAN NATIONAL HIGH SCHOOL
+            <div class="summary-card total">
+              <div class="summary-label">TOTAL</div>
+              <div id="jhsTotal" class="summary-number">0</div>
             </div>
 
-            <div class="scanner-title">
-              GATE SCANNER
+            <div class="summary-card am-present">
+              <div class="summary-label">AM PRESENT</div>
+              <div id="jhsAmPresent" class="summary-number">0</div>
             </div>
 
-            <div class="pst-label">
-              PHILIPPINE STANDARD TIME
+            <div class="summary-card am-absent">
+              <div class="summary-label">AM ABSENT</div>
+              <div id="jhsAmAbsent" class="summary-number">0</div>
             </div>
 
-            <div id="pstTime" class="pst-time">
-              --:--:-- --
+            <div class="summary-card am-late">
+              <div class="summary-label">AM LATE</div>
+              <div id="jhsAmLate" class="summary-number">0</div>
             </div>
-
-            <div id="pstDate" class="pst-date">
-              -- -- ----
-            </div>
-
-          </div>
-
-
-          <!-- CAMERA -->
-
-          <div class="camera-area">
-
-            <div id="reader"></div>
-
-            <!-- SWITCH CAMERA -->
-
-            <button
-              id="switchCameraBtn"
-              title="Switch Camera"
-              aria-label="Switch Camera"
-              type="button"
-            >
-              ↔
-            </button>
-
-
-            <!-- PROCESSING / RESULT OVERLAY -->
 
             <div
-              id="scanOverlay"
-              class="scan-overlay"
+              id="jhsPmPresentCard"
+              class="summary-card pm-present"
             >
-
-              <div
-                id="overlayBox"
-                class="overlay-box"
-              >
-
-                <div
-                  id="overlayContent"
-                ></div>
-
-              </div>
-
+              <div class="summary-label">PM PRESENT</div>
+              <div id="jhsPmPresent" class="summary-number">0</div>
             </div>
-
-          </div>
-
-
-          <!-- READY -->
-
-          <div
-            id="readyBar"
-            class="ready-bar"
-          >
-            ● READY TO SCAN
-          </div>
-
-
-          <!-- ==================================================
-               ATTENDANCE MONITOR
-               ================================================== -->
-
-          <div id="attendanceMonitor">
-
-            <div class="attendance-title">
-              SCHOOL SUMMARY
-            </div>
-
-
-            <!-- JHS -->
-
-            <div class="school-group jhs">
-
-              <div class="school-group-title">
-                JHS — GRADES 7–10
-              </div>
-
-              <div class="school-summary">
-
-                <div class="summary-card total">
-
-                  <div class="summary-label">
-                    TOTAL
-                  </div>
-
-                  <div
-                    id="jhsTotal"
-                    class="summary-number"
-                  >
-                    0
-                  </div>
-
-                </div>
-
-
-                <div class="summary-card am-present">
-
-                  <div class="summary-label">
-                    AM PRESENT
-                  </div>
-
-                  <div
-                    id="jhsAmPresent"
-                    class="summary-number"
-                  >
-                    0
-                  </div>
-
-                </div>
-
-
-                <div class="summary-card am-absent">
-
-                  <div class="summary-label">
-                    AM ABSENT
-                  </div>
-
-                  <div
-                    id="jhsAmAbsent"
-                    class="summary-number"
-                  >
-                    0
-                  </div>
-
-                </div>
-
-
-                <div class="summary-card am-late">
-
-                  <div class="summary-label">
-                    AM LATE
-                  </div>
-
-                  <div
-                    id="jhsAmLate"
-                    class="summary-number"
-                  >
-                    0
-                  </div>
-
-                </div>
-
-
-                <div
-                  id="jhsPmPresentCard"
-                  class="summary-card pm-present"
-                >
-
-                  <div class="summary-label">
-                    PM PRESENT
-                  </div>
-
-                  <div
-                    id="jhsPmPresent"
-                    class="summary-number"
-                  >
-                    0
-                  </div>
-
-                </div>
-
-
-                <div
-                  id="jhsPmAbsentCard"
-                  class="summary-card pm-absent"
-                >
-
-                  <div class="summary-label">
-                    PM ABSENT
-                  </div>
-
-                  <div
-                    id="jhsPmAbsent"
-                    class="summary-number"
-                  >
-                    0
-                  </div>
-
-                </div>
-
-
-                <div
-                  id="jhsPmLateCard"
-                  class="summary-card pm-late"
-                >
-
-                  <div class="summary-label">
-                    PM LATE
-                  </div>
-
-                  <div
-                    id="jhsPmLate"
-                    class="summary-number"
-                  >
-                    0
-                  </div>
-
-                </div>
-
-              </div>
-
-            </div>
-
-
-            <!-- SHS -->
-
-            <div class="school-group shs">
-
-              <div class="school-group-title">
-                SHS — GRADES 11–12
-              </div>
-
-              <div class="school-summary">
-
-                <div class="summary-card total">
-
-                  <div class="summary-label">
-                    TOTAL
-                  </div>
-
-                  <div
-                    id="shsTotal"
-                    class="summary-number"
-                  >
-                    0
-                  </div>
-
-                </div>
-
-
-                <div class="summary-card am-present">
-
-                  <div class="summary-label">
-                    AM PRESENT
-                  </div>
-
-                  <div
-                    id="shsAmPresent"
-                    class="summary-number"
-                  >
-                    0
-                  </div>
-
-                </div>
-
-
-                <div class="summary-card am-absent">
-
-                  <div class="summary-label">
-                    AM ABSENT
-                  </div>
-
-                  <div
-                    id="shsAmAbsent"
-                    class="summary-number"
-                  >
-                    0
-                  </div>
-
-                </div>
-
-
-                <div class="summary-card am-late">
-
-                  <div class="summary-label">
-                    AM LATE
-                  </div>
-
-                  <div
-                    id="shsAmLate"
-                    class="summary-number"
-                  >
-                    0
-                  </div>
-
-                </div>
-
-
-                <div
-                  id="shsPmPresentCard"
-                  class="summary-card pm-present"
-                >
-
-                  <div class="summary-label">
-                    PM PRESENT
-                  </div>
-
-                  <div
-                    id="shsPmPresent"
-                    class="summary-number"
-                  >
-                    0
-                  </div>
-
-                </div>
-
-
-                <div
-                  id="shsPmAbsentCard"
-                  class="summary-card pm-absent"
-                >
-
-                  <div class="summary-label">
-                    PM ABSENT
-                  </div>
-
-                  <div
-                    id="shsPmAbsent"
-                    class="summary-number"
-                  >
-                    0
-                  </div>
-
-                </div>
-
-
-                <div
-                  id="shsPmLateCard"
-                  class="summary-card pm-late"
-                >
-
-                  <div class="summary-label">
-                    PM LATE
-                  </div>
-
-                  <div
-                    id="shsPmLate"
-                    class="summary-number"
-                  >
-                    0
-                  </div>
-
-                </div>
-
-              </div>
-
-            </div>
-
-
-            <!-- SECTION ATTENDANCE -->
 
             <div
-              class="attendance-title section-title"
+              id="jhsPmAbsentCard"
+              class="summary-card pm-absent"
             >
-              SECTION ATTENDANCE
+              <div class="summary-label">PM ABSENT</div>
+              <div id="jhsPmAbsent" class="summary-number">0</div>
             </div>
 
-
-            <div id="sectionAttendance">
-              Loading attendance...
-            </div>
-
-
-            <div id="attendanceUpdated">
-              Updating...
+            <div
+              id="jhsPmLateCard"
+              class="summary-card pm-late"
+            >
+              <div class="summary-label">PM LATE</div>
+              <div id="jhsPmLate" class="summary-number">0</div>
             </div>
 
           </div>
+        </div>
 
+
+        <!-- SHS -->
+
+        <div class="school-group shs">
+
+          <div class="school-group-title">
+            SHS — GRADES 11–12
+          </div>
+
+          <div class="school-summary">
+
+            <div class="summary-card total">
+              <div class="summary-label">TOTAL</div>
+              <div id="shsTotal" class="summary-number">0</div>
+            </div>
+
+            <div class="summary-card am-present">
+              <div class="summary-label">AM PRESENT</div>
+              <div id="shsAmPresent" class="summary-number">0</div>
+            </div>
+
+            <div class="summary-card am-absent">
+              <div class="summary-label">AM ABSENT</div>
+              <div id="shsAmAbsent" class="summary-number">0</div>
+            </div>
+
+            <div class="summary-card am-late">
+              <div class="summary-label">AM LATE</div>
+              <div id="shsAmLate" class="summary-number">0</div>
+            </div>
+
+            <div
+              id="shsPmPresentCard"
+              class="summary-card pm-present"
+            >
+              <div class="summary-label">PM PRESENT</div>
+              <div id="shsPmPresent" class="summary-number">0</div>
+            </div>
+
+            <div
+              id="shsPmAbsentCard"
+              class="summary-card pm-absent"
+            >
+              <div class="summary-label">PM ABSENT</div>
+              <div id="shsPmAbsent" class="summary-number">0</div>
+            </div>
+
+            <div
+              id="shsPmLateCard"
+              class="summary-card pm-late"
+            >
+              <div class="summary-label">PM LATE</div>
+              <div id="shsPmLate" class="summary-number">0</div>
+            </div>
+
+          </div>
+        </div>
+
+
+        <div class="attendance-title section-title">
+          SECTION ATTENDANCE
+        </div>
+
+        <div id="sectionAttendance">
+          Loading attendance...
+        </div>
+
+        <div id="attendanceUpdated">
+          Updating...
         </div>
 
       </div>
 
     </div>
-
   </div>
+
+</div>
+</div>
 
 
 <script>
@@ -1306,64 +1011,40 @@
      ===================================================== */
 
   const devicePage =
-    document.getElementById(
-      "devicePage"
-    );
+    document.getElementById("devicePage");
 
   const scannerPage =
-    document.getElementById(
-      "scannerPage"
-    );
+    document.getElementById("scannerPage");
 
   const deviceCode =
-    document.getElementById(
-      "deviceCode"
-    );
+    document.getElementById("deviceCode");
 
   const continueBtn =
-    document.getElementById(
-      "continueBtn"
-    );
+    document.getElementById("continueBtn");
 
   const toggleDeviceCode =
-    document.getElementById(
-      "toggleDeviceCode"
-    );
+    document.getElementById("toggleDeviceCode");
 
   const deviceMessage =
-    document.getElementById(
-      "deviceMessage"
-    );
+    document.getElementById("deviceMessage");
 
   const switchCameraBtn =
-    document.getElementById(
-      "switchCameraBtn"
-    );
+    document.getElementById("switchCameraBtn");
 
   const scanOverlay =
-    document.getElementById(
-      "scanOverlay"
-    );
+    document.getElementById("scanOverlay");
 
   const overlayContent =
-    document.getElementById(
-      "overlayContent"
-    );
+    document.getElementById("overlayContent");
 
   const readyBar =
-    document.getElementById(
-      "readyBar"
-    );
+    document.getElementById("readyBar");
 
   const sectionAttendance =
-    document.getElementById(
-      "sectionAttendance"
-    );
+    document.getElementById("sectionAttendance");
 
   const attendanceUpdated =
-    document.getElementById(
-      "attendanceUpdated"
-    );
+    document.getElementById("attendanceUpdated");
 
 
   /* =====================================================
@@ -1374,64 +1055,26 @@
     "click",
     function() {
 
-      if (
-        deviceCode.type ===
-        "password"
-      ) {
+      if (deviceCode.type === "password") {
 
-        deviceCode.type =
-          "text";
+        deviceCode.type = "text";
 
-        toggleDeviceCode.innerHTML =
-
-          '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
-
-          '<path d="M3 3l18 18"></path>' +
-
-          '<path d="M10.6 10.6a2 2 0 0 0 2.8 2.8"></path>' +
-
-          '<path d="M9.9 4.2A10.8 10.8 0 0 1 12 4c6.5 0 10 8 10 8a18.2 18.2 0 0 1-3.1 4.4"></path>' +
-
-          '<path d="M6.6 6.6C3.7 8.7 2 12 2 12s3.5 8 10 8a10.8 10.8 0 0 0 3.3-.5"></path>' +
-
-          '</svg>';
-
+        toggleDeviceCode.textContent = "🙈";
 
         toggleDeviceCode.setAttribute(
           "aria-label",
           "Hide device code"
         );
 
-        toggleDeviceCode.setAttribute(
-          "title",
-          "Hide Device Code"
-        );
-
-
       } else {
 
-        deviceCode.type =
-          "password";
+        deviceCode.type = "password";
 
-        toggleDeviceCode.innerHTML =
-
-          '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
-
-          '<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"></path>' +
-
-          '<circle cx="12" cy="12" r="3"></circle>' +
-
-          '</svg>';
-
+        toggleDeviceCode.textContent = "👁";
 
         toggleDeviceCode.setAttribute(
           "aria-label",
           "Show device code"
-        );
-
-        toggleDeviceCode.setAttribute(
-          "title",
-          "Show Device Code"
         );
 
       }
@@ -1441,7 +1084,7 @@
 
 
   /* =====================================================
-     BEEP SOUND
+     BEEP
      ===================================================== */
 
   function beep(
@@ -1464,18 +1107,14 @@
       const gain =
         audioContext.createGain();
 
-      oscillator.type =
-        "sine";
+      oscillator.type = "sine";
 
       oscillator.frequency.value =
         frequency;
 
-      gain.gain.value =
-        0.18;
+      gain.gain.value = 0.18;
 
-      oscillator.connect(
-        gain
-      );
+      oscillator.connect(gain);
 
       gain.connect(
         audioContext.destination
@@ -1507,7 +1146,7 @@
 
 
   /* =====================================================
-     JSONP REQUEST
+     GOOGLE APPS SCRIPT JSONP REQUEST
      ===================================================== */
 
   function jsonpRequest(
@@ -1515,10 +1154,7 @@
   ) {
 
     return new Promise(
-      function(
-        resolve,
-        reject
-      ) {
+      function(resolve, reject) {
 
         const callbackName =
           "senhsCallback_" +
@@ -1526,37 +1162,42 @@
           "_" +
           (++callbackCounter);
 
+
         const script =
-          document.createElement(
-            "script"
-          );
+          document.createElement("script");
+
+
+        let finished = false;
+
 
         const timeout =
           setTimeout(
             function() {
 
+              if (finished) {
+                return;
+              }
+
+              finished = true;
+
               cleanup();
 
               reject(
                 new Error(
-                  "Server request timed out."
+                  "Unable to connect to server."
                 )
               );
 
             },
-            15000
+            20000
           );
 
 
         function cleanup() {
 
-          clearTimeout(
-            timeout
-          );
+          clearTimeout(timeout);
 
-          if (
-            script.parentNode
-          ) {
+          if (script.parentNode) {
 
             script.parentNode.removeChild(
               script
@@ -1566,25 +1207,26 @@
 
           try {
 
-            delete window[
-              callbackName
-            ];
+            delete window[callbackName];
 
-          } catch (e) {
+          } catch (error) {
 
-            window[
-              callbackName
-            ] = undefined;
+            window[callbackName] =
+              undefined;
 
           }
 
         }
 
 
-        window[
-          callbackName
-        ] =
+        window[callbackName] =
           function(data) {
+
+            if (finished) {
+              return;
+            }
+
+            finished = true;
 
             cleanup();
 
@@ -1595,6 +1237,12 @@
 
         script.onerror =
           function() {
+
+            if (finished) {
+              return;
+            }
+
+            finished = true;
 
             cleanup();
 
@@ -1607,15 +1255,32 @@
           };
 
 
+        /*
+         * IMPORTANT:
+         * Add callback safely.
+         */
+
+        const separator =
+          url.indexOf("?") >= 0
+            ? "&"
+            : "?";
+
+
         script.src =
           url +
-          "&callback=" +
+          separator +
+          "callback=" +
           encodeURIComponent(
             callbackName
-          );
+          ) +
+          "&_=" +
+          Date.now();
 
 
-        document.body.appendChild(
+        script.async = true;
+
+
+        document.head.appendChild(
           script
         );
 
@@ -1626,7 +1291,7 @@
 
 
   /* =====================================================
-     SHOW DEVICE MESSAGE
+     DEVICE MESSAGE
      ===================================================== */
 
   function showDeviceMessage(
@@ -1665,8 +1330,7 @@
     }
 
 
-    continueBtn.disabled =
-      true;
+    continueBtn.disabled = true;
 
     continueBtn.textContent =
       "CHECKING...";
@@ -1683,9 +1347,7 @@
       const requestUrl =
         APPS_SCRIPT_URL +
         "?device=" +
-        encodeURIComponent(
-          key
-        );
+        encodeURIComponent(key);
 
 
       const result =
@@ -1739,8 +1401,13 @@
 
     } catch (error) {
 
+      console.error(
+        "Device verification error:",
+        error
+      );
+
+
       showDeviceMessage(
-        error.message ||
         "Unable to connect to server.",
         "error"
       );
@@ -1758,7 +1425,7 @@
 
 
   /* =====================================================
-     OPEN CAMERA PAGE
+     OPEN SCANNER
      ===================================================== */
 
   async function openScannerPage() {
@@ -1768,6 +1435,7 @@
 
     scannerPage.style.display =
       "block";
+
 
     continueBtn.disabled =
       false;
@@ -1796,7 +1464,7 @@
 
 
   /* =====================================================
-     PM DISPLAY CONTROL
+     PM DISPLAY
      ===================================================== */
 
   function isPMDisplayTime() {
@@ -1808,20 +1476,12 @@
       now.getHours() * 60 +
       now.getMinutes();
 
-    const pmStartMinutes =
-      (12 * 60) + 5;
-
     return (
-      currentMinutes >=
-      pmStartMinutes
+      currentMinutes >= 725
     );
 
   }
 
-
-  /* =====================================================
-     UPDATE PM CARD VISIBILITY
-     ===================================================== */
 
   function updateSchoolSummaryPMDisplay() {
 
@@ -1831,35 +1491,21 @@
 
     const pmCards = [
 
-      document.getElementById(
-        "jhsPmPresentCard"
-      ),
-
-      document.getElementById(
-        "jhsPmAbsentCard"
-      ),
-
-      document.getElementById(
-        "jhsPmLateCard"
-      ),
-
-      document.getElementById(
-        "shsPmPresentCard"
-      ),
-
-      document.getElementById(
-        "shsPmAbsentCard"
-      ),
-
-      document.getElementById(
-        "shsPmLateCard"
-      )
+      "jhsPmPresentCard",
+      "jhsPmAbsentCard",
+      "jhsPmLateCard",
+      "shsPmPresentCard",
+      "shsPmAbsentCard",
+      "shsPmLateCard"
 
     ];
 
 
     pmCards.forEach(
-      function(card) {
+      function(id) {
+
+        const card =
+          document.getElementById(id);
 
         if (!card) {
           return;
@@ -1877,7 +1523,7 @@
 
 
   /* =====================================================
-     CREATE EMPTY SUMMARY
+     EMPTY SUMMARY
      ===================================================== */
 
   function createEmptySummary() {
@@ -1885,17 +1531,11 @@
     return {
 
       total: 0,
-
       amPresent: 0,
-
       amAbsent: 0,
-
       amLate: 0,
-
       pmPresent: 0,
-
       pmAbsent: 0,
-
       pmLate: 0
 
     };
@@ -1904,7 +1544,7 @@
 
 
   /* =====================================================
-     GROUP SCHOOL SUMMARY
+     JHS / SHS SUMMARY
      ===================================================== */
 
   function getJhsShsSummary(
@@ -1933,8 +1573,7 @@
           );
 
 
-        let target =
-          null;
+        let target = null;
 
 
         if (
@@ -1942,16 +1581,14 @@
           grade <= 10
         ) {
 
-          target =
-            jhs;
+          target = jhs;
 
         } else if (
           grade >= 11 &&
           grade <= 12
         ) {
 
-          target =
-            shs;
+          target = shs;
 
         }
 
@@ -1962,65 +1599,40 @@
 
 
         target.total +=
-          Number(
-            section.total || 0
-          );
-
+          Number(section.total || 0);
 
         target.amPresent +=
-          Number(
-            section.amPresent || 0
-          );
-
+          Number(section.amPresent || 0);
 
         target.amAbsent +=
-          Number(
-            section.amAbsent || 0
-          );
-
+          Number(section.amAbsent || 0);
 
         target.amLate +=
-          Number(
-            section.amLate || 0
-          );
-
+          Number(section.amLate || 0);
 
         target.pmPresent +=
-          Number(
-            section.pmPresent || 0
-          );
-
+          Number(section.pmPresent || 0);
 
         target.pmAbsent +=
-          Number(
-            section.pmAbsent || 0
-          );
-
+          Number(section.pmAbsent || 0);
 
         target.pmLate +=
-          Number(
-            section.pmLate || 0
-          );
+          Number(section.pmLate || 0);
 
       }
     );
 
 
     return {
-
-      jhs:
-        jhs,
-
-      shs:
-        shs
-
+      jhs: jhs,
+      shs: shs
     };
 
   }
 
 
   /* =====================================================
-     DISPLAY GROUP SUMMARY
+     DISPLAY SUMMARY
      ===================================================== */
 
   function displayGroupSummary(
@@ -2031,63 +1643,49 @@
     document.getElementById(
       prefix + "Total"
     ).textContent =
-      Number(
-        data.total || 0
-      );
+      Number(data.total || 0);
 
 
     document.getElementById(
       prefix + "AmPresent"
     ).textContent =
-      Number(
-        data.amPresent || 0
-      );
+      Number(data.amPresent || 0);
 
 
     document.getElementById(
       prefix + "AmAbsent"
     ).textContent =
-      Number(
-        data.amAbsent || 0
-      );
+      Number(data.amAbsent || 0);
 
 
     document.getElementById(
       prefix + "AmLate"
     ).textContent =
-      Number(
-        data.amLate || 0
-      );
+      Number(data.amLate || 0);
 
 
     document.getElementById(
       prefix + "PmPresent"
     ).textContent =
-      Number(
-        data.pmPresent || 0
-      );
+      Number(data.pmPresent || 0);
 
 
     document.getElementById(
       prefix + "PmAbsent"
     ).textContent =
-      Number(
-        data.pmAbsent || 0
-      );
+      Number(data.pmAbsent || 0);
 
 
     document.getElementById(
       prefix + "PmLate"
     ).textContent =
-      Number(
-        data.pmLate || 0
-      );
+      Number(data.pmLate || 0);
 
   }
 
 
   /* =====================================================
-     ATTENDANCE SUMMARY
+     LOAD ATTENDANCE
      ===================================================== */
 
   async function loadAttendanceSummary() {
@@ -2171,7 +1769,7 @@
 
 
   /* =====================================================
-     SECTION SORTING
+     GRADE
      ===================================================== */
 
   function getGradeNumber(
@@ -2179,17 +1777,14 @@
   ) {
 
     const match =
-      String(
-        sectionName || ""
-      ).match(
-        /\b(7|8|9|10|11|12)\b/
-      );
+      String(sectionName || "")
+        .match(
+          /\b(7|8|9|10|11|12)\b/
+        );
 
 
     if (!match) {
-
       return 99;
-
     }
 
 
@@ -2200,6 +1795,10 @@
   }
 
 
+  /* =====================================================
+     SORT SECTIONS
+     ===================================================== */
+
   function sortSections(
     sections
   ) {
@@ -2207,37 +1806,27 @@
     return sections
       .slice()
       .sort(
-        function(a, b) {
+        function(a,b) {
 
           const nameA =
-            String(
-              a.section || ""
-            );
+            String(a.section || "");
 
           const nameB =
-            String(
-              b.section || ""
-            );
+            String(b.section || "");
 
 
           const gradeA =
-            getGradeNumber(
-              nameA
-            );
+            getGradeNumber(nameA);
 
           const gradeB =
-            getGradeNumber(
-              nameB
-            );
+            getGradeNumber(nameB);
 
 
           if (
-            gradeA !==
-            gradeB
+            gradeA !== gradeB
           ) {
 
-            return gradeA -
-              gradeB;
+            return gradeA - gradeB;
 
           }
 
@@ -2258,7 +1847,7 @@
 
 
   /* =====================================================
-     RENDER SECTION ATTENDANCE TABLE
+     SECTION TABLE
      ===================================================== */
 
   function renderSectionAttendance(
@@ -2272,8 +1861,7 @@
 
 
     if (
-      sorted.length ===
-      0
+      sorted.length === 0
     ) {
 
       sectionAttendance.innerHTML =
@@ -2289,130 +1877,79 @@
 
 
     let html =
-
       '<div class="section-table-wrap">' +
-
-        '<table class="section-table">' +
-
-          '<thead>' +
-
-            '<tr>' +
-
-              '<th class="section-head">SECTION</th>' +
-
-              '<th class="total-head">TOTAL</th>' +
-
-              '<th class="am-present-head">AM<br>P</th>' +
-
-              '<th class="am-absent-head">AM<br>A</th>' +
-
-              '<th class="am-late-head">AM<br>L</th>';
+      '<table class="section-table">' +
+      '<thead>' +
+      '<tr>' +
+      '<th class="section-head">SECTION</th>' +
+      '<th class="total-head">TOTAL</th>' +
+      '<th class="am-present-head">AM<br>P</th>' +
+      '<th class="am-absent-head">AM<br>A</th>' +
+      '<th class="am-late-head">AM<br>L</th>';
 
 
     if (showPM) {
 
       html +=
-
-              '<th class="pm-present-head">PM<br>P</th>' +
-
-              '<th class="pm-absent-head">PM<br>A</th>' +
-
-              '<th class="pm-late-head">PM<br>L</th>';
+        '<th class="pm-present-head">PM<br>P</th>' +
+        '<th class="pm-absent-head">PM<br>A</th>' +
+        '<th class="pm-late-head">PM<br>L</th>';
 
     }
 
 
     html +=
-
-            '</tr>' +
-
-          '</thead>' +
-
-          '<tbody>';
+      '</tr>' +
+      '</thead>' +
+      '<tbody>';
 
 
     sorted.forEach(
       function(section) {
 
         html +=
-
           '<tr>' +
 
-            '<td class="section-table-name">' +
+          '<td class="section-table-name">' +
+          escapeHtml(section.section || "") +
+          '</td>' +
 
-              escapeHtml(
-                section.section ||
-                ""
-              ) +
+          '<td class="total-cell">' +
+          Number(section.total || 0) +
+          '</td>' +
 
-            '</td>' +
+          '<td class="am-present-cell">' +
+          Number(section.amPresent || 0) +
+          '</td>' +
 
-            '<td class="total-cell">' +
+          '<td class="am-absent-cell">' +
+          Number(section.amAbsent || 0) +
+          '</td>' +
 
-              Number(
-                section.total || 0
-              ) +
-
-            '</td>' +
-
-            '<td class="am-present-cell">' +
-
-              Number(
-                section.amPresent || 0
-              ) +
-
-            '</td>' +
-
-            '<td class="am-absent-cell">' +
-
-              Number(
-                section.amAbsent || 0
-              ) +
-
-            '</td>' +
-
-            '<td class="am-late-cell">' +
-
-              Number(
-                section.amLate || 0
-              ) +
-
-            '</td>';
+          '<td class="am-late-cell">' +
+          Number(section.amLate || 0) +
+          '</td>';
 
 
         if (showPM) {
 
           html +=
-
             '<td class="pm-present-cell">' +
-
-              Number(
-                section.pmPresent || 0
-              ) +
-
+            Number(section.pmPresent || 0) +
             '</td>' +
 
             '<td class="pm-absent-cell">' +
-
-              Number(
-                section.pmAbsent || 0
-              ) +
-
+            Number(section.pmAbsent || 0) +
             '</td>' +
 
             '<td class="pm-late-cell">' +
-
-              Number(
-                section.pmLate || 0
-              ) +
-
+            Number(section.pmLate || 0) +
             '</td>';
 
         }
 
 
         html +=
-
           '</tr>';
 
       }
@@ -2420,11 +1957,8 @@
 
 
     html +=
-
-          '</tbody>' +
-
-        '</table>' +
-
+      '</tbody>' +
+      '</table>' +
       '</div>';
 
 
@@ -2452,9 +1986,9 @@
       ) {
 
         showOverlay(
-          "ERROR",
+          "CAMERA ERROR",
           "No camera was found on this device.",
-          "error"
+          true
         );
 
         return;
@@ -2462,7 +1996,7 @@
       }
 
 
-      let backIndex =
+      const backIndex =
         cameras.findIndex(
           function(camera) {
 
@@ -2474,17 +2008,10 @@
         );
 
 
-      if (backIndex >= 0) {
-
-        currentCameraIndex =
-          backIndex;
-
-      } else {
-
-        currentCameraIndex =
-          0;
-
-      }
+      currentCameraIndex =
+        backIndex >= 0
+          ? backIndex
+          : 0;
 
 
       html5QrCode =
@@ -2507,7 +2034,7 @@
       showOverlay(
         "CAMERA ERROR",
         "Please allow camera permission and try again.",
-        "error"
+        true
       );
 
     }
@@ -2525,31 +2052,30 @@
       return;
     }
 
-    if (!cameras || cameras.length === 0) {
+    if (!cameras.length) {
       return;
     }
 
+
     const camera =
-      cameras[
-        currentCameraIndex
-      ];
+      cameras[currentCameraIndex];
+
 
     if (!camera) {
       return;
     }
 
-    const cameraId =
-      camera.id;
+
+    if (scannerRunning) {
+      return;
+    }
+
 
     try {
 
-      if (scannerRunning) {
-        return;
-      }
-
       await html5QrCode.start(
 
-        cameraId,
+        camera.id,
 
         {
           fps: 15,
@@ -2566,6 +2092,7 @@
                   viewfinderHeight
                 ) * 0.80;
 
+
               return {
                 width: size,
                 height: size
@@ -2573,32 +2100,28 @@
 
             },
 
-          aspectRatio: 1.0,
-
-          experimentalFeatures: {
-            useBarCodeDetectorIfSupported: true
-          },
-
-          rememberLastUsedCamera: true
+          aspectRatio: 1.0
 
         },
 
         onQrDetected,
 
-        function(errorMessage) {
-          // Normal QR scanning errors.
+        function() {
+          // Normal scanning errors.
         }
 
       );
 
+
       scannerRunning =
         true;
-
 
       processing =
         false;
 
+
       hideOverlay();
+
 
       readyBar.textContent =
         "● READY TO SCAN";
@@ -2606,12 +2129,8 @@
       readyBar.style.color =
         "#16803c";
 
-    } catch (error) {
 
-      console.error(
-        "Camera start error:",
-        error
-      );
+    } catch (error) {
 
       scannerRunning =
         false;
@@ -2639,8 +2158,10 @@
     processing =
       true;
 
+
     window.qrProcessingStart =
       performance.now();
+
 
     beep(
       1000,
@@ -2655,9 +2176,7 @@
         scannerRunning
       ) {
 
-        await html5QrCode.pause(
-          true
-        );
+        await html5QrCode.pause(true);
 
       }
 
@@ -2687,33 +2206,30 @@
       ).trim();
 
 
+    /*
+     * QR may contain either:
+     * LRN directly
+     * OR a URL containing ?lrn=
+     * OR a URL containing ?id=
+     */
+
     try {
 
       if (
-        lrn.startsWith(
-          "http://"
-        ) ||
-        lrn.startsWith(
-          "https://"
-        )
+        lrn.startsWith("http://") ||
+        lrn.startsWith("https://")
       ) {
 
         const qrUrl =
-          new URL(
-            lrn
-          );
+          new URL(lrn);
 
 
         const urlLrn =
-          qrUrl.searchParams.get(
-            "lrn"
-          );
+          qrUrl.searchParams.get("lrn");
 
 
         const urlId =
-          qrUrl.searchParams.get(
-            "id"
-          );
+          qrUrl.searchParams.get("id");
 
 
         if (urlLrn) {
@@ -2740,22 +2256,14 @@
     }
 
 
-    lrn =
-      lrn.trim();
-
-
     try {
 
       const requestUrl =
         APPS_SCRIPT_URL +
         "?lrn=" +
-        encodeURIComponent(
-          lrn
-        ) +
+        encodeURIComponent(lrn) +
         "&device=" +
-        encodeURIComponent(
-          deviceKey
-        );
+        encodeURIComponent(deviceKey);
 
 
       const result =
@@ -2787,15 +2295,20 @@
 
       }
 
+
     } catch (error) {
+
+      console.error(
+        "QR server error:",
+        error
+      );
+
 
       showResult({
 
-        success:
-          false,
+        success: false,
 
         message:
-          error.message ||
           "Unable to connect to server."
 
       });
@@ -2806,7 +2319,7 @@
 
 
   /* =====================================================
-     PROCESSING OVERLAY
+     PROCESSING
      ===================================================== */
 
   function showProcessing() {
@@ -2821,32 +2334,47 @@
 
     overlayContent.innerHTML =
 
+      '<div style="' +
+      'width:100%;' +
+      'max-width:700px;' +
+      'padding:30px 20px;' +
+      'text-align:center;' +
+      'background:#0d47a1;' +
+      'border:3px solid #ffffff;' +
+      'border-radius:20px;' +
+      'box-sizing:border-box;' +
+      'color:#ffffff;' +
+      '">' +
+
       '<div class="processing-title">' +
-        'PROCESSING...' +
+      'PROCESSING...' +
       '</div>' +
 
       '<div class="processing-text">' +
-        'Please wait while the attendance is being recorded.' +
+      'Please wait while the attendance is being recorded.' +
+      '</div>' +
+
       '</div>';
 
   }
 
 
   /* =====================================================
-     GENERIC ERROR OVERLAY
+     ERROR OVERLAY
      ===================================================== */
 
   function showOverlay(
     title,
     message,
-    type
+    isError
   ) {
 
     scanOverlay.style.display =
       "flex";
 
+
     scanOverlay.style.background =
-      type === "error"
+      isError
         ? "#b71c1c"
         : "rgba(0,0,0,0.72)";
 
@@ -2855,71 +2383,45 @@
 
       '<div style="' +
 
-        'width:100%;' +
+      'width:100%;' +
+      'max-width:700px;' +
+      'padding:30px 20px;' +
+      'text-align:center;' +
+      'background:' +
+      (isError ? "#7f0000" : "#0d47a1") +
+      ';' +
 
-        'max-width:700px;' +
-
-        'margin:auto;' +
-
-        'padding:30px 20px;' +
-
-        'text-align:center;' +
-
-        'background:' +
-        (
-          type === "error"
-            ? "#7f0000"
-            : "#0d47a1"
-        ) +
-        ';' +
-
-        'border:3px solid #ffffff;' +
-
-        'border-radius:20px;' +
-
-        'box-sizing:border-box;' +
-
-        'color:#ffffff;' +
-
-        'font-family:Arial,sans-serif;' +
+      'border:3px solid #ffffff;' +
+      'border-radius:20px;' +
+      'box-sizing:border-box;' +
+      'color:#ffffff;' +
 
       '">' +
 
-        '<div style="' +
+      '<div style="' +
+      'font-size:30px;' +
+      'font-weight:900;' +
+      'color:#ffffff;' +
+      'margin-bottom:18px;' +
+      '">' +
 
-          'font-size:30px;' +
+      escapeHtml(
+        title || "NOTICE"
+      ) +
 
-          'font-weight:900;' +
+      '</div>' +
 
-          'color:#ffffff;' +
+      '<div style="' +
+      'font-size:20px;' +
+      'font-weight:700;' +
+      'color:#ffffff;' +
+      '">' +
 
-          'margin-bottom:18px;' +
+      escapeHtml(
+        message || ""
+      ) +
 
-        '">' +
-
-          escapeHtml(
-            title ||
-            "NOTICE"
-          ) +
-
-        '</div>' +
-
-        '<div style="' +
-
-          'font-size:20px;' +
-
-          'font-weight:700;' +
-
-          'color:#ffffff;' +
-
-        '">' +
-
-          escapeHtml(
-            message ||
-            ""
-          ) +
-
-        '</div>' +
+      '</div>' +
 
       '</div>';
 
@@ -2927,7 +2429,7 @@
 
 
   /* =====================================================
-     RESULT OVERLAY
+     RESULT
      ===================================================== */
 
   function showResult(
@@ -2939,9 +2441,6 @@
       clearTimeout(
         showResult.timer
       );
-
-      showResult.timer =
-        null;
 
     }
 
@@ -2957,13 +2456,11 @@
 
     const isLate =
       isSuccess &&
-      result.status ===
-      "LATE";
+      result.status === "LATE";
 
 
     scanOverlay.style.background =
-      isLate ||
-      !isSuccess
+      isLate || !isSuccess
         ? "#b71c1c"
         : "#0d47a1";
 
@@ -2971,118 +2468,72 @@
     if (isSuccess) {
 
       const name =
-        result.name ||
-        "STUDENT";
+        result.name || "STUDENT";
 
 
       const section =
-        result.section ||
-        "";
+        result.section || "";
 
 
       const event =
-        result.event ||
-        "";
+        result.event || "";
 
 
       let html =
 
         '<div style="' +
 
-          'width:100%;' +
-
-          'max-width:850px;' +
-
-          'margin:auto;' +
-
-          'padding:28px 20px;' +
-
-          'text-align:center;' +
-
-          'background:#0d47a1;' +
-
-          'border:3px solid #ffffff;' +
-
-          'border-radius:20px;' +
-
-          'box-sizing:border-box;' +
-
-          'color:#ffffff;' +
-
-          'font-family:Arial,sans-serif;' +
-
-          'box-shadow:0 8px 25px rgba(0,0,0,.40);' +
+        'width:100%;' +
+        'max-width:850px;' +
+        'margin:auto;' +
+        'padding:28px 20px;' +
+        'text-align:center;' +
+        'background:#0d47a1;' +
+        'border:3px solid #ffffff;' +
+        'border-radius:20px;' +
+        'box-sizing:border-box;' +
+        'color:#ffffff;' +
+        'font-family:Arial,sans-serif;' +
 
         '">' +
 
+        '<div style="' +
+        'font-size:34px;' +
+        'font-weight:900;' +
+        'color:#ffffff;' +
+        'line-height:1.15;' +
+        'margin:15px 0;' +
+        '">' +
 
-          '<div style="' +
+        escapeHtml(name) +
 
-            'font-size:34px;' +
+        '</div>' +
 
-            'font-weight:900;' +
+        '<div style="' +
+        'font-size:22px;' +
+        'font-weight:700;' +
+        'color:#ffffff;' +
+        'margin-bottom:22px;' +
+        '">' +
 
-            'color:#ffffff;' +
+        escapeHtml(section) +
 
-            'line-height:1.15;' +
+        '</div>' +
 
-            'margin:15px 0;' +
+        '<div style="' +
+        'display:inline-block;' +
+        'padding:10px 25px;' +
+        'font-size:28px;' +
+        'font-weight:900;' +
+        'color:#ffffff;' +
+        'background:#1565c0;' +
+        'border:2px solid #ffffff;' +
+        'border-radius:12px;' +
+        '">' +
 
-            'text-shadow:1px 2px 3px rgba(0,0,0,.50);' +
+        escapeHtml(event) +
 
-          '">' +
-
-            escapeHtml(
-              name
-            ) +
-
-          '</div>' +
-
-
-          '<div style="' +
-
-            'font-size:22px;' +
-
-            'font-weight:700;' +
-
-            'color:#ffffff;' +
-
-            'margin-bottom:22px;' +
-
-          '">' +
-
-            escapeHtml(
-              section
-            ) +
-
-          '</div>' +
-
-
-          '<div style="' +
-
-            'display:inline-block;' +
-
-            'padding:10px 25px;' +
-
-            'font-size:28px;' +
-
-            'font-weight:900;' +
-
-            'color:#ffffff;' +
-
-            'background:#1565c0;' +
-
-            'border:2px solid #ffffff;' +
-
-            'border-radius:12px;' +
-
-          '">' +
-
-            escapeHtml(
-              event
-            ) +
-
-          '</div>';
+        '</div>';
 
 
       if (isLate) {
@@ -3090,28 +2541,18 @@
         html +=
 
           '<div style="' +
-
-            'margin-top:18px;' +
-
-            'font-size:30px;' +
-
-            'font-weight:900;' +
-
-            'color:#ffffff;' +
-
-            'background:#8b0000;' +
-
-            'border:2px solid #ffffff;' +
-
-            'border-radius:12px;' +
-
-            'padding:8px 25px;' +
-
-            'display:inline-block;' +
-
+          'margin-top:18px;' +
+          'font-size:30px;' +
+          'font-weight:900;' +
+          'color:#ffffff;' +
+          'background:#8b0000;' +
+          'border:2px solid #ffffff;' +
+          'border-radius:12px;' +
+          'padding:8px 25px;' +
+          'display:inline-block;' +
           '">' +
 
-            'LATE' +
+          'LATE' +
 
           '</div>';
 
@@ -3139,64 +2580,39 @@
 
         '<div style="' +
 
-          'width:100%;' +
-
-          'max-width:700px;' +
-
-          'margin:auto;' +
-
-          'padding:30px 20px;' +
-
-          'text-align:center;' +
-
-          'background:#7f0000;' +
-
-          'border:3px solid #ffffff;' +
-
-          'border-radius:20px;' +
-
-          'box-sizing:border-box;' +
-
-          'color:#ffffff;' +
-
-          'font-family:Arial,sans-serif;' +
+        'width:100%;' +
+        'max-width:700px;' +
+        'margin:auto;' +
+        'padding:30px 20px;' +
+        'text-align:center;' +
+        'background:#7f0000;' +
+        'border:3px solid #ffffff;' +
+        'border-radius:20px;' +
+        'box-sizing:border-box;' +
+        'color:#ffffff;' +
 
         '">' +
 
+        '<div style="' +
+        'font-size:30px;' +
+        'font-weight:900;' +
+        'color:#ffffff;' +
+        'margin-bottom:18px;' +
+        '">' +
 
-          '<div style="' +
+        'SCAN NOT RECORDED' +
 
-            'font-size:30px;' +
+        '</div>' +
 
-            'font-weight:900;' +
+        '<div style="' +
+        'font-size:20px;' +
+        'font-weight:700;' +
+        'color:#ffffff;' +
+        '">' +
 
-            'color:#ffffff;' +
+        escapeHtml(message) +
 
-            'margin-bottom:18px;' +
-
-          '">' +
-
-            'SCAN NOT RECORDED' +
-
-          '</div>' +
-
-
-          '<div style="' +
-
-            'font-size:20px;' +
-
-            'font-weight:700;' +
-
-            'color:#ffffff;' +
-
-          '">' +
-
-            escapeHtml(
-              message
-            ) +
-
-          '</div>' +
-
+        '</div>' +
 
         '</div>';
 
@@ -3215,8 +2631,7 @@
             (
               performance.now() -
               window.qrProcessingStart
-            ) /
-            1000
+            ) / 1000
           ).toFixed(2)
         : "0.00";
 
@@ -3232,12 +2647,6 @@
       setTimeout(
         function() {
 
-          showResult.timer =
-            null;
-
-          scanOverlay.onclick =
-            null;
-
           resumeScanner();
 
         },
@@ -3248,21 +2657,25 @@
 
 
   /* =====================================================
-     RESUME SCANNER
+     RESUME
      ===================================================== */
 
   async function resumeScanner() {
 
     hideOverlay();
 
+
     readyBar.textContent =
       "● READY TO SCAN";
+
 
     readyBar.style.color =
       "#16803c";
 
+
     processing =
       false;
+
 
     try {
 
@@ -3286,20 +2699,17 @@
         error
       );
 
+
       scannerRunning =
         false;
+
 
       readyBar.textContent =
         "CAMERA ERROR";
 
+
       readyBar.style.color =
         "#b71c1c";
-
-      showOverlay(
-        "CAMERA ERROR",
-        "Unable to resume the camera. Please try again.",
-        "error"
-      );
 
     }
 
@@ -3315,14 +2725,11 @@
     scanOverlay.style.display =
       "none";
 
-    scanOverlay.onclick =
-      null;
-
   }
 
 
   /* =====================================================
-     CAMERA SWITCH
+     SWITCH CAMERA
      ===================================================== */
 
   switchCameraBtn.addEventListener(
@@ -3331,27 +2738,30 @@
 
       if (
         processing ||
-        !cameras ||
         cameras.length < 2 ||
         !html5QrCode
       ) {
         return;
       }
 
+
       processing =
         true;
+
 
       switchCameraBtn.disabled =
         true;
 
+
       readyBar.textContent =
         "SWITCHING CAMERA...";
+
 
       readyBar.style.color =
         "#1267a5";
 
 
-      const previousCameraIndex =
+      const previousIndex =
         currentCameraIndex;
 
 
@@ -3363,11 +2773,11 @@
 
             await html5QrCode.stop();
 
-          } catch (stopError) {
+          } catch (error) {
 
             console.log(
               "Camera stop:",
-              stopError
+              error
             );
 
           }
@@ -3388,13 +2798,6 @@
         await startSelectedCamera();
 
 
-        readyBar.textContent =
-          "● READY TO SCAN";
-
-        readyBar.style.color =
-          "#16803c";
-
-
       } catch (error) {
 
         console.error(
@@ -3404,7 +2807,7 @@
 
 
         currentCameraIndex =
-          previousCameraIndex;
+          previousIndex;
 
 
         scannerRunning =
@@ -3415,33 +2818,11 @@
 
           await startSelectedCamera();
 
-
-          readyBar.textContent =
-            "● READY TO SCAN";
-
-          readyBar.style.color =
-            "#16803c";
-
-
         } catch (recoverError) {
 
           console.error(
             "Camera recovery error:",
             recoverError
-          );
-
-
-          readyBar.textContent =
-            "CAMERA ERROR";
-
-          readyBar.style.color =
-            "#b71c1c";
-
-
-          showOverlay(
-            "CAMERA ERROR",
-            "Unable to switch camera. Please try again.",
-            "error"
           );
 
         }
@@ -3454,6 +2835,14 @@
         switchCameraBtn.disabled =
           false;
 
+
+        readyBar.textContent =
+          "● READY TO SCAN";
+
+
+        readyBar.style.color =
+          "#16803c";
+
       }
 
     }
@@ -3461,7 +2850,7 @@
 
 
   /* =====================================================
-     CONTINUE BUTTON
+     BUTTON
      ===================================================== */
 
   continueBtn.addEventListener(
@@ -3471,7 +2860,7 @@
 
 
   /* =====================================================
-     ENTER KEY
+     ENTER
      ===================================================== */
 
   deviceCode.addEventListener(
@@ -3479,8 +2868,7 @@
     function(event) {
 
       if (
-        event.key ===
-        "Enter"
+        event.key === "Enter"
       ) {
 
         event.preventDefault();
@@ -3532,7 +2920,7 @@
 
 
   /* =====================================================
-     PHILIPPINE STANDARD TIME CLOCK
+     PHILIPPINE STANDARD TIME
      ===================================================== */
 
   function updatePSTClock() {
@@ -3545,20 +2933,11 @@
       new Intl.DateTimeFormat(
         "en-US",
         {
-          timeZone:
-            "Asia/Manila",
-
-          hour:
-            "2-digit",
-
-          minute:
-            "2-digit",
-
-          second:
-            "2-digit",
-
-          hour12:
-            true
+          timeZone: "Asia/Manila",
+          hour: "2-digit",
+          minute: "2-digit",
+          second: "2-digit",
+          hour12: true
         }
       ).format(now);
 
@@ -3567,20 +2946,11 @@
       new Intl.DateTimeFormat(
         "en-US",
         {
-          timeZone:
-            "Asia/Manila",
-
-          weekday:
-            "long",
-
-          month:
-            "long",
-
-          day:
-            "numeric",
-
-          year:
-            "numeric"
+          timeZone: "Asia/Manila",
+          weekday: "long",
+          month: "long",
+          day: "numeric",
+          year: "numeric"
         }
       ).format(now);
 
@@ -3619,6 +2989,7 @@
     updatePSTClock,
     1000
   );
+
 
   updatePSTClock();
 
