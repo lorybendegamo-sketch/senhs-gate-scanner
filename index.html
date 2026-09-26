@@ -2626,104 +2626,111 @@
   }
 
 
-  /* =====================================================
-     START SELECTED CAMERA
-     ===================================================== */
+/* =====================================================
+   START SELECTED CAMERA
+   ===================================================== */
 
-  async function startSelectedCamera() {
+async function startSelectedCamera() {
 
-    if (!html5QrCode) {
+  if (!html5QrCode) {
+    return;
+  }
+
+  if (!cameras || cameras.length === 0) {
+    return;
+  }
+
+  const camera =
+    cameras[
+      currentCameraIndex
+    ];
+
+  if (!camera) {
+    return;
+  }
+
+  const cameraId =
+    camera.id;
+
+  try {
+
+    if (scannerRunning) {
       return;
     }
 
-    if (!cameras || cameras.length === 0) {
-      return;
-    }
+    await html5QrCode.start(
 
-    const camera =
-      cameras[
-        currentCameraIndex
-      ];
+      cameraId,
 
-    if (!camera) {
-      return;
-    }
+      {
+        fps: 15,
 
-    const cameraId =
-      camera.id;
+        qrbox:
+          function(
+            viewfinderWidth,
+            viewfinderHeight
+          ) {
 
-    try {
+            const size =
+              Math.min(
+                viewfinderWidth,
+                viewfinderHeight
+              ) * 0.80;
 
-      if (scannerRunning) {
-        return;
-      }
+            return {
+              width: size,
+              height: size
+            };
 
-      await html5QrCode.start(
+          },
 
-        cameraId,
+        aspectRatio: 1.0,
 
-        {
-          fps: 10,
-
-          qrbox:
-            function(
-              viewfinderWidth,
-              viewfinderHeight
-            ) {
-
-              const size =
-                Math.min(
-                  viewfinderWidth,
-                  viewfinderHeight
-                ) * 0.68;
-
-              return {
-                width: size,
-                height: size
-              };
-
-            },
-
-          aspectRatio: 1.0
+        experimentalFeatures: {
+          useBarCodeDetectorIfSupported: true
         },
 
-        onQrDetected,
+        rememberLastUsedCamera: true
 
-        function(errorMessage) {
-          // Normal QR scanning errors.
-        }
+      },
 
-      );
+      onQrDetected,
 
-      scannerRunning =
-        true;
+      function(errorMessage) {
+        // Normal QR scanning errors.
+      }
 
-      processing =
-        false;
+    );
 
-      hideOverlay();
+    scannerRunning =
+      true;
 
-      readyBar.textContent =
-        "● READY TO SCAN";
+    processing =
+      false;
 
-      readyBar.style.color =
-        "#16803c";
+    hideOverlay();
 
-    } catch (error) {
+    readyBar.textContent =
+      "● READY TO SCAN";
 
-      console.error(
-        "Camera start error:",
-        error
-      );
+    readyBar.style.color =
+      "#16803c";
 
-      scannerRunning =
-        false;
+  } catch (error) {
 
-      throw error;
+    console.error(
+      "Camera start error:",
+      error
+    );
 
-    }
+    scannerRunning =
+      false;
+
+    throw error;
 
   }
+
+}
 
 
   /* =====================================================
