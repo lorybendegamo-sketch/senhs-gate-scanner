@@ -56,7 +56,6 @@
       position: relative;
     }
 
-
     /* =========================================
        PAGE 1
        ========================================= */
@@ -132,7 +131,6 @@
       font-weight: bold;
       color: #345;
     }
-
 
     /* =========================================
        DEVICE CODE
@@ -220,7 +218,6 @@
     .success {
       color: #16803c;
     }
-
 
     /* =========================================
        PAGE 2
@@ -328,7 +325,6 @@
       display: block;
     }
 
-
     /* =========================================
        CAMERA SWITCH
        ========================================= */
@@ -356,7 +352,6 @@
       transform: scale(0.94);
     }
 
-
     /* =========================================
        STATUS BAR
        ========================================= */
@@ -371,7 +366,6 @@
       font-size: 17px;
       font-weight: 900;
     }
-
 
     /* =========================================
        ATTENDANCE MONITOR
@@ -400,7 +394,6 @@
     .section-title {
       margin-top: 22px;
     }
-
 
     /* =========================================
        JHS / SHS SCHOOL SUMMARY
@@ -491,7 +484,6 @@
     .summary-card.pm-late {
       background: #ef6c00;
     }
-
 
     /* =========================================
        SECTION ATTENDANCE TABLE
@@ -618,14 +610,12 @@
       background: #fff3e0 !important;
     }
 
-
     #attendanceUpdated {
       text-align: center;
       font-size: 10px;
       color: #9fb0bd;
       margin-top: 10px;
     }
-
 
     /* =========================================
        OVERLAY
@@ -678,7 +668,6 @@
       color: #667;
     }
 
-
     /* =========================================
        RESPONSIVE
        ========================================= */
@@ -713,7 +702,6 @@
       }
 
     }
-
 
     @media (max-width: 480px) {
 
@@ -786,511 +774,496 @@
 
 </head>
 
-
 <body>
 
   <div class="page">
 
     <div class="container">
 
+      <!-- ==================================================
+           PAGE 1 — DEVICE CODE
+           ================================================== -->
 
-<!-- ==================================================
-     PAGE 1 — DEVICE CODE
-     ================================================== -->
+      <div id="devicePage">
 
-<div id="devicePage">
-
-  <div class="device-watermark">
-    SENHS
-  </div>
-
-  <div class="device-content">
-
-    <div class="school-name">
-      SAN ESTEBAN NATIONAL HIGH SCHOOL
-    </div>
-
-    <div class="gate-title">
-      GATE SCANNER
-    </div>
-
-    <div class="subtitle">
-      Authorized Gate Device
-    </div>
-
-    <label
-      class="device-label"
-      for="deviceCode"
-    >
-      Enter Device Code
-    </label>
-
-    <div class="device-code-wrapper">
-
-      <input
-        id="deviceCode"
-        type="password"
-        placeholder="Enter Device Code"
-        autocomplete="off"
-      >
-
-      <button
-        id="toggleDeviceCode"
-        type="button"
-        aria-label="Show device code"
-        title="Show / Hide Device Code"
-      >
-
-        <svg
-          id="deviceEyeIcon"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          aria-hidden="true"
-        >
-
-          <path
-            d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"
-          ></path>
-
-          <circle
-            cx="12"
-            cy="12"
-            r="3"
-          ></circle>
-
-        </svg>
-
-      </button>
-
-    </div>
-
-
-    <button
-      id="continueBtn"
-      type="button"
-    >
-      CONTINUE
-    </button>
-
-
-    <div id="deviceMessage"></div>
-
-  </div>
-
-</div>
-
-
-<!-- ==================================================
-     PAGE 2 — CAMERA SCANNER
-     ================================================== -->
-
-<div id="scannerPage">
-
-  <div class="scanner-container">
-
-    <div class="scanner-watermark">
-      SENHS
-    </div>
-
-
-    <!-- HEADER -->
-
-    <div class="scanner-header">
-
-      <div class="scanner-school">
-        SAN ESTEBAN NATIONAL HIGH SCHOOL
-      </div>
-
-      <div class="scanner-title">
-        GATE SCANNER
-      </div>
-
-      <div class="pst-label">
-        PHILIPPINE STANDARD TIME
-      </div>
-
-      <div id="pstTime" class="pst-time">
-        --:--:-- --
-      </div>
-
-      <div id="pstDate" class="pst-date">
-        -- -- ----
-      </div>
-
-    </div>
-
-
-    <!-- CAMERA -->
-
-    <div class="camera-area">
-
-      <div id="reader"></div>
-
-
-      <!-- SWITCH CAMERA -->
-
-      <button
-        id="switchCameraBtn"
-        title="Switch Camera"
-        aria-label="Switch Camera"
-        type="button"
-      >
-        ↔
-      </button>
-
-
-      <!-- PROCESSING / RESULT OVERLAY -->
-
-      <div
-        id="scanOverlay"
-        class="scan-overlay"
-      >
-
-        <div
-          id="overlayBox"
-          class="overlay-box"
-        >
-
-          <div
-            id="overlayContent"
-          ></div>
-
+        <div class="device-watermark">
+          SENHS
         </div>
 
-      </div>
+        <div class="device-content">
 
-    </div>
-
-
-    <!-- READY -->
-
-    <div
-      id="readyBar"
-      class="ready-bar"
-    >
-      ● READY TO SCAN
-    </div>
-
-
-    <!-- ==================================================
-         ATTENDANCE MONITOR
-         ================================================== -->
-
-    <div id="attendanceMonitor">
-
-      <div class="attendance-title">
-        SCHOOL SUMMARY
-      </div>
-
-
-      <!-- =========================================
-           JHS SUMMARY
-           GRADES 7–10
-           ========================================= -->
-
-      <div class="school-group jhs">
-
-        <div class="school-group-title">
-          JHS — GRADES 7–10
-        </div>
-
-        <div class="school-summary">
-
-          <div class="summary-card total">
-
-            <div class="summary-label">
-              TOTAL
-            </div>
-
-            <div
-              id="jhsTotal"
-              class="summary-number"
-            >
-              0
-            </div>
-
+          <div class="school-name">
+            SAN ESTEBAN NATIONAL HIGH SCHOOL
           </div>
 
-
-          <div class="summary-card am-present">
-
-            <div class="summary-label">
-              AM PRESENT
-            </div>
-
-            <div
-              id="jhsAmPresent"
-              class="summary-number"
-            >
-              0
-            </div>
-
+          <div class="gate-title">
+            GATE SCANNER
           </div>
 
-
-          <div class="summary-card am-absent">
-
-            <div class="summary-label">
-              AM ABSENT
-            </div>
-
-            <div
-              id="jhsAmAbsent"
-              class="summary-number"
-            >
-              0
-            </div>
-
+          <div class="subtitle">
+            Authorized Gate Device
           </div>
 
-
-          <div class="summary-card am-late">
-
-            <div class="summary-label">
-              AM LATE
-            </div>
-
-            <div
-              id="jhsAmLate"
-              class="summary-number"
-            >
-              0
-            </div>
-
-          </div>
-
-
-          <div
-            id="jhsPmPresentCard"
-            class="summary-card pm-present"
+          <label
+            class="device-label"
+            for="deviceCode"
           >
+            Enter Device Code
+          </label>
 
-            <div class="summary-label">
-              PM PRESENT
-            </div>
+          <div class="device-code-wrapper">
 
-            <div
-              id="jhsPmPresent"
-              class="summary-number"
+            <input
+              id="deviceCode"
+              type="password"
+              placeholder="Enter Device Code"
+              autocomplete="off"
             >
-              0
-            </div>
+
+            <button
+              id="toggleDeviceCode"
+              type="button"
+              aria-label="Show device code"
+              title="Show / Hide Device Code"
+            >
+
+              <svg
+                id="deviceEyeIcon"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+
+                <path
+                  d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"
+                ></path>
+
+                <circle
+                  cx="12"
+                  cy="12"
+                  r="3"
+                ></circle>
+
+              </svg>
+
+            </button>
 
           </div>
 
-
-          <div
-            id="jhsPmAbsentCard"
-            class="summary-card pm-absent"
+          <button
+            id="continueBtn"
+            type="button"
           >
+            CONTINUE
+          </button>
 
-            <div class="summary-label">
-              PM ABSENT
-            </div>
-
-            <div
-              id="jhsPmAbsent"
-              class="summary-number"
-            >
-              0
-            </div>
-
-          </div>
-
-
-          <div
-            id="jhsPmLateCard"
-            class="summary-card pm-late"
-          >
-
-            <div class="summary-label">
-              PM LATE
-            </div>
-
-            <div
-              id="jhsPmLate"
-              class="summary-number"
-            >
-              0
-            </div>
-
-          </div>
+          <div id="deviceMessage"></div>
 
         </div>
 
       </div>
 
 
-      <!-- =========================================
-           SHS SUMMARY
-           GRADES 11–12
-           ========================================= -->
+      <!-- ==================================================
+           PAGE 2 — CAMERA SCANNER
+           ================================================== -->
 
-      <div class="school-group shs">
+      <div id="scannerPage">
 
-        <div class="school-group-title">
-          SHS — GRADES 11–12
+        <div class="scanner-container">
+
+          <div class="scanner-watermark">
+            SENHS
+          </div>
+
+          <!-- HEADER -->
+
+          <div class="scanner-header">
+
+            <div class="scanner-school">
+              SAN ESTEBAN NATIONAL HIGH SCHOOL
+            </div>
+
+            <div class="scanner-title">
+              GATE SCANNER
+            </div>
+
+            <div class="pst-label">
+              PHILIPPINE STANDARD TIME
+            </div>
+
+            <div id="pstTime" class="pst-time">
+              --:--:-- --
+            </div>
+
+            <div id="pstDate" class="pst-date">
+              -- -- ----
+            </div>
+
+          </div>
+
+
+          <!-- CAMERA -->
+
+          <div class="camera-area">
+
+            <div id="reader"></div>
+
+            <!-- SWITCH CAMERA -->
+
+            <button
+              id="switchCameraBtn"
+              title="Switch Camera"
+              aria-label="Switch Camera"
+              type="button"
+            >
+              ↔
+            </button>
+
+
+            <!-- PROCESSING / RESULT OVERLAY -->
+
+            <div
+              id="scanOverlay"
+              class="scan-overlay"
+            >
+
+              <div
+                id="overlayBox"
+                class="overlay-box"
+              >
+
+                <div
+                  id="overlayContent"
+                ></div>
+
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <!-- READY -->
+
+          <div
+            id="readyBar"
+            class="ready-bar"
+          >
+            ● READY TO SCAN
+          </div>
+
+
+          <!-- ==================================================
+               ATTENDANCE MONITOR
+               ================================================== -->
+
+          <div id="attendanceMonitor">
+
+            <div class="attendance-title">
+              SCHOOL SUMMARY
+            </div>
+
+
+            <!-- JHS -->
+
+            <div class="school-group jhs">
+
+              <div class="school-group-title">
+                JHS — GRADES 7–10
+              </div>
+
+              <div class="school-summary">
+
+                <div class="summary-card total">
+
+                  <div class="summary-label">
+                    TOTAL
+                  </div>
+
+                  <div
+                    id="jhsTotal"
+                    class="summary-number"
+                  >
+                    0
+                  </div>
+
+                </div>
+
+
+                <div class="summary-card am-present">
+
+                  <div class="summary-label">
+                    AM PRESENT
+                  </div>
+
+                  <div
+                    id="jhsAmPresent"
+                    class="summary-number"
+                  >
+                    0
+                  </div>
+
+                </div>
+
+
+                <div class="summary-card am-absent">
+
+                  <div class="summary-label">
+                    AM ABSENT
+                  </div>
+
+                  <div
+                    id="jhsAmAbsent"
+                    class="summary-number"
+                  >
+                    0
+                  </div>
+
+                </div>
+
+
+                <div class="summary-card am-late">
+
+                  <div class="summary-label">
+                    AM LATE
+                  </div>
+
+                  <div
+                    id="jhsAmLate"
+                    class="summary-number"
+                  >
+                    0
+                  </div>
+
+                </div>
+
+
+                <div
+                  id="jhsPmPresentCard"
+                  class="summary-card pm-present"
+                >
+
+                  <div class="summary-label">
+                    PM PRESENT
+                  </div>
+
+                  <div
+                    id="jhsPmPresent"
+                    class="summary-number"
+                  >
+                    0
+                  </div>
+
+                </div>
+
+
+                <div
+                  id="jhsPmAbsentCard"
+                  class="summary-card pm-absent"
+                >
+
+                  <div class="summary-label">
+                    PM ABSENT
+                  </div>
+
+                  <div
+                    id="jhsPmAbsent"
+                    class="summary-number"
+                  >
+                    0
+                  </div>
+
+                </div>
+
+
+                <div
+                  id="jhsPmLateCard"
+                  class="summary-card pm-late"
+                >
+
+                  <div class="summary-label">
+                    PM LATE
+                  </div>
+
+                  <div
+                    id="jhsPmLate"
+                    class="summary-number"
+                  >
+                    0
+                  </div>
+
+                </div>
+
+              </div>
+
+            </div>
+
+
+            <!-- SHS -->
+
+            <div class="school-group shs">
+
+              <div class="school-group-title">
+                SHS — GRADES 11–12
+              </div>
+
+              <div class="school-summary">
+
+                <div class="summary-card total">
+
+                  <div class="summary-label">
+                    TOTAL
+                  </div>
+
+                  <div
+                    id="shsTotal"
+                    class="summary-number"
+                  >
+                    0
+                  </div>
+
+                </div>
+
+
+                <div class="summary-card am-present">
+
+                  <div class="summary-label">
+                    AM PRESENT
+                  </div>
+
+                  <div
+                    id="shsAmPresent"
+                    class="summary-number"
+                  >
+                    0
+                  </div>
+
+                </div>
+
+
+                <div class="summary-card am-absent">
+
+                  <div class="summary-label">
+                    AM ABSENT
+                  </div>
+
+                  <div
+                    id="shsAmAbsent"
+                    class="summary-number"
+                  >
+                    0
+                  </div>
+
+                </div>
+
+
+                <div class="summary-card am-late">
+
+                  <div class="summary-label">
+                    AM LATE
+                  </div>
+
+                  <div
+                    id="shsAmLate"
+                    class="summary-number"
+                  >
+                    0
+                  </div>
+
+                </div>
+
+
+                <div
+                  id="shsPmPresentCard"
+                  class="summary-card pm-present"
+                >
+
+                  <div class="summary-label">
+                    PM PRESENT
+                  </div>
+
+                  <div
+                    id="shsPmPresent"
+                    class="summary-number"
+                  >
+                    0
+                  </div>
+
+                </div>
+
+
+                <div
+                  id="shsPmAbsentCard"
+                  class="summary-card pm-absent"
+                >
+
+                  <div class="summary-label">
+                    PM ABSENT
+                  </div>
+
+                  <div
+                    id="shsPmAbsent"
+                    class="summary-number"
+                  >
+                    0
+                  </div>
+
+                </div>
+
+
+                <div
+                  id="shsPmLateCard"
+                  class="summary-card pm-late"
+                >
+
+                  <div class="summary-label">
+                    PM LATE
+                  </div>
+
+                  <div
+                    id="shsPmLate"
+                    class="summary-number"
+                  >
+                    0
+                  </div>
+
+                </div>
+
+              </div>
+
+            </div>
+
+
+            <!-- SECTION ATTENDANCE -->
+
+            <div
+              class="attendance-title section-title"
+            >
+              SECTION ATTENDANCE
+            </div>
+
+
+            <div id="sectionAttendance">
+              Loading attendance...
+            </div>
+
+
+            <div id="attendanceUpdated">
+              Updating...
+            </div>
+
+          </div>
+
         </div>
 
-        <div class="school-summary">
-
-          <div class="summary-card total">
-
-            <div class="summary-label">
-              TOTAL
-            </div>
-
-            <div
-              id="shsTotal"
-              class="summary-number"
-            >
-              0
-            </div>
-
-          </div>
-
-
-          <div class="summary-card am-present">
-
-            <div class="summary-label">
-              AM PRESENT
-            </div>
-
-            <div
-              id="shsAmPresent"
-              class="summary-number"
-            >
-              0
-            </div>
-
-          </div>
-
-
-          <div class="summary-card am-absent">
-
-            <div class="summary-label">
-              AM ABSENT
-            </div>
-
-            <div
-              id="shsAmAbsent"
-              class="summary-number"
-            >
-              0
-            </div>
-
-          </div>
-
-
-          <div class="summary-card am-late">
-
-            <div class="summary-label">
-              AM LATE
-            </div>
-
-            <div
-              id="shsAmLate"
-              class="summary-number"
-            >
-              0
-            </div>
-
-          </div>
-
-
-          <div
-            id="shsPmPresentCard"
-            class="summary-card pm-present"
-          >
-
-            <div class="summary-label">
-              PM PRESENT
-            </div>
-
-            <div
-              id="shsPmPresent"
-              class="summary-number"
-            >
-              0
-            </div>
-
-          </div>
-
-
-          <div
-            id="shsPmAbsentCard"
-            class="summary-card pm-absent"
-          >
-
-            <div class="summary-label">
-              PM ABSENT
-            </div>
-
-            <div
-              id="shsPmAbsent"
-              class="summary-number"
-            >
-              0
-            </div>
-
-          </div>
-
-
-          <div
-            id="shsPmLateCard"
-            class="summary-card pm-late"
-          >
-
-            <div class="summary-label">
-              PM LATE
-            </div>
-
-            <div
-              id="shsPmLate"
-              class="summary-number"
-            >
-              0
-            </div>
-
-          </div>
-
-        </div>
-
       </div>
-
-
-      <!-- =========================================
-           SECTION ATTENDANCE
-           ========================================= -->
-
-      <div
-        class="attendance-title section-title"
-      >
-        SECTION ATTENDANCE
-      </div>
-
-
-      <div id="sectionAttendance">
-        Loading attendance...
-      </div>
-
-
-      <div id="attendanceUpdated">
-        Updating...
-      </div>
-
-    </div>
-
-
-  </div>
-
-</div>
 
     </div>
 
@@ -1303,8 +1276,8 @@
      CONFIGURATION
      ===================================================== */
 
-const APPS_SCRIPT_URL =
-"https://script.google.com/macros/s/AKfycbyuXwfLu_wjourRT3BwQDTwA-H9vIJfu5LvqbjjbG3jwv5JVb0mi_1SO5CRPq60S5KdaCg/exec";
+  const APPS_SCRIPT_URL =
+    "https://script.google.com/macros/s/AKfycbyuXwfLu_wjourRT3BwQDTwA-H9vIJfu5LvqbjjbG3jwv5JVb0mi_1SO5CRPq60S5KdaCg/exec";
 
 
   /* =====================================================
@@ -1391,6 +1364,7 @@ const APPS_SCRIPT_URL =
     document.getElementById(
       "attendanceUpdated"
     );
+
 
   /* =====================================================
      DEVICE CODE SHOW / HIDE
@@ -1707,11 +1681,11 @@ const APPS_SCRIPT_URL =
     try {
 
       const requestUrl =
-  APPS_SCRIPT_URL +
-  "?device=" +
-  encodeURIComponent(
-    key
-  );
+        APPS_SCRIPT_URL +
+        "?device=" +
+        encodeURIComponent(
+          key
+        );
 
 
       const result =
@@ -2817,7 +2791,8 @@ const APPS_SCRIPT_URL =
 
       showResult({
 
-        success: false,
+        success:
+          false,
 
         message:
           error.message ||
