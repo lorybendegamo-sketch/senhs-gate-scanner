@@ -2749,6 +2749,8 @@ async function startSelectedCamera() {
     processing =
       true;
 
+    window.qrProcessingStart =
+  performance.now();
 
     beep(
       1000,
@@ -3218,21 +3220,32 @@ async function startSelectedCamera() {
     }
 
 
-    showResult.timer =
-      setTimeout(
-        function() {
+    const processingTime =
+  window.qrProcessingStart
+    ? ((performance.now() - window.qrProcessingStart) / 1000).toFixed(2)
+    : "0.00";
 
-          showResult.timer =
-            null;
+console.log(
+  "QR PROCESSING TIME: " +
+  processingTime +
+  " seconds"
+);
 
-          scanOverlay.onclick =
-            null;
+showResult.timer =
+  setTimeout(
+    function() {
 
-          resumeScanner();
+      showResult.timer =
+        null;
 
-        },
-        5000
-      );
+      scanOverlay.onclick =
+        null;
+
+      resumeScanner();
+
+    },
+    3000
+  );
 
   }
 
