@@ -1,4 +1,3 @@
-```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -24,24 +23,24 @@
     }
 
     body {
-  margin: 0;
-  font-family: Arial, Helvetica, sans-serif;
-  color: #123;
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      color: #123;
 
-  background-image:
-    linear-gradient(
-      rgba(255,255,255,0.72),
-      rgba(255,255,255,0.72)
-    ),
-    url("./logo.png");
+      background-image:
+        linear-gradient(
+          rgba(255,255,255,0.72),
+          rgba(255,255,255,0.72)
+        ),
+        url("./logo.png");
 
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
 
-  min-height: 100vh;
-}
+      min-height: 100vh;
+    }
 
     .page {
       min-height: 100vh;
@@ -63,28 +62,28 @@
        ========================================= */
 
     #devicePage {
-  position: relative;
-  min-height: calc(100vh - 40px);
+      position: relative;
+      min-height: calc(100vh - 40px);
 
-  background-image:
-    linear-gradient(
-      rgba(255,255,255,0.78),
-      rgba(255,255,255,0.78)
-    ),
-    url("./logo.png");
+      background-image:
+        linear-gradient(
+          rgba(255,255,255,0.78),
+          rgba(255,255,255,0.78)
+        ),
+        url("./logo.png");
 
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
 
-  border-radius: 24px;
-  padding: 35px 25px;
-  box-shadow: 0 10px 35px rgba(0,0,0,0.12);
-  text-align: center;
-  overflow: hidden;
+      border-radius: 24px;
+      padding: 35px 25px;
+      box-shadow: 0 10px 35px rgba(0,0,0,0.12);
+      text-align: center;
+      overflow: hidden;
 
-  box-sizing: border-box;
-}
+      box-sizing: border-box;
+    }
 
     .device-watermark {
       position: absolute;
@@ -232,26 +231,26 @@
     }
 
     .scanner-container {
-  position: relative;
-  width: 100%;
-  min-height: 100vh;
+      position: relative;
+      width: 100%;
+      min-height: 100vh;
 
-  overflow: hidden;
-  border-radius: 24px;
+      overflow: hidden;
+      border-radius: 24px;
 
-  background-image:
-    linear-gradient(
-      rgba(255,255,255,0.78),
-      rgba(255,255,255,0.78)
-    ),
-    url("./logo.png");
+      background-image:
+        linear-gradient(
+          rgba(255,255,255,0.78),
+          rgba(255,255,255,0.78)
+        ),
+        url("./logo.png");
 
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
 
-  box-shadow: 0 10px 35px rgba(0,0,0,0.20);
-}
+      box-shadow: 0 10px 35px rgba(0,0,0,0.20);
+    }
 
     .scanner-watermark {
       position: absolute;
@@ -289,28 +288,28 @@
     }
 
     .pst-label {
-  margin-top: 12px;
-  font-size: 14px;
-  font-weight: 800;
-  letter-spacing: 1px;
-  color: #124b7c;
-}
+      margin-top: 12px;
+      font-size: 14px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      color: #124b7c;
+    }
 
-.pst-time {
-  margin-top: 2px;
-  font-size: 38px;
-  font-weight: 900;
-  line-height: 1.1;
-  color: #111;
-  letter-spacing: 1px;
-}
+    .pst-time {
+      margin-top: 2px;
+      font-size: 38px;
+      font-weight: 900;
+      line-height: 1.1;
+      color: #111;
+      letter-spacing: 1px;
+    }
 
-.pst-date {
-  margin-top: 5px;
-  font-size: 16px;
-  font-weight: 700;
-  color: #333;
-}
+    .pst-date {
+      margin-top: 5px;
+      font-size: 16px;
+      font-weight: 700;
+      color: #333;
+    }
 
     .camera-area {
       position: relative;
@@ -887,503 +886,411 @@
 </div>
 
 
-/* =====================================================
-   SHOW / HIDE DEVICE CODE
-   ===================================================== */
+<!-- ==================================================
+     PAGE 2 — CAMERA SCANNER
+     ================================================== -->
 
-const toggleDeviceCode =
-  document.getElementById(
-    "toggleDeviceCode"
-  );
+<div id="scannerPage">
 
-const deviceCode =
-  document.getElementById(
-    "deviceCode"
-  );
+  <div class="scanner-container">
+
+    <div class="scanner-watermark">
+      SENHS
+    </div>
 
 
-if (
-  toggleDeviceCode &&
-  deviceCode
-) {
+    <!-- HEADER -->
 
-  toggleDeviceCode.addEventListener(
-    "click",
-    function() {
+    <div class="scanner-header">
 
-      if (
-        deviceCode.type ===
-        "password"
-      ) {
+      <div class="scanner-school">
+        SAN ESTEBAN NATIONAL HIGH SCHOOL
+      </div>
 
-        deviceCode.type =
-          "text";
+      <div class="scanner-title">
+        GATE SCANNER
+      </div>
 
-        toggleDeviceCode.setAttribute(
-          "aria-label",
-          "Hide device code"
-        );
+      <div class="pst-label">
+        PHILIPPINE STANDARD TIME
+      </div>
 
-        toggleDeviceCode.setAttribute(
-          "title",
-          "Hide Device Code"
-        );
+      <div id="pstTime" class="pst-time">
+        --:--:-- --
+      </div>
 
-      } else {
+      <div id="pstDate" class="pst-date">
+        -- -- ----
+      </div>
 
-        deviceCode.type =
-          "password";
-
-        toggleDeviceCode.setAttribute(
-          "aria-label",
-          "Show device code"
-        );
-
-        toggleDeviceCode.setAttribute(
-          "title",
-          "Show Device Code"
-        );
-
-      }
-
-    }
-  );
-
-}
-
-      <!-- ==================================================
-           PAGE 2 — CAMERA SCANNER
-           ================================================== -->
-
-      <div id="scannerPage">
-
-        <div class="scanner-container">
-
-          <div class="scanner-watermark">
-            SENHS
-          </div>
+    </div>
 
 
-          <!-- HEADER -->
+    <!-- CAMERA -->
 
-          <div class="scanner-header">
+    <div class="camera-area">
 
-  <div class="scanner-school">
-    SAN ESTEBAN NATIONAL HIGH SCHOOL
-  </div>
-
-  <div class="scanner-title">
-    GATE SCANNER
-  </div>
-
-  <div class="pst-label">
-    PHILIPPINE STANDARD TIME
-  </div>
-
-  <div id="pstTime" class="pst-time">
-    --:--:-- --
-  </div>
-
-  <div id="pstDate" class="pst-date">
-    -- -- ----
-  </div>
-
-</div>
+      <div id="reader"></div>
 
 
-          <!-- CAMERA -->
+      <!-- SWITCH CAMERA -->
 
-          <div class="camera-area">
-
-            <div id="reader"></div>
-
-
-            <!-- SWITCH CAMERA -->
-
-            <button
-              id="switchCameraBtn"
-              title="Switch Camera"
-              aria-label="Switch Camera"
-              type="button"
-            >
-              ↔
-            </button>
+      <button
+        id="switchCameraBtn"
+        title="Switch Camera"
+        aria-label="Switch Camera"
+        type="button"
+      >
+        ↔
+      </button>
 
 
-            <!-- PROCESSING / RESULT OVERLAY -->
+      <!-- PROCESSING / RESULT OVERLAY -->
 
-            <div
-              id="scanOverlay"
-              class="scan-overlay"
-            >
+      <div
+        id="scanOverlay"
+        class="scan-overlay"
+      >
 
-              <div
-                id="overlayBox"
-                class="overlay-box"
-              >
-
-                <div
-                  id="overlayContent"
-                ></div>
-
-              </div>
-
-            </div>
-
-          </div>
-
-
-          <!-- READY -->
+        <div
+          id="overlayBox"
+          class="overlay-box"
+        >
 
           <div
-            id="readyBar"
-            class="ready-bar"
-          >
-            ● READY TO SCAN
-          </div>
-
-
-          <!-- ==================================================
-               ATTENDANCE MONITOR
-               ================================================== -->
-
-          <div id="attendanceMonitor">
-
-            <div class="attendance-title">
-              SCHOOL SUMMARY
-            </div>
-
-
-            <!-- =========================================
-                 JHS SUMMARY
-                 GRADES 7–10
-                 ========================================= -->
-
-            <div class="school-group jhs">
-
-              <div class="school-group-title">
-                JHS — GRADES 7–10
-              </div>
-
-              <div class="school-summary">
-
-                <!-- TOTAL -->
-
-                <div class="summary-card total">
-
-                  <div class="summary-label">
-                    TOTAL
-                  </div>
-
-                  <div
-                    id="jhsTotal"
-                    class="summary-number"
-                  >
-                    0
-                  </div>
-
-                </div>
-
-
-                <!-- AM PRESENT -->
-
-                <div class="summary-card am-present">
-
-                  <div class="summary-label">
-                    AM PRESENT
-                  </div>
-
-                  <div
-                    id="jhsAmPresent"
-                    class="summary-number"
-                  >
-                    0
-                  </div>
-
-                </div>
-
-
-                <!-- AM ABSENT -->
-
-                <div class="summary-card am-absent">
-
-                  <div class="summary-label">
-                    AM ABSENT
-                  </div>
-
-                  <div
-                    id="jhsAmAbsent"
-                    class="summary-number"
-                  >
-                    0
-                  </div>
-
-                </div>
-
-
-                <!-- AM LATE -->
-
-                <div class="summary-card am-late">
-
-                  <div class="summary-label">
-                    AM LATE
-                  </div>
-
-                  <div
-                    id="jhsAmLate"
-                    class="summary-number"
-                  >
-                    0
-                  </div>
-
-                </div>
-
-
-                <!-- PM PRESENT -->
-
-                <div
-                  id="jhsPmPresentCard"
-                  class="summary-card pm-present"
-                >
-
-                  <div class="summary-label">
-                    PM PRESENT
-                  </div>
-
-                  <div
-                    id="jhsPmPresent"
-                    class="summary-number"
-                  >
-                    0
-                  </div>
-
-                </div>
-
-
-                <!-- PM ABSENT -->
-
-                <div
-                  id="jhsPmAbsentCard"
-                  class="summary-card pm-absent"
-                >
-
-                  <div class="summary-label">
-                    PM ABSENT
-                  </div>
-
-                  <div
-                    id="jhsPmAbsent"
-                    class="summary-number"
-                  >
-                    0
-                  </div>
-
-                </div>
-
-
-                <!-- PM LATE -->
-
-                <div
-                  id="jhsPmLateCard"
-                  class="summary-card pm-late"
-                >
-
-                  <div class="summary-label">
-                    PM LATE
-                  </div>
-
-                  <div
-                    id="jhsPmLate"
-                    class="summary-number"
-                  >
-                    0
-                  </div>
-
-                </div>
-
-              </div>
-
-            </div>
-
-
-            <!-- =========================================
-                 SHS SUMMARY
-                 GRADES 11–12
-                 ========================================= -->
-
-            <div class="school-group shs">
-
-              <div class="school-group-title">
-                SHS — GRADES 11–12
-              </div>
-
-              <div class="school-summary">
-
-                <!-- TOTAL -->
-
-                <div class="summary-card total">
-
-                  <div class="summary-label">
-                    TOTAL
-                  </div>
-
-                  <div
-                    id="shsTotal"
-                    class="summary-number"
-                  >
-                    0
-                  </div>
-
-                </div>
-
-
-                <!-- AM PRESENT -->
-
-                <div class="summary-card am-present">
-
-                  <div class="summary-label">
-                    AM PRESENT
-                  </div>
-
-                  <div
-                    id="shsAmPresent"
-                    class="summary-number"
-                  >
-                    0
-                  </div>
-
-                </div>
-
-
-                <!-- AM ABSENT -->
-
-                <div class="summary-card am-absent">
-
-                  <div class="summary-label">
-                    AM ABSENT
-                  </div>
-
-                  <div
-                    id="shsAmAbsent"
-                    class="summary-number"
-                  >
-                    0
-                  </div>
-
-                </div>
-
-
-                <!-- AM LATE -->
-
-                <div class="summary-card am-late">
-
-                  <div class="summary-label">
-                    AM LATE
-                  </div>
-
-                  <div
-                    id="shsAmLate"
-                    class="summary-number"
-                  >
-                    0
-                  </div>
-
-                </div>
-
-
-                <!-- PM PRESENT -->
-
-                <div
-                  id="shsPmPresentCard"
-                  class="summary-card pm-present"
-                >
-
-                  <div class="summary-label">
-                    PM PRESENT
-                  </div>
-
-                  <div
-                    id="shsPmPresent"
-                    class="summary-number"
-                  >
-                    0
-                  </div>
-
-                </div>
-
-
-                <!-- PM ABSENT -->
-
-                <div
-                  id="shsPmAbsentCard"
-                  class="summary-card pm-absent"
-                >
-
-                  <div class="summary-label">
-                    PM ABSENT
-                  </div>
-
-                  <div
-                    id="shsPmAbsent"
-                    class="summary-number"
-                  >
-                    0
-                  </div>
-
-                </div>
-
-
-                <!-- PM LATE -->
-
-                <div
-                  id="shsPmLateCard"
-                  class="summary-card pm-late"
-                >
-
-                  <div class="summary-label">
-                    PM LATE
-                  </div>
-
-                  <div
-                    id="shsPmLate"
-                    class="summary-number"
-                  >
-                    0
-                  </div>
-
-                </div>
-
-              </div>
-
-            </div>
-
-
-            <!-- =========================================
-                 SECTION ATTENDANCE
-                 ========================================= -->
-
-            <div
-              class="attendance-title section-title"
-            >
-              SECTION ATTENDANCE
-            </div>
-
-
-            <div id="sectionAttendance">
-              Loading attendance...
-            </div>
-
-
-            <div id="attendanceUpdated">
-              Updating...
-            </div>
-
-          </div>
-
+            id="overlayContent"
+          ></div>
 
         </div>
 
       </div>
+
+    </div>
+
+
+    <!-- READY -->
+
+    <div
+      id="readyBar"
+      class="ready-bar"
+    >
+      ● READY TO SCAN
+    </div>
+
+
+    <!-- ==================================================
+         ATTENDANCE MONITOR
+         ================================================== -->
+
+    <div id="attendanceMonitor">
+
+      <div class="attendance-title">
+        SCHOOL SUMMARY
+      </div>
+
+
+      <!-- =========================================
+           JHS SUMMARY
+           GRADES 7–10
+           ========================================= -->
+
+      <div class="school-group jhs">
+
+        <div class="school-group-title">
+          JHS — GRADES 7–10
+        </div>
+
+        <div class="school-summary">
+
+          <div class="summary-card total">
+
+            <div class="summary-label">
+              TOTAL
+            </div>
+
+            <div
+              id="jhsTotal"
+              class="summary-number"
+            >
+              0
+            </div>
+
+          </div>
+
+
+          <div class="summary-card am-present">
+
+            <div class="summary-label">
+              AM PRESENT
+            </div>
+
+            <div
+              id="jhsAmPresent"
+              class="summary-number"
+            >
+              0
+            </div>
+
+          </div>
+
+
+          <div class="summary-card am-absent">
+
+            <div class="summary-label">
+              AM ABSENT
+            </div>
+
+            <div
+              id="jhsAmAbsent"
+              class="summary-number"
+            >
+              0
+            </div>
+
+          </div>
+
+
+          <div class="summary-card am-late">
+
+            <div class="summary-label">
+              AM LATE
+            </div>
+
+            <div
+              id="jhsAmLate"
+              class="summary-number"
+            >
+              0
+            </div>
+
+          </div>
+
+
+          <div
+            id="jhsPmPresentCard"
+            class="summary-card pm-present"
+          >
+
+            <div class="summary-label">
+              PM PRESENT
+            </div>
+
+            <div
+              id="jhsPmPresent"
+              class="summary-number"
+            >
+              0
+            </div>
+
+          </div>
+
+
+          <div
+            id="jhsPmAbsentCard"
+            class="summary-card pm-absent"
+          >
+
+            <div class="summary-label">
+              PM ABSENT
+            </div>
+
+            <div
+              id="jhsPmAbsent"
+              class="summary-number"
+            >
+              0
+            </div>
+
+          </div>
+
+
+          <div
+            id="jhsPmLateCard"
+            class="summary-card pm-late"
+          >
+
+            <div class="summary-label">
+              PM LATE
+            </div>
+
+            <div
+              id="jhsPmLate"
+              class="summary-number"
+            >
+              0
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- =========================================
+           SHS SUMMARY
+           GRADES 11–12
+           ========================================= -->
+
+      <div class="school-group shs">
+
+        <div class="school-group-title">
+          SHS — GRADES 11–12
+        </div>
+
+        <div class="school-summary">
+
+          <div class="summary-card total">
+
+            <div class="summary-label">
+              TOTAL
+            </div>
+
+            <div
+              id="shsTotal"
+              class="summary-number"
+            >
+              0
+            </div>
+
+          </div>
+
+
+          <div class="summary-card am-present">
+
+            <div class="summary-label">
+              AM PRESENT
+            </div>
+
+            <div
+              id="shsAmPresent"
+              class="summary-number"
+            >
+              0
+            </div>
+
+          </div>
+
+
+          <div class="summary-card am-absent">
+
+            <div class="summary-label">
+              AM ABSENT
+            </div>
+
+            <div
+              id="shsAmAbsent"
+              class="summary-number"
+            >
+              0
+            </div>
+
+          </div>
+
+
+          <div class="summary-card am-late">
+
+            <div class="summary-label">
+              AM LATE
+            </div>
+
+            <div
+              id="shsAmLate"
+              class="summary-number"
+            >
+              0
+            </div>
+
+          </div>
+
+
+          <div
+            id="shsPmPresentCard"
+            class="summary-card pm-present"
+          >
+
+            <div class="summary-label">
+              PM PRESENT
+            </div>
+
+            <div
+              id="shsPmPresent"
+              class="summary-number"
+            >
+              0
+            </div>
+
+          </div>
+
+
+          <div
+            id="shsPmAbsentCard"
+            class="summary-card pm-absent"
+          >
+
+            <div class="summary-label">
+              PM ABSENT
+            </div>
+
+            <div
+              id="shsPmAbsent"
+              class="summary-number"
+            >
+              0
+            </div>
+
+          </div>
+
+
+          <div
+            id="shsPmLateCard"
+            class="summary-card pm-late"
+          >
+
+            <div class="summary-label">
+              PM LATE
+            </div>
+
+            <div
+              id="shsPmLate"
+              class="summary-number"
+            >
+              0
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- =========================================
+           SECTION ATTENDANCE
+           ========================================= -->
+
+      <div
+        class="attendance-title section-title"
+      >
+        SECTION ATTENDANCE
+      </div>
+
+
+      <div id="sectionAttendance">
+        Loading attendance...
+      </div>
+
+
+      <div id="attendanceUpdated">
+        Updating...
+      </div>
+
+    </div>
+
+
+  </div>
+
+</div>
 
     </div>
 
@@ -1398,7 +1305,8 @@ if (
      ===================================================== */
 
   const APPS_SCRIPT_URL =
-  "https://script.google.com/macros/s/AKfycbyXwfLu_wjourRT3BwQDTwA-H9vIJfu5LvqbjjbG3jwv5JVb0mi_1SO5CRPq60S5KdaCg/exec";
+    "https://script.google.com/macros/s/AKfycbyuXwfLu_wjourRT3BwQDTwA-H9vIJfu5LvqbjjbG3jwv5JVb0mi_1SO5CRPq60S5KdaCg/exec";
+
 
   /* =====================================================
      VARIABLES
@@ -1522,6 +1430,11 @@ if (
           "Hide device code"
         );
 
+        toggleDeviceCode.setAttribute(
+          "title",
+          "Hide Device Code"
+        );
+
 
       } else {
 
@@ -1542,6 +1455,11 @@ if (
         toggleDeviceCode.setAttribute(
           "aria-label",
           "Show device code"
+        );
+
+        toggleDeviceCode.setAttribute(
+          "title",
+          "Show Device Code"
         );
 
       }
@@ -1908,13 +1826,6 @@ if (
 
   /* =====================================================
      PM DISPLAY CONTROL
-
-     BEFORE 12:05 PM:
-       PM SCHOOL SUMMARY CARDS HIDDEN
-       PM SECTION TABLE COLUMNS HIDDEN
-
-     12:05 PM ONWARD:
-       PM INFORMATION VISIBLE
      ===================================================== */
 
   function isPMDisplayTime() {
@@ -2023,12 +1934,6 @@ if (
 
   /* =====================================================
      GROUP SCHOOL SUMMARY
-
-     JHS = GRADES 7–10
-     SHS = GRADES 11–12
-
-     ADMIN / NON-GRADE SECTIONS ARE NOT INCLUDED
-     IN JHS OR SHS SUMMARY.
      ===================================================== */
 
   function getJhsShsSummary(
@@ -2080,11 +1985,6 @@ if (
         }
 
 
-        /*
-         * Ignore ADMIN and any other
-         * non-grade section.
-         */
-
         if (!target) {
           return;
         }
@@ -2095,16 +1995,6 @@ if (
             section.total || 0
           );
 
-
-        /*
-         * IMPORTANT:
-         *
-         * AM PRESENT already includes
-         * students classified as LATE.
-         *
-         * Therefore, do NOT add amLate
-         * to amPresent.
-         */
 
         target.amPresent +=
           Number(
@@ -2256,19 +2146,11 @@ if (
       }
 
 
-      /* =========================================
-         GET JHS / SHS SUMMARY
-         ========================================= */
-
       const grouped =
         getJhsShsSummary(
           result.sections || []
         );
 
-
-      /* =========================================
-         JHS SCHOOL SUMMARY
-         ========================================= */
 
       displayGroupSummary(
         "jhs",
@@ -2276,26 +2158,14 @@ if (
       );
 
 
-      /* =========================================
-         SHS SCHOOL SUMMARY
-         ========================================= */
-
       displayGroupSummary(
         "shs",
         grouped.shs
       );
 
 
-      /* =========================================
-         PM VISIBILITY
-         ========================================= */
-
       updateSchoolSummaryPMDisplay();
 
-
-      /* =========================================
-         SECTION ATTENDANCE
-         ========================================= */
 
       renderSectionAttendance(
         result.sections || []
@@ -2331,7 +2201,6 @@ if (
 
   /* =====================================================
      SECTION SORTING
-     GRADE 7 → 12
      ===================================================== */
 
   function getGradeNumber(
@@ -2419,15 +2288,6 @@ if (
 
   /* =====================================================
      RENDER SECTION ATTENDANCE TABLE
-
-     BEFORE 12:05 PM:
-
-       SECTION | TOTAL | AM P | AM A | AM L
-
-     12:05 PM ONWARD:
-
-       SECTION | TOTAL | AM P | AM A | AM L |
-       PM P | PM A | PM L
      ===================================================== */
 
   function renderSectionAttendance(
@@ -2477,10 +2337,6 @@ if (
 
               '<th class="am-late-head">AM<br>L</th>';
 
-
-    /* =========================================
-       PM HEADERS ONLY FROM 12:05 PM
-       ========================================= */
 
     if (showPM) {
 
@@ -2552,10 +2408,6 @@ if (
 
             '</td>';
 
-
-        /* =========================================
-           PM CELLS ONLY FROM 12:05 PM
-           ========================================= */
 
         if (showPM) {
 
@@ -2692,111 +2544,111 @@ if (
   }
 
 
-/* =====================================================
-   START SELECTED CAMERA
-   ===================================================== */
+  /* =====================================================
+     START SELECTED CAMERA
+     ===================================================== */
 
-async function startSelectedCamera() {
+  async function startSelectedCamera() {
 
-  if (!html5QrCode) {
-    return;
-  }
-
-  if (!cameras || cameras.length === 0) {
-    return;
-  }
-
-  const camera =
-    cameras[
-      currentCameraIndex
-    ];
-
-  if (!camera) {
-    return;
-  }
-
-  const cameraId =
-    camera.id;
-
-  try {
-
-    if (scannerRunning) {
+    if (!html5QrCode) {
       return;
     }
 
-    await html5QrCode.start(
+    if (!cameras || cameras.length === 0) {
+      return;
+    }
 
-      cameraId,
+    const camera =
+      cameras[
+        currentCameraIndex
+      ];
 
-      {
-        fps: 15,
+    if (!camera) {
+      return;
+    }
 
-        qrbox:
-          function(
-            viewfinderWidth,
-            viewfinderHeight
-          ) {
+    const cameraId =
+      camera.id;
 
-            const size =
-              Math.min(
-                viewfinderWidth,
-                viewfinderHeight
-              ) * 0.80;
+    try {
 
-            return {
-              width: size,
-              height: size
-            };
-
-          },
-
-        aspectRatio: 1.0,
-
-        experimentalFeatures: {
-          useBarCodeDetectorIfSupported: true
-        },
-
-        rememberLastUsedCamera: true
-
-      },
-
-      onQrDetected,
-
-      function(errorMessage) {
-        // Normal QR scanning errors.
+      if (scannerRunning) {
+        return;
       }
 
-    );
+      await html5QrCode.start(
 
-    scannerRunning =
-      true;
+        cameraId,
 
-    processing =
-      false;
+        {
+          fps: 15,
 
-    hideOverlay();
+          qrbox:
+            function(
+              viewfinderWidth,
+              viewfinderHeight
+            ) {
 
-    readyBar.textContent =
-      "● READY TO SCAN";
+              const size =
+                Math.min(
+                  viewfinderWidth,
+                  viewfinderHeight
+                ) * 0.80;
 
-    readyBar.style.color =
-      "#16803c";
+              return {
+                width: size,
+                height: size
+              };
 
-  } catch (error) {
+            },
 
-    console.error(
-      "Camera start error:",
-      error
-    );
+          aspectRatio: 1.0,
 
-    scannerRunning =
-      false;
+          experimentalFeatures: {
+            useBarCodeDetectorIfSupported: true
+          },
 
-    throw error;
+          rememberLastUsedCamera: true
+
+        },
+
+        onQrDetected,
+
+        function(errorMessage) {
+          // Normal QR scanning errors.
+        }
+
+      );
+
+      scannerRunning =
+        true;
+
+      processing =
+        false;
+
+      hideOverlay();
+
+      readyBar.textContent =
+        "● READY TO SCAN";
+
+      readyBar.style.color =
+        "#16803c";
+
+    } catch (error) {
+
+      console.error(
+        "Camera start error:",
+        error
+      );
+
+      scannerRunning =
+        false;
+
+      throw error;
+
+    }
 
   }
-
-}
 
 
   /* =====================================================
@@ -2816,7 +2668,7 @@ async function startSelectedCamera() {
       true;
 
     window.qrProcessingStart =
-  performance.now();
+      performance.now();
 
     beep(
       1000,
@@ -2990,6 +2842,10 @@ async function startSelectedCamera() {
       "flex";
 
 
+    scanOverlay.style.background =
+      "rgba(0,0,0,0.72)";
+
+
     overlayContent.innerHTML =
 
       '<div class="processing-title">' +
@@ -3003,213 +2859,23 @@ async function startSelectedCamera() {
   }
 
 
-/* =====================================================
-   RESULT OVERLAY
-   ===================================================== */
-
-function showResult(
-  result
-) {
-
-  if (showResult.timer) {
-
-    clearTimeout(
-      showResult.timer
-    );
-
-    showResult.timer =
-      null;
-
-  }
-
-
-  scanOverlay.style.display =
-    "flex";
-
-
-  const isSuccess =
-    result &&
-    result.success;
-
-
-  const isLate =
-    isSuccess &&
-    result.status ===
-    "LATE";
-
-
-  scanOverlay.style.background =
-    isLate ||
-    !isSuccess
-      ? "#b71c1c"
-      : "#0d47a1";
-
-
-  if (isSuccess) {
-
-    const name =
-      result.name ||
-      "STUDENT";
-
-
-    const section =
-      result.section ||
-      "";
-
-
-    const event =
-      result.event ||
-      "";
-
-
-    let html =
-
-      '<div style="' +
-
-        'width:100%;' +
-
-        'max-width:850px;' +
-
-        'margin:auto;' +
-
-        'padding:28px 20px;' +
-
-        'text-align:center;' +
-
-        'background:#0d47a1;' +
-
-        'border:3px solid #ffffff;' +
-
-        'border-radius:20px;' +
-
-        'box-sizing:border-box;' +
-
-        'color:#ffffff;' +
-
-        'font-family:Arial,sans-serif;' +
-
-        'box-shadow:0 8px 25px rgba(0,0,0,.40);' +
-
-      '">' +
-
-
-        '<div style="' +
-
-          'font-size:34px;' +
-
-          'font-weight:900;' +
-
-          'color:#ffffff;' +
-
-          'line-height:1.15;' +
-
-          'margin:15px 0;' +
-
-          'text-shadow:1px 2px 3px rgba(0,0,0,.50);' +
-
-        '">' +
-
-          escapeHtml(
-            name
-          ) +
-
-        '</div>' +
-
-
-        '<div style="' +
-
-          'font-size:22px;' +
-
-          'font-weight:700;' +
-
-          'color:#ffffff;' +
-
-          'margin-bottom:22px;' +
-
-        '">' +
-
-          escapeHtml(
-            section
-          ) +
-
-        '</div>' +
-
-
-        '<div style="' +
-
-          'display:inline-block;' +
-
-          'padding:10px 25px;' +
-
-          'font-size:28px;' +
-
-          'font-weight:900;' +
-
-          'color:#ffffff;' +
-
-          'background:#1565c0;' +
-
-          'border:2px solid #ffffff;' +
-
-          'border-radius:12px;' +
-
-        '">' +
-
-          escapeHtml(
-            event
-          ) +
-
-        '</div>';
-
-
-    if (isLate) {
-
-      html +=
-
-        '<div style="' +
-
-          'margin-top:18px;' +
-
-          'font-size:30px;' +
-
-          'font-weight:900;' +
-
-          'color:#ffffff;' +
-
-          'background:#8b0000;' +
-
-          'border:2px solid #ffffff;' +
-
-          'border-radius:12px;' +
-
-          'padding:8px 25px;' +
-
-          'display:inline-block;' +
-
-        '">' +
-
-          'LATE' +
-
-        '</div>';
-
-    }
-
-
-    html +=
-      '</div>';
-
-
-    overlayContent.innerHTML =
-      html;
-
-
-  } else {
-
-    const message =
-      result &&
-      result.message
-        ? result.message
-        : "SCAN FAILED";
+  /* =====================================================
+     GENERIC ERROR OVERLAY
+     ===================================================== */
+
+  function showOverlay(
+    title,
+    message,
+    type
+  ) {
+
+    scanOverlay.style.display =
+      "flex";
+
+    scanOverlay.style.background =
+      type === "error"
+        ? "#b71c1c"
+        : "rgba(0,0,0,0.72)";
 
 
     overlayContent.innerHTML =
@@ -3226,7 +2892,13 @@ function showResult(
 
         'text-align:center;' +
 
-        'background:#7f0000;' +
+        'background:' +
+        (
+          type === "error"
+            ? "#7f0000"
+            : "#0d47a1"
+        ) +
+        ';' +
 
         'border:3px solid #ffffff;' +
 
@@ -3240,7 +2912,6 @@ function showResult(
 
       '">' +
 
-
         '<div style="' +
 
           'font-size:30px;' +
@@ -3253,10 +2924,12 @@ function showResult(
 
         '">' +
 
-          'SCAN NOT RECORDED' +
+          escapeHtml(
+            title ||
+            "NOTICE"
+          ) +
 
         '</div>' +
-
 
         '<div style="' +
 
@@ -3269,226 +2942,475 @@ function showResult(
         '">' +
 
           escapeHtml(
-            message
+            message ||
+            ""
           ) +
 
         '</div>' +
 
-
       '</div>';
 
-
-    beep(
-      600,
-      180
-    );
-
   }
 
 
-  const processingTime =
-    window.qrProcessingStart
-      ? (
-          (
-            performance.now() -
-            window.qrProcessingStart
-          ) /
-          1000
-        ).toFixed(2)
-      : "0.00";
+  /* =====================================================
+     RESULT OVERLAY
+     ===================================================== */
 
+  function showResult(
+    result
+  ) {
 
-  console.log(
-    "QR PROCESSING TIME: " +
-    processingTime +
-    " seconds"
-  );
+    if (showResult.timer) {
 
+      clearTimeout(
+        showResult.timer
+      );
 
-  showResult.timer =
-    setTimeout(
-      function() {
-
-        showResult.timer =
-          null;
-
-        scanOverlay.onclick =
-          null;
-
-        resumeScanner();
-
-      },
-      3000
-    );
-
-}
-
-
-/* =====================================================
-   RESUME SCANNER
-   ===================================================== */
-
-async function resumeScanner() {
-
-  hideOverlay();
-
-  readyBar.textContent =
-    "● READY TO SCAN";
-
-  readyBar.style.color =
-    "#16803c";
-
-  processing =
-    false;
-
-  try {
-
-    if (
-      html5QrCode &&
-      scannerRunning
-    ) {
-
-      await html5QrCode.resume();
-
-    } else {
-
-      await startSelectedCamera();
+      showResult.timer =
+        null;
 
     }
 
-  } catch (error) {
 
-    console.error(
-      "Resume scanner error:",
-      error
-    );
-
-    scannerRunning =
-      false;
-
-    readyBar.textContent =
-      "CAMERA ERROR";
-
-    readyBar.style.color =
-      "#b71c1c";
-
-    showOverlay(
-      "CAMERA ERROR",
-      "Unable to resume the camera. Please try again.",
-      "error"
-    );
-
-  }
-
-}
+    scanOverlay.style.display =
+      "flex";
 
 
-/* =====================================================
-   HIDE OVERLAY
-   ===================================================== */
-
-function hideOverlay() {
-
-  scanOverlay.style.display =
-    "none";
-
-  scanOverlay.onclick =
-    null;
-
-}
+    const isSuccess =
+      result &&
+      result.success;
 
 
-/* =====================================================
-   CAMERA SWITCH
-   ===================================================== */
-
-switchCameraBtn.addEventListener(
-  "click",
-  async function() {
-
-    if (
-      processing ||
-      !cameras ||
-      cameras.length < 2 ||
-      !html5QrCode
-    ) {
-      return;
-    }
-
-    processing =
-      true;
-
-    switchCameraBtn.disabled =
-      true;
-
-    readyBar.textContent =
-      "SWITCHING CAMERA...";
-
-    readyBar.style.color =
-      "#1267a5";
+    const isLate =
+      isSuccess &&
+      result.status ===
+      "LATE";
 
 
-    const previousCameraIndex =
-      currentCameraIndex;
+    scanOverlay.style.background =
+      isLate ||
+      !isSuccess
+        ? "#b71c1c"
+        : "#0d47a1";
 
 
-    try {
+    if (isSuccess) {
 
-      if (scannerRunning) {
+      const name =
+        result.name ||
+        "STUDENT";
 
-        try {
 
-          await html5QrCode.stop();
+      const section =
+        result.section ||
+        "";
 
-        } catch (stopError) {
 
-          console.log(
-            "Camera stop:",
-            stopError
-          );
+      const event =
+        result.event ||
+        "";
 
-        }
 
-        scannerRunning =
-          false;
+      let html =
+
+        '<div style="' +
+
+          'width:100%;' +
+
+          'max-width:850px;' +
+
+          'margin:auto;' +
+
+          'padding:28px 20px;' +
+
+          'text-align:center;' +
+
+          'background:#0d47a1;' +
+
+          'border:3px solid #ffffff;' +
+
+          'border-radius:20px;' +
+
+          'box-sizing:border-box;' +
+
+          'color:#ffffff;' +
+
+          'font-family:Arial,sans-serif;' +
+
+          'box-shadow:0 8px 25px rgba(0,0,0,.40);' +
+
+        '">' +
+
+
+          '<div style="' +
+
+            'font-size:34px;' +
+
+            'font-weight:900;' +
+
+            'color:#ffffff;' +
+
+            'line-height:1.15;' +
+
+            'margin:15px 0;' +
+
+            'text-shadow:1px 2px 3px rgba(0,0,0,.50);' +
+
+          '">' +
+
+            escapeHtml(
+              name
+            ) +
+
+          '</div>' +
+
+
+          '<div style="' +
+
+            'font-size:22px;' +
+
+            'font-weight:700;' +
+
+            'color:#ffffff;' +
+
+            'margin-bottom:22px;' +
+
+          '">' +
+
+            escapeHtml(
+              section
+            ) +
+
+          '</div>' +
+
+
+          '<div style="' +
+
+            'display:inline-block;' +
+
+            'padding:10px 25px;' +
+
+            'font-size:28px;' +
+
+            'font-weight:900;' +
+
+            'color:#ffffff;' +
+
+            'background:#1565c0;' +
+
+            'border:2px solid #ffffff;' +
+
+            'border-radius:12px;' +
+
+          '">' +
+
+            escapeHtml(
+              event
+            ) +
+
+          '</div>';
+
+
+      if (isLate) {
+
+        html +=
+
+          '<div style="' +
+
+            'margin-top:18px;' +
+
+            'font-size:30px;' +
+
+            'font-weight:900;' +
+
+            'color:#ffffff;' +
+
+            'background:#8b0000;' +
+
+            'border:2px solid #ffffff;' +
+
+            'border-radius:12px;' +
+
+            'padding:8px 25px;' +
+
+            'display:inline-block;' +
+
+          '">' +
+
+            'LATE' +
+
+          '</div>';
 
       }
 
 
-      currentCameraIndex =
-        (
-          currentCameraIndex + 1
-        ) %
-        cameras.length;
+      html +=
+        '</div>';
 
 
-      await startSelectedCamera();
+      overlayContent.innerHTML =
+        html;
 
 
-      readyBar.textContent =
-        "● READY TO SCAN";
+    } else {
 
-      readyBar.style.color =
-        "#16803c";
+      const message =
+        result &&
+        result.message
+          ? result.message
+          : "SCAN FAILED";
 
+
+      overlayContent.innerHTML =
+
+        '<div style="' +
+
+          'width:100%;' +
+
+          'max-width:700px;' +
+
+          'margin:auto;' +
+
+          'padding:30px 20px;' +
+
+          'text-align:center;' +
+
+          'background:#7f0000;' +
+
+          'border:3px solid #ffffff;' +
+
+          'border-radius:20px;' +
+
+          'box-sizing:border-box;' +
+
+          'color:#ffffff;' +
+
+          'font-family:Arial,sans-serif;' +
+
+        '">' +
+
+
+          '<div style="' +
+
+            'font-size:30px;' +
+
+            'font-weight:900;' +
+
+            'color:#ffffff;' +
+
+            'margin-bottom:18px;' +
+
+          '">' +
+
+            'SCAN NOT RECORDED' +
+
+          '</div>' +
+
+
+          '<div style="' +
+
+            'font-size:20px;' +
+
+            'font-weight:700;' +
+
+            'color:#ffffff;' +
+
+          '">' +
+
+            escapeHtml(
+              message
+            ) +
+
+          '</div>' +
+
+
+        '</div>';
+
+
+      beep(
+        600,
+        180
+      );
+
+    }
+
+
+    const processingTime =
+      window.qrProcessingStart
+        ? (
+            (
+              performance.now() -
+              window.qrProcessingStart
+            ) /
+            1000
+          ).toFixed(2)
+        : "0.00";
+
+
+    console.log(
+      "QR PROCESSING TIME: " +
+      processingTime +
+      " seconds"
+    );
+
+
+    showResult.timer =
+      setTimeout(
+        function() {
+
+          showResult.timer =
+            null;
+
+          scanOverlay.onclick =
+            null;
+
+          resumeScanner();
+
+        },
+        3000
+      );
+
+  }
+
+
+  /* =====================================================
+     RESUME SCANNER
+     ===================================================== */
+
+  async function resumeScanner() {
+
+    hideOverlay();
+
+    readyBar.textContent =
+      "● READY TO SCAN";
+
+    readyBar.style.color =
+      "#16803c";
+
+    processing =
+      false;
+
+    try {
+
+      if (
+        html5QrCode &&
+        scannerRunning
+      ) {
+
+        await html5QrCode.resume();
+
+      } else {
+
+        await startSelectedCamera();
+
+      }
 
     } catch (error) {
 
       console.error(
-        "Camera switch error:",
+        "Resume scanner error:",
         error
       );
-
-
-      currentCameraIndex =
-        previousCameraIndex;
-
 
       scannerRunning =
         false;
 
+      readyBar.textContent =
+        "CAMERA ERROR";
+
+      readyBar.style.color =
+        "#b71c1c";
+
+      showOverlay(
+        "CAMERA ERROR",
+        "Unable to resume the camera. Please try again.",
+        "error"
+      );
+
+    }
+
+  }
+
+
+  /* =====================================================
+     HIDE OVERLAY
+     ===================================================== */
+
+  function hideOverlay() {
+
+    scanOverlay.style.display =
+      "none";
+
+    scanOverlay.onclick =
+      null;
+
+  }
+
+
+  /* =====================================================
+     CAMERA SWITCH
+     ===================================================== */
+
+  switchCameraBtn.addEventListener(
+    "click",
+    async function() {
+
+      if (
+        processing ||
+        !cameras ||
+        cameras.length < 2 ||
+        !html5QrCode
+      ) {
+        return;
+      }
+
+      processing =
+        true;
+
+      switchCameraBtn.disabled =
+        true;
+
+      readyBar.textContent =
+        "SWITCHING CAMERA...";
+
+      readyBar.style.color =
+        "#1267a5";
+
+
+      const previousCameraIndex =
+        currentCameraIndex;
+
 
       try {
+
+        if (scannerRunning) {
+
+          try {
+
+            await html5QrCode.stop();
+
+          } catch (stopError) {
+
+            console.log(
+              "Camera stop:",
+              stopError
+            );
+
+          }
+
+          scannerRunning =
+            false;
+
+        }
+
+
+        currentCameraIndex =
+          (
+            currentCameraIndex + 1
+          ) %
+          cameras.length;
+
 
         await startSelectedCamera();
 
@@ -3500,202 +3422,234 @@ switchCameraBtn.addEventListener(
           "#16803c";
 
 
-      } catch (recoverError) {
+      } catch (error) {
 
         console.error(
-          "Camera recovery error:",
-          recoverError
+          "Camera switch error:",
+          error
         );
 
 
-        readyBar.textContent =
-          "CAMERA ERROR";
-
-        readyBar.style.color =
-          "#b71c1c";
+        currentCameraIndex =
+          previousCameraIndex;
 
 
-        showOverlay(
-          "CAMERA ERROR",
-          "Unable to switch camera. Please try again.",
-          "error"
-        );
+        scannerRunning =
+          false;
+
+
+        try {
+
+          await startSelectedCamera();
+
+
+          readyBar.textContent =
+            "● READY TO SCAN";
+
+          readyBar.style.color =
+            "#16803c";
+
+
+        } catch (recoverError) {
+
+          console.error(
+            "Camera recovery error:",
+            recoverError
+          );
+
+
+          readyBar.textContent =
+            "CAMERA ERROR";
+
+          readyBar.style.color =
+            "#b71c1c";
+
+
+          showOverlay(
+            "CAMERA ERROR",
+            "Unable to switch camera. Please try again.",
+            "error"
+          );
+
+        }
+
+      } finally {
+
+        processing =
+          false;
+
+        switchCameraBtn.disabled =
+          false;
 
       }
 
-    } finally {
+    }
+  );
 
-      processing =
-        false;
 
-      switchCameraBtn.disabled =
-        false;
+  /* =====================================================
+     CONTINUE BUTTON
+     ===================================================== */
+
+  continueBtn.addEventListener(
+    "click",
+    verifyDevice
+  );
+
+
+  /* =====================================================
+     ENTER KEY
+     ===================================================== */
+
+  deviceCode.addEventListener(
+    "keydown",
+    function(event) {
+
+      if (
+        event.key ===
+        "Enter"
+      ) {
+
+        event.preventDefault();
+
+        verifyDevice();
+
+      }
+
+    }
+  );
+
+
+  /* =====================================================
+     HTML ESCAPE
+     ===================================================== */
+
+  function escapeHtml(
+    value
+  ) {
+
+    return String(value)
+
+      .replace(
+        /&/g,
+        "&amp;"
+      )
+
+      .replace(
+        /</g,
+        "&lt;"
+      )
+
+      .replace(
+        />/g,
+        "&gt;"
+      )
+
+      .replace(
+        /"/g,
+        "&quot;"
+      )
+
+      .replace(
+        /'/g,
+        "&#039;"
+      );
+
+  }
+
+
+  /* =====================================================
+     PHILIPPINE STANDARD TIME CLOCK
+     ===================================================== */
+
+  function updatePSTClock() {
+
+    const now =
+      new Date();
+
+
+    const time =
+      new Intl.DateTimeFormat(
+        "en-US",
+        {
+          timeZone:
+            "Asia/Manila",
+
+          hour:
+            "2-digit",
+
+          minute:
+            "2-digit",
+
+          second:
+            "2-digit",
+
+          hour12:
+            true
+        }
+      ).format(now);
+
+
+    const date =
+      new Intl.DateTimeFormat(
+        "en-US",
+        {
+          timeZone:
+            "Asia/Manila",
+
+          weekday:
+            "long",
+
+          month:
+            "long",
+
+          day:
+            "numeric",
+
+          year:
+            "numeric"
+        }
+      ).format(now);
+
+
+    const timeElement =
+      document.getElementById(
+        "pstTime"
+      );
+
+
+    const dateElement =
+      document.getElementById(
+        "pstDate"
+      );
+
+
+    if (timeElement) {
+
+      timeElement.textContent =
+        time;
+
+    }
+
+
+    if (dateElement) {
+
+      dateElement.textContent =
+        date;
 
     }
 
   }
-);
 
 
-/* =====================================================
-   CONTINUE BUTTON
-   ===================================================== */
+  setInterval(
+    updatePSTClock,
+    1000
+  );
 
-continueBtn.addEventListener(
-  "click",
-  verifyDevice
-);
-
-
-/* =====================================================
-   ENTER KEY
-   ===================================================== */
-
-deviceCode.addEventListener(
-  "keydown",
-  function(event) {
-
-    if (
-      event.key ===
-      "Enter"
-    ) {
-
-      event.preventDefault();
-
-      verifyDevice();
-
-    }
-
-  }
-);
-
-
-/* =====================================================
-   HTML ESCAPE
-   ===================================================== */
-
-function escapeHtml(
-  value
-) {
-
-  return String(value)
-
-    .replace(
-      /&/g,
-      "&amp;"
-    )
-
-    .replace(
-      /</g,
-      "&lt;"
-    )
-
-    .replace(
-      />/g,
-      "&gt;"
-    )
-
-    .replace(
-      /"/g,
-      "&quot;"
-    )
-
-    .replace(
-      /'/g,
-      "&#039;"
-    );
-
-}
-
-
-function updatePSTClock() {
-
-  const now =
-    new Date();
-
-
-  const time =
-    new Intl.DateTimeFormat(
-      "en-US",
-      {
-        timeZone:
-          "Asia/Manila",
-
-        hour:
-          "2-digit",
-
-        minute:
-          "2-digit",
-
-        second:
-          "2-digit",
-
-        hour12:
-          true
-      }
-    ).format(now);
-
-
-  const date =
-    new Intl.DateTimeFormat(
-      "en-US",
-      {
-        timeZone:
-          "Asia/Manila",
-
-        weekday:
-          "long",
-
-        month:
-          "long",
-
-        day:
-          "numeric",
-
-        year:
-          "numeric"
-      }
-    ).format(now);
-
-
-  const timeElement =
-    document.getElementById(
-      "pstTime"
-    );
-
-
-  const dateElement =
-    document.getElementById(
-      "pstDate"
-    );
-
-
-  if (timeElement) {
-
-    timeElement.textContent =
-      time;
-
-  }
-
-
-  if (dateElement) {
-
-    dateElement.textContent =
-      date;
-
-  }
-
-}
-
-
-setInterval(
-  updatePSTClock,
-  1000
-);
-
-updatePSTClock();
+  updatePSTClock();
 
 </script>
 
 </body>
-</html> 
+</html>
