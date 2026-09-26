@@ -1149,146 +1149,108 @@
      GOOGLE APPS SCRIPT JSONP REQUEST
      ===================================================== */
 
-  function jsonpRequest(
-    url
-  ) {
+function jsonpRequest(url) {
 
-    return new Promise(
-      function(resolve, reject) {
+  return new Promise(function(resolve, reject) {
 
-        const callbackName =
-          "senhsCallback_" +
-          Date.now() +
-          "_" +
-          (++callbackCounter);
+    const callbackName =
+      "senhsCallback_" +
+      Date.now() +
+      "_" +
+      Math.floor(Math.random() * 100000);
 
+    const script =
+      document.createElement("script");
 
-        const script =
-          document.createElement("script");
+    let finished = false;
 
+    const timeout =
+      setTimeout(function() {
 
-        let finished = false;
+        if (finished) return;
 
+        finished = true;
 
-        const timeout =
-          setTimeout(
-            function() {
+        cleanup();
 
-              if (finished) {
-                return;
-              }
-
-              finished = true;
-
-              cleanup();
-
-              reject(
-                new Error(
-                  "Unable to connect to server."
-                )
-              );
-
-            },
-            20000
-          );
-
-
-        function cleanup() {
-
-          clearTimeout(timeout);
-
-          if (script.parentNode) {
-
-            script.parentNode.removeChild(
-              script
-            );
-
-          }
-
-          try {
-
-            delete window[callbackName];
-
-          } catch (error) {
-
-            window[callbackName] =
-              undefined;
-
-          }
-
-        }
-
-
-        window[callbackName] =
-          function(data) {
-
-            if (finished) {
-              return;
-            }
-
-            finished = true;
-
-            cleanup();
-
-            resolve(data);
-
-          };
-
-
-        script.onerror =
-          function() {
-
-            if (finished) {
-              return;
-            }
-
-            finished = true;
-
-            cleanup();
-
-            reject(
-              new Error(
-                "Unable to connect to server."
-              )
-            );
-
-          };
-
-
-        /*
-         * IMPORTANT:
-         * Add callback safely.
-         */
-
-        const separator =
-          url.indexOf("?") >= 0
-            ? "&"
-            : "?";
-
-
-        script.src =
-          url +
-          separator +
-          "callback=" +
-          encodeURIComponent(
-            callbackName
-          ) +
-          "&_=" +
-          Date.now();
-
-
-        script.async = true;
-
-
-        document.head.appendChild(
-          script
+        reject(
+          new Error(
+            "Unable to connect to server."
+          )
         );
 
+      }, 20000);
+
+
+    function cleanup() {
+
+      clearTimeout(timeout);
+
+      if (script.parentNode) {
+        script.parentNode.removeChild(script);
       }
-    );
 
-  }
+      try {
+        delete window[callbackName];
+      } catch (e) {
+        window[callbackName] = undefined;
+      }
+    }
 
+
+    window[callbackName] =
+      function(data) {
+
+        if (finished) return;
+
+        finished = true;
+
+        cleanup();
+
+        resolve(data);
+      };
+
+
+    script.onerror =
+      function() {
+
+        if (finished) return;
+
+        finished = true;
+
+        cleanup();
+
+        reject(
+          new Error(
+            "Unable to connect to server."
+          )
+        );
+      };
+
+
+    let separator = "?";
+
+    if (url.indexOf("?") !== -1) {
+      separator = "&";
+    }
+
+
+    script.src =
+      url +
+      separator +
+      "callback=" +
+      encodeURIComponent(callbackName) +
+      "&_=" +
+      Date.now();
+
+
+    script.async = true;
+
+    document.body.appendChild(script);
+
+  });
+
+}
 
   /* =====================================================
      DEVICE MESSAGE
