@@ -12,8 +12,8 @@
 
   <script
     src="https://unpkg.com/html5-qrcode"
-    type="text/javascript">
-  </script>
+    type="text/javascript"
+  ></script>
 
   <style>
     * {
@@ -53,6 +53,10 @@
       max-width: 620px;
       position: relative;
     }
+
+    /* =========================
+       PAGE 1
+       ========================= */
 
     #devicePage {
       position: relative;
@@ -166,6 +170,10 @@
       z-index: 10;
     }
 
+    #toggleDeviceCode:hover {
+      background: rgba(0,0,0,0.06);
+    }
+
     #continueBtn {
       width: 100%;
       margin-top: 18px;
@@ -184,6 +192,10 @@
       cursor: wait;
     }
 
+    #continueBtn:active {
+      transform: scale(0.98);
+    }
+
     #deviceMessage {
       min-height: 25px;
       margin-top: 15px;
@@ -198,6 +210,10 @@
       color: #16803c;
     }
 
+    /* =========================
+       PAGE 2
+       ========================= */
+
     #scannerPage {
       display: none;
     }
@@ -206,6 +222,7 @@
       position: relative;
       width: 100%;
       min-height: 100vh;
+
       overflow: hidden;
       border-radius: 24px;
 
@@ -334,6 +351,10 @@
       font-weight: 900;
     }
 
+    /* =========================
+       ATTENDANCE
+       ========================= */
+
     #attendanceMonitor {
       position: relative;
       z-index: 5;
@@ -372,6 +393,7 @@
       color: #ffffff;
       font-size: 16px;
       font-weight: 900;
+      letter-spacing: 0.4px;
     }
 
     .school-group.jhs .school-group-title {
@@ -405,21 +427,43 @@
       font-size: 10px;
       font-weight: 900;
       line-height: 1.2;
+      color: #ffffff;
     }
 
     .summary-number {
       font-size: 28px;
       font-weight: 900;
+      color: #ffffff;
       margin-top: 5px;
     }
 
-    .summary-card.total { background: #1976d2; }
-    .summary-card.am-present { background: #16803c; }
-    .summary-card.am-absent { background: #d32f2f; }
-    .summary-card.am-late { background: #f57c00; }
-    .summary-card.pm-present { background: #00897b; }
-    .summary-card.pm-absent { background: #c62828; }
-    .summary-card.pm-late { background: #ef6c00; }
+    .summary-card.total {
+      background: #1976d2;
+    }
+
+    .summary-card.am-present {
+      background: #16803c;
+    }
+
+    .summary-card.am-absent {
+      background: #d32f2f;
+    }
+
+    .summary-card.am-late {
+      background: #f57c00;
+    }
+
+    .summary-card.pm-present {
+      background: #00897b;
+    }
+
+    .summary-card.pm-absent {
+      background: #c62828;
+    }
+
+    .summary-card.pm-late {
+      background: #ef6c00;
+    }
 
     #sectionAttendance {
       display: block;
@@ -439,6 +483,7 @@
       width: 100%;
       min-width: 610px;
       border-collapse: collapse;
+      table-layout: auto;
       text-align: center;
       font-size: 13px;
     }
@@ -452,14 +497,37 @@
       line-height: 1.15;
     }
 
-    .section-table th.section-head { background: #1565c0; }
-    .section-table th.total-head { background: #3949ab; }
-    .section-table th.am-present-head { background: #2e7d32; }
-    .section-table th.am-absent-head { background: #c62828; }
-    .section-table th.am-late-head { background: #ef6c00; }
-    .section-table th.pm-present-head { background: #00897b; }
-    .section-table th.pm-absent-head { background: #ad1457; }
-    .section-table th.pm-late-head { background: #f57c00; }
+    .section-table th.section-head {
+      background: #1565c0;
+    }
+
+    .section-table th.total-head {
+      background: #3949ab;
+    }
+
+    .section-table th.am-present-head {
+      background: #2e7d32;
+    }
+
+    .section-table th.am-absent-head {
+      background: #c62828;
+    }
+
+    .section-table th.am-late-head {
+      background: #ef6c00;
+    }
+
+    .section-table th.pm-present-head {
+      background: #00897b;
+    }
+
+    .section-table th.pm-absent-head {
+      background: #ad1457;
+    }
+
+    .section-table th.pm-late-head {
+      background: #f57c00;
+    }
 
     .section-table td {
       padding: 9px 7px;
@@ -521,6 +589,10 @@
       margin-top: 10px;
     }
 
+    /* =========================
+       OVERLAY
+       ========================= */
+
     .scan-overlay {
       position: absolute;
       z-index: 30;
@@ -552,10 +624,25 @@
 
       .summary-card {
         min-height: 82px;
+        padding: 9px 4px;
+      }
+
+      .summary-label {
+        font-size: 9px;
+      }
+
+      .summary-number {
+        font-size: 25px;
       }
 
       .section-table {
         font-size: 12px;
+        min-width: 610px;
+      }
+
+      .section-table th,
+      .section-table td {
+        padding: 8px 6px;
       }
     }
 
@@ -588,6 +675,12 @@
       .scanner-watermark {
         font-size: 110px;
       }
+
+      .device-code-wrapper {
+        width: 100% !important;
+        max-width: 420px !important;
+        margin: 0 auto 18px auto !important;
+      }
     }
   </style>
 </head>
@@ -596,6 +689,10 @@
 
 <div class="page">
 <div class="container">
+
+  <!-- =========================
+       DEVICE PAGE
+       ========================= -->
 
   <div id="devicePage">
 
@@ -615,7 +712,10 @@
         Authorized Gate Device
       </div>
 
-      <label class="device-label" for="deviceCode">
+      <label
+        class="device-label"
+        for="deviceCode"
+      >
         Enter Device Code
       </label>
 
@@ -651,6 +751,10 @@
   </div>
 
 
+  <!-- =========================
+       SCANNER PAGE
+       ========================= -->
+
   <div id="scannerPage">
 
     <div class="scanner-container">
@@ -673,11 +777,17 @@
           PHILIPPINE STANDARD TIME
         </div>
 
-        <div id="pstTime" class="pst-time">
+        <div
+          id="pstTime"
+          class="pst-time"
+        >
           --:--:-- --
         </div>
 
-        <div id="pstDate" class="pst-date">
+        <div
+          id="pstDate"
+          class="pst-date"
+        >
           -- -- ----
         </div>
 
@@ -701,16 +811,25 @@
           id="scanOverlay"
           class="scan-overlay"
         >
+
           <div id="overlayContent"></div>
+
         </div>
 
       </div>
 
 
-      <div id="readyBar" class="ready-bar">
+      <div
+        id="readyBar"
+        class="ready-bar"
+      >
         ● READY TO SCAN
       </div>
 
+
+  <!-- =========================
+           ATTENDANCE MONITOR
+           ========================= -->
 
       <div id="attendanceMonitor">
 
@@ -718,6 +837,8 @@
           SCHOOL SUMMARY
         </div>
 
+
+        <!-- JHS -->
 
         <div class="school-group jhs">
 
@@ -747,17 +868,26 @@
               <div id="jhsAmLate" class="summary-number">0</div>
             </div>
 
-            <div id="jhsPmPresentCard" class="summary-card pm-present">
+            <div
+              id="jhsPmPresentCard"
+              class="summary-card pm-present"
+            >
               <div class="summary-label">PM PRESENT</div>
               <div id="jhsPmPresent" class="summary-number">0</div>
             </div>
 
-            <div id="jhsPmAbsentCard" class="summary-card pm-absent">
+            <div
+              id="jhsPmAbsentCard"
+              class="summary-card pm-absent"
+            >
               <div class="summary-label">PM ABSENT</div>
               <div id="jhsPmAbsent" class="summary-number">0</div>
             </div>
 
-            <div id="jhsPmLateCard" class="summary-card pm-late">
+            <div
+              id="jhsPmLateCard"
+              class="summary-card pm-late"
+            >
               <div class="summary-label">PM LATE</div>
               <div id="jhsPmLate" class="summary-number">0</div>
             </div>
@@ -765,6 +895,8 @@
           </div>
         </div>
 
+
+        <!-- SHS -->
 
         <div class="school-group shs">
 
@@ -794,17 +926,26 @@
               <div id="shsAmLate" class="summary-number">0</div>
             </div>
 
-            <div id="shsPmPresentCard" class="summary-card pm-present">
+            <div
+              id="shsPmPresentCard"
+              class="summary-card pm-present"
+            >
               <div class="summary-label">PM PRESENT</div>
               <div id="shsPmPresent" class="summary-number">0</div>
             </div>
 
-            <div id="shsPmAbsentCard" class="summary-card pm-absent">
+            <div
+              id="shsPmAbsentCard"
+              class="summary-card pm-absent"
+            >
               <div class="summary-label">PM ABSENT</div>
               <div id="shsPmAbsent" class="summary-number">0</div>
             </div>
 
-            <div id="shsPmLateCard" class="summary-card pm-late">
+            <div
+              id="shsPmLateCard"
+              class="summary-card pm-late"
+            >
               <div class="summary-label">PM LATE</div>
               <div id="shsPmLate" class="summary-number">0</div>
             </div>
@@ -836,151 +977,177 @@
 
 <script>
 
-/* =====================================================
-   SENHS GATE SCANNER
-   GOOGLE APPS SCRIPT CONNECTION
-   ===================================================== */
+  /* =====================================================
+     CONFIGURATION
+     ===================================================== */
 
-/*
- * THIS URL MUST MATCH THE DEPLOYED APPS SCRIPT.
- */
-const APPS_SCRIPT_URL =
-  "https://script.google.com/macros/s/AKfycbyXwfLu_wjourRT3BwQDTwA-H9vIJfu5LvqbjjbG3jwv5JVb0mi_1SO5CRPq60S5KdaCg/exec";
+  const APPS_SCRIPT_URL =
+    "https://script.google.com/macros/s/AKfycbyXwfLu_wjourRT3BwQDTwA-H9vIJfu5LvqbjjbG3jwv5JVb0mi_1SO5CRPq60S5KdaCg/exec";
 
 
-/* =====================================================
-   CLIENT ID
-   ===================================================== */
+  /* =====================================================
+     VARIABLES
+     ===================================================== */
 
-const CLIENT_ID =
-  (
-    window.crypto &&
-    typeof window.crypto.randomUUID === "function"
-  )
-    ? window.crypto.randomUUID()
-    : (
-        "client-" +
-        Date.now() +
-        "-" +
-        Math.random()
-          .toString(36)
-          .substring(2, 12)
+  let deviceKey = "";
+
+  let html5QrCode = null;
+
+  let cameras = [];
+
+  let currentCameraIndex = 0;
+
+  let scannerRunning = false;
+
+  let processing = false;
+
+  let callbackCounter = 0;
+
+  let attendanceTimer = null;
+
+
+  /* =====================================================
+     ELEMENTS
+     ===================================================== */
+
+  const devicePage =
+    document.getElementById("devicePage");
+
+  const scannerPage =
+    document.getElementById("scannerPage");
+
+  const deviceCode =
+    document.getElementById("deviceCode");
+
+  const continueBtn =
+    document.getElementById("continueBtn");
+
+  const toggleDeviceCode =
+    document.getElementById("toggleDeviceCode");
+
+  const deviceMessage =
+    document.getElementById("deviceMessage");
+
+  const switchCameraBtn =
+    document.getElementById("switchCameraBtn");
+
+  const scanOverlay =
+    document.getElementById("scanOverlay");
+
+  const overlayContent =
+    document.getElementById("overlayContent");
+
+  const readyBar =
+    document.getElementById("readyBar");
+
+  const sectionAttendance =
+    document.getElementById("sectionAttendance");
+
+  const attendanceUpdated =
+    document.getElementById("attendanceUpdated");
+
+
+  /* =====================================================
+     DEVICE CODE SHOW / HIDE
+     ===================================================== */
+
+  toggleDeviceCode.addEventListener(
+    "click",
+    function() {
+
+      if (deviceCode.type === "password") {
+
+        deviceCode.type = "text";
+
+        toggleDeviceCode.textContent = "🙈";
+
+        toggleDeviceCode.setAttribute(
+          "aria-label",
+          "Hide device code"
+        );
+
+      } else {
+
+        deviceCode.type = "password";
+
+        toggleDeviceCode.textContent = "👁";
+
+        toggleDeviceCode.setAttribute(
+          "aria-label",
+          "Show device code"
+        );
+
+      }
+
+    }
+  );
+
+
+  /* =====================================================
+     BEEP
+     ===================================================== */
+
+  function beep(
+    frequency = 900,
+    duration = 120
+  ) {
+
+    try {
+
+      const AudioContext =
+        window.AudioContext ||
+        window.webkitAudioContext;
+
+      const audioContext =
+        new AudioContext();
+
+      const oscillator =
+        audioContext.createOscillator();
+
+      const gain =
+        audioContext.createGain();
+
+      oscillator.type = "sine";
+
+      oscillator.frequency.value =
+        frequency;
+
+      gain.gain.value = 0.18;
+
+      oscillator.connect(gain);
+
+      gain.connect(
+        audioContext.destination
       );
 
+      oscillator.start();
 
-/* =====================================================
-   PLATFORM
-   ===================================================== */
+      setTimeout(
+        function() {
 
-function detectPlatform() {
+          oscillator.stop();
 
-  const ua =
-    navigator.userAgent ||
-    navigator.vendor ||
-    window.opera ||
-    "";
+          audioContext.close();
 
-  const isAndroid =
-    /Android/i.test(ua);
+        },
+        duration
+      );
 
-  const isIOS =
-    /iPhone|iPad|iPod/i.test(ua);
+    } catch (error) {
 
-  const isTouchDevice =
-    ("ontouchstart" in window) ||
-    (
-      navigator.maxTouchPoints &&
-      navigator.maxTouchPoints > 0
-    );
+      console.log(
+        "Beep unavailable:",
+        error
+      );
 
-  if (
-    isAndroid ||
-    isIOS ||
-    (
-      isTouchDevice &&
-      window.innerWidth <= 900
-    )
-  ) {
-    return "mobile";
+    }
+
   }
 
-  return "laptop";
-}
 
-
-const CLIENT_PLATFORM =
-  detectPlatform();
-
-
-/* =====================================================
-   VARIABLES
-   ===================================================== */
-
-let deviceKey = "";
-
-let sessionToken = "";
-
-let html5QrCode = null;
-
-let cameras = [];
-
-let currentCameraIndex = 0;
-
-let scannerRunning = false;
-
-let processing = false;
-
-let attendanceTimer = null;
-
-let heartbeatTimer = null;
-
-let sessionReleased = false;
-
-
-/* =====================================================
-   ELEMENTS
-   ===================================================== */
-
-const devicePage =
-  document.getElementById("devicePage");
-
-const scannerPage =
-  document.getElementById("scannerPage");
-
-const deviceCode =
-  document.getElementById("deviceCode");
-
-const continueBtn =
-  document.getElementById("continueBtn");
-
-const toggleDeviceCode =
-  document.getElementById("toggleDeviceCode");
-
-const deviceMessage =
-  document.getElementById("deviceMessage");
-
-const switchCameraBtn =
-  document.getElementById("switchCameraBtn");
-
-const scanOverlay =
-  document.getElementById("scanOverlay");
-
-const overlayContent =
-  document.getElementById("overlayContent");
-
-const readyBar =
-  document.getElementById("readyBar");
-
-const sectionAttendance =
-  document.getElementById("sectionAttendance");
-
-const attendanceUpdated =
-  document.getElementById("attendanceUpdated");
-
-
-/* =====================================================
-   JSONP
-   ===================================================== */
+  /* =====================================================
+     GOOGLE APPS SCRIPT JSONP REQUEST
+     ===================================================== */
 
 function jsonpRequest(url) {
 
@@ -990,9 +1157,7 @@ function jsonpRequest(url) {
       "senhsCallback_" +
       Date.now() +
       "_" +
-      Math.floor(
-        Math.random() * 100000
-      );
+      Math.floor(Math.random() * 100000);
 
     const script =
       document.createElement("script");
@@ -1030,7 +1195,6 @@ function jsonpRequest(url) {
       } catch (e) {
         window[callbackName] = undefined;
       }
-
     }
 
 
@@ -1044,7 +1208,6 @@ function jsonpRequest(url) {
         cleanup();
 
         resolve(data);
-
       };
 
 
@@ -1062,23 +1225,21 @@ function jsonpRequest(url) {
             "Unable to connect to server."
           )
         );
-
       };
 
 
-    const separator =
-      url.indexOf("?") !== -1
-        ? "&"
-        : "?";
+    let separator = "?";
+
+    if (url.indexOf("?") !== -1) {
+      separator = "&";
+    }
 
 
     script.src =
       url +
       separator +
       "callback=" +
-      encodeURIComponent(
-        callbackName
-      ) +
+      encodeURIComponent(callbackName) +
       "&_=" +
       Date.now();
 
@@ -1091,149 +1252,125 @@ function jsonpRequest(url) {
 
 }
 
+  /* =====================================================
+     DEVICE MESSAGE
+     ===================================================== */
 
-/* =====================================================
-   DEVICE MESSAGE
-   ===================================================== */
+  function showDeviceMessage(
+    message,
+    type
+  ) {
 
-function showDeviceMessage(
-  message,
-  type
-) {
+    deviceMessage.textContent =
+      message;
 
-  deviceMessage.textContent =
-    message;
-
-  deviceMessage.className =
-    type || "";
-
-}
-
-
-/* =====================================================
-   SESSION PARAMETERS
-   ===================================================== */
-
-function getSessionParams() {
-
-  return (
-    "&device=" +
-    encodeURIComponent(deviceKey) +
-
-    "&session=" +
-    encodeURIComponent(sessionToken) +
-
-    "&client=" +
-    encodeURIComponent(CLIENT_ID) +
-
-    "&platform=" +
-    encodeURIComponent(CLIENT_PLATFORM)
-  );
-
-}
-
-
-/* =====================================================
-   VERIFY DEVICE
-   ===================================================== */
-
-async function verifyDevice() {
-
-  const key =
-    deviceCode.value.trim();
-
-
-  if (!key) {
-
-    showDeviceMessage(
-      "Please enter the Device Code.",
-      "error"
-    );
-
-    return;
+    deviceMessage.className =
+      type || "";
 
   }
 
 
-  continueBtn.disabled =
-    true;
+  /* =====================================================
+     VERIFY DEVICE
+     ===================================================== */
 
-  continueBtn.textContent =
-    "CHECKING...";
+  async function verifyDevice() {
 
-
-  showDeviceMessage(
-    "Checking device...",
-    ""
-  );
+    const key =
+      deviceCode.value.trim();
 
 
-  try {
+    if (!key) {
 
-    const requestUrl =
-      APPS_SCRIPT_URL +
-      "?device=" +
-      encodeURIComponent(key) +
-      "&client=" +
-      encodeURIComponent(CLIENT_ID) +
-      "&platform=" +
-      encodeURIComponent(CLIENT_PLATFORM);
-
-
-    const result =
-      await jsonpRequest(
-        requestUrl
+      showDeviceMessage(
+        "Please enter the Device Code.",
+        "error"
       );
 
+      return;
 
-    console.log(
-      "DEVICE LOGIN RESULT:",
-      result
+    }
+
+
+    continueBtn.disabled = true;
+
+    continueBtn.textContent =
+      "CHECKING...";
+
+
+    showDeviceMessage(
+      "Checking device...",
+      ""
     );
 
 
-    if (
-      result &&
-      result.success &&
-      result.authorized &&
-      result.session
-    ) {
+    try {
 
-      deviceKey =
-        key;
-
-      sessionToken =
-        result.session;
-
-      sessionReleased =
-        false;
+      const requestUrl =
+        APPS_SCRIPT_URL +
+        "?device=" +
+        encodeURIComponent(key);
 
 
-      showDeviceMessage(
-        "Device authorized.",
-        "success"
+      const result =
+        await jsonpRequest(
+          requestUrl
+        );
+
+
+      if (
+        result &&
+        result.success &&
+        result.authorized
+      ) {
+
+        deviceKey =
+          key;
+
+
+        showDeviceMessage(
+          "Device authorized.",
+          "success"
+        );
+
+
+        setTimeout(
+          function() {
+
+            openScannerPage();
+
+          },
+          300
+        );
+
+
+      } else {
+
+        showDeviceMessage(
+          "Access denied. Device not recognized.",
+          "error"
+        );
+
+
+        continueBtn.disabled =
+          false;
+
+        continueBtn.textContent =
+          "CONTINUE";
+
+      }
+
+
+    } catch (error) {
+
+      console.error(
+        "Device verification error:",
+        error
       );
 
 
-      startHeartbeat();
-
-
-      setTimeout(function() {
-
-        openScannerPage();
-
-      }, 300);
-
-
-    } else {
-
       showDeviceMessage(
-        (
-          result &&
-          result.message
-        )
-          ? result.message
-          : "Access denied. Device not recognized.",
+        "Unable to connect to server.",
         "error"
       );
 
@@ -1246,19 +1383,20 @@ async function verifyDevice() {
 
     }
 
-
-  } catch (error) {
-
-    console.error(
-      "Device verification error:",
-      error
-    );
+  }
 
 
-    showDeviceMessage(
-      "Unable to connect to server.",
-      "error"
-    );
+  /* =====================================================
+     OPEN SCANNER
+     ===================================================== */
+
+  async function openScannerPage() {
+
+    devicePage.style.display =
+      "none";
+
+    scannerPage.style.display =
+      "block";
 
 
     continueBtn.disabled =
@@ -1267,1378 +1405,581 @@ async function verifyDevice() {
     continueBtn.textContent =
       "CONTINUE";
 
-  }
 
-}
-
-
-/* =====================================================
-   HEARTBEAT
-   ===================================================== */
-
-function startHeartbeat() {
-
-  stopHeartbeat();
-
-  heartbeatTimer =
-    setInterval(
-      sendHeartbeat,
-      20000
-    );
-
-  sendHeartbeat();
-
-}
+    await startCamera();
 
 
-function stopHeartbeat() {
-
-  if (heartbeatTimer) {
-
-    clearInterval(
-      heartbeatTimer
-    );
-
-    heartbeatTimer =
-      null;
-
-  }
-
-}
+    loadAttendanceSummary();
 
 
-async function sendHeartbeat() {
+    if (!attendanceTimer) {
 
-  if (
-    !deviceKey ||
-    !sessionToken ||
-    sessionReleased
-  ) {
-    return;
-  }
-
-
-  try {
-
-    const result =
-      await jsonpRequest(
-        APPS_SCRIPT_URL +
-        "?heartbeat=1" +
-        getSessionParams()
-      );
-
-
-    if (
-      !result ||
-      !result.success
-    ) {
-
-      console.warn(
-        "Heartbeat rejected:",
-        result
-      );
+      attendanceTimer =
+        setInterval(
+          loadAttendanceSummary,
+          5000
+        );
 
     }
 
-  } catch (error) {
+  }
 
-    console.log(
-      "Heartbeat:",
-      error
+
+  /* =====================================================
+     PM DISPLAY
+     ===================================================== */
+
+  function isPMDisplayTime() {
+
+    const now =
+      new Date();
+
+    const currentMinutes =
+      now.getHours() * 60 +
+      now.getMinutes();
+
+    return (
+      currentMinutes >= 725
     );
 
   }
 
-}
+
+  function updateSchoolSummaryPMDisplay() {
+
+    const showPM =
+      isPMDisplayTime();
 
 
-/* =====================================================
-   RELEASE
-   ===================================================== */
+    const pmCards = [
 
-function releaseDeviceSession() {
+      "jhsPmPresentCard",
+      "jhsPmAbsentCard",
+      "jhsPmLateCard",
+      "shsPmPresentCard",
+      "shsPmAbsentCard",
+      "shsPmLateCard"
 
-  if (
-    !deviceKey ||
-    !sessionToken ||
-    sessionReleased
-  ) {
-    return;
+    ];
+
+
+    pmCards.forEach(
+      function(id) {
+
+        const card =
+          document.getElementById(id);
+
+        if (!card) {
+          return;
+        }
+
+        card.style.display =
+          showPM
+            ? ""
+            : "none";
+
+      }
+    );
+
   }
 
 
-  sessionReleased =
-    true;
+  /* =====================================================
+     EMPTY SUMMARY
+     ===================================================== */
 
-  stopHeartbeat();
+  function createEmptySummary() {
+
+    return {
+
+      total: 0,
+      amPresent: 0,
+      amAbsent: 0,
+      amLate: 0,
+      pmPresent: 0,
+      pmAbsent: 0,
+      pmLate: 0
+
+    };
+
+  }
 
 
-  const params =
-    "release=1" +
+  /* =====================================================
+     JHS / SHS SUMMARY
+     ===================================================== */
 
-    "&device=" +
-    encodeURIComponent(deviceKey) +
+  function getJhsShsSummary(
+    sections
+  ) {
 
-    "&session=" +
-    encodeURIComponent(sessionToken) +
+    const jhs =
+      createEmptySummary();
 
-    "&client=" +
-    encodeURIComponent(CLIENT_ID) +
-
-    "&platform=" +
-    encodeURIComponent(CLIENT_PLATFORM);
+    const shs =
+      createEmptySummary();
 
 
-  try {
+    (sections || []).forEach(
+      function(section) {
 
-    if (navigator.sendBeacon) {
+        const sectionName =
+          String(
+            section.section || ""
+          ).trim();
 
-      const blob =
-        new Blob(
-          [params],
-          {
-            type:
-              "application/x-www-form-urlencoded"
-          }
+
+        const grade =
+          getGradeNumber(
+            sectionName
+          );
+
+
+        let target = null;
+
+
+        if (
+          grade >= 7 &&
+          grade <= 10
+        ) {
+
+          target = jhs;
+
+        } else if (
+          grade >= 11 &&
+          grade <= 12
+        ) {
+
+          target = shs;
+
+        }
+
+
+        if (!target) {
+          return;
+        }
+
+
+        target.total +=
+          Number(section.total || 0);
+
+        target.amPresent +=
+          Number(section.amPresent || 0);
+
+        target.amAbsent +=
+          Number(section.amAbsent || 0);
+
+        target.amLate +=
+          Number(section.amLate || 0);
+
+        target.pmPresent +=
+          Number(section.pmPresent || 0);
+
+        target.pmAbsent +=
+          Number(section.pmAbsent || 0);
+
+        target.pmLate +=
+          Number(section.pmLate || 0);
+
+      }
+    );
+
+
+    return {
+      jhs: jhs,
+      shs: shs
+    };
+
+  }
+
+
+  /* =====================================================
+     DISPLAY SUMMARY
+     ===================================================== */
+
+  function displayGroupSummary(
+    prefix,
+    data
+  ) {
+
+    document.getElementById(
+      prefix + "Total"
+    ).textContent =
+      Number(data.total || 0);
+
+
+    document.getElementById(
+      prefix + "AmPresent"
+    ).textContent =
+      Number(data.amPresent || 0);
+
+
+    document.getElementById(
+      prefix + "AmAbsent"
+    ).textContent =
+      Number(data.amAbsent || 0);
+
+
+    document.getElementById(
+      prefix + "AmLate"
+    ).textContent =
+      Number(data.amLate || 0);
+
+
+    document.getElementById(
+      prefix + "PmPresent"
+    ).textContent =
+      Number(data.pmPresent || 0);
+
+
+    document.getElementById(
+      prefix + "PmAbsent"
+    ).textContent =
+      Number(data.pmAbsent || 0);
+
+
+    document.getElementById(
+      prefix + "PmLate"
+    ).textContent =
+      Number(data.pmLate || 0);
+
+  }
+
+
+  /* =====================================================
+     LOAD ATTENDANCE
+     ===================================================== */
+
+  async function loadAttendanceSummary() {
+
+    try {
+
+      const requestUrl =
+        APPS_SCRIPT_URL +
+        "?summary=today";
+
+
+      const result =
+        await jsonpRequest(
+          requestUrl
         );
 
 
-      const sent =
-        navigator.sendBeacon(
-          APPS_SCRIPT_URL,
-          blob
+      if (
+        !result ||
+        !result.success
+      ) {
+
+        throw new Error(
+          "Unable to load attendance."
         );
 
-
-      if (sent) {
-        return;
       }
 
-    }
 
-  } catch (error) {
-
-    console.log(
-      "Beacon release error:",
-      error
-    );
-
-  }
-
-
-  try {
-
-    const img =
-      new Image();
-
-    img.src =
-      APPS_SCRIPT_URL +
-      "?" +
-      params +
-      "&_=" +
-      Date.now();
-
-  } catch (error) {
-
-    console.log(
-      "Release fallback error:",
-      error
-    );
-
-  }
-
-}
-
-
-window.addEventListener(
-  "pagehide",
-  releaseDeviceSession
-);
-
-window.addEventListener(
-  "beforeunload",
-  releaseDeviceSession
-);
-
-
-/* =====================================================
-   OPEN SCANNER
-   ===================================================== */
-
-async function openScannerPage() {
-
-  devicePage.style.display =
-    "none";
-
-  scannerPage.style.display =
-    "block";
-
-
-  await startCamera();
-
-  loadAttendanceSummary();
-
-
-  if (!attendanceTimer) {
-
-    attendanceTimer =
-      setInterval(
-        loadAttendanceSummary,
-        5000
-      );
-
-  }
-
-}
-
-
-/* =====================================================
-   PM
-   ===================================================== */
-
-function isPMDisplayTime() {
-
-  const now =
-    new Date();
-
-  const currentMinutes =
-    now.getHours() * 60 +
-    now.getMinutes();
-
-  return currentMinutes >= 725;
-
-}
-
-
-function updateSchoolSummaryPMDisplay() {
-
-  const showPM =
-    isPMDisplayTime();
-
-
-  [
-    "jhsPmPresentCard",
-    "jhsPmAbsentCard",
-    "jhsPmLateCard",
-    "shsPmPresentCard",
-    "shsPmAbsentCard",
-    "shsPmLateCard"
-  ].forEach(function(id) {
-
-    const card =
-      document.getElementById(id);
-
-    if (!card) return;
-
-    card.style.display =
-      showPM ? "" : "none";
-
-  });
-
-}
-
-
-/* =====================================================
-   SUMMARY
-   ===================================================== */
-
-function createEmptySummary() {
-
-  return {
-    total: 0,
-    amPresent: 0,
-    amAbsent: 0,
-    amLate: 0,
-    pmPresent: 0,
-    pmAbsent: 0,
-    pmLate: 0
-  };
-
-}
-
-
-function getGradeNumber(
-  sectionName
-) {
-
-  const match =
-    String(
-      sectionName || ""
-    ).match(
-      /\b(7|8|9|10|11|12)\b/
-    );
-
-
-  return match
-    ? Number(match[1])
-    : 99;
-
-}
-
-
-function getJhsShsSummary(
-  sections
-) {
-
-  const jhs =
-    createEmptySummary();
-
-  const shs =
-    createEmptySummary();
-
-
-  (sections || []).forEach(
-    function(section) {
-
-      const grade =
-        getGradeNumber(
-          section.section
+      const grouped =
+        getJhsShsSummary(
+          result.sections || []
         );
 
 
-      const target =
-        grade >= 7 && grade <= 10
-          ? jhs
-          : grade >= 11 && grade <= 12
-            ? shs
-            : null;
-
-
-      if (!target) return;
-
-
-      target.total +=
-        Number(section.total || 0);
-
-      target.amPresent +=
-        Number(section.amPresent || 0);
-
-      target.amAbsent +=
-        Number(section.amAbsent || 0);
-
-      target.amLate +=
-        Number(section.amLate || 0);
-
-      target.pmPresent +=
-        Number(section.pmPresent || 0);
-
-      target.pmAbsent +=
-        Number(section.pmAbsent || 0);
-
-      target.pmLate +=
-        Number(section.pmLate || 0);
-
-    }
-  );
-
-
-  return {
-    jhs,
-    shs
-  };
-
-}
-
-
-function displayGroupSummary(
-  prefix,
-  data
-) {
-
-  [
-    ["Total", data.total],
-    ["AmPresent", data.amPresent],
-    ["AmAbsent", data.amAbsent],
-    ["AmLate", data.amLate],
-    ["PmPresent", data.pmPresent],
-    ["PmAbsent", data.pmAbsent],
-    ["PmLate", data.pmLate]
-  ].forEach(function(item) {
-
-    const el =
-      document.getElementById(
-        prefix + item[0]
-      );
-
-    if (el) {
-      el.textContent =
-        Number(item[1] || 0);
-    }
-
-  });
-
-}
-
-
-/* =====================================================
-   LOAD ATTENDANCE
-   ===================================================== */
-
-async function loadAttendanceSummary() {
-
-  try {
-
-    const result =
-      await jsonpRequest(
-        APPS_SCRIPT_URL +
-        "?summary=today"
+      displayGroupSummary(
+        "jhs",
+        grouped.jhs
       );
 
 
-    if (
-      !result ||
-      !result.success
-    ) {
-      throw new Error(
-        "Unable to load attendance."
+      displayGroupSummary(
+        "shs",
+        grouped.shs
       );
-    }
 
 
-    const grouped =
-      getJhsShsSummary(
+      updateSchoolSummaryPMDisplay();
+
+
+      renderSectionAttendance(
         result.sections || []
       );
 
 
-    displayGroupSummary(
-      "jhs",
-      grouped.jhs
-    );
-
-    displayGroupSummary(
-      "shs",
-      grouped.shs
-    );
-
-
-    updateSchoolSummaryPMDisplay();
+      attendanceUpdated.textContent =
+        "Updated " +
+        new Date().toLocaleTimeString(
+          [],
+          {
+            hour: "2-digit",
+            minute: "2-digit",
+            second: "2-digit"
+          }
+        );
 
 
-    renderSectionAttendance(
-      result.sections || []
-    );
+    } catch (error) {
 
-
-    attendanceUpdated.textContent =
-      "Updated " +
-      new Date().toLocaleTimeString(
-        [],
-        {
-          hour: "2-digit",
-          minute: "2-digit",
-          second: "2-digit"
-        }
+      console.error(
+        "Attendance update error:",
+        error
       );
 
-
-  } catch (error) {
-
-    console.error(
-      "Attendance update error:",
-      error
-    );
-
-    attendanceUpdated.textContent =
-      "Unable to update attendance.";
-
-  }
-
-}
-
-
-/* =====================================================
-   SECTION TABLE
-   ===================================================== */
-
-function sortSections(
-  sections
-) {
-
-  return sections
-    .slice()
-    .sort(function(a, b) {
-
-      const gradeA =
-        getGradeNumber(a.section);
-
-      const gradeB =
-        getGradeNumber(b.section);
-
-
-      if (gradeA !== gradeB) {
-        return gradeA - gradeB;
-      }
-
-
-      return String(
-        a.section || ""
-      ).localeCompare(
-        String(
-          b.section || ""
-        ),
-        undefined,
-        {
-          numeric: true,
-          sensitivity: "base"
-        }
-      );
-
-    });
-
-}
-
-
-function renderSectionAttendance(
-  sections
-) {
-
-  const sorted =
-    sortSections(
-      sections
-    );
-
-
-  if (!sorted.length) {
-
-    sectionAttendance.innerHTML =
-      '<div style="color:#ffffff;text-align:center;padding:15px;">No section data available.</div>';
-
-    return;
-
-  }
-
-
-  const showPM =
-    isPMDisplayTime();
-
-
-  let html =
-    '<div class="section-table-wrap">' +
-    '<table class="section-table">' +
-    '<thead><tr>' +
-
-    '<th class="section-head">SECTION</th>' +
-    '<th class="total-head">TOTAL</th>' +
-    '<th class="am-present-head">AM<br>P</th>' +
-    '<th class="am-absent-head">AM<br>A</th>' +
-    '<th class="am-late-head">AM<br>L</th>';
-
-
-  if (showPM) {
-
-    html +=
-      '<th class="pm-present-head">PM<br>P</th>' +
-      '<th class="pm-absent-head">PM<br>A</th>' +
-      '<th class="pm-late-head">PM<br>L</th>';
-
-  }
-
-
-  html +=
-    '</tr></thead><tbody>';
-
-
-  sorted.forEach(function(section) {
-
-    html +=
-      '<tr>' +
-
-      '<td class="section-table-name">' +
-      escapeHtml(section.section || "") +
-      '</td>' +
-
-      '<td class="total-cell">' +
-      Number(section.total || 0) +
-      '</td>' +
-
-      '<td class="am-present-cell">' +
-      Number(section.amPresent || 0) +
-      '</td>' +
-
-      '<td class="am-absent-cell">' +
-      Number(section.amAbsent || 0) +
-      '</td>' +
-
-      '<td class="am-late-cell">' +
-      Number(section.amLate || 0) +
-      '</td>';
-
-
-    if (showPM) {
-
-      html +=
-        '<td class="pm-present-cell">' +
-        Number(section.pmPresent || 0) +
-        '</td>' +
-
-        '<td class="pm-absent-cell">' +
-        Number(section.pmAbsent || 0) +
-        '</td>' +
-
-        '<td class="pm-late-cell">' +
-        Number(section.pmLate || 0) +
-        '</td>';
+      attendanceUpdated.textContent =
+        "Unable to update attendance.";
 
     }
 
-
-    html +=
-      '</tr>';
-
-  });
+  }
 
 
-  html +=
-    '</tbody></table></div>';
+  /* =====================================================
+     GRADE
+     ===================================================== */
+
+  function getGradeNumber(
+    sectionName
+  ) {
+
+    const match =
+      String(sectionName || "")
+        .match(
+          /\b(7|8|9|10|11|12)\b/
+        );
 
 
-  sectionAttendance.innerHTML =
-    html;
-
-}
-
-
-/* =====================================================
-   CAMERA
-   ===================================================== */
-
-async function startCamera() {
-
-  try {
-
-    cameras =
-      await Html5Qrcode.getCameras();
-
-
-    if (
-      !cameras ||
-      !cameras.length
-    ) {
-
-      showOverlay(
-        "CAMERA ERROR",
-        "No camera was found on this device.",
-        true
-      );
-
-      return;
-
+    if (!match) {
+      return 99;
     }
 
 
-    const backIndex =
-      cameras.findIndex(
-        function(camera) {
+    return Number(
+      match[1]
+    );
 
-          return /back|rear|environment/i.test(
-            camera.label || ""
+  }
+
+
+  /* =====================================================
+     SORT SECTIONS
+     ===================================================== */
+
+  function sortSections(
+    sections
+  ) {
+
+    return sections
+      .slice()
+      .sort(
+        function(a,b) {
+
+          const nameA =
+            String(a.section || "");
+
+          const nameB =
+            String(b.section || "");
+
+
+          const gradeA =
+            getGradeNumber(nameA);
+
+          const gradeB =
+            getGradeNumber(nameB);
+
+
+          if (
+            gradeA !== gradeB
+          ) {
+
+            return gradeA - gradeB;
+
+          }
+
+
+          return nameA.localeCompare(
+            nameB,
+            undefined,
+            {
+              numeric: true,
+              sensitivity: "base"
+            }
           );
 
         }
       );
 
-
-    currentCameraIndex =
-      backIndex >= 0
-        ? backIndex
-        : 0;
-
-
-    html5QrCode =
-      new Html5Qrcode(
-        "reader"
-      );
-
-
-    await startSelectedCamera();
-
-
-  } catch (error) {
-
-    console.error(
-      "Start camera error:",
-      error
-    );
-
-
-    showOverlay(
-      "CAMERA ERROR",
-      "Please allow camera permission and try again.",
-      true
-    );
-
   }
 
-}
 
+  /* =====================================================
+     SECTION TABLE
+     ===================================================== */
 
-async function startSelectedCamera() {
-
-  if (
-    !html5QrCode ||
-    !cameras.length ||
-    scannerRunning
+  function renderSectionAttendance(
+    sections
   ) {
-    return;
-  }
 
-
-  const camera =
-    cameras[currentCameraIndex];
-
-
-  if (!camera) return;
-
-
-  await html5QrCode.start(
-
-    camera.id,
-
-    {
-      fps: 15,
-
-      qrbox:
-        function(
-          width,
-          height
-        ) {
-
-          const size =
-            Math.min(
-              width,
-              height
-            ) * 0.80;
-
-          return {
-            width: size,
-            height: size
-          };
-
-        },
-
-      aspectRatio: 1.0
-
-    },
-
-    onQrDetected,
-
-    function() {}
-
-  );
-
-
-  scannerRunning =
-    true;
-
-  processing =
-    false;
-
-
-  hideOverlay();
-
-
-  readyBar.textContent =
-    "● READY TO SCAN";
-
-  readyBar.style.color =
-    "#16803c";
-
-}
-
-
-/* =====================================================
-   QR SCAN
-   ===================================================== */
-
-async function onQrDetected(
-  decodedText
-) {
-
-  if (processing) return;
-
-
-  processing =
-    true;
-
-
-  window.qrProcessingStart =
-    performance.now();
-
-
-  beep(
-    1000,
-    130
-  );
-
-
-  try {
-
-    if (
-      html5QrCode &&
-      scannerRunning
-    ) {
-
-      await html5QrCode.pause(true);
-
-    }
-
-  } catch (error) {
-
-    console.log(
-      "Pause error:",
-      error
-    );
-
-  }
-
-
-  readyBar.textContent =
-    "PROCESSING...";
-
-  readyBar.style.color =
-    "#1267a5";
-
-
-  showProcessing();
-
-
-  let lrn =
-    String(
-      decodedText || ""
-    ).trim();
-
-
-  try {
-
-    if (
-      lrn.startsWith("http://") ||
-      lrn.startsWith("https://")
-    ) {
-
-      const qrUrl =
-        new URL(lrn);
-
-
-      const urlLrn =
-        qrUrl.searchParams.get("lrn");
-
-      const urlId =
-        qrUrl.searchParams.get("id");
-
-
-      if (urlLrn) {
-
-        lrn =
-          urlLrn.trim();
-
-      } else if (urlId) {
-
-        lrn =
-          urlId.trim();
-
-      }
-
-    }
-
-  } catch (error) {
-
-    console.log(
-      "QR URL parsing skipped:",
-      error
-    );
-
-  }
-
-
-  try {
-
-    const result =
-      await jsonpRequest(
-
-        APPS_SCRIPT_URL +
-
-        "?lrn=" +
-        encodeURIComponent(lrn) +
-
-        getSessionParams()
-
+    const sorted =
+      sortSections(
+        sections
       );
 
 
-    console.log(
-      "SCAN RESULT:",
-      result
-    );
-
-
-    showResult(
-      result
-    );
-
-
     if (
-      result &&
-      result.success
+      sorted.length === 0
     ) {
 
-      beep(
-        1400,
-        180
-      );
+      sectionAttendance.innerHTML =
+        '<div style="color:#ffffff;text-align:center;padding:15px;">No section data available.</div>';
 
-
-      setTimeout(
-        loadAttendanceSummary,
-        500
-      );
+      return;
 
     }
 
 
-  } catch (error) {
-
-    console.error(
-      "QR server error:",
-      error
-    );
-
-
-    showResult({
-
-      success: false,
-
-      message:
-        "Unable to connect to server."
-
-    });
-
-  }
-
-}
-
-
-/* =====================================================
-   PROCESSING
-   ===================================================== */
-
-function showProcessing() {
-
-  scanOverlay.style.display =
-    "flex";
-
-  scanOverlay.style.background =
-    "rgba(0,0,0,0.72)";
-
-
-  overlayContent.innerHTML =
-
-    '<div style="' +
-    'width:100%;' +
-    'max-width:700px;' +
-    'padding:30px 20px;' +
-    'text-align:center;' +
-    'background:#0d47a1;' +
-    'border:3px solid #ffffff;' +
-    'border-radius:20px;' +
-    'box-sizing:border-box;' +
-    'color:#ffffff;' +
-    '">' +
-
-    '<div class="processing-title">' +
-    'PROCESSING...' +
-    '</div>' +
-
-    '<div class="processing-text">' +
-    'Please wait while the attendance is being recorded.' +
-    '</div>' +
-
-    '</div>';
-
-}
-
-
-/* =====================================================
-   RESULT
-   ===================================================== */
-
-function showResult(
-  result
-) {
-
-  if (showResult.timer) {
-
-    clearTimeout(
-      showResult.timer
-    );
-
-  }
-
-
-  scanOverlay.style.display =
-    "flex";
-
-
-  const isSuccess =
-    result &&
-    result.success;
-
-
-  const isLate =
-    isSuccess &&
-    result.status === "LATE";
-
-
-  scanOverlay.style.background =
-    isLate || !isSuccess
-      ? "#b71c1c"
-      : "#0d47a1";
-
-
-  if (isSuccess) {
-
-    const name =
-      result.name ||
-      "STUDENT";
-
-    const section =
-      result.section ||
-      "";
-
-    const event =
-      result.event ||
-      "";
+    const showPM =
+      isPMDisplayTime();
 
 
     let html =
-
-      '<div style="' +
-      'width:100%;' +
-      'max-width:850px;' +
-      'margin:auto;' +
-      'padding:28px 20px;' +
-      'text-align:center;' +
-      'background:#0d47a1;' +
-      'border:3px solid #ffffff;' +
-      'border-radius:20px;' +
-      'box-sizing:border-box;' +
-      'color:#ffffff;' +
-      'font-family:Arial,sans-serif;' +
-      '">' +
-
-      '<div style="' +
-      'font-size:34px;' +
-      'font-weight:900;' +
-      'color:#ffffff;' +
-      'line-height:1.15;' +
-      'margin:15px 0;' +
-      '">' +
-
-      escapeHtml(name) +
-
-      '</div>' +
-
-      '<div style="' +
-      'font-size:22px;' +
-      'font-weight:700;' +
-      'color:#ffffff;' +
-      'margin-bottom:22px;' +
-      '">' +
-
-      escapeHtml(section) +
-
-      '</div>' +
-
-      '<div style="' +
-      'display:inline-block;' +
-      'padding:10px 25px;' +
-      'font-size:28px;' +
-      'font-weight:900;' +
-      'color:#ffffff;' +
-      'background:#1565c0;' +
-      'border:2px solid #ffffff;' +
-      'border-radius:12px;' +
-      '">' +
-
-      escapeHtml(event) +
-
-      '</div>';
+      '<div class="section-table-wrap">' +
+      '<table class="section-table">' +
+      '<thead>' +
+      '<tr>' +
+      '<th class="section-head">SECTION</th>' +
+      '<th class="total-head">TOTAL</th>' +
+      '<th class="am-present-head">AM<br>P</th>' +
+      '<th class="am-absent-head">AM<br>A</th>' +
+      '<th class="am-late-head">AM<br>L</th>';
 
 
-    if (isLate) {
+    if (showPM) {
 
       html +=
-
-        '<div style="' +
-        'margin-top:18px;' +
-        'font-size:30px;' +
-        'font-weight:900;' +
-        'color:#ffffff;' +
-        'background:#8b0000;' +
-        'border:2px solid #ffffff;' +
-        'border-radius:12px;' +
-        'padding:8px 25px;' +
-        'display:inline-block;' +
-        '">' +
-
-        'LATE' +
-
-        '</div>';
+        '<th class="pm-present-head">PM<br>P</th>' +
+        '<th class="pm-absent-head">PM<br>A</th>' +
+        '<th class="pm-late-head">PM<br>L</th>';
 
     }
 
 
     html +=
+      '</tr>' +
+      '</thead>' +
+      '<tbody>';
+
+
+    sorted.forEach(
+      function(section) {
+
+        html +=
+          '<tr>' +
+
+          '<td class="section-table-name">' +
+          escapeHtml(section.section || "") +
+          '</td>' +
+
+          '<td class="total-cell">' +
+          Number(section.total || 0) +
+          '</td>' +
+
+          '<td class="am-present-cell">' +
+          Number(section.amPresent || 0) +
+          '</td>' +
+
+          '<td class="am-absent-cell">' +
+          Number(section.amAbsent || 0) +
+          '</td>' +
+
+          '<td class="am-late-cell">' +
+          Number(section.amLate || 0) +
+          '</td>';
+
+
+        if (showPM) {
+
+          html +=
+            '<td class="pm-present-cell">' +
+            Number(section.pmPresent || 0) +
+            '</td>' +
+
+            '<td class="pm-absent-cell">' +
+            Number(section.pmAbsent || 0) +
+            '</td>' +
+
+            '<td class="pm-late-cell">' +
+            Number(section.pmLate || 0) +
+            '</td>';
+
+        }
+
+
+        html +=
+          '</tr>';
+
+      }
+    );
+
+
+    html +=
+      '</tbody>' +
+      '</table>' +
       '</div>';
 
 
-    overlayContent.innerHTML =
+    sectionAttendance.innerHTML =
       html;
 
-
-  } else {
-
-    const message =
-      result &&
-      result.message
-        ? result.message
-        : "SCAN FAILED";
-
-
-    overlayContent.innerHTML =
-
-      '<div style="' +
-      'width:100%;' +
-      'max-width:700px;' +
-      'margin:auto;' +
-      'padding:30px 20px;' +
-      'text-align:center;' +
-      'background:#7f0000;' +
-      'border:3px solid #ffffff;' +
-      'border-radius:20px;' +
-      'box-sizing:border-box;' +
-      'color:#ffffff;' +
-      '">' +
-
-      '<div style="' +
-      'font-size:30px;' +
-      'font-weight:900;' +
-      'margin-bottom:18px;' +
-      '">' +
-
-      'SCAN NOT RECORDED' +
-
-      '</div>' +
-
-      '<div style="' +
-      'font-size:20px;' +
-      'font-weight:700;' +
-      '">' +
-
-      escapeHtml(message) +
-
-      '</div>' +
-
-      '</div>';
-
-
-    beep(
-      600,
-      180
-    );
-
   }
 
 
-  showResult.timer =
-    setTimeout(
-      resumeScanner,
-      3000
-    );
+  /* =====================================================
+     START CAMERA
+     ===================================================== */
 
-}
-
-
-/* =====================================================
-   RESUME
-   ===================================================== */
-
-async function resumeScanner() {
-
-  hideOverlay();
-
-
-  readyBar.textContent =
-    "● READY TO SCAN";
-
-  readyBar.style.color =
-    "#16803c";
-
-
-  processing =
-    false;
-
-
-  try {
-
-    if (
-      html5QrCode &&
-      scannerRunning
-    ) {
-
-      await html5QrCode.resume();
-
-    } else {
-
-      await startSelectedCamera();
-
-    }
-
-  } catch (error) {
-
-    console.error(
-      "Resume scanner error:",
-      error
-    );
-
-    scannerRunning =
-      false;
-
-    readyBar.textContent =
-      "CAMERA ERROR";
-
-    readyBar.style.color =
-      "#b71c1c";
-
-  }
-
-}
-
-
-/* =====================================================
-   OVERLAY
-   ===================================================== */
-
-function hideOverlay() {
-
-  scanOverlay.style.display =
-    "none";
-
-}
-
-
-function showOverlay(
-  title,
-  message,
-  isError
-) {
-
-  scanOverlay.style.display =
-    "flex";
-
-  scanOverlay.style.background =
-    isError
-      ? "#b71c1c"
-      : "rgba(0,0,0,0.72)";
-
-
-  overlayContent.innerHTML =
-
-    '<div style="' +
-    'width:100%;' +
-    'max-width:700px;' +
-    'padding:30px 20px;' +
-    'text-align:center;' +
-    'background:' +
-    (
-      isError
-        ? "#7f0000"
-        : "#0d47a1"
-    ) +
-    ';' +
-    'border:3px solid #ffffff;' +
-    'border-radius:20px;' +
-    'box-sizing:border-box;' +
-    'color:#ffffff;' +
-    '">' +
-
-    '<div style="' +
-    'font-size:30px;' +
-    'font-weight:900;' +
-    'margin-bottom:18px;' +
-    '">' +
-
-    escapeHtml(
-      title || "NOTICE"
-    ) +
-
-    '</div>' +
-
-    '<div style="' +
-    'font-size:20px;' +
-    'font-weight:700;' +
-    '">' +
-
-    escapeHtml(
-      message || ""
-    ) +
-
-    '</div>' +
-
-    '</div>';
-
-}
-
-
-/* =====================================================
-   SWITCH CAMERA
-   ===================================================== */
-
-switchCameraBtn.addEventListener(
-  "click",
-  async function() {
-
-    if (
-      processing ||
-      cameras.length < 2 ||
-      !html5QrCode
-    ) {
-      return;
-    }
-
-
-    processing =
-      true;
-
-    switchCameraBtn.disabled =
-      true;
-
-
-    const previousIndex =
-      currentCameraIndex;
-
+  async function startCamera() {
 
     try {
 
-      if (scannerRunning) {
+      cameras =
+        await Html5Qrcode.getCameras();
 
-        try {
-          await html5QrCode.stop();
-        } catch (error) {
-          console.log(error);
-        }
 
-        scannerRunning =
-          false;
+      if (
+        !cameras ||
+        cameras.length === 0
+      ) {
+
+        showOverlay(
+          "CAMERA ERROR",
+          "No camera was found on this device.",
+          true
+        );
+
+        return;
 
       }
 
 
+      const backIndex =
+        cameras.findIndex(
+          function(camera) {
+
+            return /back|rear|environment/i.test(
+              camera.label || ""
+            );
+
+          }
+        );
+
+
       currentCameraIndex =
-        (
-          currentCameraIndex + 1
-        ) %
-        cameras.length;
+        backIndex >= 0
+          ? backIndex
+          : 0;
+
+
+      html5QrCode =
+        new Html5Qrcode(
+          "reader"
+        );
 
 
       await startSelectedCamera();
@@ -2647,33 +1988,102 @@ switchCameraBtn.addEventListener(
     } catch (error) {
 
       console.error(
-        "Camera switch error:",
+        "Start camera error:",
         error
       );
 
 
-      currentCameraIndex =
-        previousIndex;
+      showOverlay(
+        "CAMERA ERROR",
+        "Please allow camera permission and try again.",
+        true
+      );
+
+    }
+
+  }
+
+
+  /* =====================================================
+     START SELECTED CAMERA
+     ===================================================== */
+
+  async function startSelectedCamera() {
+
+    if (!html5QrCode) {
+      return;
+    }
+
+    if (!cameras.length) {
+      return;
+    }
+
+
+    const camera =
+      cameras[currentCameraIndex];
+
+
+    if (!camera) {
+      return;
+    }
+
+
+    if (scannerRunning) {
+      return;
+    }
+
+
+    try {
+
+      await html5QrCode.start(
+
+        camera.id,
+
+        {
+          fps: 15,
+
+          qrbox:
+            function(
+              viewfinderWidth,
+              viewfinderHeight
+            ) {
+
+              const size =
+                Math.min(
+                  viewfinderWidth,
+                  viewfinderHeight
+                ) * 0.80;
+
+
+              return {
+                width: size,
+                height: size
+              };
+
+            },
+
+          aspectRatio: 1.0
+
+        },
+
+        onQrDetected,
+
+        function() {
+          // Normal scanning errors.
+        }
+
+      );
+
 
       scannerRunning =
-        false;
-
-
-      try {
-        await startSelectedCamera();
-      } catch (recoverError) {
-        console.error(
-          recoverError
-        );
-      }
-
-    } finally {
+        true;
 
       processing =
         false;
 
-      switchCameraBtn.disabled =
-        false;
+
+      hideOverlay();
+
 
       readyBar.textContent =
         "● READY TO SCAN";
@@ -2681,264 +2091,869 @@ switchCameraBtn.addEventListener(
       readyBar.style.color =
         "#16803c";
 
-    }
 
-  }
-);
+    } catch (error) {
 
+      scannerRunning =
+        false;
 
-/* =====================================================
-   BUTTONS
-   ===================================================== */
-
-continueBtn.addEventListener(
-  "click",
-  verifyDevice
-);
-
-
-deviceCode.addEventListener(
-  "keydown",
-  function(event) {
-
-    if (
-      event.key === "Enter"
-    ) {
-
-      event.preventDefault();
-
-      verifyDevice();
+      throw error;
 
     }
 
   }
-);
 
 
-toggleDeviceCode.addEventListener(
-  "click",
-  function() {
+  /* =====================================================
+     QR DETECTED
+     ===================================================== */
 
-    if (
-      deviceCode.type === "password"
-    ) {
+  async function onQrDetected(
+    decodedText
+  ) {
 
-      deviceCode.type =
-        "text";
+    if (processing) {
+      return;
+    }
 
-      toggleDeviceCode.textContent =
-        "🙈";
+
+    processing =
+      true;
+
+
+    window.qrProcessingStart =
+      performance.now();
+
+
+    beep(
+      1000,
+      130
+    );
+
+
+    try {
+
+      if (
+        html5QrCode &&
+        scannerRunning
+      ) {
+
+        await html5QrCode.pause(true);
+
+      }
+
+    } catch (error) {
+
+      console.log(
+        "Pause error:",
+        error
+      );
+
+    }
+
+
+    readyBar.textContent =
+      "PROCESSING...";
+
+    readyBar.style.color =
+      "#1267a5";
+
+
+    showProcessing();
+
+
+    let lrn =
+      String(
+        decodedText || ""
+      ).trim();
+
+
+    /*
+     * QR may contain either:
+     * LRN directly
+     * OR a URL containing ?lrn=
+     * OR a URL containing ?id=
+     */
+
+    try {
+
+      if (
+        lrn.startsWith("http://") ||
+        lrn.startsWith("https://")
+      ) {
+
+        const qrUrl =
+          new URL(lrn);
+
+
+        const urlLrn =
+          qrUrl.searchParams.get("lrn");
+
+
+        const urlId =
+          qrUrl.searchParams.get("id");
+
+
+        if (urlLrn) {
+
+          lrn =
+            urlLrn.trim();
+
+        } else if (urlId) {
+
+          lrn =
+            urlId.trim();
+
+        }
+
+      }
+
+    } catch (error) {
+
+      console.log(
+        "QR URL parsing skipped:",
+        error
+      );
+
+    }
+
+
+    try {
+
+      const requestUrl =
+        APPS_SCRIPT_URL +
+        "?lrn=" +
+        encodeURIComponent(lrn) +
+        "&device=" +
+        encodeURIComponent(deviceKey);
+
+
+      const result =
+        await jsonpRequest(
+          requestUrl
+        );
+
+
+      showResult(
+        result
+      );
+
+
+      if (
+        result &&
+        result.success
+      ) {
+
+        beep(
+          1400,
+          180
+        );
+
+
+        setTimeout(
+          loadAttendanceSummary,
+          500
+        );
+
+      }
+
+
+    } catch (error) {
+
+      console.error(
+        "QR server error:",
+        error
+      );
+
+
+      showResult({
+
+        success: false,
+
+        message:
+          "Unable to connect to server."
+
+      });
+
+    }
+
+  }
+
+
+  /* =====================================================
+     PROCESSING
+     ===================================================== */
+
+  function showProcessing() {
+
+    scanOverlay.style.display =
+      "flex";
+
+
+    scanOverlay.style.background =
+      "rgba(0,0,0,0.72)";
+
+
+    overlayContent.innerHTML =
+
+      '<div style="' +
+      'width:100%;' +
+      'max-width:700px;' +
+      'padding:30px 20px;' +
+      'text-align:center;' +
+      'background:#0d47a1;' +
+      'border:3px solid #ffffff;' +
+      'border-radius:20px;' +
+      'box-sizing:border-box;' +
+      'color:#ffffff;' +
+      '">' +
+
+      '<div class="processing-title">' +
+      'PROCESSING...' +
+      '</div>' +
+
+      '<div class="processing-text">' +
+      'Please wait while the attendance is being recorded.' +
+      '</div>' +
+
+      '</div>';
+
+  }
+
+
+  /* =====================================================
+     ERROR OVERLAY
+     ===================================================== */
+
+  function showOverlay(
+    title,
+    message,
+    isError
+  ) {
+
+    scanOverlay.style.display =
+      "flex";
+
+
+    scanOverlay.style.background =
+      isError
+        ? "#b71c1c"
+        : "rgba(0,0,0,0.72)";
+
+
+    overlayContent.innerHTML =
+
+      '<div style="' +
+
+      'width:100%;' +
+      'max-width:700px;' +
+      'padding:30px 20px;' +
+      'text-align:center;' +
+      'background:' +
+      (isError ? "#7f0000" : "#0d47a1") +
+      ';' +
+
+      'border:3px solid #ffffff;' +
+      'border-radius:20px;' +
+      'box-sizing:border-box;' +
+      'color:#ffffff;' +
+
+      '">' +
+
+      '<div style="' +
+      'font-size:30px;' +
+      'font-weight:900;' +
+      'color:#ffffff;' +
+      'margin-bottom:18px;' +
+      '">' +
+
+      escapeHtml(
+        title || "NOTICE"
+      ) +
+
+      '</div>' +
+
+      '<div style="' +
+      'font-size:20px;' +
+      'font-weight:700;' +
+      'color:#ffffff;' +
+      '">' +
+
+      escapeHtml(
+        message || ""
+      ) +
+
+      '</div>' +
+
+      '</div>';
+
+  }
+
+
+  /* =====================================================
+     RESULT
+     ===================================================== */
+
+  function showResult(
+    result
+  ) {
+
+    if (showResult.timer) {
+
+      clearTimeout(
+        showResult.timer
+      );
+
+    }
+
+
+    scanOverlay.style.display =
+      "flex";
+
+
+    const isSuccess =
+      result &&
+      result.success;
+
+
+    const isLate =
+      isSuccess &&
+      result.status === "LATE";
+
+
+    scanOverlay.style.background =
+      isLate || !isSuccess
+        ? "#b71c1c"
+        : "#0d47a1";
+
+
+    if (isSuccess) {
+
+      const name =
+        result.name || "STUDENT";
+
+
+      const section =
+        result.section || "";
+
+
+      const event =
+        result.event || "";
+
+
+      let html =
+
+        '<div style="' +
+
+        'width:100%;' +
+        'max-width:850px;' +
+        'margin:auto;' +
+        'padding:28px 20px;' +
+        'text-align:center;' +
+        'background:#0d47a1;' +
+        'border:3px solid #ffffff;' +
+        'border-radius:20px;' +
+        'box-sizing:border-box;' +
+        'color:#ffffff;' +
+        'font-family:Arial,sans-serif;' +
+
+        '">' +
+
+        '<div style="' +
+        'font-size:34px;' +
+        'font-weight:900;' +
+        'color:#ffffff;' +
+        'line-height:1.15;' +
+        'margin:15px 0;' +
+        '">' +
+
+        escapeHtml(name) +
+
+        '</div>' +
+
+        '<div style="' +
+        'font-size:22px;' +
+        'font-weight:700;' +
+        'color:#ffffff;' +
+        'margin-bottom:22px;' +
+        '">' +
+
+        escapeHtml(section) +
+
+        '</div>' +
+
+        '<div style="' +
+        'display:inline-block;' +
+        'padding:10px 25px;' +
+        'font-size:28px;' +
+        'font-weight:900;' +
+        'color:#ffffff;' +
+        'background:#1565c0;' +
+        'border:2px solid #ffffff;' +
+        'border-radius:12px;' +
+        '">' +
+
+        escapeHtml(event) +
+
+        '</div>';
+
+
+      if (isLate) {
+
+        html +=
+
+          '<div style="' +
+          'margin-top:18px;' +
+          'font-size:30px;' +
+          'font-weight:900;' +
+          'color:#ffffff;' +
+          'background:#8b0000;' +
+          'border:2px solid #ffffff;' +
+          'border-radius:12px;' +
+          'padding:8px 25px;' +
+          'display:inline-block;' +
+          '">' +
+
+          'LATE' +
+
+          '</div>';
+
+      }
+
+
+      html +=
+        '</div>';
+
+
+      overlayContent.innerHTML =
+        html;
+
 
     } else {
 
-      deviceCode.type =
-        "password";
+      const message =
+        result &&
+        result.message
+          ? result.message
+          : "SCAN FAILED";
 
-      toggleDeviceCode.textContent =
-        "👁";
+
+      overlayContent.innerHTML =
+
+        '<div style="' +
+
+        'width:100%;' +
+        'max-width:700px;' +
+        'margin:auto;' +
+        'padding:30px 20px;' +
+        'text-align:center;' +
+        'background:#7f0000;' +
+        'border:3px solid #ffffff;' +
+        'border-radius:20px;' +
+        'box-sizing:border-box;' +
+        'color:#ffffff;' +
+
+        '">' +
+
+        '<div style="' +
+        'font-size:30px;' +
+        'font-weight:900;' +
+        'color:#ffffff;' +
+        'margin-bottom:18px;' +
+        '">' +
+
+        'SCAN NOT RECORDED' +
+
+        '</div>' +
+
+        '<div style="' +
+        'font-size:20px;' +
+        'font-weight:700;' +
+        'color:#ffffff;' +
+        '">' +
+
+        escapeHtml(message) +
+
+        '</div>' +
+
+        '</div>';
+
+
+      beep(
+        600,
+        180
+      );
+
+    }
+
+
+    const processingTime =
+      window.qrProcessingStart
+        ? (
+            (
+              performance.now() -
+              window.qrProcessingStart
+            ) / 1000
+          ).toFixed(2)
+        : "0.00";
+
+
+    console.log(
+      "QR PROCESSING TIME: " +
+      processingTime +
+      " seconds"
+    );
+
+
+    showResult.timer =
+      setTimeout(
+        function() {
+
+          resumeScanner();
+
+        },
+        3000
+      );
+
+  }
+
+
+  /* =====================================================
+     RESUME
+     ===================================================== */
+
+  async function resumeScanner() {
+
+    hideOverlay();
+
+
+    readyBar.textContent =
+      "● READY TO SCAN";
+
+
+    readyBar.style.color =
+      "#16803c";
+
+
+    processing =
+      false;
+
+
+    try {
+
+      if (
+        html5QrCode &&
+        scannerRunning
+      ) {
+
+        await html5QrCode.resume();
+
+      } else {
+
+        await startSelectedCamera();
+
+      }
+
+    } catch (error) {
+
+      console.error(
+        "Resume scanner error:",
+        error
+      );
+
+
+      scannerRunning =
+        false;
+
+
+      readyBar.textContent =
+        "CAMERA ERROR";
+
+
+      readyBar.style.color =
+        "#b71c1c";
 
     }
 
   }
-);
 
 
-/* =====================================================
-   BEEP
-   ===================================================== */
+  /* =====================================================
+     HIDE OVERLAY
+     ===================================================== */
 
-function beep(
-  frequency = 900,
-  duration = 120
-) {
+  function hideOverlay() {
 
-  try {
-
-    const AudioContext =
-      window.AudioContext ||
-      window.webkitAudioContext;
-
-
-    const audioContext =
-      new AudioContext();
-
-
-    const oscillator =
-      audioContext.createOscillator();
-
-
-    const gain =
-      audioContext.createGain();
-
-
-    oscillator.type =
-      "sine";
-
-    oscillator.frequency.value =
-      frequency;
-
-    gain.gain.value =
-      0.18;
-
-
-    oscillator.connect(gain);
-
-    gain.connect(
-      audioContext.destination
-    );
-
-
-    oscillator.start();
-
-
-    setTimeout(
-      function() {
-
-        oscillator.stop();
-
-        audioContext.close();
-
-      },
-      duration
-    );
-
-  } catch (error) {
-
-    console.log(
-      "Beep unavailable:",
-      error
-    );
+    scanOverlay.style.display =
+      "none";
 
   }
 
-}
 
+  /* =====================================================
+     SWITCH CAMERA
+     ===================================================== */
 
-/* =====================================================
-   ESCAPE HTML
-   ===================================================== */
+  switchCameraBtn.addEventListener(
+    "click",
+    async function() {
 
-function escapeHtml(
-  value
-) {
-
-  return String(value)
-
-    .replace(
-      /&/g,
-      "&amp;"
-    )
-
-    .replace(
-      /</g,
-      "&lt;"
-    )
-
-    .replace(
-      />/g,
-      "&gt;"
-    )
-
-    .replace(
-      /"/g,
-      "&quot;"
-    )
-
-    .replace(
-      /'/g,
-      "&#039;"
-    );
-
-}
-
-
-/* =====================================================
-   PHILIPPINE STANDARD TIME
-   ===================================================== */
-
-function updatePSTClock() {
-
-  const now =
-    new Date();
-
-
-  const time =
-    new Intl.DateTimeFormat(
-      "en-US",
-      {
-        timeZone:
-          "Asia/Manila",
-
-        hour:
-          "2-digit",
-
-        minute:
-          "2-digit",
-
-        second:
-          "2-digit",
-
-        hour12:
-          true
+      if (
+        processing ||
+        cameras.length < 2 ||
+        !html5QrCode
+      ) {
+        return;
       }
-    ).format(now);
 
 
-  const date =
-    new Intl.DateTimeFormat(
-      "en-US",
-      {
-        timeZone:
-          "Asia/Manila",
+      processing =
+        true;
 
-        weekday:
-          "long",
 
-        month:
-          "long",
+      switchCameraBtn.disabled =
+        true;
 
-        day:
-          "numeric",
 
-        year:
-          "numeric"
+      readyBar.textContent =
+        "SWITCHING CAMERA...";
+
+
+      readyBar.style.color =
+        "#1267a5";
+
+
+      const previousIndex =
+        currentCameraIndex;
+
+
+      try {
+
+        if (scannerRunning) {
+
+          try {
+
+            await html5QrCode.stop();
+
+          } catch (error) {
+
+            console.log(
+              "Camera stop:",
+              error
+            );
+
+          }
+
+          scannerRunning =
+            false;
+
+        }
+
+
+        currentCameraIndex =
+          (
+            currentCameraIndex + 1
+          ) %
+          cameras.length;
+
+
+        await startSelectedCamera();
+
+
+      } catch (error) {
+
+        console.error(
+          "Camera switch error:",
+          error
+        );
+
+
+        currentCameraIndex =
+          previousIndex;
+
+
+        scannerRunning =
+          false;
+
+
+        try {
+
+          await startSelectedCamera();
+
+        } catch (recoverError) {
+
+          console.error(
+            "Camera recovery error:",
+            recoverError
+          );
+
+        }
+
+      } finally {
+
+        processing =
+          false;
+
+        switchCameraBtn.disabled =
+          false;
+
+
+        readyBar.textContent =
+          "● READY TO SCAN";
+
+
+        readyBar.style.color =
+          "#16803c";
+
       }
-    ).format(now);
+
+    }
+  );
 
 
-  const timeElement =
-    document.getElementById(
-      "pstTime"
-    );
+  /* =====================================================
+     BUTTON
+     ===================================================== */
 
-  const dateElement =
-    document.getElementById(
-      "pstDate"
-    );
+  continueBtn.addEventListener(
+    "click",
+    verifyDevice
+  );
 
 
-  if (timeElement) {
-    timeElement.textContent =
-      time;
+  /* =====================================================
+     ENTER
+     ===================================================== */
+
+  deviceCode.addEventListener(
+    "keydown",
+    function(event) {
+
+      if (
+        event.key === "Enter"
+      ) {
+
+        event.preventDefault();
+
+        verifyDevice();
+
+      }
+
+    }
+  );
+
+
+  /* =====================================================
+     HTML ESCAPE
+     ===================================================== */
+
+  function escapeHtml(
+    value
+  ) {
+
+    return String(value)
+
+      .replace(
+        /&/g,
+        "&amp;"
+      )
+
+      .replace(
+        /</g,
+        "&lt;"
+      )
+
+      .replace(
+        />/g,
+        "&gt;"
+      )
+
+      .replace(
+        /"/g,
+        "&quot;"
+      )
+
+      .replace(
+        /'/g,
+        "&#039;"
+      );
+
   }
 
 
-  if (dateElement) {
-    dateElement.textContent =
-      date;
+  /* =====================================================
+     PHILIPPINE STANDARD TIME
+     ===================================================== */
+
+  function updatePSTClock() {
+
+    const now =
+      new Date();
+
+
+    const time =
+      new Intl.DateTimeFormat(
+        "en-US",
+        {
+          timeZone: "Asia/Manila",
+          hour: "2-digit",
+          minute: "2-digit",
+          second: "2-digit",
+          hour12: true
+        }
+      ).format(now);
+
+
+    const date =
+      new Intl.DateTimeFormat(
+        "en-US",
+        {
+          timeZone: "Asia/Manila",
+          weekday: "long",
+          month: "long",
+          day: "numeric",
+          year: "numeric"
+        }
+      ).format(now);
+
+
+    const timeElement =
+      document.getElementById(
+        "pstTime"
+      );
+
+
+    const dateElement =
+      document.getElementById(
+        "pstDate"
+      );
+
+
+    if (timeElement) {
+
+      timeElement.textContent =
+        time;
+
+    }
+
+
+    if (dateElement) {
+
+      dateElement.textContent =
+        date;
+
+    }
+
   }
 
-}
+
+  setInterval(
+    updatePSTClock,
+    1000
+  );
 
 
-setInterval(
-  updatePSTClock,
-  1000
-);
-
-updatePSTClock();
-
-updateSchoolSummaryPMDisplay();
+  updatePSTClock();
 
 </script>
 
