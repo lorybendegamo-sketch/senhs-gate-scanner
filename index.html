@@ -2053,18 +2053,70 @@ function releaseDeviceSession() {
     "&session=" +
     encodeURIComponent(sessionToken) +
     "&platform=" +
-    encodeURIComponent(platform);
+    encodeURIComponent(platform) +
+    "&_=" +
+    Date.now();
 
 
   try {
 
-    const image =
-      new Image();
+    /*
+     * sendBeacon is more reliable during
+     * pagehide / beforeunload.
+     */
 
-    image.src =
-      requestUrl +
-      "&_=" +
-      Date.now();
+    if (
+      navigator.sendBeacon
+    ) {
+
+      const released =
+        navigator.sendBeacon(
+          requestUrl,
+          new Blob(
+            [""],
+            {
+              type:
+                "text/plain"
+            }
+          )
+        );
+
+
+      if (released) {
+
+        console.log(
+          "Device release sent."
+        );
+
+      } else {
+
+        /*
+         * Fallback if sendBeacon
+         * could not queue the request.
+         */
+
+        const image =
+          new Image();
+
+        image.src =
+          requestUrl;
+
+      }
+
+    } else {
+
+      /*
+       * Fallback for browsers
+       * without sendBeacon.
+       */
+
+      const image =
+        new Image();
+
+      image.src =
+        requestUrl;
+
+    }
 
   } catch (error) {
 
@@ -2088,7 +2140,6 @@ function releaseDeviceSession() {
   }
 
 }
-
 
 /* =====================================================
    RELEASE WHEN LEAVING PAGE
