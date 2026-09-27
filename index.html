@@ -828,154 +828,164 @@
 
 
   <!-- =========================
-           ATTENDANCE MONITOR
-           ========================= -->
+     ATTENDANCE MONITOR
+     ========================= -->
 
-      <div id="attendanceMonitor">
+<div id="attendanceMonitor">
 
-        <div class="attendance-title">
-          SCHOOL SUMMARY
-        </div>
+  <div class="attendance-title">
+    SCHOOL SUMMARY
+  </div>
 
+  <!-- JHS -->
+  <div class="school-group jhs">
+    <div class="school-group-title">
+      JHS — GRADES 7–10
+    </div>
 
-        <!-- JHS -->
-
-        <div class="school-group jhs">
-
-          <div class="school-group-title">
-            JHS — GRADES 7–10
-          </div>
-
-          <div class="school-summary">
-
-            <div class="summary-card total">
-              <div class="summary-label">TOTAL</div>
-              <div id="jhsTotal" class="summary-number">0</div>
-            </div>
-
-            <div class="summary-card am-present">
-              <div class="summary-label">AM PRESENT</div>
-              <div id="jhsAmPresent" class="summary-number">0</div>
-            </div>
-
-            <div class="summary-card am-absent">
-              <div class="summary-label">AM ABSENT</div>
-              <div id="jhsAmAbsent" class="summary-number">0</div>
-            </div>
-
-            <div class="summary-card am-late">
-              <div class="summary-label">AM LATE</div>
-              <div id="jhsAmLate" class="summary-number">0</div>
-            </div>
-
-            <div
-              id="jhsPmPresentCard"
-              class="summary-card pm-present"
-            >
-              <div class="summary-label">PM PRESENT</div>
-              <div id="jhsPmPresent" class="summary-number">0</div>
-            </div>
-
-            <div
-              id="jhsPmAbsentCard"
-              class="summary-card pm-absent"
-            >
-              <div class="summary-label">PM ABSENT</div>
-              <div id="jhsPmAbsent" class="summary-number">0</div>
-            </div>
-
-            <div
-              id="jhsPmLateCard"
-              class="summary-card pm-late"
-            >
-              <div class="summary-label">PM LATE</div>
-              <div id="jhsPmLate" class="summary-number">0</div>
-            </div>
-
-          </div>
-        </div>
-
-
-        <!-- SHS -->
-
-        <div class="school-group shs">
-
-          <div class="school-group-title">
-            SHS — GRADES 11–12
-          </div>
-
-          <div class="school-summary">
-
-            <div class="summary-card total">
-              <div class="summary-label">TOTAL</div>
-              <div id="shsTotal" class="summary-number">0</div>
-            </div>
-
-            <div class="summary-card am-present">
-              <div class="summary-label">AM PRESENT</div>
-              <div id="shsAmPresent" class="summary-number">0</div>
-            </div>
-
-            <div class="summary-card am-absent">
-              <div class="summary-label">AM ABSENT</div>
-              <div id="shsAmAbsent" class="summary-number">0</div>
-            </div>
-
-            <div class="summary-card am-late">
-              <div class="summary-label">AM LATE</div>
-              <div id="shsAmLate" class="summary-number">0</div>
-            </div>
-
-            <div
-              id="shsPmPresentCard"
-              class="summary-card pm-present"
-            >
-              <div class="summary-label">PM PRESENT</div>
-              <div id="shsPmPresent" class="summary-number">0</div>
-            </div>
-
-            <div
-              id="shsPmAbsentCard"
-              class="summary-card pm-absent"
-            >
-              <div class="summary-label">PM ABSENT</div>
-              <div id="shsPmAbsent" class="summary-number">0</div>
-            </div>
-
-            <div
-              id="shsPmLateCard"
-              class="summary-card pm-late"
-            >
-              <div class="summary-label">PM LATE</div>
-              <div id="shsPmLate" class="summary-number">0</div>
-            </div>
-
-          </div>
-        </div>
-
-
-        <div class="attendance-title section-title">
-          SECTION ATTENDANCE
-        </div>
-
-        <div id="sectionAttendance">
-          Loading attendance...
-        </div>
-
-        <div id="attendanceUpdated">
-          Updating...
-        </div>
-
+    <div class="school-summary">
+      <div class="summary-card total">
+        <div class="summary-label">TOTAL</div>
+        <div id="jhsTotal" class="summary-number">0</div>
       </div>
 
+      <div class="summary-card am-present">
+        <div class="summary-label">AM PRESENT</div>
+        <div id="jhsAmPresent" class="summary-number">0</div>
+      </div>
+
+      <div class="summary-card am-absent">
+        <div class="summary-label">AM ABSENT</div>
+        <div id="jhsAmAbsent" class="summary-number">0</div>
+      </div>
+
+      <div class="summary-card am-late">
+        <div class="summary-label">AM LATE</div>
+        <div id="jhsAmLate" class="summary-number">0</div>
+      </div>
+
+      <div id="jhsPmPresentCard" class="summary-card pm-present">
+        <div class="summary-label">PM PRESENT</div>
+        <div id="jhsPmPresent" class="summary-number">0</div>
+      </div>
+
+      <div id="jhsPmAbsentCard" class="summary-card pm-absent">
+        <div class="summary-label">PM ABSENT</div>
+        <div id="jhsPmAbsent" class="summary-number">0</div>
+      </div>
+
+      <div id="jhsPmLateCard" class="summary-card pm-late">
+        <div class="summary-label">PM LATE</div>
+        <div id="jhsPmLate" class="summary-number">0</div>
+      </div>
     </div>
   </div>
 
-</div>
+  <!-- SHS -->
+  <div class="school-group shs">
+    <div class="school-group-title">
+      SHS — GRADES 11–12
+    </div>
+
+    <div class="school-summary">
+      <div class="summary-card total">
+        <div class="summary-label">TOTAL</div>
+        <div id="shsTotal" class="summary-number">0</div>
+      </div>
+
+      <div class="summary-card am-present">
+        <div class="summary-label">AM PRESENT</div>
+        <div id="shsAmPresent" class="summary-number">0</div>
+      </div>
+
+      <div class="summary-card am-absent">
+        <div class="summary-label">AM ABSENT</div>
+        <div id="shsAmAbsent" class="summary-number">0</div>
+      </div>
+
+      <div class="summary-card am-late">
+        <div class="summary-label">AM LATE</div>
+        <div id="shsAmLate" class="summary-number">0</div>
+      </div>
+
+      <div id="shsPmPresentCard" class="summary-card pm-present">
+        <div class="summary-label">PM PRESENT</div>
+        <div id="shsPmPresent" class="summary-number">0</div>
+      </div>
+
+      <div id="shsPmAbsentCard" class="summary-card pm-absent">
+        <div class="summary-label">PM ABSENT</div>
+        <div id="shsPmAbsent" class="summary-number">0</div>
+      </div>
+
+      <div id="shsPmLateCard" class="summary-card pm-late">
+        <div class="summary-label">PM LATE</div>
+        <div id="shsPmLate" class="summary-number">0</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="attendance-title section-title">
+    SECTION ATTENDANCE
+  </div>
+
+  <div id="sectionAttendance">
+    Loading attendance...
+  </div>
+
+  <div id="attendanceUpdated">
+    Updating...
+  </div>
+
 </div>
 
+<!-- =========================
+     STYLE
+     ========================= -->
+<style>
+  .school-summary {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+  }
 
+  .summary-card {
+    flex: 1 1 150px;
+    text-align: center;
+    border-radius: 8px;
+    padding: 10px;
+    color: #fff;
+    font-weight: bold;
+  }
+
+  .total { background-color: #1976d2; }
+  .am-present, .pm-present { background-color: #008000; }
+  .am-absent, .pm-absent { background-color: #d32f2f; }
+  .am-late, .pm-late { background-color: #ff9800; }
+</style>
+
+<!-- =========================
+     SCRIPT
+     ========================= -->
 <script>
+  function updateAttendanceLayout() {
+    const currentHour = new Date().getHours();
+    const pmCards = document.querySelectorAll('.pm-present, .pm-absent, .pm-late');
+
+    if (currentHour >= 12 && currentHour >= 12.05) {
+      // Hapon na (12:05 PM pataas) — ipakita ang PM cards
+      pmCards.forEach(card => card.style.display = 'flex');
+    } else {
+      // Umaga — itago ang PM cards
+      pmCards.forEach(card => card.style.display = 'none');
+    }
+  }
+
+  // I-run agad pag-load ng page
+  updateAttendanceLayout();
+</script>
+
 
   /* =====================================================
      CONFIGURATION
