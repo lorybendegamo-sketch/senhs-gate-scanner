@@ -1436,6 +1436,9 @@ async function verifyDevice() {
 
 async function openScannerPage() {
 
+  releaseSent = false;
+
+  
   devicePage.style.display =
     "none";
 
@@ -2090,28 +2093,78 @@ function releaseDeviceSession() {
 }
 
 /* =====================================================
-   RELEASE WHEN LEAVING PAGE
+   RELEASE WHEN LEAVING / HIDING PAGE
+   ===================================================== */
+
+let releaseSent = false;
+
+
+function releaseCurrentSession() {
+
+  if (releaseSent) {
+    return;
+  }
+
+
+  if (!deviceKey || !sessionToken) {
+    return;
+  }
+
+
+  releaseSent = true;
+
+
+  releaseDeviceSession();
+
+}
+
+
+/* =====================================================
+   ANDROID / CHROME BACK
+   ===================================================== */
+
+document.addEventListener(
+  "visibilitychange",
+  function() {
+
+    if (
+      document.visibilityState === "hidden"
+    ) {
+
+      releaseCurrentSession();
+
+    }
+
+  }
+);
+
+
+/* =====================================================
+   PAGE LEAVE
    ===================================================== */
 
 window.addEventListener(
   "pagehide",
   function() {
 
-    releaseDeviceSession();
+    releaseCurrentSession();
 
   }
 );
 
+
+/* =====================================================
+   BROWSER CLOSE / LEAVE
+   ===================================================== */
 
 window.addEventListener(
   "beforeunload",
   function() {
 
-    releaseDeviceSession();
+    releaseCurrentSession();
 
   }
 );
-  
 
 /* =====================================================
    START CAMERA
