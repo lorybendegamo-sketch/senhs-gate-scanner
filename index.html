@@ -2173,6 +2173,41 @@ async function startCamera() {
 
   try {
 
+    /*
+     * Check existing camera permission first.
+     * If already granted, reuse it.
+     */
+
+    if (
+      navigator.permissions &&
+      navigator.permissions.query
+    ) {
+
+      try {
+
+        const permission =
+          await navigator.permissions.query({
+            name: "camera"
+          });
+
+
+        console.log(
+          "Camera permission:",
+          permission.state
+        );
+
+      } catch (permissionError) {
+
+        console.log(
+          "Camera permission check skipped:",
+          permissionError
+        );
+
+      }
+
+    }
+
+
     cameras =
       await Html5Qrcode.getCameras();
 
@@ -2237,7 +2272,7 @@ async function startCamera() {
   }
 
 }
-
+  
 
   /* =====================================================
      START SELECTED CAMERA
