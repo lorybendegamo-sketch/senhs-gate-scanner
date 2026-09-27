@@ -2060,63 +2060,11 @@ function releaseDeviceSession() {
 
   try {
 
-    /*
-     * sendBeacon is more reliable during
-     * pagehide / beforeunload.
-     */
+    const image =
+      new Image();
 
-    if (
-      navigator.sendBeacon
-    ) {
-
-      const released =
-        navigator.sendBeacon(
-          requestUrl,
-          new Blob(
-            [""],
-            {
-              type:
-                "text/plain"
-            }
-          )
-        );
-
-
-      if (released) {
-
-        console.log(
-          "Device release sent."
-        );
-
-      } else {
-
-        /*
-         * Fallback if sendBeacon
-         * could not queue the request.
-         */
-
-        const image =
-          new Image();
-
-        image.src =
-          requestUrl;
-
-      }
-
-    } else {
-
-      /*
-       * Fallback for browsers
-       * without sendBeacon.
-       */
-
-      const image =
-        new Image();
-
-      image.src =
-        requestUrl;
-
-    }
+    image.src =
+      requestUrl;
 
   } catch (error) {
 
