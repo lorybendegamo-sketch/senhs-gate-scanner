@@ -827,712 +827,155 @@
       </div>
 
 
-    <!-- =========================
-     ATTENDANCE MONITOR
-     ========================= -->
-
-<div id="attendanceMonitor">
-
-  <div class="attendance-title">
-    SCHOOL SUMMARY
-  </div>
-
-
   <!-- =========================
-       TOTAL STUDENTS
-       ========================= -->
+           ATTENDANCE MONITOR
+           ========================= -->
 
-  <div class="school-total-card">
+      <div id="attendanceMonitor">
 
-    <div class="school-total-label">
-      TOTAL STUDENTS
-    </div>
-
-    <div
-      id="schoolTotalStudents"
-      class="school-total-number"
-    >
-      0
-    </div>
-
-  </div>
+        <div class="attendance-title">
+          SCHOOL SUMMARY
+        </div>
 
 
-  <!-- =========================
-       JHS
-       ========================= -->
+        <!-- JHS -->
 
-  <div class="school-group jhs">
+        <div class="school-group jhs">
 
-    <div class="school-group-title">
-      JHS — GRADES 7–10
-    </div>
+          <div class="school-group-title">
+            JHS — GRADES 7–10
+          </div>
 
+          <div class="school-summary">
 
-    <div class="attendance-matrix">
+            <div class="summary-card total">
+              <div class="summary-label">TOTAL</div>
+              <div id="jhsTotal" class="summary-number">0</div>
+            </div>
 
-      <!-- HEADER -->
+            <div class="summary-card am-present">
+              <div class="summary-label">AM PRESENT</div>
+              <div id="jhsAmPresent" class="summary-number">0</div>
+            </div>
 
-      <div class="matrix-corner"></div>
+            <div class="summary-card am-absent">
+              <div class="summary-label">AM ABSENT</div>
+              <div id="jhsAmAbsent" class="summary-number">0</div>
+            </div>
 
-      <div class="matrix-header am-header">
-        AM
-      </div>
+            <div class="summary-card am-late">
+              <div class="summary-label">AM LATE</div>
+              <div id="jhsAmLate" class="summary-number">0</div>
+            </div>
 
-      <div
-        id="jhsPmHeader"
-        class="matrix-header pm-header pm-summary-item"
-      >
-        PM
-      </div>
+            <div
+              id="jhsPmPresentCard"
+              class="summary-card pm-present"
+            >
+              <div class="summary-label">PM PRESENT</div>
+              <div id="jhsPmPresent" class="summary-number">0</div>
+            </div>
 
+            <div
+              id="jhsPmAbsentCard"
+              class="summary-card pm-absent"
+            >
+              <div class="summary-label">PM ABSENT</div>
+              <div id="jhsPmAbsent" class="summary-number">0</div>
+            </div>
 
-      <!-- PRESENT -->
+            <div
+              id="jhsPmLateCard"
+              class="summary-card pm-late"
+            >
+              <div class="summary-label">PM LATE</div>
+              <div id="jhsPmLate" class="summary-number">0</div>
+            </div>
 
-      <div class="matrix-label present-label">
-        PRESENT
-      </div>
-
-      <div class="matrix-value present-value">
-        <span id="jhsAmPresent">0</span>
-      </div>
-
-      <div
-        id="jhsPmPresentCard"
-        class="matrix-value present-value pm-summary-item"
-      >
-        <span id="jhsPmPresent">0</span>
-      </div>
-
-
-      <!-- ABSENT -->
-
-      <div class="matrix-label absent-label">
-        ABSENT
-      </div>
-
-      <div class="matrix-value absent-value">
-        <span id="jhsAmAbsent">0</span>
-      </div>
-
-      <div
-        id="jhsPmAbsentCard"
-        class="matrix-value absent-value pm-summary-item"
-      >
-        <span id="jhsPmAbsent">0</span>
-      </div>
+          </div>
+        </div>
 
 
-      <!-- LATE -->
+        <!-- SHS -->
 
-      <div class="matrix-label late-label">
-        LATE
-      </div>
+        <div class="school-group shs">
 
-      <div class="matrix-value late-value">
-        <span id="jhsAmLate">0</span>
-      </div>
+          <div class="school-group-title">
+            SHS — GRADES 11–12
+          </div>
 
-      <div
-        id="jhsPmLateCard"
-        class="matrix-value late-value pm-summary-item"
-      >
-        <span id="jhsPmLate">0</span>
-      </div>
+          <div class="school-summary">
 
-    </div>
+            <div class="summary-card total">
+              <div class="summary-label">TOTAL</div>
+              <div id="shsTotal" class="summary-number">0</div>
+            </div>
 
-  </div>
+            <div class="summary-card am-present">
+              <div class="summary-label">AM PRESENT</div>
+              <div id="shsAmPresent" class="summary-number">0</div>
+            </div>
 
+            <div class="summary-card am-absent">
+              <div class="summary-label">AM ABSENT</div>
+              <div id="shsAmAbsent" class="summary-number">0</div>
+            </div>
 
-  <!-- =========================
-       SHS
-       ========================= -->
+            <div class="summary-card am-late">
+              <div class="summary-label">AM LATE</div>
+              <div id="shsAmLate" class="summary-number">0</div>
+            </div>
 
-  <div class="school-group shs">
+            <div
+              id="shsPmPresentCard"
+              class="summary-card pm-present"
+            >
+              <div class="summary-label">PM PRESENT</div>
+              <div id="shsPmPresent" class="summary-number">0</div>
+            </div>
 
-    <div class="school-group-title">
-      SHS — GRADES 11–12
-    </div>
+            <div
+              id="shsPmAbsentCard"
+              class="summary-card pm-absent"
+            >
+              <div class="summary-label">PM ABSENT</div>
+              <div id="shsPmAbsent" class="summary-number">0</div>
+            </div>
 
+            <div
+              id="shsPmLateCard"
+              class="summary-card pm-late"
+            >
+              <div class="summary-label">PM LATE</div>
+              <div id="shsPmLate" class="summary-number">0</div>
+            </div>
 
-    <div class="attendance-matrix">
-
-      <!-- HEADER -->
-
-      <div class="matrix-corner"></div>
-
-      <div class="matrix-header am-header">
-        AM
-      </div>
-
-      <div
-        id="shsPmHeader"
-        class="matrix-header pm-header pm-summary-item"
-      >
-        PM
-      </div>
-
-
-      <!-- PRESENT -->
-
-      <div class="matrix-label present-label">
-        PRESENT
-      </div>
-
-      <div class="matrix-value present-value">
-        <span id="shsAmPresent">0</span>
-      </div>
-
-      <div
-        id="shsPmPresentCard"
-        class="matrix-value present-value pm-summary-item"
-      >
-        <span id="shsPmPresent">0</span>
-      </div>
+          </div>
+        </div>
 
 
-      <!-- ABSENT -->
+        <div class="attendance-title section-title">
+          SECTION ATTENDANCE
+        </div>
 
-      <div class="matrix-label absent-label">
-        ABSENT
-      </div>
+        <div id="sectionAttendance">
+          Loading attendance...
+        </div>
 
-      <div class="matrix-value absent-value">
-        <span id="shsAmAbsent">0</span>
-      </div>
+        <div id="attendanceUpdated">
+          Updating...
+        </div>
 
-      <div
-        id="shsPmAbsentCard"
-        class="matrix-value absent-value pm-summary-item"
-      >
-        <span id="shsPmAbsent">0</span>
-      </div>
-
-
-      <!-- LATE -->
-
-      <div class="matrix-label late-label">
-        LATE
-      </div>
-
-      <div class="matrix-value late-value">
-        <span id="shsAmLate">0</span>
-      </div>
-
-      <div
-        id="shsPmLateCard"
-        class="matrix-value late-value pm-summary-item"
-      >
-        <span id="shsPmLate">0</span>
       </div>
 
     </div>
-
-  </div>
-
-
-  <!-- =========================
-       SECTION ATTENDANCE
-       ========================= -->
-
-  <div class="attendance-title section-title">
-    SECTION ATTENDANCE
-  </div>
-
-  <div id="sectionAttendance">
-    Loading attendance...
-  </div>
-
-  <div id="attendanceUpdated">
-    Updating...
   </div>
 
 </div>
-
-
-<!-- =========================
-     SCHOOL SUMMARY STYLE
-     ========================= -->
-
-<style>
-
-  /* TOTAL STUDENTS */
-
-  .school-total-card {
-
-    width: 100%;
-
-    box-sizing: border-box;
-
-    margin: 0 auto 18px auto;
-
-    padding: 14px 18px;
-
-    border-radius: 16px;
-
-    text-align: center;
-
-    background:
-      linear-gradient(
-        135deg,
-        #ffffff,
-        #f3f7fb
-      );
-
-    border: 1px solid #dce5ee;
-
-    box-shadow:
-      0 4px 14px
-      rgba(0,0,0,0.08);
-
-  }
-
-
-  .school-total-label {
-
-    font-size: 12px;
-
-    font-weight: 800;
-
-    letter-spacing: 1.2px;
-
-    color: #667085;
-
-  }
-
-
-  .school-total-number {
-
-    margin-top: 3px;
-
-    font-size: 32px;
-
-    line-height: 1;
-
-    font-weight: 900;
-
-    color: #17365d;
-
-  }
-
-
-  /* SCHOOL GROUP */
-
-  .school-group {
-
-    margin-bottom: 18px;
-
-  }
-
-
-  .school-group-title {
-
-    margin-bottom: 8px;
-
-    font-size: 14px;
-
-    font-weight: 800;
-
-    color: #17365d;
-
-  }
-
-
-  /* MATRIX */
-
-  .attendance-matrix {
-
-    display: grid;
-
-    grid-template-columns:
-      minmax(82px, 1.2fr)
-      minmax(70px, 1fr)
-      minmax(70px, 1fr);
-
-    gap: 6px;
-
-    width: 100%;
-
-  }
-
-
-  .matrix-corner {
-
-    min-height: 34px;
-
-  }
-
-
-  .matrix-header {
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    min-height: 34px;
-
-    border-radius: 9px;
-
-    font-size: 12px;
-
-    font-weight: 900;
-
-    letter-spacing: .5px;
-
-  }
-
-
-  .am-header {
-
-    background: #e8f1ff;
-
-    color: #245b9e;
-
-  }
-
-
-  .pm-header {
-
-    background: #f0eaff;
-
-    color: #6842a5;
-
-  }
-
-
-  .matrix-label {
-
-    display: flex;
-
-    align-items: center;
-
-    padding: 0 10px;
-
-    min-height: 54px;
-
-    border-radius: 10px;
-
-    font-size: 12px;
-
-    font-weight: 900;
-
-  }
-
-
-  .matrix-value {
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    min-height: 54px;
-
-    border-radius: 10px;
-
-    font-size: 22px;
-
-    font-weight: 900;
-
-    background: #ffffff;
-
-    border: 1px solid #e1e7ef;
-
-  }
-
-
-  /* PRESENT */
-
-  .present-label {
-
-    background: #eaf8ef;
-
-    color: #18733c;
-
-  }
-
-
-  .present-value {
-
-    color: #18733c;
-
-    background: #f7fcf8;
-
-    border-color: #cfead8;
-
-  }
-
-
-  /* ABSENT */
-
-  .absent-label {
-
-    background: #fff0f0;
-
-    color: #c53030;
-
-  }
-
-
-  .absent-value {
-
-    color: #c53030;
-
-    background: #fffafa;
-
-    border-color: #f1d2d2;
-
-  }
-
-
-  /* LATE */
-
-  .late-label {
-
-    background: #fff6df;
-
-    color: #a56800;
-
-  }
-
-
-  .late-value {
-
-    color: #a56800;
-
-    background: #fffdf7;
-
-    border-color: #f0dfb5;
-
-  }
-
-
-  /* PM HIDDEN BEFORE PM */
-
-  .pm-summary-item {
-
-    display: none;
-
-  }
-
-
-  /* SECTION TITLE */
-
-  .section-title {
-
-    margin-top: 22px;
-
-  }
-
-
-  /* SMALL SCREEN */
-
-  @media (max-width: 480px) {
-
-    .attendance-matrix {
-
-      grid-template-columns:
-        minmax(76px, 1.15fr)
-        minmax(64px, 1fr)
-        minmax(64px, 1fr);
-
-      gap: 5px;
-
-    }
-
-
-    .matrix-label {
-
-      min-height: 48px;
-
-      padding: 0 7px;
-
-      font-size: 11px;
-
-    }
-
-
-    .matrix-value {
-
-      min-height: 48px;
-
-      font-size: 20px;
-
-    }
-
-
-    .matrix-header {
-
-      min-height: 30px;
-
-      font-size: 11px;
-
-    }
-
-
-    .school-total-number {
-
-      font-size: 29px;
-
-    }
-
-  }
-
-</style>
+</div>
 
 
 <script>
-
-(function() {
-
-  /* =========================================
-     UPDATE TOTAL STUDENTS
-     ========================================= */
-
-  function updateSchoolTotal() {
-
-    const jhs =
-      document.getElementById(
-        "jhsTotal"
-      );
-
-    const shs =
-      document.getElementById(
-        "shsTotal"
-      );
-
-    const total =
-      document.getElementById(
-        "schoolTotalStudents"
-      );
-
-
-    if (!total) return;
-
-
-    const jhsNumber =
-      jhs
-        ? parseInt(
-            jhs.textContent
-          ) || 0
-        : 0;
-
-
-    const shsNumber =
-      shs
-        ? parseInt(
-            shs.textContent
-          ) || 0
-        : 0;
-
-
-    total.textContent =
-      jhsNumber + shsNumber;
-
-  }
-
-
-  /* =========================================
-     SHOW PM ONLY FROM 12:05 PM
-     ========================================= */
-
-  function updatePmVisibility() {
-
-    const now =
-      new Date();
-
-    const minutes =
-      now.getHours() * 60 +
-      now.getMinutes();
-
-
-    const showPM =
-      minutes >= 725;
-
-
-    const pmItems =
-      document.querySelectorAll(
-        ".pm-summary-item"
-      );
-
-
-    pmItems.forEach(
-      function(item) {
-
-        item.style.display =
-          showPM
-            ? "flex"
-            : "none";
-
-      }
-    );
-
-  }
-
-
-  /* =========================================
-     WATCH TOTAL VALUES
-     ========================================= */
-
-  const totalElements = [
-
-    document.getElementById(
-      "jhsTotal"
-    ),
-
-    document.getElementById(
-      "shsTotal"
-    )
-
-  ].filter(Boolean);
-
-
-  totalElements.forEach(
-    function(element) {
-
-      const observer =
-        new MutationObserver(
-          updateSchoolTotal
-        );
-
-      observer.observe(
-        element,
-        {
-          childList: true,
-          characterData: true,
-          subtree: true
-        }
-      );
-
-    }
-  );
-
-
-  /* =========================================
-     INITIAL
-     ========================================= */
-
-  updateSchoolTotal();
-
-  updatePmVisibility();
-
-
-  /* =========================================
-     CHECK PM EVERY MINUTE
-     ========================================= */
-
-  setInterval(
-    updatePmVisibility,
-    30000
-  );
-
-
-})();
-
 
   /* =====================================================
      CONFIGURATION
