@@ -985,30 +985,51 @@
     "https://script.google.com/macros/s/AKfycbyXwfLu_wjourRT3BwQDTwA-H9vIJfu5LvqbjjbG3jwv5JVb0mi_1SO5CRPq60S5KdaCg/exec";
 
 
-  /* =====================================================
-     VARIABLES
-     ===================================================== */
+/* =====================================================
+   VARIABLES
+   ===================================================== */
 
-  let deviceKey = "";
+let deviceKey = "";
 
-  let html5QrCode = null;
+/* =====================================================
+   DEVICE SESSION
+   ===================================================== */
 
-  let cameras = [];
+let clientId =
+  "SENHS_" +
+  Date.now() +
+  "_" +
+  Math.random().toString(36).substring(2, 10);
 
-  let currentCameraIndex = 0;
+  let sessionToken = "";
+  
+let platform =
+  /Android|iPhone|iPad|iPod/i.test(navigator.userAgent)
+    ? "mobile"
+    : "laptop";
 
-  let scannerRunning = false;
+let sessionActive = false;
 
-  let processing = false;
+let heartbeatTimer = null;
 
-  let callbackCounter = 0;
+let html5QrCode = null;
 
-  let attendanceTimer = null;
+let cameras = [];
+
+let currentCameraIndex = 0;
+
+let scannerRunning = false;
+
+let processing = false;
+
+let callbackCounter = 0;
+
+let attendanceTimer = null;
 
 
-  /* =====================================================
-     ELEMENTS
-     ===================================================== */
+/* =====================================================
+   ELEMENTS
+   ===================================================== */
 
   const devicePage =
     document.getElementById("devicePage");
@@ -1270,107 +1291,107 @@ function jsonpRequest(url) {
   }
 
 
-  /* =====================================================
-     VERIFY DEVICE
-     ===================================================== */
+/* =====================================================
+   VERIFY DEVICE
+   ===================================================== */
 
-  async function verifyDevice() {
+async function verifyDevice() {
 
-    const key =
-      deviceCode.value.trim();
-
-
-    if (!key) {
-
-      showDeviceMessage(
-        "Please enter the Device Code.",
-        "error"
-      );
-
-      return;
-
-    }
+  const key =
+    deviceCode.value.trim();
 
 
-    continueBtn.disabled = true;
-
-    continueBtn.textContent =
-      "CHECKING...";
-
+  if (!key) {
 
     showDeviceMessage(
-      "Checking device...",
-      ""
+      "Please enter the Device Code.",
+      "error"
     );
 
+    return;
 
-    try {
-
-      const requestUrl =
-        APPS_SCRIPT_URL +
-        "?device=" +
-        encodeURIComponent(key);
+  }
 
 
-      const result =
-        await jsonpRequest(
-          requestUrl
+  continueBtn.disabled = true;
+
+  continueBtn.textContent =
+    "CHECKING...";
+
+
+  showDeviceMessage(
+    "Checking device...",
+    ""
+  );
+
+
+  try {
+
+    const requestUrl =
+      APPS_SCRIPT_URL +
+      "?device=" +
+      encodeURIComponent(key) +
+      "&platform=" +
+      encodeURIComponent(platform);
+
+
+    const result =
+      await jsonpRequest(
+        requestUrl
+      );
+
+
+    if (
+      result &&
+      result.success &&
+      result.authorized
+    ) {
+
+      deviceKey =
+        key;
+
+
+      sessionToken =
+        String(
+          result.session || ""
         );
 
 
-      if (
-        result &&
-        result.success &&
-        result.authorized
-      ) {
+      if (!sessionToken) {
 
-        deviceKey =
-          key;
-
-
-        showDeviceMessage(
-          "Device authorized.",
-          "success"
+        throw new Error(
+          "No session token received."
         );
-
-
-        setTimeout(
-          function() {
-
-            openScannerPage();
-
-          },
-          300
-        );
-
-
-      } else {
-
-        showDeviceMessage(
-          "Access denied. Device not recognized.",
-          "error"
-        );
-
-
-        continueBtn.disabled =
-          false;
-
-        continueBtn.textContent =
-          "CONTINUE";
 
       }
 
 
-    } catch (error) {
-
-      console.error(
-        "Device verification error:",
-        error
-      );
+      sessionActive =
+        true;
 
 
       showDeviceMessage(
-        "Unable to connect to server.",
+        "Device authorized.",
+        "success"
+      );
+
+
+      setTimeout(
+        function() {
+
+          openScannerPage();
+
+        },
+        300
+      );
+
+
+    } else {
+
+      showDeviceMessage(
+        result && result.message
+          ? result.message
+          : "Access denied. Device not recognized.",
         "error"
       );
 
@@ -1383,20 +1404,19 @@ function jsonpRequest(url) {
 
     }
 
-  }
+
+  } catch (error) {
+
+    console.error(
+      "Device verification error:",
+      error
+    );
 
 
-  /* =====================================================
-     OPEN SCANNER
-     ===================================================== */
-
-  async function openScannerPage() {
-
-    devicePage.style.display =
-      "none";
-
-    scannerPage.style.display =
-      "block";
+    showDeviceMessage(
+      "Unable to connect to server.",
+      "error"
+    );
 
 
     continueBtn.disabled =
@@ -1405,25 +1425,55 @@ function jsonpRequest(url) {
     continueBtn.textContent =
       "CONTINUE";
 
+  }
 
-    await startCamera();
+}
+  
+
+/* =====================================================
+   OPEN SCANNER
+   ===================================================== */
+
+async function openScannerPage() {
+
+  devicePage.style.display =
+    "none";
+
+  scannerPage.style.display =
+    "block";
 
 
-    loadAttendanceSummary();
+  continueBtn.disabled =
+    false;
+
+  continueBtn.textContent =
+    "CONTINUE";
 
 
-    if (!attendanceTimer) {
+  await startCamera();
 
-      attendanceTimer =
-        setInterval(
-          loadAttendanceSummary,
-          5000
-        );
 
-    }
+  loadAttendanceSummary();
+
+
+  if (!attendanceTimer) {
+
+    attendanceTimer =
+      setInterval(
+        loadAttendanceSummary,
+        5000
+      );
 
   }
 
+
+  /* =====================================================
+     START DEVICE HEARTBEAT
+     ===================================================== */
+
+  startDeviceHeartbeat();
+
+}
 
   /* =====================================================
      PM DISPLAY
@@ -1930,78 +1980,212 @@ function jsonpRequest(url) {
   }
 
 
-  /* =====================================================
-     START CAMERA
-     ===================================================== */
+/* =====================================================
+   DEVICE HEARTBEAT
+   ===================================================== */
 
-  async function startCamera() {
+function startDeviceHeartbeat() {
 
-    try {
-
-      cameras =
-        await Html5Qrcode.getCameras();
-
-
-      if (
-        !cameras ||
-        cameras.length === 0
-      ) {
-
-        showOverlay(
-          "CAMERA ERROR",
-          "No camera was found on this device.",
-          true
-        );
-
-        return;
-
-      }
+  if (heartbeatTimer) {
+    clearInterval(heartbeatTimer);
+  }
 
 
-      const backIndex =
-        cameras.findIndex(
-          function(camera) {
+  heartbeatTimer =
+    setInterval(
+      async function() {
 
-            return /back|rear|environment/i.test(
-              camera.label || ""
-            );
-
-          }
-        );
+        if (!deviceKey || !sessionToken) {
+          return;
+        }
 
 
-      currentCameraIndex =
-        backIndex >= 0
-          ? backIndex
-          : 0;
+        try {
+
+          const requestUrl =
+            APPS_SCRIPT_URL +
+            "?heartbeat=1" +
+            "&device=" +
+            encodeURIComponent(deviceKey) +
+            "&session=" +
+            encodeURIComponent(sessionToken) +
+            "&platform=" +
+            encodeURIComponent(platform);
 
 
-      html5QrCode =
-        new Html5Qrcode(
-          "reader"
-        );
+          await jsonpRequest(
+            requestUrl
+          );
 
 
-      await startSelectedCamera();
+        } catch (error) {
+
+          console.log(
+            "Heartbeat error:",
+            error
+          );
+
+        }
+
+      },
+      20000
+    );
+
+}
 
 
-    } catch (error) {
+/* =====================================================
+   RELEASE DEVICE SESSION
+   ===================================================== */
 
-      console.error(
-        "Start camera error:",
-        error
-      );
+function releaseDeviceSession() {
 
+  if (!deviceKey || !sessionToken) {
+    return;
+  }
+
+
+  const requestUrl =
+    APPS_SCRIPT_URL +
+    "?release=1" +
+    "&device=" +
+    encodeURIComponent(deviceKey) +
+    "&session=" +
+    encodeURIComponent(sessionToken) +
+    "&platform=" +
+    encodeURIComponent(platform);
+
+
+  try {
+
+    const image =
+      new Image();
+
+    image.src =
+      requestUrl +
+      "&_=" +
+      Date.now();
+
+  } catch (error) {
+
+    console.log(
+      "Release error:",
+      error
+    );
+
+  }
+
+
+  if (heartbeatTimer) {
+
+    clearInterval(
+      heartbeatTimer
+    );
+
+    heartbeatTimer =
+      null;
+
+  }
+
+}
+
+
+/* =====================================================
+   RELEASE WHEN LEAVING PAGE
+   ===================================================== */
+
+window.addEventListener(
+  "pagehide",
+  function() {
+
+    releaseDeviceSession();
+
+  }
+);
+
+
+window.addEventListener(
+  "beforeunload",
+  function() {
+
+    releaseDeviceSession();
+
+  }
+);
+  
+
+/* =====================================================
+   START CAMERA
+   ===================================================== */
+
+async function startCamera() {
+
+  try {
+
+    cameras =
+      await Html5Qrcode.getCameras();
+
+
+    if (
+      !cameras ||
+      cameras.length === 0
+    ) {
 
       showOverlay(
         "CAMERA ERROR",
-        "Please allow camera permission and try again.",
+        "No camera was found on this device.",
         true
       );
 
+      return;
+
     }
 
+
+    const backIndex =
+      cameras.findIndex(
+        function(camera) {
+
+          return /back|rear|environment/i.test(
+            camera.label || ""
+          );
+
+        }
+      );
+
+
+    currentCameraIndex =
+      backIndex >= 0
+        ? backIndex
+        : 0;
+
+
+    html5QrCode =
+      new Html5Qrcode(
+        "reader"
+      );
+
+
+    await startSelectedCamera();
+
+
+  } catch (error) {
+
+    console.error(
+      "Start camera error:",
+      error
+    );
+
+
+    showOverlay(
+      "CAMERA ERROR",
+      "Please allow camera permission and try again.",
+      true
+    );
+
   }
+
+}
 
 
   /* =====================================================
@@ -2104,181 +2288,185 @@ function jsonpRequest(url) {
   }
 
 
-  /* =====================================================
-     QR DETECTED
-     ===================================================== */
+/* =====================================================
+   QR DETECTED
+   ===================================================== */
 
-  async function onQrDetected(
-    decodedText
-  ) {
+async function onQrDetected(
+  decodedText
+) {
 
-    if (processing) {
-      return;
+  if (processing) {
+    return;
+  }
+
+
+  processing =
+    true;
+
+
+  window.qrProcessingStart =
+    performance.now();
+
+
+  beep(
+    1000,
+    130
+  );
+
+
+  try {
+
+    if (
+      html5QrCode &&
+      scannerRunning
+    ) {
+
+      await html5QrCode.pause(true);
+
     }
 
+  } catch (error) {
 
-    processing =
-      true;
-
-
-    window.qrProcessingStart =
-      performance.now();
-
-
-    beep(
-      1000,
-      130
+    console.log(
+      "Pause error:",
+      error
     );
-
-
-    try {
-
-      if (
-        html5QrCode &&
-        scannerRunning
-      ) {
-
-        await html5QrCode.pause(true);
-
-      }
-
-    } catch (error) {
-
-      console.log(
-        "Pause error:",
-        error
-      );
-
-    }
-
-
-    readyBar.textContent =
-      "PROCESSING...";
-
-    readyBar.style.color =
-      "#1267a5";
-
-
-    showProcessing();
-
-
-    let lrn =
-      String(
-        decodedText || ""
-      ).trim();
-
-
-    /*
-     * QR may contain either:
-     * LRN directly
-     * OR a URL containing ?lrn=
-     * OR a URL containing ?id=
-     */
-
-    try {
-
-      if (
-        lrn.startsWith("http://") ||
-        lrn.startsWith("https://")
-      ) {
-
-        const qrUrl =
-          new URL(lrn);
-
-
-        const urlLrn =
-          qrUrl.searchParams.get("lrn");
-
-
-        const urlId =
-          qrUrl.searchParams.get("id");
-
-
-        if (urlLrn) {
-
-          lrn =
-            urlLrn.trim();
-
-        } else if (urlId) {
-
-          lrn =
-            urlId.trim();
-
-        }
-
-      }
-
-    } catch (error) {
-
-      console.log(
-        "QR URL parsing skipped:",
-        error
-      );
-
-    }
-
-
-    try {
-
-      const requestUrl =
-        APPS_SCRIPT_URL +
-        "?lrn=" +
-        encodeURIComponent(lrn) +
-        "&device=" +
-        encodeURIComponent(deviceKey);
-
-
-      const result =
-        await jsonpRequest(
-          requestUrl
-        );
-
-
-      showResult(
-        result
-      );
-
-
-      if (
-        result &&
-        result.success
-      ) {
-
-        beep(
-          1400,
-          180
-        );
-
-
-        setTimeout(
-          loadAttendanceSummary,
-          500
-        );
-
-      }
-
-
-    } catch (error) {
-
-      console.error(
-        "QR server error:",
-        error
-      );
-
-
-      showResult({
-
-        success: false,
-
-        message:
-          "Unable to connect to server."
-
-      });
-
-    }
 
   }
 
+
+  readyBar.textContent =
+    "PROCESSING...";
+
+  readyBar.style.color =
+    "#1267a5";
+
+
+  showProcessing();
+
+
+  let lrn =
+    String(
+      decodedText || ""
+    ).trim();
+
+
+  /*
+   * QR may contain either:
+   * LRN directly
+   * OR a URL containing ?lrn=
+   * OR a URL containing ?id=
+   */
+
+  try {
+
+    if (
+      lrn.startsWith("http://") ||
+      lrn.startsWith("https://")
+    ) {
+
+      const qrUrl =
+        new URL(lrn);
+
+
+      const urlLrn =
+        qrUrl.searchParams.get("lrn");
+
+
+      const urlId =
+        qrUrl.searchParams.get("id");
+
+
+      if (urlLrn) {
+
+        lrn =
+          urlLrn.trim();
+
+      } else if (urlId) {
+
+        lrn =
+          urlId.trim();
+
+      }
+
+    }
+
+  } catch (error) {
+
+    console.log(
+      "QR URL parsing skipped:",
+      error
+    );
+
+  }
+
+
+  try {
+
+    const requestUrl =
+      APPS_SCRIPT_URL +
+      "?lrn=" +
+      encodeURIComponent(lrn) +
+      "&device=" +
+      encodeURIComponent(deviceKey) +
+      "&session=" +
+      encodeURIComponent(sessionToken) +
+      "&platform=" +
+      encodeURIComponent(platform);
+
+
+    const result =
+      await jsonpRequest(
+        requestUrl
+      );
+
+
+    showResult(
+      result
+    );
+
+
+    if (
+      result &&
+      result.success
+    ) {
+
+      beep(
+        1400,
+        180
+      );
+
+
+      setTimeout(
+        loadAttendanceSummary,
+        500
+      );
+
+    }
+
+
+  } catch (error) {
+
+    console.error(
+      "QR server error:",
+      error
+    );
+
+
+    showResult({
+
+      success: false,
+
+      message:
+        "Unable to connect to server."
+
+    });
+
+  }
+
+}
+  
 
   /* =====================================================
      PROCESSING
