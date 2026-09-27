@@ -827,7 +827,7 @@
       </div>
 
 
-  <!-- =========================
+      <!-- =========================
            ATTENDANCE MONITOR
            ========================= -->
 
@@ -985,6 +985,76 @@
 
 
   /* =====================================================
+     CLIENT ID / PLATFORM
+     IMPORTANT:
+     - No localStorage
+     - No sessionStorage
+     - No cookies
+     - New client ID for every browser tab/session
+     ===================================================== */
+
+  const CLIENT_ID =
+    (
+      window.crypto &&
+      typeof window.crypto.randomUUID === "function"
+    )
+      ? window.crypto.randomUUID()
+      : (
+          "client-" +
+          Date.now() +
+          "-" +
+          Math.random().toString(36).substring(2, 12)
+        );
+
+
+  function detectPlatform() {
+
+    const ua =
+      navigator.userAgent ||
+      navigator.vendor ||
+      window.opera ||
+      "";
+
+    const isAndroid =
+      /Android/i.test(ua);
+
+    const isIOS =
+      /iPhone|iPad|iPod/i.test(ua);
+
+    const isTouchDevice =
+      (
+        "ontouchstart" in window
+      ) ||
+      (
+        navigator.maxTouchPoints &&
+        navigator.maxTouchPoints > 0
+      );
+
+
+    if (
+      isAndroid ||
+      isIOS ||
+      (
+        isTouchDevice &&
+        window.innerWidth <= 900
+      )
+    ) {
+
+      return "mobile";
+
+    }
+
+
+    return "laptop";
+
+  }
+
+
+  const CLIENT_PLATFORM =
+    detectPlatform();
+
+
+  /* =====================================================
      VARIABLES
      ===================================================== */
 
@@ -1000,9 +1070,11 @@
 
   let processing = false;
 
-  let callbackCounter = 0;
-
   let attendanceTimer = null;
+
+  let heartbeatTimer = null;
+
+  let sessionReleased = false;
 
 
   /* =====================================================
@@ -1148,108 +1220,134 @@
      GOOGLE APPS SCRIPT JSONP REQUEST
      ===================================================== */
 
-function jsonpRequest(url) {
+  function jsonpRequest(url) {
 
-  return new Promise(function(resolve, reject) {
+    return new Promise(function(resolve, reject) {
 
-    const callbackName =
-      "senhsCallback_" +
-      Date.now() +
-      "_" +
-      Math.floor(Math.random() * 100000);
-
-    const script =
-      document.createElement("script");
-
-    let finished = false;
-
-    const timeout =
-      setTimeout(function() {
-
-        if (finished) return;
-
-        finished = true;
-
-        cleanup();
-
-        reject(
-          new Error(
-            "Unable to connect to server."
-          )
+      const callbackName =
+        "senhsCallback_" +
+        Date.now() +
+        "_" +
+        Math.floor(
+          Math.random() * 100000
         );
 
-      }, 20000);
+      const script =
+        document.createElement("script");
 
+      let finished = false;
 
-    function cleanup() {
+      const timeout =
+        setTimeout(
+          function() {
 
-      clearTimeout(timeout);
+            if (finished) return;
 
-      if (script.parentNode) {
-        script.parentNode.removeChild(script);
-      }
+            finished = true;
 
-      try {
-        delete window[callbackName];
-      } catch (e) {
-        window[callbackName] = undefined;
-      }
-    }
+            cleanup();
 
+            reject(
+              new Error(
+                "Unable to connect to server."
+              )
+            );
 
-    window[callbackName] =
-      function(data) {
-
-        if (finished) return;
-
-        finished = true;
-
-        cleanup();
-
-        resolve(data);
-      };
-
-
-    script.onerror =
-      function() {
-
-        if (finished) return;
-
-        finished = true;
-
-        cleanup();
-
-        reject(
-          new Error(
-            "Unable to connect to server."
-          )
+          },
+          20000
         );
-      };
 
 
-    let separator = "?";
+      function cleanup() {
 
-    if (url.indexOf("?") !== -1) {
-      separator = "&";
-    }
+        clearTimeout(timeout);
+
+        if (script.parentNode) {
+
+          script.parentNode.removeChild(
+            script
+          );
+
+        }
+
+        try {
+
+          delete window[callbackName];
+
+        } catch (e) {
+
+          window[callbackName] =
+            undefined;
+
+        }
+
+      }
 
 
-    script.src =
-      url +
-      separator +
-      "callback=" +
-      encodeURIComponent(callbackName) +
-      "&_=" +
-      Date.now();
+      window[callbackName] =
+        function(data) {
+
+          if (finished) return;
+
+          finished = true;
+
+          cleanup();
+
+          resolve(data);
+
+        };
 
 
-    script.async = true;
+      script.onerror =
+        function() {
 
-    document.body.appendChild(script);
+          if (finished) return;
 
-  });
+          finished = true;
 
-}
+          cleanup();
+
+          reject(
+            new Error(
+              "Unable to connect to server."
+            )
+          );
+
+        };
+
+
+      let separator = "?";
+
+      if (
+        url.indexOf("?") !== -1
+      ) {
+
+        separator = "&";
+
+      }
+
+
+      script.src =
+        url +
+        separator +
+        "callback=" +
+        encodeURIComponent(
+          callbackName
+        ) +
+        "&_=" +
+        Date.now();
+
+
+      script.async = true;
+
+      document.body.appendChild(
+        script
+      );
+
+    });
+
+  }
+
 
   /* =====================================================
      DEVICE MESSAGE
@@ -1265,6 +1363,24 @@ function jsonpRequest(url) {
 
     deviceMessage.className =
       type || "";
+
+  }
+
+
+  /* =====================================================
+     BUILD SESSION PARAMETERS
+     ===================================================== */
+
+  function getSessionParams() {
+
+    return (
+      "&device=" +
+      encodeURIComponent(deviceKey) +
+      "&client=" +
+      encodeURIComponent(CLIENT_ID) +
+      "&platform=" +
+      encodeURIComponent(CLIENT_PLATFORM)
+    );
 
   }
 
@@ -1305,10 +1421,23 @@ function jsonpRequest(url) {
 
     try {
 
+      /*
+       * IMPORTANT:
+       * We temporarily use the entered key
+       * only for verification.
+       *
+       * The Device Code is NOT saved
+       * in localStorage/sessionStorage/cookies.
+       */
+
       const requestUrl =
         APPS_SCRIPT_URL +
         "?device=" +
-        encodeURIComponent(key);
+        encodeURIComponent(key) +
+        "&client=" +
+        encodeURIComponent(CLIENT_ID) +
+        "&platform=" +
+        encodeURIComponent(CLIENT_PLATFORM);
 
 
       const result =
@@ -1333,6 +1462,9 @@ function jsonpRequest(url) {
         );
 
 
+        startHeartbeat();
+
+
         setTimeout(
           function() {
 
@@ -1346,7 +1478,12 @@ function jsonpRequest(url) {
       } else {
 
         showDeviceMessage(
-          "Access denied. Device not recognized.",
+          (
+            result &&
+            result.message
+          )
+            ? result.message
+            : "Access denied. Device not recognized.",
           "error"
         );
 
@@ -1383,6 +1520,232 @@ function jsonpRequest(url) {
     }
 
   }
+
+
+  /* =====================================================
+     HEARTBEAT
+     Keeps the device session alive.
+     ===================================================== */
+
+  function startHeartbeat() {
+
+    stopHeartbeat();
+
+
+    heartbeatTimer =
+      setInterval(
+        function() {
+
+          sendHeartbeat();
+
+        },
+        20000
+      );
+
+
+    /*
+     * Send one immediately as well.
+     */
+
+    sendHeartbeat();
+
+  }
+
+
+  function stopHeartbeat() {
+
+    if (heartbeatTimer) {
+
+      clearInterval(
+        heartbeatTimer
+      );
+
+      heartbeatTimer =
+        null;
+
+    }
+
+  }
+
+
+  async function sendHeartbeat() {
+
+    if (!deviceKey) {
+      return;
+    }
+
+
+    if (sessionReleased) {
+      return;
+    }
+
+
+    try {
+
+      const requestUrl =
+        APPS_SCRIPT_URL +
+        "?heartbeat=1" +
+        getSessionParams();
+
+
+      /*
+       * We don't display an error here.
+       * A heartbeat failure should not stop scanning.
+       */
+
+      await jsonpRequest(
+        requestUrl
+      );
+
+    } catch (error) {
+
+      console.log(
+        "Heartbeat:",
+        error
+      );
+
+    }
+
+  }
+
+
+  /* =====================================================
+     RELEASE DEVICE SESSION
+     ===================================================== */
+
+  function releaseDeviceSession() {
+
+    if (
+      !deviceKey ||
+      sessionReleased
+    ) {
+
+      return;
+
+    }
+
+
+    sessionReleased =
+      true;
+
+
+    stopHeartbeat();
+
+
+    const params =
+      "release=1" +
+      "&device=" +
+      encodeURIComponent(
+        deviceKey
+      ) +
+      "&client=" +
+      encodeURIComponent(
+        CLIENT_ID
+      ) +
+      "&platform=" +
+      encodeURIComponent(
+        CLIENT_PLATFORM
+      );
+
+
+    /*
+     * First attempt:
+     * sendBeacon POST.
+     *
+     * This works even while the page
+     * is being closed/unloaded.
+     */
+
+    try {
+
+      if (
+        navigator.sendBeacon
+      ) {
+
+        const blob =
+          new Blob(
+            [params],
+            {
+              type:
+                "application/x-www-form-urlencoded"
+            }
+          );
+
+
+        const sent =
+          navigator.sendBeacon(
+            APPS_SCRIPT_URL,
+            blob
+          );
+
+
+        if (sent) {
+          return;
+        }
+
+      }
+
+    } catch (error) {
+
+      console.log(
+        "sendBeacon release error:",
+        error
+      );
+
+    }
+
+
+    /*
+     * Fallback:
+     * GET request through an Image object.
+     */
+
+    try {
+
+      const releaseImage =
+        new Image();
+
+      releaseImage.src =
+        APPS_SCRIPT_URL +
+        "?" +
+        params +
+        "&_=" +
+        Date.now();
+
+    } catch (error) {
+
+      console.log(
+        "Release fallback error:",
+        error
+      );
+
+    }
+
+  }
+
+
+  /* =====================================================
+     RELEASE SESSION WHEN PAGE CLOSES / LEAVES
+     ===================================================== */
+
+  window.addEventListener(
+    "pagehide",
+    function() {
+
+      releaseDeviceSession();
+
+    }
+  );
+
+
+  window.addEventListener(
+    "beforeunload",
+    function() {
+
+      releaseDeviceSession();
+
+    }
+  );
 
 
   /* =====================================================
@@ -1430,12 +1793,17 @@ function jsonpRequest(url) {
 
   function isPMDisplayTime() {
 
+    /*
+     * PM display starts at 12:05 PM.
+     */
+
     const now =
       new Date();
 
     const currentMinutes =
       now.getHours() * 60 +
       now.getMinutes();
+
 
     return (
       currentMinutes >= 725
@@ -1466,11 +1834,15 @@ function jsonpRequest(url) {
       function(id) {
 
         const card =
-          document.getElementById(id);
+          document.getElementById(
+            id
+          );
+
 
         if (!card) {
           return;
         }
+
 
         card.style.display =
           showPM
@@ -1560,25 +1932,45 @@ function jsonpRequest(url) {
 
 
         target.total +=
-          Number(section.total || 0);
+          Number(
+            section.total || 0
+          );
+
 
         target.amPresent +=
-          Number(section.amPresent || 0);
+          Number(
+            section.amPresent || 0
+          );
+
 
         target.amAbsent +=
-          Number(section.amAbsent || 0);
+          Number(
+            section.amAbsent || 0
+          );
+
 
         target.amLate +=
-          Number(section.amLate || 0);
+          Number(
+            section.amLate || 0
+          );
+
 
         target.pmPresent +=
-          Number(section.pmPresent || 0);
+          Number(
+            section.pmPresent || 0
+          );
+
 
         target.pmAbsent +=
-          Number(section.pmAbsent || 0);
+          Number(
+            section.pmAbsent || 0
+          );
+
 
         target.pmLate +=
-          Number(section.pmLate || 0);
+          Number(
+            section.pmLate || 0
+          );
 
       }
     );
@@ -1604,43 +1996,57 @@ function jsonpRequest(url) {
     document.getElementById(
       prefix + "Total"
     ).textContent =
-      Number(data.total || 0);
+      Number(
+        data.total || 0
+      );
 
 
     document.getElementById(
       prefix + "AmPresent"
     ).textContent =
-      Number(data.amPresent || 0);
+      Number(
+        data.amPresent || 0
+      );
 
 
     document.getElementById(
       prefix + "AmAbsent"
     ).textContent =
-      Number(data.amAbsent || 0);
+      Number(
+        data.amAbsent || 0
+      );
 
 
     document.getElementById(
       prefix + "AmLate"
     ).textContent =
-      Number(data.amLate || 0);
+      Number(
+        data.amLate || 0
+      );
 
 
     document.getElementById(
       prefix + "PmPresent"
     ).textContent =
-      Number(data.pmPresent || 0);
+      Number(
+        data.pmPresent || 0
+      );
 
 
     document.getElementById(
       prefix + "PmAbsent"
     ).textContent =
-      Number(data.pmAbsent || 0);
+      Number(
+        data.pmAbsent || 0
+      );
 
 
     document.getElementById(
       prefix + "PmLate"
     ).textContent =
-      Number(data.pmLate || 0);
+      Number(
+        data.pmLate || 0
+      );
 
   }
 
@@ -1721,6 +2127,7 @@ function jsonpRequest(url) {
         error
       );
 
+
       attendanceUpdated.textContent =
         "Unable to update attendance.";
 
@@ -1738,10 +2145,11 @@ function jsonpRequest(url) {
   ) {
 
     const match =
-      String(sectionName || "")
-        .match(
-          /\b(7|8|9|10|11|12)\b/
-        );
+      String(
+        sectionName || ""
+      ).match(
+        /\b(7|8|9|10|11|12)\b/
+      );
 
 
     if (!match) {
@@ -1770,24 +2178,37 @@ function jsonpRequest(url) {
         function(a,b) {
 
           const nameA =
-            String(a.section || "");
+            String(
+              a.section || ""
+            );
+
 
           const nameB =
-            String(b.section || "");
+            String(
+              b.section || ""
+            );
 
 
           const gradeA =
-            getGradeNumber(nameA);
+            getGradeNumber(
+              nameA
+            );
+
 
           const gradeB =
-            getGradeNumber(nameB);
+            getGradeNumber(
+              nameB
+            );
 
 
           if (
             gradeA !== gradeB
           ) {
 
-            return gradeA - gradeB;
+            return (
+              gradeA -
+              gradeB
+            );
 
           }
 
@@ -1872,23 +2293,33 @@ function jsonpRequest(url) {
           '<tr>' +
 
           '<td class="section-table-name">' +
-          escapeHtml(section.section || "") +
+          escapeHtml(
+            section.section || ""
+          ) +
           '</td>' +
 
           '<td class="total-cell">' +
-          Number(section.total || 0) +
+          Number(
+            section.total || 0
+          ) +
           '</td>' +
 
           '<td class="am-present-cell">' +
-          Number(section.amPresent || 0) +
+          Number(
+            section.amPresent || 0
+          ) +
           '</td>' +
 
           '<td class="am-absent-cell">' +
-          Number(section.amAbsent || 0) +
+          Number(
+            section.amAbsent || 0
+          ) +
           '</td>' +
 
           '<td class="am-late-cell">' +
-          Number(section.amLate || 0) +
+          Number(
+            section.amLate || 0
+          ) +
           '</td>';
 
 
@@ -1896,15 +2327,21 @@ function jsonpRequest(url) {
 
           html +=
             '<td class="pm-present-cell">' +
-            Number(section.pmPresent || 0) +
+            Number(
+              section.pmPresent || 0
+            ) +
             '</td>' +
 
             '<td class="pm-absent-cell">' +
-            Number(section.pmAbsent || 0) +
+            Number(
+              section.pmAbsent || 0
+            ) +
             '</td>' +
 
             '<td class="pm-late-cell">' +
-            Number(section.pmLate || 0) +
+            Number(
+              section.pmLate || 0
+            ) +
             '</td>';
 
         }
@@ -2013,13 +2450,16 @@ function jsonpRequest(url) {
       return;
     }
 
+
     if (!cameras.length) {
       return;
     }
 
 
     const camera =
-      cameras[currentCameraIndex];
+      cameras[
+        currentCameraIndex
+      ];
 
 
     if (!camera) {
@@ -2068,7 +2508,7 @@ function jsonpRequest(url) {
         onQrDetected,
 
         function() {
-          // Normal scanning errors.
+          /* Normal scanning errors. */
         }
 
       );
@@ -2076,6 +2516,7 @@ function jsonpRequest(url) {
 
       scannerRunning =
         true;
+
 
       processing =
         false;
@@ -2086,6 +2527,7 @@ function jsonpRequest(url) {
 
       readyBar.textContent =
         "● READY TO SCAN";
+
 
       readyBar.style.color =
         "#16803c";
@@ -2137,7 +2579,9 @@ function jsonpRequest(url) {
         scannerRunning
       ) {
 
-        await html5QrCode.pause(true);
+        await html5QrCode.pause(
+          true
+        );
 
       }
 
@@ -2154,6 +2598,7 @@ function jsonpRequest(url) {
     readyBar.textContent =
       "PROCESSING...";
 
+
     readyBar.style.color =
       "#1267a5";
 
@@ -2169,16 +2614,23 @@ function jsonpRequest(url) {
 
     /*
      * QR may contain either:
+     *
      * LRN directly
+     *
      * OR a URL containing ?lrn=
+     *
      * OR a URL containing ?id=
      */
 
     try {
 
       if (
-        lrn.startsWith("http://") ||
-        lrn.startsWith("https://")
+        lrn.startsWith(
+          "http://"
+        ) ||
+        lrn.startsWith(
+          "https://"
+        )
       ) {
 
         const qrUrl =
@@ -2186,11 +2638,15 @@ function jsonpRequest(url) {
 
 
         const urlLrn =
-          qrUrl.searchParams.get("lrn");
+          qrUrl.searchParams.get(
+            "lrn"
+          );
 
 
         const urlId =
-          qrUrl.searchParams.get("id");
+          qrUrl.searchParams.get(
+            "id"
+          );
 
 
         if (urlLrn) {
@@ -2222,9 +2678,21 @@ function jsonpRequest(url) {
       const requestUrl =
         APPS_SCRIPT_URL +
         "?lrn=" +
-        encodeURIComponent(lrn) +
+        encodeURIComponent(
+          lrn
+        ) +
         "&device=" +
-        encodeURIComponent(deviceKey);
+        encodeURIComponent(
+          deviceKey
+        ) +
+        "&client=" +
+        encodeURIComponent(
+          CLIENT_ID
+        ) +
+        "&platform=" +
+        encodeURIComponent(
+          CLIENT_PLATFORM
+        );
 
 
       const result =
@@ -2349,7 +2817,11 @@ function jsonpRequest(url) {
       'padding:30px 20px;' +
       'text-align:center;' +
       'background:' +
-      (isError ? "#7f0000" : "#0d47a1") +
+      (
+        isError
+          ? "#7f0000"
+          : "#0d47a1"
+      ) +
       ';' +
 
       'border:3px solid #ffffff;' +
@@ -2367,7 +2839,8 @@ function jsonpRequest(url) {
       '">' +
 
       escapeHtml(
-        title || "NOTICE"
+        title ||
+        "NOTICE"
       ) +
 
       '</div>' +
@@ -2429,15 +2902,18 @@ function jsonpRequest(url) {
     if (isSuccess) {
 
       const name =
-        result.name || "STUDENT";
+        result.name ||
+        "STUDENT";
 
 
       const section =
-        result.section || "";
+        result.section ||
+        "";
 
 
       const event =
-        result.event || "";
+        result.event ||
+        "";
 
 
       let html =
@@ -2466,7 +2942,9 @@ function jsonpRequest(url) {
         'margin:15px 0;' +
         '">' +
 
-        escapeHtml(name) +
+        escapeHtml(
+          name
+        ) +
 
         '</div>' +
 
@@ -2477,7 +2955,9 @@ function jsonpRequest(url) {
         'margin-bottom:22px;' +
         '">' +
 
-        escapeHtml(section) +
+        escapeHtml(
+          section
+        ) +
 
         '</div>' +
 
@@ -2492,7 +2972,9 @@ function jsonpRequest(url) {
         'border-radius:12px;' +
         '">' +
 
-        escapeHtml(event) +
+        escapeHtml(
+          event
+        ) +
 
         '</div>';
 
@@ -2571,7 +3053,9 @@ function jsonpRequest(url) {
         'color:#ffffff;' +
         '">' +
 
-        escapeHtml(message) +
+        escapeHtml(
+          message
+        ) +
 
         '</div>' +
 
@@ -2702,7 +3186,9 @@ function jsonpRequest(url) {
         cameras.length < 2 ||
         !html5QrCode
       ) {
+
         return;
+
       }
 
 
@@ -2742,6 +3228,7 @@ function jsonpRequest(url) {
             );
 
           }
+
 
           scannerRunning =
             false;
@@ -2792,6 +3279,7 @@ function jsonpRequest(url) {
 
         processing =
           false;
+
 
         switchCameraBtn.disabled =
           false;
@@ -2894,11 +3382,20 @@ function jsonpRequest(url) {
       new Intl.DateTimeFormat(
         "en-US",
         {
-          timeZone: "Asia/Manila",
-          hour: "2-digit",
-          minute: "2-digit",
-          second: "2-digit",
-          hour12: true
+          timeZone:
+            "Asia/Manila",
+
+          hour:
+            "2-digit",
+
+          minute:
+            "2-digit",
+
+          second:
+            "2-digit",
+
+          hour12:
+            true
         }
       ).format(now);
 
@@ -2907,11 +3404,20 @@ function jsonpRequest(url) {
       new Intl.DateTimeFormat(
         "en-US",
         {
-          timeZone: "Asia/Manila",
-          weekday: "long",
-          month: "long",
-          day: "numeric",
-          year: "numeric"
+          timeZone:
+            "Asia/Manila",
+
+          weekday:
+            "long",
+
+          month:
+            "long",
+
+          day:
+            "numeric",
+
+          year:
+            "numeric"
         }
       ).format(now);
 
@@ -2953,6 +3459,14 @@ function jsonpRequest(url) {
 
 
   updatePSTClock();
+
+
+  /* =====================================================
+     INITIAL PM DISPLAY
+     ===================================================== */
+
+  updateSchoolSummaryPMDisplay();
+
 
 </script>
 
