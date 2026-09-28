@@ -2121,17 +2121,33 @@ function releaseCurrentSession() {
 
 /* =====================================================
    ANDROID / CHROME BACK
+   DO NOT RELEASE SESSION WHEN HIDDEN
    ===================================================== */
 
 document.addEventListener(
   "visibilitychange",
   function() {
 
+    /*
+     * Do NOT release the device session here.
+     *
+     * The scanner can remain open for many hours
+     * even when there are no scans.
+     */
+
     if (
-      document.visibilityState === "hidden"
+      document.visibilityState === "visible"
     ) {
 
-      releaseCurrentSession();
+      if (
+        deviceKey &&
+        sessionToken &&
+        !heartbeatTimer
+      ) {
+
+        startDeviceHeartbeat();
+
+      }
 
     }
 
