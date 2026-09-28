@@ -54,161 +54,265 @@
       position: relative;
     }
 
-    /* =========================
-       PAGE 1
-       ========================= */
+   
+/* =========================
+   PAGE 1
+   ========================= */
 
-    #devicePage {
-      position: relative;
-      min-height: calc(100vh - 40px);
+#userPage {
+  position: relative;
+  min-height: calc(100vh - 40px);
+  display: block;
 
-      background-image:
-        linear-gradient(
-          rgba(255,255,255,0.78),
-          rgba(255,255,255,0.78)
-        ),
-        url("./logo.png");
+  background-image:
+    linear-gradient(
+      rgba(255,255,255,0.78),
+      rgba(255,255,255,0.78)
+    ),
+    url("./logo.png");
 
-      background-size: cover;
-      background-position: center;
-      background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 
-      border-radius: 24px;
-      padding: 35px 25px;
-      box-shadow: 0 10px 35px rgba(0,0,0,0.12);
-      text-align: center;
-      overflow: hidden;
-    }
+  border-radius: 24px;
+  padding: 35px 25px;
+  box-shadow: 0 10px 35px rgba(0,0,0,0.12);
+  text-align: center;
+  overflow: hidden;
+}
 
-    .device-watermark {
-      position: absolute;
-      left: 50%;
-      top: 50%;
-      transform: translate(-50%, -50%);
-      font-size: 170px;
-      font-weight: 900;
-      color: rgba(0,70,140,0.045);
-      pointer-events: none;
-      white-space: nowrap;
-      z-index: 0;
-    }
 
-    .device-content {
-      position: relative;
-      z-index: 1;
-    }
+/* =========================
+   PAGE 2 — DEVICE CODE
+   ========================= */
 
-    .school-name {
-      font-size: 30px;
-      font-weight: 900;
-      letter-spacing: 0.5px;
-      line-height: 1.2;
-      color: #124b7c;
-    }
+#devicePage {
+  display: none;
 
-    .gate-title {
-      margin-top: 6px;
-      font-size: 24px;
-      font-weight: 800;
-      color: #123;
-    }
+  position: relative;
+  min-height: calc(100vh - 40px);
 
-    .subtitle {
-      margin-top: 8px;
-      color: #667;
-      font-size: 15px;
-    }
+  background-image:
+    linear-gradient(
+      rgba(255,255,255,0.78),
+      rgba(255,255,255,0.78)
+    ),
+    url("./logo.png");
 
-    .device-label {
-      display: block;
-      margin-top: 35px;
-      margin-bottom: 8px;
-      text-align: left;
-      font-weight: bold;
-      color: #345;
-    }
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 
-    .device-code-wrapper {
-      position: relative;
-      width: 100%;
-      margin: 0 auto;
-    }
+  border-radius: 24px;
+  padding: 35px 25px;
+  box-shadow: 0 10px 35px rgba(0,0,0,0.12);
+  text-align: center;
+  overflow: hidden;
+}
 
-    #deviceCode {
-      width: 100%;
-      padding: 17px;
-      padding-right: 60px;
-      font-size: 18px;
-      border: 2px solid #ccd8e5;
-      border-radius: 14px;
-      outline: none;
-      text-align: center;
-      letter-spacing: 1px;
-    }
 
-    #deviceCode:focus {
-      border-color: #1677c8;
-    }
+/* =========================
+   USER INFORMATION INPUTS
+   ========================= */
 
-    #toggleDeviceCode {
-      position: absolute;
-      right: 6px;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 46px;
-      height: 46px;
-      border: none;
-      border-radius: 10px;
-      background: transparent;
-      color: #222;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 0;
-      margin: 0;
-      z-index: 10;
-    }
+#userNameInput,
+#userEmailInput {
+  width: 100%;
+  max-width: 420px;
+  box-sizing: border-box;
 
-    #toggleDeviceCode:hover {
-      background: rgba(0,0,0,0.06);
-    }
+  padding: 14px 16px;
+  margin: 8px auto 18px;
 
-    #continueBtn {
-      width: 100%;
-      margin-top: 18px;
-      padding: 17px;
-      border: none;
-      border-radius: 14px;
-      background: #1267a5;
-      color: white;
-      font-size: 18px;
-      font-weight: 800;
-      cursor: pointer;
-    }
+  border: 1px solid #ccc;
+  border-radius: 12px;
 
-    #continueBtn:disabled {
-      opacity: 0.7;
-      cursor: wait;
-    }
+  font-size: 16px;
+  font-family: inherit;
 
-    #continueBtn:active {
-      transform: scale(0.98);
-    }
+  outline: none;
+  background: #fff;
+}
 
-    #deviceMessage {
-      min-height: 25px;
-      margin-top: 15px;
-      font-weight: bold;
-    }
+#userNameInput:focus,
+#userEmailInput:focus {
+  border-color: #1a73e8;
+  box-shadow: 0 0 0 3px rgba(26,115,232,0.12);
+}
 
-    .error {
-      color: #c62828;
-    }
+#userNextBtn {
+  width: 100%;
+  max-width: 420px;
 
-    .success {
-      color: #16803c;
-    }
+  padding: 14px 20px;
+  margin-top: 5px;
+
+  border: none;
+  border-radius: 12px;
+
+  background: #1a73e8;
+  color: white;
+
+  font-size: 16px;
+  font-weight: bold;
+
+  cursor: pointer;
+}
+
+#userNextBtn:hover {
+  opacity: 0.92;
+}
+
+#userNextBtn:active {
+  transform: scale(0.98);
+}
+
+#userMessage {
+  min-height: 20px;
+  margin-top: 15px;
+
+  font-size: 14px;
+  font-weight: bold;
+  color: #d93025;
+}
+
+
+/* =========================
+   DEVICE PAGE ELEMENTS
+   ========================= */
+
+.device-watermark {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 170px;
+  font-weight: 900;
+  color: rgba(0,70,140,0.045);
+  pointer-events: none;
+  white-space: nowrap;
+  z-index: 0;
+}
+
+.device-content {
+  position: relative;
+  z-index: 1;
+}
+
+.school-name {
+  font-size: 30px;
+  font-weight: 900;
+  letter-spacing: 0.5px;
+  line-height: 1.2;
+  color: #124b7c;
+}
+
+.gate-title {
+  margin-top: 6px;
+  font-size: 24px;
+  font-weight: 800;
+  color: #123;
+}
+
+.subtitle {
+  margin-top: 8px;
+  color: #667;
+  font-size: 15px;
+}
+
+.device-label {
+  display: block;
+  margin-top: 35px;
+  margin-bottom: 8px;
+  text-align: left;
+  font-weight: bold;
+  color: #345;
+}
+
+.device-code-wrapper {
+  position: relative;
+  width: 100%;
+  margin: 0 auto;
+}
+
+#deviceCode {
+  width: 100%;
+  padding: 17px;
+  padding-right: 60px;
+  font-size: 18px;
+  border: 2px solid #ccd8e5;
+  border-radius: 14px;
+  outline: none;
+  text-align: center;
+  letter-spacing: 1px;
+}
+
+#deviceCode:focus {
+  border-color: #1677c8;
+}
+
+#toggleDeviceCode {
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 46px;
+  height: 46px;
+  border: none;
+  border-radius: 10px;
+  background: transparent;
+  color: #222;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  margin: 0;
+  z-index: 10;
+}
+
+#toggleDeviceCode:hover {
+  background: rgba(0,0,0,0.06);
+}
+
+#continueBtn {
+  width: 100%;
+  margin-top: 18px;
+  padding: 17px;
+  border: none;
+  border-radius: 14px;
+  background: #1267a5;
+  color: white;
+  font-size: 18px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+#continueBtn:disabled {
+  opacity: 0.7;
+  cursor: wait;
+}
+
+#continueBtn:active {
+  transform: scale(0.98);
+}
+
+#deviceMessage {
+  min-height: 25px;
+  margin-top: 15px;
+  font-weight: bold;
+}
+
+.error {
+  color: #c62828;
+}
+
+.success {
+  color: #16803c;
+}
+
+
 
     /* =========================
        PAGE 2
