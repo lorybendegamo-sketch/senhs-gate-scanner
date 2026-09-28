@@ -2910,7 +2910,7 @@ async function onQrDetected(
 
 
 /* =====================================================
-   RESUME
+   RESUME SCANNER
    ===================================================== */
 
 async function resumeScanner() {
@@ -2929,8 +2929,7 @@ async function resumeScanner() {
   try {
 
     /*
-     * If scanner is already running,
-     * make sure it is resumed.
+     * Try normal resume first.
      */
 
     if (
@@ -2942,12 +2941,16 @@ async function resumeScanner() {
 
         await html5QrCode.resume();
 
+        console.log(
+          "Scanner resumed successfully."
+        );
+
         return;
 
       } catch (resumeError) {
 
         console.log(
-          "Resume failed. Restarting camera...",
+          "Resume failed. Restarting scanner...",
           resumeError
         );
 
@@ -2957,8 +2960,8 @@ async function resumeScanner() {
 
 
     /*
-     * If resume fails or scanner stopped,
-     * completely restart the camera.
+     * If resume failed,
+     * completely stop the scanner.
      */
 
     if (
@@ -2973,24 +2976,34 @@ async function resumeScanner() {
       } catch (stopError) {
 
         console.log(
-          "Stop before restart:",
+          "Scanner stop error:",
           stopError
         );
 
       }
 
-      scannerRunning = false;
-
     }
 
 
+    scannerRunning = false;
+
+
+    /*
+     * Restart camera/scanner.
+     */
+
     await startSelectedCamera();
+
+
+    console.log(
+      "Scanner restarted successfully."
+    );
 
 
   } catch (error) {
 
     console.error(
-      "Resume/restart scanner error:",
+      "Scanner recovery error:",
       error
     );
 
@@ -2998,7 +3011,7 @@ async function resumeScanner() {
     scannerRunning = false;
 
     readyBar.textContent =
-      "SCANNER ERROR — TAP SCREEN TO RETRY";
+      "CAMERA ERROR";
 
     readyBar.style.color =
       "#b71c1c";
