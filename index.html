@@ -2909,65 +2909,103 @@ async function onQrDetected(
   }
 
 
-  /* =====================================================
-     RESUME
-     ===================================================== */
+/* =====================================================
+   RESUME
+   ===================================================== */
 
-  async function resumeScanner() {
+async function resumeScanner() {
 
-    hideOverlay();
+  hideOverlay();
 
+  processing = false;
 
-    readyBar.textContent =
-      "● READY TO SCAN";
+  readyBar.textContent =
+    "● READY TO SCAN";
 
-
-    readyBar.style.color =
-      "#16803c";
-
-
-    processing =
-      false;
+  readyBar.style.color =
+    "#16803c";
 
 
-    try {
+  try {
 
-      if (
-        html5QrCode &&
-        scannerRunning
-      ) {
+    /*
+     * If scanner is already running,
+     * make sure it is resumed.
+     */
+
+    if (
+      html5QrCode &&
+      scannerRunning
+    ) {
+
+      try {
 
         await html5QrCode.resume();
 
-      } else {
+        return;
 
-        await startSelectedCamera();
+      } catch (resumeError) {
+
+        console.log(
+          "Resume failed. Restarting camera...",
+          resumeError
+        );
 
       }
 
-    } catch (error) {
-
-      console.error(
-        "Resume scanner error:",
-        error
-      );
+    }
 
 
-      scannerRunning =
-        false;
+    /*
+     * If resume fails or scanner stopped,
+     * completely restart the camera.
+     */
 
+    if (
+      html5QrCode &&
+      scannerRunning
+    ) {
 
-      readyBar.textContent =
-        "CAMERA ERROR";
+      try {
 
+        await html5QrCode.stop();
 
-      readyBar.style.color =
-        "#b71c1c";
+      } catch (stopError) {
+
+        console.log(
+          "Stop before restart:",
+          stopError
+        );
+
+      }
+
+      scannerRunning = false;
 
     }
 
+
+    await startSelectedCamera();
+
+
+  } catch (error) {
+
+    console.error(
+      "Resume/restart scanner error:",
+      error
+    );
+
+
+    scannerRunning = false;
+
+    readyBar.textContent =
+      "SCANNER ERROR — TAP SCREEN TO RETRY";
+
+    readyBar.style.color =
+      "#b71c1c";
+
   }
 
+}
 
   /* =====================================================
      HIDE OVERLAY
