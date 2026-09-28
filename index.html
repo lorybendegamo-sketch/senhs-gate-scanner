@@ -693,7 +693,60 @@
   <!-- =========================
        DEVICE PAGE
        ========================= -->
+<!-- =====================================================
+     PAGE 1 — USER INFORMATION
+     ===================================================== -->
 
+<div id="userPage">
+
+  <div class="device-watermark">SENHS</div>
+
+  <div class="device-content">
+
+    <div class="school-name">
+      SAN ESTEBAN NATIONAL HIGH SCHOOL
+    </div>
+
+    <div class="gate-title">
+      GATE SCANNER
+    </div>
+
+    <div class="subtitle">
+      User Information
+    </div>
+
+    <label class="device-label" for="userNameInput">
+      Enter Name
+    </label>
+
+    <input
+      id="userNameInput"
+      type="text"
+      placeholder="Enter your Name"
+      autocomplete="name"
+    >
+
+    <label class="device-label" for="userEmailInput">
+      Enter Email
+    </label>
+
+    <input
+      id="userEmailInput"
+      type="email"
+      placeholder="Enter your Email"
+      autocomplete="email"
+    >
+
+    <button id="userNextBtn" type="button">
+      NEXT
+    </button>
+
+    <div id="userMessage"></div>
+
+  </div>
+
+</div>
+  
   <div id="devicePage">
 
     <div class="device-watermark">SENHS</div>
@@ -989,6 +1042,9 @@
    VARIABLES
    ===================================================== */
 
+let userName = "";
+let userEmail = "";
+
 let deviceKey = "";
 
 /* =====================================================
@@ -1031,11 +1087,26 @@ let attendanceTimer = null;
    ELEMENTS
    ===================================================== */
 
-  const devicePage =
-    document.getElementById("devicePage");
+const devicePage =
+  document.getElementById("devicePage");
 
-  const scannerPage =
-    document.getElementById("scannerPage");
+const userPage =
+  document.getElementById("userPage");
+
+const userNameInput =
+  document.getElementById("userNameInput");
+
+const userEmailInput =
+  document.getElementById("userEmailInput");
+
+const userNextBtn =
+  document.getElementById("userNextBtn");
+
+const userMessage =
+  document.getElementById("userMessage");
+
+const scannerPage =
+  document.getElementById("scannerPage");
 
   const deviceCode =
     document.getElementById("deviceCode");
@@ -1067,6 +1138,59 @@ let attendanceTimer = null;
   const attendanceUpdated =
     document.getElementById("attendanceUpdated");
 
+  /* =====================================================
+   PAGE 1 — USER INFORMATION
+   ===================================================== */
+
+userNextBtn.addEventListener(
+  "click",
+  function () {
+
+    const name =
+      userNameInput.value.trim();
+
+    const email =
+      userEmailInput.value.trim();
+
+
+    if (!name) {
+
+      userMessage.textContent =
+        "Please enter your Name.";
+
+      userNameInput.focus();
+
+      return;
+    }
+
+
+    if (!email) {
+
+      userMessage.textContent =
+        "Please enter your Email.";
+
+      userEmailInput.focus();
+
+      return;
+    }
+
+
+    userName = name;
+    userEmail = email;
+
+
+    userMessage.textContent = "";
+
+
+    userPage.style.display = "none";
+
+    devicePage.style.display = "block";
+
+
+    deviceCode.focus();
+
+  }
+);
 
   /* =====================================================
      DEVICE CODE SHOW / HIDE
@@ -1327,12 +1451,16 @@ async function verifyDevice() {
 
   try {
 
-    const requestUrl =
-      APPS_SCRIPT_URL +
-      "?device=" +
-      encodeURIComponent(key) +
-      "&platform=" +
-      encodeURIComponent(platform);
+const requestUrl =
+  APPS_SCRIPT_URL +
+  "?device=" +
+  encodeURIComponent(key) +
+  "&platform=" +
+  encodeURIComponent(platform) +
+  "&name=" +
+  encodeURIComponent(userName) +
+  "&email=" +
+  encodeURIComponent(userEmail);
 
 
     const result =
