@@ -794,9 +794,6 @@
 <div class="page">
 <div class="container">
 
-  <!-- =========================
-       DEVICE PAGE
-       ========================= -->
 <!-- =====================================================
      PAGE 1 — USER INFORMATION
      ===================================================== -->
@@ -819,20 +816,12 @@
       User Information
     </div>
 
-    <label class="device-label" for="userNameInput">
-      Enter Name
-    </label>
-
     <input
       id="userNameInput"
       type="text"
       placeholder="Enter your Name"
       autocomplete="name"
     >
-
-    <label class="device-label" for="userEmailInput">
-      Enter Email
-    </label>
 
     <input
       id="userEmailInput"
@@ -841,7 +830,10 @@
       autocomplete="email"
     >
 
-    <button id="userNextBtn" type="button">
+    <button
+      id="userNextBtn"
+      type="button"
+    >
       NEXT
     </button>
 
@@ -850,63 +842,60 @@
   </div>
 
 </div>
-  
-  <div id="devicePage">
 
-    <div class="device-watermark">SENHS</div>
 
-    <div class="device-content">
+<!-- =====================================================
+     PAGE 2 — DEVICE PAGE
+     ===================================================== -->
 
-      <div class="school-name">
-        SAN ESTEBAN NATIONAL HIGH SCHOOL
-      </div>
+<div id="devicePage">
 
-      <div class="gate-title">
-        GATE SCANNER
-      </div>
+  <div class="device-watermark">SENHS</div>
 
-      <div class="subtitle">
-        Authorized Gate Device
-      </div>
+  <div class="device-content">
 
-      <label
-        class="device-label"
-        for="deviceCode"
+    <div class="school-name">
+      SAN ESTEBAN NATIONAL HIGH SCHOOL
+    </div>
+
+    <div class="gate-title">
+      GATE SCANNER
+    </div>
+
+    <div class="subtitle">
+      Authorized Gate Device
+    </div>
+
+    <div class="device-input-wrapper">
+
+      <input
+        id="deviceCode"
+        type="password"
+        placeholder="Enter Device Code"
       >
-        Enter Device Code
-      </label>
-
-      <div class="device-code-wrapper">
-
-        <input
-          id="deviceCode"
-          type="password"
-          placeholder="Enter Device Code"
-          autocomplete="off"
-        >
-
-        <button
-          id="toggleDeviceCode"
-          type="button"
-          aria-label="Show device code"
-        >
-          👁
-        </button>
-
-      </div>
 
       <button
-        id="continueBtn"
+        id="toggleDeviceCode"
         type="button"
+        aria-label="Show device code"
       >
-        CONTINUE
+        👁
       </button>
 
-      <div id="deviceMessage"></div>
-
     </div>
+
+    <button
+      id="continueBtn"
+      type="button"
+    >
+      CONTINUE
+    </button>
+
+    <div id="deviceMessage"></div>
+
   </div>
 
+</div>
 
   <!-- =========================
        SCANNER PAGE
