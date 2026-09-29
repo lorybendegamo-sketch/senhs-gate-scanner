@@ -618,6 +618,7 @@
     }
 
     @media (max-width: 600px) {
+
       .school-summary {
         grid-template-columns: repeat(2, 1fr);
       }
@@ -644,9 +645,11 @@
       .section-table td {
         padding: 8px 6px;
       }
+
     }
 
     @media (max-width: 480px) {
+
       .page {
         padding: 10px;
       }
@@ -681,7 +684,9 @@
         max-width: 420px !important;
         margin: 0 auto 18px auto !important;
       }
+
     }
+
   </style>
 </head>
 
@@ -690,13 +695,15 @@
 <div class="page">
 <div class="container">
 
-  <!-- =========================
-       DEVICE PAGE
-       ========================= -->
+  <!-- =====================================================
+       PAGE 1 — DEVICE AUTHORIZATION
+       ===================================================== -->
 
   <div id="devicePage">
 
-    <div class="device-watermark">SENHS</div>
+    <div class="device-watermark">
+      SENHS
+    </div>
 
     <div class="device-content">
 
@@ -748,12 +755,13 @@
       <div id="deviceMessage"></div>
 
     </div>
+
   </div>
 
 
-  <!-- =========================
-       SCANNER PAGE
-       ========================= -->
+  <!-- =====================================================
+       PAGE 2 — SCANNER
+       ===================================================== -->
 
   <div id="scannerPage">
 
@@ -794,6 +802,8 @@
       </div>
 
 
+      <!-- CAMERA -->
+
       <div class="camera-area">
 
         <div id="reader"></div>
@@ -827,9 +837,9 @@
       </div>
 
 
-  <!-- =========================
+      <!-- =====================================================
            ATTENDANCE MONITOR
-           ========================= -->
+           ===================================================== -->
 
       <div id="attendanceMonitor">
 
@@ -849,50 +859,119 @@
           <div class="school-summary">
 
             <div class="summary-card total">
-              <div class="summary-label">TOTAL</div>
-              <div id="jhsTotal" class="summary-number">0</div>
+              <div class="summary-label">
+                TOTAL
+              </div>
+
+              <div
+                id="jhsTotal"
+                class="summary-number"
+              >
+                0
+              </div>
             </div>
+
 
             <div class="summary-card am-present">
-              <div class="summary-label">AM PRESENT</div>
-              <div id="jhsAmPresent" class="summary-number">0</div>
+              <div class="summary-label">
+                AM PRESENT
+              </div>
+
+              <div
+                id="jhsAmPresent"
+                class="summary-number"
+              >
+                0
+              </div>
             </div>
+
 
             <div class="summary-card am-absent">
-              <div class="summary-label">AM ABSENT</div>
-              <div id="jhsAmAbsent" class="summary-number">0</div>
+              <div class="summary-label">
+                AM ABSENT
+              </div>
+
+              <div
+                id="jhsAmAbsent"
+                class="summary-number"
+              >
+                0
+              </div>
             </div>
 
+
             <div class="summary-card am-late">
-              <div class="summary-label">AM LATE</div>
-              <div id="jhsAmLate" class="summary-number">0</div>
+              <div class="summary-label">
+                AM LATE
+              </div>
+
+              <div
+                id="jhsAmLate"
+                class="summary-number"
+              >
+                0
+              </div>
             </div>
+
 
             <div
               id="jhsPmPresentCard"
               class="summary-card pm-present"
             >
-              <div class="summary-label">PM PRESENT</div>
-              <div id="jhsPmPresent" class="summary-number">0</div>
+
+              <div class="summary-label">
+                PM PRESENT
+              </div>
+
+              <div
+                id="jhsPmPresent"
+                class="summary-number"
+              >
+                0
+              </div>
+
             </div>
+
 
             <div
               id="jhsPmAbsentCard"
               class="summary-card pm-absent"
             >
-              <div class="summary-label">PM ABSENT</div>
-              <div id="jhsPmAbsent" class="summary-number">0</div>
+
+              <div class="summary-label">
+                PM ABSENT
+              </div>
+
+              <div
+                id="jhsPmAbsent"
+                class="summary-number"
+              >
+                0
+              </div>
+
             </div>
+
 
             <div
               id="jhsPmLateCard"
               class="summary-card pm-late"
             >
-              <div class="summary-label">PM LATE</div>
-              <div id="jhsPmLate" class="summary-number">0</div>
+
+              <div class="summary-label">
+                PM LATE
+              </div>
+
+              <div
+                id="jhsPmLate"
+                class="summary-number"
+              >
+                0
+              </div>
+
             </div>
 
           </div>
+
         </div>
 
 
@@ -907,50 +986,127 @@
           <div class="school-summary">
 
             <div class="summary-card total">
-              <div class="summary-label">TOTAL</div>
-              <div id="shsTotal" class="summary-number">0</div>
+
+              <div class="summary-label">
+                TOTAL
+              </div>
+
+              <div
+                id="shsTotal"
+                class="summary-number"
+              >
+                0
+              </div>
+
             </div>
+
 
             <div class="summary-card am-present">
-              <div class="summary-label">AM PRESENT</div>
-              <div id="shsAmPresent" class="summary-number">0</div>
+
+              <div class="summary-label">
+                AM PRESENT
+              </div>
+
+              <div
+                id="shsAmPresent"
+                class="summary-number"
+              >
+                0
+              </div>
+
             </div>
+
 
             <div class="summary-card am-absent">
-              <div class="summary-label">AM ABSENT</div>
-              <div id="shsAmAbsent" class="summary-number">0</div>
+
+              <div class="summary-label">
+                AM ABSENT
+              </div>
+
+              <div
+                id="shsAmAbsent"
+                class="summary-number"
+              >
+                0
+              </div>
+
             </div>
 
+
             <div class="summary-card am-late">
-              <div class="summary-label">AM LATE</div>
-              <div id="shsAmLate" class="summary-number">0</div>
+
+              <div class="summary-label">
+                AM LATE
+              </div>
+
+              <div
+                id="shsAmLate"
+                class="summary-number"
+              >
+                0
+              </div>
+
             </div>
+
 
             <div
               id="shsPmPresentCard"
               class="summary-card pm-present"
             >
-              <div class="summary-label">PM PRESENT</div>
-              <div id="shsPmPresent" class="summary-number">0</div>
+
+              <div class="summary-label">
+                PM PRESENT
+              </div>
+
+              <div
+                id="shsPmPresent"
+                class="summary-number"
+              >
+                0
+              </div>
+
             </div>
+
 
             <div
               id="shsPmAbsentCard"
               class="summary-card pm-absent"
             >
-              <div class="summary-label">PM ABSENT</div>
-              <div id="shsPmAbsent" class="summary-number">0</div>
+
+              <div class="summary-label">
+                PM ABSENT
+              </div>
+
+              <div
+                id="shsPmAbsent"
+                class="summary-number"
+              >
+                0
+              </div>
+
             </div>
+
 
             <div
               id="shsPmLateCard"
               class="summary-card pm-late"
             >
-              <div class="summary-label">PM LATE</div>
-              <div id="shsPmLate" class="summary-number">0</div>
+
+              <div class="summary-label">
+                PM LATE
+              </div>
+
+              <div
+                id="shsPmLate"
+                class="summary-number"
+              >
+                0
+              </div>
+
             </div>
 
           </div>
+
         </div>
 
 
@@ -958,9 +1114,11 @@
           SECTION ATTENDANCE
         </div>
 
+
         <div id="sectionAttendance">
           Loading attendance...
         </div>
+
 
         <div id="attendanceUpdated">
           Updating...
@@ -969,6 +1127,7 @@
       </div>
 
     </div>
+
   </div>
 
 </div>
@@ -977,12 +1136,18 @@
 
 <script>
 
-  /* =====================================================
-     CONFIGURATION
-     ===================================================== */
+/* =====================================================
+   CONFIGURATION
+   ===================================================== */
 
-  const APPS_SCRIPT_URL =
-    "https://script.google.com/macros/s/AKfycbyXwfLu_wjourRT3BwQDTwA-H9vIJfu5LvqbjjbG3jwv5JVb0mi_1SO5CRPq60S5KdaCg/exec";
+/*
+ * IMPORTANT:
+ * Ito ang Apps Script Web App URL na gagamitin
+ * ng GitHub frontend.
+ */
+
+const APPS_SCRIPT_URL =
+  "https://script.google.com/macros/s/AKfycbyuK3nirgvJ7Ux6TADBT1OJ9IDJovyG6Bc0cjMvC7oJNrw_FQxPDWhDhsWeARW_-sPi8/exec";
 
 
 /* =====================================================
@@ -991,20 +1156,12 @@
 
 let deviceKey = "";
 
-/* =====================================================
-   DEVICE SESSION
-   ===================================================== */
+let sessionToken = "";
 
-let clientId =
-  "SENHS_" +
-  Date.now() +
-  "_" +
-  Math.random().toString(36).substring(2, 10);
-
-  let sessionToken = "";
-  
 let platform =
-  /Android|iPhone|iPad|iPod/i.test(navigator.userAgent)
+  /Android|iPhone|iPad|iPod/i.test(
+    navigator.userAgent
+  )
     ? "mobile"
     : "laptop";
 
@@ -1022,273 +1179,415 @@ let scannerRunning = false;
 
 let processing = false;
 
-let callbackCounter = 0;
-
 let attendanceTimer = null;
+
+let releaseSent = false;
+
+let reauthorizationInProgress = false;
 
 
 /* =====================================================
    ELEMENTS
    ===================================================== */
 
-  const devicePage =
-    document.getElementById("devicePage");
+const devicePage =
+  document.getElementById(
+    "devicePage"
+  );
 
-  const scannerPage =
-    document.getElementById("scannerPage");
+const scannerPage =
+  document.getElementById(
+    "scannerPage"
+  );
 
-  const deviceCode =
-    document.getElementById("deviceCode");
+const deviceCode =
+  document.getElementById(
+    "deviceCode"
+  );
 
-  const continueBtn =
-    document.getElementById("continueBtn");
+const continueBtn =
+  document.getElementById(
+    "continueBtn"
+  );
 
-  const toggleDeviceCode =
-    document.getElementById("toggleDeviceCode");
+const toggleDeviceCode =
+  document.getElementById(
+    "toggleDeviceCode"
+  );
 
-  const deviceMessage =
-    document.getElementById("deviceMessage");
+const deviceMessage =
+  document.getElementById(
+    "deviceMessage"
+  );
 
-  const switchCameraBtn =
-    document.getElementById("switchCameraBtn");
+const switchCameraBtn =
+  document.getElementById(
+    "switchCameraBtn"
+  );
 
-  const scanOverlay =
-    document.getElementById("scanOverlay");
+const scanOverlay =
+  document.getElementById(
+    "scanOverlay"
+  );
 
-  const overlayContent =
-    document.getElementById("overlayContent");
+const overlayContent =
+  document.getElementById(
+    "overlayContent"
+  );
 
-  const readyBar =
-    document.getElementById("readyBar");
+const readyBar =
+  document.getElementById(
+    "readyBar"
+  );
 
-  const sectionAttendance =
-    document.getElementById("sectionAttendance");
+const sectionAttendance =
+  document.getElementById(
+    "sectionAttendance"
+  );
 
-  const attendanceUpdated =
-    document.getElementById("attendanceUpdated");
+const attendanceUpdated =
+  document.getElementById(
+    "attendanceUpdated"
+  );
 
 
-  /* =====================================================
-     DEVICE CODE SHOW / HIDE
-     ===================================================== */
+/* =====================================================
+   DEVICE CODE SHOW / HIDE
+   ===================================================== */
 
-  toggleDeviceCode.addEventListener(
-    "click",
-    function() {
+toggleDeviceCode.addEventListener(
+  "click",
+  function() {
 
-      if (deviceCode.type === "password") {
+    if (
+      deviceCode.type ===
+      "password"
+    ) {
 
-        deviceCode.type = "text";
+      deviceCode.type =
+        "text";
 
-        toggleDeviceCode.textContent = "🙈";
+      toggleDeviceCode.textContent =
+        "🙈";
 
-        toggleDeviceCode.setAttribute(
-          "aria-label",
-          "Hide device code"
+      toggleDeviceCode.setAttribute(
+        "aria-label",
+        "Hide device code"
+      );
+
+    } else {
+
+      deviceCode.type =
+        "password";
+
+      toggleDeviceCode.textContent =
+        "👁";
+
+      toggleDeviceCode.setAttribute(
+        "aria-label",
+        "Show device code"
+      );
+
+    }
+
+  }
+);
+
+
+/* =====================================================
+   BEEP
+   ===================================================== */
+
+function beep(
+  frequency = 900,
+  duration = 120
+) {
+
+  try {
+
+    const AudioContext =
+      window.AudioContext ||
+      window.webkitAudioContext;
+
+    const audioContext =
+      new AudioContext();
+
+    const oscillator =
+      audioContext.createOscillator();
+
+    const gain =
+      audioContext.createGain();
+
+    oscillator.type =
+      "sine";
+
+    oscillator.frequency.value =
+      frequency;
+
+    gain.gain.value =
+      0.18;
+
+    oscillator.connect(
+      gain
+    );
+
+    gain.connect(
+      audioContext.destination
+    );
+
+    oscillator.start();
+
+    setTimeout(
+      function() {
+
+        try {
+          oscillator.stop();
+        } catch (e) {}
+
+        try {
+          audioContext.close();
+        } catch (e) {}
+
+      },
+      duration
+    );
+
+  } catch (error) {
+
+    console.log(
+      "Beep unavailable:",
+      error
+    );
+
+  }
+
+}
+
+
+/* =====================================================
+   GOOGLE APPS SCRIPT JSONP
+   ===================================================== */
+
+function jsonpRequest(
+  url,
+  timeoutMs = 20000
+) {
+
+  return new Promise(
+    function(resolve, reject) {
+
+      const callbackName =
+        "senhsCallback_" +
+        Date.now() +
+        "_" +
+        Math.floor(
+          Math.random() * 1000000
         );
 
-      } else {
-
-        deviceCode.type = "password";
-
-        toggleDeviceCode.textContent = "👁";
-
-        toggleDeviceCode.setAttribute(
-          "aria-label",
-          "Show device code"
+      const script =
+        document.createElement(
+          "script"
         );
+
+      let finished =
+        false;
+
+      const timeout =
+        setTimeout(
+          function() {
+
+            if (finished) {
+              return;
+            }
+
+            finished =
+              true;
+
+            cleanup();
+
+            reject(
+              new Error(
+                "Unable to connect to server."
+              )
+            );
+
+          },
+          timeoutMs
+        );
+
+
+      function cleanup() {
+
+        clearTimeout(
+          timeout
+        );
+
+        if (
+          script.parentNode
+        ) {
+
+          script.parentNode.removeChild(
+            script
+          );
+
+        }
+
+        try {
+
+          delete window[
+            callbackName
+          ];
+
+        } catch (error) {
+
+          window[
+            callbackName
+          ] = undefined;
+
+        }
 
       }
+
+
+      window[
+        callbackName
+      ] =
+        function(data) {
+
+          if (finished) {
+            return;
+          }
+
+          finished =
+            true;
+
+          cleanup();
+
+          resolve(data);
+
+        };
+
+
+      script.onerror =
+        function() {
+
+          if (finished) {
+            return;
+          }
+
+          finished =
+            true;
+
+          cleanup();
+
+          reject(
+            new Error(
+              "Unable to connect to server."
+            )
+          );
+
+        };
+
+
+      let separator =
+        "?";
+
+      if (
+        url.indexOf("?") !== -1
+      ) {
+
+        separator =
+          "&";
+
+      }
+
+
+      script.src =
+        url +
+        separator +
+        "callback=" +
+        encodeURIComponent(
+          callbackName
+        ) +
+        "&_=" +
+        Date.now();
+
+
+      script.async =
+        true;
+
+
+      document.body.appendChild(
+        script
+      );
 
     }
   );
 
-
-  /* =====================================================
-     BEEP
-     ===================================================== */
-
-  function beep(
-    frequency = 900,
-    duration = 120
-  ) {
-
-    try {
-
-      const AudioContext =
-        window.AudioContext ||
-        window.webkitAudioContext;
-
-      const audioContext =
-        new AudioContext();
-
-      const oscillator =
-        audioContext.createOscillator();
-
-      const gain =
-        audioContext.createGain();
-
-      oscillator.type = "sine";
-
-      oscillator.frequency.value =
-        frequency;
-
-      gain.gain.value = 0.18;
-
-      oscillator.connect(gain);
-
-      gain.connect(
-        audioContext.destination
-      );
-
-      oscillator.start();
-
-      setTimeout(
-        function() {
-
-          oscillator.stop();
-
-          audioContext.close();
-
-        },
-        duration
-      );
-
-    } catch (error) {
-
-      console.log(
-        "Beep unavailable:",
-        error
-      );
-
-    }
-
-  }
+}
 
 
-  /* =====================================================
-     GOOGLE APPS SCRIPT JSONP REQUEST
-     ===================================================== */
+/* =====================================================
+   DEVICE MESSAGE
+   ===================================================== */
 
-function jsonpRequest(url) {
+function showDeviceMessage(
+  message,
+  type
+) {
 
-  return new Promise(function(resolve, reject) {
+  deviceMessage.textContent =
+    message;
 
-    const callbackName =
-      "senhsCallback_" +
-      Date.now() +
-      "_" +
-      Math.floor(Math.random() * 100000);
-
-    const script =
-      document.createElement("script");
-
-    let finished = false;
-
-    const timeout =
-      setTimeout(function() {
-
-        if (finished) return;
-
-        finished = true;
-
-        cleanup();
-
-        reject(
-          new Error(
-            "Unable to connect to server."
-          )
-        );
-
-      }, 20000);
-
-
-    function cleanup() {
-
-      clearTimeout(timeout);
-
-      if (script.parentNode) {
-        script.parentNode.removeChild(script);
-      }
-
-      try {
-        delete window[callbackName];
-      } catch (e) {
-        window[callbackName] = undefined;
-      }
-    }
-
-
-    window[callbackName] =
-      function(data) {
-
-        if (finished) return;
-
-        finished = true;
-
-        cleanup();
-
-        resolve(data);
-      };
-
-
-    script.onerror =
-      function() {
-
-        if (finished) return;
-
-        finished = true;
-
-        cleanup();
-
-        reject(
-          new Error(
-            "Unable to connect to server."
-          )
-        );
-      };
-
-
-    let separator = "?";
-
-    if (url.indexOf("?") !== -1) {
-      separator = "&";
-    }
-
-
-    script.src =
-      url +
-      separator +
-      "callback=" +
-      encodeURIComponent(callbackName) +
-      "&_=" +
-      Date.now();
-
-
-    script.async = true;
-
-    document.body.appendChild(script);
-
-  });
+  deviceMessage.className =
+    type || "";
 
 }
 
-  /* =====================================================
-     DEVICE MESSAGE
-     ===================================================== */
 
-  function showDeviceMessage(
-    message,
-    type
-  ) {
+/* =====================================================
+   AUTHORIZE DEVICE
+   ===================================================== */
 
-    deviceMessage.textContent =
-      message;
+async function authorizeDeviceNow(
+  key
+) {
 
-    deviceMessage.className =
-      type || "";
+  const requestUrl =
+    APPS_SCRIPT_URL +
+    "?device=" +
+    encodeURIComponent(
+      key
+    ) +
+    "&platform=" +
+    encodeURIComponent(
+      platform
+    ) +
+    "&format=json";
 
-  }
+
+  /*
+   * JSONP is used because Apps Script
+   * is cross-origin.
+   */
+
+  const jsonpUrl =
+    APPS_SCRIPT_URL +
+    "?device=" +
+    encodeURIComponent(
+      key
+    ) +
+    "&platform=" +
+    encodeURIComponent(
+      platform
+    );
+
+
+  return await jsonpRequest(
+    jsonpUrl
+  );
+
+}
 
 
 /* =====================================================
@@ -1308,12 +1607,15 @@ async function verifyDevice() {
       "error"
     );
 
+    deviceCode.focus();
+
     return;
 
   }
 
 
-  continueBtn.disabled = true;
+  continueBtn.disabled =
+    true;
 
   continueBtn.textContent =
     "CHECKING...";
@@ -1327,17 +1629,9 @@ async function verifyDevice() {
 
   try {
 
-    const requestUrl =
-      APPS_SCRIPT_URL +
-      "?device=" +
-      encodeURIComponent(key) +
-      "&platform=" +
-      encodeURIComponent(platform);
-
-
     const result =
-      await jsonpRequest(
-        requestUrl
+      await authorizeDeviceNow(
+        key
       );
 
 
@@ -1349,7 +1643,6 @@ async function verifyDevice() {
 
       deviceKey =
         key;
-
 
       sessionToken =
         String(
@@ -1368,6 +1661,9 @@ async function verifyDevice() {
 
       sessionActive =
         true;
+
+      releaseSent =
+        false;
 
 
       showDeviceMessage(
@@ -1389,7 +1685,8 @@ async function verifyDevice() {
     } else {
 
       showDeviceMessage(
-        result && result.message
+        result &&
+        result.message
           ? result.message
           : "Access denied. Device not recognized.",
         "error"
@@ -1428,7 +1725,7 @@ async function verifyDevice() {
   }
 
 }
-  
+
 
 /* =====================================================
    OPEN SCANNER
@@ -1436,9 +1733,10 @@ async function verifyDevice() {
 
 async function openScannerPage() {
 
-  releaseSent = false;
+  releaseSent =
+    false;
 
-  
+
   devicePage.style.display =
     "none";
 
@@ -1453,7 +1751,21 @@ async function openScannerPage() {
     "CONTINUE";
 
 
-  await startCamera();
+  startDeviceHeartbeat();
+
+
+  try {
+
+    await startCamera();
+
+  } catch (error) {
+
+    console.error(
+      "Camera startup error:",
+      error
+    );
+
+  }
 
 
   loadAttendanceSummary();
@@ -1469,518 +1781,712 @@ async function openScannerPage() {
 
   }
 
+}
 
-  /* =====================================================
-     START DEVICE HEARTBEAT
-     ===================================================== */
 
-  startDeviceHeartbeat();
+/* =====================================================
+   PHILIPPINE TIME — PM DISPLAY
+   ===================================================== */
+
+function getManilaHour() {
+
+  const parts =
+    new Intl.DateTimeFormat(
+      "en-US",
+      {
+        timeZone:
+          "Asia/Manila",
+        hour:
+          "numeric",
+        hour12:
+          false
+      }
+    ).formatToParts(
+      new Date()
+    );
+
+
+  const hourPart =
+    parts.find(
+      function(part) {
+
+        return (
+          part.type ===
+          "hour"
+        );
+
+      }
+    );
+
+
+  return hourPart
+    ? Number(
+        hourPart.value
+      )
+    : 0;
 
 }
 
-  /* =====================================================
-     PM DISPLAY
-     ===================================================== */
 
-  function isPMDisplayTime() {
+/* =====================================================
+   PM DISPLAY
+   ===================================================== */
 
-    const now =
-      new Date();
+function isPMDisplayTime() {
 
-    const currentMinutes =
-      now.getHours() * 60 +
-      now.getMinutes();
+  /*
+   * Backend:
+   * AM = before 12:00 PM
+   * PM = 12:00 PM onward
+   */
 
-    return (
-      currentMinutes >= 725
-    );
+  return (
+    getManilaHour() >= 12
+  );
 
-  }
+}
 
 
-  function updateSchoolSummaryPMDisplay() {
+/* =====================================================
+   UPDATE PM CARDS
+   ===================================================== */
 
-    const showPM =
-      isPMDisplayTime();
+function updateSchoolSummaryPMDisplay() {
 
+  const showPM =
+    isPMDisplayTime();
 
-    const pmCards = [
 
-      "jhsPmPresentCard",
-      "jhsPmAbsentCard",
-      "jhsPmLateCard",
-      "shsPmPresentCard",
-      "shsPmAbsentCard",
-      "shsPmLateCard"
+  const pmCards = [
 
-    ];
+    "jhsPmPresentCard",
+    "jhsPmAbsentCard",
+    "jhsPmLateCard",
 
+    "shsPmPresentCard",
+    "shsPmAbsentCard",
+    "shsPmLateCard"
 
-    pmCards.forEach(
-      function(id) {
+  ];
 
-        const card =
-          document.getElementById(id);
 
-        if (!card) {
-          return;
-        }
+  pmCards.forEach(
+    function(id) {
 
-        card.style.display =
-          showPM
-            ? ""
-            : "none";
-
-      }
-    );
-
-  }
-
-
-  /* =====================================================
-     EMPTY SUMMARY
-     ===================================================== */
-
-  function createEmptySummary() {
-
-    return {
-
-      total: 0,
-      amPresent: 0,
-      amAbsent: 0,
-      amLate: 0,
-      pmPresent: 0,
-      pmAbsent: 0,
-      pmLate: 0
-
-    };
-
-  }
-
-
-  /* =====================================================
-     JHS / SHS SUMMARY
-     ===================================================== */
-
-  function getJhsShsSummary(
-    sections
-  ) {
-
-    const jhs =
-      createEmptySummary();
-
-    const shs =
-      createEmptySummary();
-
-
-    (sections || []).forEach(
-      function(section) {
-
-        const sectionName =
-          String(
-            section.section || ""
-          ).trim();
-
-
-        const grade =
-          getGradeNumber(
-            sectionName
-          );
-
-
-        let target = null;
-
-
-        if (
-          grade >= 7 &&
-          grade <= 10
-        ) {
-
-          target = jhs;
-
-        } else if (
-          grade >= 11 &&
-          grade <= 12
-        ) {
-
-          target = shs;
-
-        }
-
-
-        if (!target) {
-          return;
-        }
-
-
-        target.total +=
-          Number(section.total || 0);
-
-        target.amPresent +=
-          Number(section.amPresent || 0);
-
-        target.amAbsent +=
-          Number(section.amAbsent || 0);
-
-        target.amLate +=
-          Number(section.amLate || 0);
-
-        target.pmPresent +=
-          Number(section.pmPresent || 0);
-
-        target.pmAbsent +=
-          Number(section.pmAbsent || 0);
-
-        target.pmLate +=
-          Number(section.pmLate || 0);
-
-      }
-    );
-
-
-    return {
-      jhs: jhs,
-      shs: shs
-    };
-
-  }
-
-
-  /* =====================================================
-     DISPLAY SUMMARY
-     ===================================================== */
-
-  function displayGroupSummary(
-    prefix,
-    data
-  ) {
-
-    document.getElementById(
-      prefix + "Total"
-    ).textContent =
-      Number(data.total || 0);
-
-
-    document.getElementById(
-      prefix + "AmPresent"
-    ).textContent =
-      Number(data.amPresent || 0);
-
-
-    document.getElementById(
-      prefix + "AmAbsent"
-    ).textContent =
-      Number(data.amAbsent || 0);
-
-
-    document.getElementById(
-      prefix + "AmLate"
-    ).textContent =
-      Number(data.amLate || 0);
-
-
-    document.getElementById(
-      prefix + "PmPresent"
-    ).textContent =
-      Number(data.pmPresent || 0);
-
-
-    document.getElementById(
-      prefix + "PmAbsent"
-    ).textContent =
-      Number(data.pmAbsent || 0);
-
-
-    document.getElementById(
-      prefix + "PmLate"
-    ).textContent =
-      Number(data.pmLate || 0);
-
-  }
-
-
-  /* =====================================================
-     LOAD ATTENDANCE
-     ===================================================== */
-
-  async function loadAttendanceSummary() {
-
-    try {
-
-      const requestUrl =
-        APPS_SCRIPT_URL +
-        "?summary=today";
-
-
-      const result =
-        await jsonpRequest(
-          requestUrl
+      const card =
+        document.getElementById(
+          id
         );
+
+
+      if (!card) {
+        return;
+      }
+
+
+      card.style.display =
+        showPM
+          ? ""
+          : "none";
+
+    }
+  );
+
+}
+
+
+/* =====================================================
+   EMPTY SUMMARY
+   ===================================================== */
+
+function createEmptySummary() {
+
+  return {
+
+    total: 0,
+
+    amPresent: 0,
+
+    amAbsent: 0,
+
+    amLate: 0,
+
+    pmPresent: 0,
+
+    pmAbsent: 0,
+
+    pmLate: 0
+
+  };
+
+}
+
+
+/* =====================================================
+   JHS / SHS SUMMARY
+   ===================================================== */
+
+function getJhsShsSummary(
+  sections
+) {
+
+  const jhs =
+    createEmptySummary();
+
+  const shs =
+    createEmptySummary();
+
+
+  (
+    sections || []
+  ).forEach(
+    function(section) {
+
+      const sectionName =
+        String(
+          section.section ||
+          ""
+        ).trim();
+
+
+      const grade =
+        getGradeNumber(
+          sectionName
+        );
+
+
+      let target =
+        null;
 
 
       if (
-        !result ||
-        !result.success
+        grade >= 7 &&
+        grade <= 10
       ) {
 
-        throw new Error(
-          "Unable to load attendance."
-        );
+        target =
+          jhs;
+
+      } else if (
+        grade >= 11 &&
+        grade <= 12
+      ) {
+
+        target =
+          shs;
 
       }
 
 
-      const grouped =
-        getJhsShsSummary(
-          result.sections || []
+      if (!target) {
+        return;
+      }
+
+
+      target.total +=
+        Number(
+          section.total || 0
         );
 
 
-      displayGroupSummary(
-        "jhs",
-        grouped.jhs
-      );
-
-
-      displayGroupSummary(
-        "shs",
-        grouped.shs
-      );
-
-
-      updateSchoolSummaryPMDisplay();
-
-
-      renderSectionAttendance(
-        result.sections || []
-      );
-
-
-      attendanceUpdated.textContent =
-        "Updated " +
-        new Date().toLocaleTimeString(
-          [],
-          {
-            hour: "2-digit",
-            minute: "2-digit",
-            second: "2-digit"
-          }
+      target.amPresent +=
+        Number(
+          section.amPresent || 0
         );
 
 
-    } catch (error) {
+      target.amAbsent +=
+        Number(
+          section.amAbsent || 0
+        );
 
-      console.error(
-        "Attendance update error:",
-        error
-      );
 
-      attendanceUpdated.textContent =
-        "Unable to update attendance.";
+      target.amLate +=
+        Number(
+          section.amLate || 0
+        );
+
+
+      target.pmPresent +=
+        Number(
+          section.pmPresent || 0
+        );
+
+
+      target.pmAbsent +=
+        Number(
+          section.pmAbsent || 0
+        );
+
+
+      target.pmLate +=
+        Number(
+          section.pmLate || 0
+        );
 
     }
+  );
 
-  }
+
+  return {
+
+    jhs:
+      jhs,
+
+    shs:
+      shs
+
+  };
+
+}
 
 
-  /* =====================================================
-     GRADE
-     ===================================================== */
+/* =====================================================
+   DISPLAY SUMMARY
+   ===================================================== */
 
-  function getGradeNumber(
-    sectionName
-  ) {
+function displayGroupSummary(
+  prefix,
+  data
+) {
 
-    const match =
-      String(sectionName || "")
-        .match(
-          /\b(7|8|9|10|11|12)\b/
+  const values = {
+
+    Total:
+      data.total,
+
+    AmPresent:
+      data.amPresent,
+
+    AmAbsent:
+      data.amAbsent,
+
+    AmLate:
+      data.amLate,
+
+    PmPresent:
+      data.pmPresent,
+
+    PmAbsent:
+      data.pmAbsent,
+
+    PmLate:
+      data.pmLate
+
+  };
+
+
+  Object.keys(
+    values
+  ).forEach(
+    function(key) {
+
+      const element =
+        document.getElementById(
+          prefix + key
         );
 
 
-    if (!match) {
-      return 99;
-    }
+      if (element) {
 
-
-    return Number(
-      match[1]
-    );
-
-  }
-
-
-  /* =====================================================
-     SORT SECTIONS
-     ===================================================== */
-
-  function sortSections(
-    sections
-  ) {
-
-    return sections
-      .slice()
-      .sort(
-        function(a,b) {
-
-          const nameA =
-            String(a.section || "");
-
-          const nameB =
-            String(b.section || "");
-
-
-          const gradeA =
-            getGradeNumber(nameA);
-
-          const gradeB =
-            getGradeNumber(nameB);
-
-
-          if (
-            gradeA !== gradeB
-          ) {
-
-            return gradeA - gradeB;
-
-          }
-
-
-          return nameA.localeCompare(
-            nameB,
-            undefined,
-            {
-              numeric: true,
-              sensitivity: "base"
-            }
+        element.textContent =
+          Number(
+            values[key] || 0
           );
 
-        }
-      );
+      }
 
-  }
+    }
+  );
+
+}
 
 
-  /* =====================================================
-     SECTION TABLE
-     ===================================================== */
+/* =====================================================
+   LOAD ATTENDANCE SUMMARY
+   ===================================================== */
 
-  function renderSectionAttendance(
-    sections
-  ) {
+async function loadAttendanceSummary() {
 
-    const sorted =
-      sortSections(
-        sections
+  try {
+
+    const requestUrl =
+      APPS_SCRIPT_URL +
+      "?summary=today";
+
+
+    const result =
+      await jsonpRequest(
+        requestUrl,
+        15000
       );
 
 
     if (
-      sorted.length === 0
+      !result ||
+      !result.success
     ) {
 
-      sectionAttendance.innerHTML =
-        '<div style="color:#ffffff;text-align:center;padding:15px;">No section data available.</div>';
-
-      return;
-
-    }
-
-
-    const showPM =
-      isPMDisplayTime();
-
-
-    let html =
-      '<div class="section-table-wrap">' +
-      '<table class="section-table">' +
-      '<thead>' +
-      '<tr>' +
-      '<th class="section-head">SECTION</th>' +
-      '<th class="total-head">TOTAL</th>' +
-      '<th class="am-present-head">AM<br>P</th>' +
-      '<th class="am-absent-head">AM<br>A</th>' +
-      '<th class="am-late-head">AM<br>L</th>';
-
-
-    if (showPM) {
-
-      html +=
-        '<th class="pm-present-head">PM<br>P</th>' +
-        '<th class="pm-absent-head">PM<br>A</th>' +
-        '<th class="pm-late-head">PM<br>L</th>';
+      throw new Error(
+        "Unable to load attendance."
+      );
 
     }
 
 
-    html +=
-      '</tr>' +
-      '</thead>' +
-      '<tbody>';
+    const grouped =
+      getJhsShsSummary(
+        result.sections ||
+        []
+      );
 
 
-    sorted.forEach(
-      function(section) {
-
-        html +=
-          '<tr>' +
-
-          '<td class="section-table-name">' +
-          escapeHtml(section.section || "") +
-          '</td>' +
-
-          '<td class="total-cell">' +
-          Number(section.total || 0) +
-          '</td>' +
-
-          '<td class="am-present-cell">' +
-          Number(section.amPresent || 0) +
-          '</td>' +
-
-          '<td class="am-absent-cell">' +
-          Number(section.amAbsent || 0) +
-          '</td>' +
-
-          '<td class="am-late-cell">' +
-          Number(section.amLate || 0) +
-          '</td>';
+    displayGroupSummary(
+      "jhs",
+      grouped.jhs
+    );
 
 
-        if (showPM) {
+    displayGroupSummary(
+      "shs",
+      grouped.shs
+    );
 
-          html +=
-            '<td class="pm-present-cell">' +
-            Number(section.pmPresent || 0) +
-            '</td>' +
 
-            '<td class="pm-absent-cell">' +
-            Number(section.pmAbsent || 0) +
-            '</td>' +
+    updateSchoolSummaryPMDisplay();
 
-            '<td class="pm-late-cell">' +
-            Number(section.pmLate || 0) +
-            '</td>';
+
+    renderSectionAttendance(
+      result.sections ||
+      []
+    );
+
+
+    attendanceUpdated.textContent =
+      "Updated " +
+      new Intl.DateTimeFormat(
+        "en-US",
+        {
+          timeZone:
+            "Asia/Manila",
+          hour:
+            "2-digit",
+          minute:
+            "2-digit",
+          second:
+            "2-digit"
+        }
+      ).format(
+        new Date()
+      );
+
+
+  } catch (error) {
+
+    console.error(
+      "Attendance update error:",
+      error
+    );
+
+
+    attendanceUpdated.textContent =
+      "Unable to update attendance.";
+
+  }
+
+}
+
+
+/* =====================================================
+   GRADE NUMBER
+   ===================================================== */
+
+function getGradeNumber(
+  sectionName
+) {
+
+  const match =
+    String(
+      sectionName || ""
+    ).match(
+      /\b(7|8|9|10|11|12)\b/
+    );
+
+
+  if (!match) {
+    return 99;
+  }
+
+
+  return Number(
+    match[1]
+  );
+
+}
+
+
+/* =====================================================
+   SORT SECTIONS
+   ===================================================== */
+
+function sortSections(
+  sections
+) {
+
+  return (
+    sections || []
+  )
+    .slice()
+    .sort(
+      function(a,b) {
+
+        const nameA =
+          String(
+            a.section || ""
+          );
+
+        const nameB =
+          String(
+            b.section || ""
+          );
+
+
+        const gradeA =
+          getGradeNumber(
+            nameA
+          );
+
+        const gradeB =
+          getGradeNumber(
+            nameB
+          );
+
+
+        if (
+          gradeA !==
+          gradeB
+        ) {
+
+          return (
+            gradeA -
+            gradeB
+          );
 
         }
 
 
-        html +=
-          '</tr>';
+        return nameA.localeCompare(
+          nameB,
+          undefined,
+          {
+            numeric:
+              true,
+            sensitivity:
+              "base"
+          }
+        );
 
       }
     );
 
+}
 
-    html +=
-      '</tbody>' +
-      '</table>' +
-      '</div>';
 
+/* =====================================================
+   SECTION ATTENDANCE
+   ===================================================== */
+
+function renderSectionAttendance(
+  sections
+) {
+
+  const sorted =
+    sortSections(
+      sections
+    );
+
+
+  if (
+    sorted.length === 0
+  ) {
 
     sectionAttendance.innerHTML =
-      html;
+      '<div style="color:#ffffff;text-align:center;padding:15px;">No section data available.</div>';
+
+    return;
 
   }
+
+
+  const showPM =
+    isPMDisplayTime();
+
+
+  let html =
+
+    '<div class="section-table-wrap">' +
+
+    '<table class="section-table">' +
+
+    '<thead>' +
+
+    '<tr>' +
+
+    '<th class="section-head">' +
+    'SECTION' +
+    '</th>' +
+
+    '<th class="total-head">' +
+    'TOTAL' +
+    '</th>' +
+
+    '<th class="am-present-head">' +
+    'AM<br>P' +
+    '</th>' +
+
+    '<th class="am-absent-head">' +
+    'AM<br>A' +
+    '</th>' +
+
+    '<th class="am-late-head">' +
+    'AM<br>L' +
+    '</th>';
+
+
+  if (showPM) {
+
+    html +=
+
+      '<th class="pm-present-head">' +
+      'PM<br>P' +
+      '</th>' +
+
+      '<th class="pm-absent-head">' +
+      'PM<br>A' +
+      '</th>' +
+
+      '<th class="pm-late-head">' +
+      'PM<br>L' +
+      '</th>';
+
+  }
+
+
+  html +=
+
+    '</tr>' +
+
+    '</thead>' +
+
+    '<tbody>';
+
+
+  sorted.forEach(
+    function(section) {
+
+      html +=
+
+        '<tr>' +
+
+        '<td class="section-table-name">' +
+
+        escapeHtml(
+          section.section ||
+          ""
+        ) +
+
+        '</td>' +
+
+        '<td class="total-cell">' +
+
+        Number(
+          section.total || 0
+        ) +
+
+        '</td>' +
+
+        '<td class="am-present-cell">' +
+
+        Number(
+          section.amPresent ||
+          0
+        ) +
+
+        '</td>' +
+
+        '<td class="am-absent-cell">' +
+
+        Number(
+          section.amAbsent ||
+          0
+        ) +
+
+        '</td>' +
+
+        '<td class="am-late-cell">' +
+
+        Number(
+          section.amLate ||
+          0
+        ) +
+
+        '</td>';
+
+
+      if (showPM) {
+
+        html +=
+
+          '<td class="pm-present-cell">' +
+
+          Number(
+            section.pmPresent ||
+            0
+          ) +
+
+          '</td>' +
+
+          '<td class="pm-absent-cell">' +
+
+          Number(
+            section.pmAbsent ||
+            0
+          ) +
+
+          '</td>' +
+
+          '<td class="pm-late-cell">' +
+
+          Number(
+            section.pmLate ||
+            0
+          ) +
+
+          '</td>';
+
+      }
+
+
+      html +=
+        '</tr>';
+
+    }
+  );
+
+
+  html +=
+
+    '</tbody>' +
+
+    '</table>' +
+
+    '</div>';
+
+
+  sectionAttendance.innerHTML =
+    html;
+
+}
 
 
 /* =====================================================
@@ -1990,16 +2496,30 @@ async function openScannerPage() {
 function startDeviceHeartbeat() {
 
   if (heartbeatTimer) {
-    clearInterval(heartbeatTimer);
+
+    clearInterval(
+      heartbeatTimer
+    );
+
   }
 
+
+  /*
+   * Backend expires after 30 seconds.
+   * Heartbeat every 10 seconds.
+   */
 
   heartbeatTimer =
     setInterval(
       async function() {
 
-        if (!deviceKey || !sessionToken) {
+        if (
+          !deviceKey ||
+          !sessionToken
+        ) {
+
           return;
+
         }
 
 
@@ -2007,18 +2527,51 @@ function startDeviceHeartbeat() {
 
           const requestUrl =
             APPS_SCRIPT_URL +
+
             "?heartbeat=1" +
+
             "&device=" +
-            encodeURIComponent(deviceKey) +
+            encodeURIComponent(
+              deviceKey
+            ) +
+
             "&session=" +
-            encodeURIComponent(sessionToken) +
+            encodeURIComponent(
+              sessionToken
+            ) +
+
             "&platform=" +
-            encodeURIComponent(platform);
+            encodeURIComponent(
+              platform
+            );
 
 
-          await jsonpRequest(
-            requestUrl
-          );
+          const result =
+            await jsonpRequest(
+              requestUrl,
+              10000
+            );
+
+
+          if (
+            result &&
+            result.success
+          ) {
+
+            sessionActive =
+              true;
+
+          } else {
+
+            sessionActive =
+              false;
+
+            console.log(
+              "Heartbeat rejected:",
+              result
+            );
+
+          }
 
 
         } catch (error) {
@@ -2031,8 +2584,101 @@ function startDeviceHeartbeat() {
         }
 
       },
-      20000
+      10000
     );
+
+}
+
+
+/* =====================================================
+   RE-AUTHORIZE DEVICE
+   ===================================================== */
+
+async function reauthorizeDevice() {
+
+  if (
+    reauthorizationInProgress
+  ) {
+
+    return false;
+
+  }
+
+
+  if (!deviceKey) {
+
+    return false;
+
+  }
+
+
+  reauthorizationInProgress =
+    true;
+
+
+  try {
+
+    const result =
+      await authorizeDeviceNow(
+        deviceKey
+      );
+
+
+    if (
+      result &&
+      result.success &&
+      result.authorized &&
+      result.session
+    ) {
+
+      sessionToken =
+        String(
+          result.session
+        );
+
+      sessionActive =
+        true;
+
+      releaseSent =
+        false;
+
+
+      console.log(
+        "Device session renewed."
+      );
+
+
+      return true;
+
+    }
+
+
+    console.log(
+      "Device reauthorization failed:",
+      result
+    );
+
+
+    return false;
+
+
+  } catch (error) {
+
+    console.error(
+      "Device reauthorization error:",
+      error
+    );
+
+
+    return false;
+
+
+  } finally {
+
+    reauthorizationInProgress =
+      false;
+
+  }
 
 }
 
@@ -2043,25 +2689,47 @@ function startDeviceHeartbeat() {
 
 function releaseDeviceSession() {
 
-  if (!deviceKey || !sessionToken) {
+  if (
+    !deviceKey ||
+    !sessionToken
+  ) {
+
     return;
+
   }
 
 
   const requestUrl =
+
     APPS_SCRIPT_URL +
+
     "?release=1" +
+
     "&device=" +
-    encodeURIComponent(deviceKey) +
+    encodeURIComponent(
+      deviceKey
+    ) +
+
     "&session=" +
-    encodeURIComponent(sessionToken) +
+    encodeURIComponent(
+      sessionToken
+    ) +
+
     "&platform=" +
-    encodeURIComponent(platform) +
+    encodeURIComponent(
+      platform
+    ) +
+
     "&_=" +
     Date.now();
 
 
   try {
+
+    /*
+     * Image request is used because
+     * unload/pagehide may cancel fetch/JSONP.
+     */
 
     const image =
       new Image();
@@ -2092,26 +2760,32 @@ function releaseDeviceSession() {
 
 }
 
+
 /* =====================================================
-   RELEASE WHEN LEAVING / HIDING PAGE
+   RELEASE CURRENT SESSION
    ===================================================== */
-
-let releaseSent = false;
-
 
 function releaseCurrentSession() {
 
   if (releaseSent) {
+
     return;
+
   }
 
 
-  if (!deviceKey || !sessionToken) {
+  if (
+    !deviceKey ||
+    !sessionToken
+  ) {
+
     return;
+
   }
 
 
-  releaseSent = true;
+  releaseSent =
+    true;
 
 
   releaseDeviceSession();
@@ -2119,24 +2793,19 @@ function releaseCurrentSession() {
 }
 
 
-/* =====================================================
-   ANDROID / CHROME BACK
-   ===================================================== */
-
-document.addEventListener(
-  "visibilitychange",
-  function() {
-
-    if (
-      document.visibilityState === "hidden"
-    ) {
-
-      releaseCurrentSession();
-
-    }
-
-  }
-);
+/*
+ * IMPORTANT:
+ *
+ * HINDI na ginagamit ang visibilitychange
+ * para mag-release ng session.
+ *
+ * Dahil kapag nag-open ang user ng ibang app,
+ * nag-switch tab, o nag-lock ng phone,
+ * puwedeng maging hidden ang page.
+ *
+ * Kapag nag-release agad doon,
+ * mawawala ang active device session.
+ */
 
 
 /* =====================================================
@@ -2154,7 +2823,7 @@ window.addEventListener(
 
 
 /* =====================================================
-   BROWSER CLOSE / LEAVE
+   BROWSER CLOSE
    ===================================================== */
 
 window.addEventListener(
@@ -2166,6 +2835,7 @@ window.addEventListener(
   }
 );
 
+
 /* =====================================================
    START CAMERA
    ===================================================== */
@@ -2173,11 +2843,6 @@ window.addEventListener(
 async function startCamera() {
 
   try {
-
-    /*
-     * Check existing camera permission first.
-     * If already granted, reuse it.
-     */
 
     if (
       navigator.permissions &&
@@ -2187,9 +2852,12 @@ async function startCamera() {
       try {
 
         const permission =
-          await navigator.permissions.query({
-            name: "camera"
-          });
+          await navigator.permissions.query(
+            {
+              name:
+                "camera"
+            }
+          );
 
 
         console.log(
@@ -2273,106 +2941,126 @@ async function startCamera() {
   }
 
 }
-  
-
-  /* =====================================================
-     START SELECTED CAMERA
-     ===================================================== */
-
-  async function startSelectedCamera() {
-
-    if (!html5QrCode) {
-      return;
-    }
-
-    if (!cameras.length) {
-      return;
-    }
 
 
-    const camera =
-      cameras[currentCameraIndex];
+/* =====================================================
+   START SELECTED CAMERA
+   ===================================================== */
+
+async function startSelectedCamera() {
+
+  if (!html5QrCode) {
+    return;
+  }
 
 
-    if (!camera) {
-      return;
-    }
+  if (
+    !cameras ||
+    !cameras.length
+  ) {
 
-
-    if (scannerRunning) {
-      return;
-    }
-
-
-    try {
-
-      await html5QrCode.start(
-
-        camera.id,
-
-        {
-          fps: 15,
-
-          qrbox:
-            function(
-              viewfinderWidth,
-              viewfinderHeight
-            ) {
-
-              const size =
-                Math.min(
-                  viewfinderWidth,
-                  viewfinderHeight
-                ) * 0.80;
-
-
-              return {
-                width: size,
-                height: size
-              };
-
-            },
-
-          aspectRatio: 1.0
-
-        },
-
-        onQrDetected,
-
-        function() {
-          // Normal scanning errors.
-        }
-
-      );
-
-
-      scannerRunning =
-        true;
-
-      processing =
-        false;
-
-
-      hideOverlay();
-
-
-      readyBar.textContent =
-        "● READY TO SCAN";
-
-      readyBar.style.color =
-        "#16803c";
-
-
-    } catch (error) {
-
-      scannerRunning =
-        false;
-
-      throw error;
-
-    }
+    return;
 
   }
+
+
+  const camera =
+    cameras[
+      currentCameraIndex
+    ];
+
+
+  if (!camera) {
+    return;
+  }
+
+
+  if (scannerRunning) {
+    return;
+  }
+
+
+  try {
+
+    await html5QrCode.start(
+
+      camera.id,
+
+      {
+
+        fps: 15,
+
+        qrbox:
+          function(
+            viewfinderWidth,
+            viewfinderHeight
+          ) {
+
+            const size =
+              Math.min(
+                viewfinderWidth,
+                viewfinderHeight
+              ) * 0.80;
+
+
+            return {
+
+              width:
+                size,
+
+              height:
+                size
+
+            };
+
+          },
+
+        aspectRatio:
+          1.0
+
+      },
+
+      onQrDetected,
+
+      function() {
+
+        /*
+         * Normal QR scanning errors.
+         * Hindi ipinapakita sa user.
+         */
+
+      }
+
+    );
+
+
+    scannerRunning =
+      true;
+
+    processing =
+      false;
+
+
+    hideOverlay();
+
+
+    readyBar.textContent =
+      "● READY TO SCAN";
+
+    readyBar.style.color =
+      "#16803c";
+
+
+  } catch (error) {
+
+    scannerRunning =
+      false;
+
+    throw error;
+
+  }
+
+}
 
 
 /* =====================================================
@@ -2384,7 +3072,9 @@ async function onQrDetected(
 ) {
 
   if (processing) {
+
     return;
+
   }
 
 
@@ -2409,7 +3099,9 @@ async function onQrDetected(
       scannerRunning
     ) {
 
-      await html5QrCode.pause(true);
+      await html5QrCode.pause(
+        true
+      );
 
     }
 
@@ -2440,29 +3132,42 @@ async function onQrDetected(
 
 
   /*
-   * QR may contain either:
-   * LRN directly
-   * OR a URL containing ?lrn=
-   * OR a URL containing ?id=
+   * QR can contain:
+   *
+   * 1. Direct LRN
+   *
+   * 2. URL ?lrn=
+   *
+   * 3. URL ?id=
    */
 
   try {
 
     if (
-      lrn.startsWith("http://") ||
-      lrn.startsWith("https://")
+      lrn.startsWith(
+        "http://"
+      ) ||
+      lrn.startsWith(
+        "https://"
+      )
     ) {
 
       const qrUrl =
-        new URL(lrn);
+        new URL(
+          lrn
+        );
 
 
       const urlLrn =
-        qrUrl.searchParams.get("lrn");
+        qrUrl.searchParams.get(
+          "lrn"
+        );
 
 
       const urlId =
-        qrUrl.searchParams.get("id");
+        qrUrl.searchParams.get(
+          "id"
+        );
 
 
       if (urlLrn) {
@@ -2489,24 +3194,66 @@ async function onQrDetected(
   }
 
 
+  if (!lrn) {
+
+    showResult({
+
+      success:
+        false,
+
+      message:
+        "Invalid QR Code."
+
+    });
+
+    return;
+
+  }
+
+
   try {
 
-    const requestUrl =
-      APPS_SCRIPT_URL +
-      "?lrn=" +
-      encodeURIComponent(lrn) +
-      "&device=" +
-      encodeURIComponent(deviceKey) +
-      "&session=" +
-      encodeURIComponent(sessionToken) +
-      "&platform=" +
-      encodeURIComponent(platform);
-
-
-    const result =
-      await jsonpRequest(
-        requestUrl
+    let result =
+      await sendScan(
+        lrn
       );
+
+
+    /*
+     * If the current session expired,
+     * automatically authorize again once.
+     */
+
+    if (
+      result &&
+      !result.success &&
+      /expired|session|not active|authorized/i.test(
+        String(
+          result.message ||
+          ""
+        )
+      )
+    ) {
+
+      console.log(
+        "Session problem detected. Reauthorizing..."
+      );
+
+
+      const renewed =
+        await reauthorizeDevice();
+
+
+      if (renewed) {
+
+        result =
+          await sendScan(
+            lrn
+          );
+
+      }
+
+    }
 
 
     showResult(
@@ -2543,7 +3290,8 @@ async function onQrDetected(
 
     showResult({
 
-      success: false,
+      success:
+        false,
 
       message:
         "Unable to connect to server."
@@ -2553,67 +3301,401 @@ async function onQrDetected(
   }
 
 }
-  
-
-  /* =====================================================
-     PROCESSING
-     ===================================================== */
-
-  function showProcessing() {
-
-    scanOverlay.style.display =
-      "flex";
 
 
-    scanOverlay.style.background =
-      "rgba(0,0,0,0.72)";
+/* =====================================================
+   SEND SCAN
+   ===================================================== */
+
+async function sendScan(
+  lrn
+) {
+
+  const requestUrl =
+
+    APPS_SCRIPT_URL +
+
+    "?lrn=" +
+    encodeURIComponent(
+      lrn
+    ) +
+
+    "&device=" +
+    encodeURIComponent(
+      deviceKey
+    ) +
+
+    "&session=" +
+    encodeURIComponent(
+      sessionToken
+    ) +
+
+    "&platform=" +
+    encodeURIComponent(
+      platform
+    );
 
 
-    overlayContent.innerHTML =
+  return await jsonpRequest(
+    requestUrl,
+    20000
+  );
+
+}
+
+
+/* =====================================================
+   PROCESSING
+   ===================================================== */
+
+function showProcessing() {
+
+  scanOverlay.style.display =
+    "flex";
+
+
+  scanOverlay.style.background =
+    "rgba(0,0,0,0.72)";
+
+
+  overlayContent.innerHTML =
+
+    '<div style="' +
+
+    'width:100%;' +
+    'max-width:700px;' +
+    'padding:30px 20px;' +
+    'text-align:center;' +
+    'background:#0d47a1;' +
+    'border:3px solid #ffffff;' +
+    'border-radius:20px;' +
+    'box-sizing:border-box;' +
+    'color:#ffffff;' +
+
+    '">' +
+
+    '<div class="processing-title">' +
+
+    'PROCESSING...' +
+
+    '</div>' +
+
+    '<div class="processing-text">' +
+
+    'Please wait while the attendance is being recorded.' +
+
+    '</div>' +
+
+    '</div>';
+
+}
+
+
+/* =====================================================
+   ERROR OVERLAY
+   ===================================================== */
+
+function showOverlay(
+  title,
+  message,
+  isError
+) {
+
+  scanOverlay.style.display =
+    "flex";
+
+
+  scanOverlay.style.background =
+    isError
+      ? "#b71c1c"
+      : "rgba(0,0,0,0.72)";
+
+
+  overlayContent.innerHTML =
+
+    '<div style="' +
+
+    'width:100%;' +
+    'max-width:700px;' +
+    'padding:30px 20px;' +
+    'text-align:center;' +
+    'background:' +
+    (
+      isError
+        ? "#7f0000"
+        : "#0d47a1"
+    ) +
+    ';' +
+
+    'border:3px solid #ffffff;' +
+    'border-radius:20px;' +
+    'box-sizing:border-box;' +
+    'color:#ffffff;' +
+
+    '">' +
+
+    '<div style="' +
+
+    'font-size:30px;' +
+    'font-weight:900;' +
+    'color:#ffffff;' +
+    'margin-bottom:18px;' +
+
+    '">' +
+
+    escapeHtml(
+      title ||
+      "NOTICE"
+    ) +
+
+    '</div>' +
+
+    '<div style="' +
+
+    'font-size:20px;' +
+    'font-weight:700;' +
+    'color:#ffffff;' +
+
+    '">' +
+
+    escapeHtml(
+      message ||
+      ""
+    ) +
+
+    '</div>' +
+
+    '</div>';
+
+}
+
+
+/* =====================================================
+   RESULT
+   ===================================================== */
+
+function showResult(
+  result
+) {
+
+  if (
+    showResult.timer
+  ) {
+
+    clearTimeout(
+      showResult.timer
+    );
+
+  }
+
+
+  scanOverlay.style.display =
+    "flex";
+
+
+  const isSuccess =
+    result &&
+    result.success;
+
+
+  const isLate =
+    isSuccess &&
+    result.status ===
+    "LATE";
+
+
+  scanOverlay.style.background =
+    isLate ||
+    !isSuccess
+      ? "#b71c1c"
+      : "#0d47a1";
+
+
+  if (isSuccess) {
+
+    const name =
+      result.name ||
+      "STUDENT";
+
+
+    const section =
+      result.section ||
+      "";
+
+
+    const event =
+      result.event ||
+      "";
+
+
+    const transaction =
+      result.transaction ||
+      "";
+
+
+    const time =
+      result.time ||
+      "";
+
+
+    let html =
 
       '<div style="' +
+
       'width:100%;' +
-      'max-width:700px;' +
-      'padding:30px 20px;' +
+      'max-width:850px;' +
+      'margin:auto;' +
+      'padding:28px 20px;' +
       'text-align:center;' +
       'background:#0d47a1;' +
       'border:3px solid #ffffff;' +
       'border-radius:20px;' +
       'box-sizing:border-box;' +
       'color:#ffffff;' +
+      'font-family:Arial,sans-serif;' +
+
       '">' +
 
-      '<div class="processing-title">' +
-      'PROCESSING...' +
+
+      '<div style="' +
+
+      'font-size:34px;' +
+      'font-weight:900;' +
+      'color:#ffffff;' +
+      'line-height:1.15;' +
+      'margin:15px 0;' +
+
+      '">' +
+
+      escapeHtml(
+        name
+      ) +
+
       '</div>' +
 
-      '<div class="processing-text">' +
-      'Please wait while the attendance is being recorded.' +
+
+      '<div style="' +
+
+      'font-size:22px;' +
+      'font-weight:700;' +
+      'color:#ffffff;' +
+      'margin-bottom:22px;' +
+
+      '">' +
+
+      escapeHtml(
+        section
+      ) +
+
       '</div>' +
+
+
+      '<div style="' +
+
+      'display:inline-block;' +
+      'padding:10px 25px;' +
+      'font-size:28px;' +
+      'font-weight:900;' +
+      'color:#ffffff;' +
+      'background:#1565c0;' +
+      'border:2px solid #ffffff;' +
+      'border-radius:12px;' +
+
+      '">' +
+
+      escapeHtml(
+        event
+      ) +
 
       '</div>';
 
-  }
+
+    if (isLate) {
+
+      html +=
+
+        '<div style="' +
+
+        'margin-top:18px;' +
+        'font-size:30px;' +
+        'font-weight:900;' +
+        'color:#ffffff;' +
+        'background:#8b0000;' +
+        'border:2px solid #ffffff;' +
+        'border-radius:12px;' +
+        'padding:8px 25px;' +
+        'display:inline-block;' +
+
+        '">' +
+
+        'LATE' +
+
+        '</div>';
+
+    }
 
 
-  /* =====================================================
-     ERROR OVERLAY
-     ===================================================== */
+    if (transaction) {
 
-  function showOverlay(
-    title,
-    message,
-    isError
-  ) {
+      html +=
 
-    scanOverlay.style.display =
-      "flex";
+        '<div style="' +
+
+        'margin-top:16px;' +
+        'font-size:17px;' +
+        'font-weight:700;' +
+        'color:#ffffff;' +
+
+        '">' +
+
+        'Transaction #' +
+
+        escapeHtml(
+          transaction
+        ) +
+
+        '</div>';
+
+    }
 
 
-    scanOverlay.style.background =
-      isError
-        ? "#b71c1c"
-        : "rgba(0,0,0,0.72)";
+    if (time) {
+
+      html +=
+
+        '<div style="' +
+
+        'margin-top:6px;' +
+        'font-size:16px;' +
+        'font-weight:600;' +
+        'color:#ffffff;' +
+
+        '">' +
+
+        escapeHtml(
+          time
+        ) +
+
+        '</div>';
+
+    }
+
+
+    html +=
+      '</div>';
+
+
+    overlayContent.innerHTML =
+      html;
+
+
+  } else {
+
+    const message =
+      result &&
+      result.message
+        ? result.message
+        : "SCAN FAILED";
 
 
     overlayContent.innerHTML =
@@ -2622,12 +3704,10 @@ async function onQrDetected(
 
       'width:100%;' +
       'max-width:700px;' +
+      'margin:auto;' +
       'padding:30px 20px;' +
       'text-align:center;' +
-      'background:' +
-      (isError ? "#7f0000" : "#0d47a1") +
-      ';' +
-
+      'background:#7f0000;' +
       'border:3px solid #ffffff;' +
       'border-radius:20px;' +
       'box-sizing:border-box;' +
@@ -2636,599 +3716,462 @@ async function onQrDetected(
       '">' +
 
       '<div style="' +
+
       'font-size:30px;' +
       'font-weight:900;' +
       'color:#ffffff;' +
       'margin-bottom:18px;' +
+
       '">' +
 
-      escapeHtml(
-        title || "NOTICE"
-      ) +
+      'SCAN NOT RECORDED' +
 
       '</div>' +
 
       '<div style="' +
+
       'font-size:20px;' +
       'font-weight:700;' +
       'color:#ffffff;' +
+
       '">' +
 
       escapeHtml(
-        message || ""
+        message
       ) +
 
       '</div>' +
 
       '</div>';
 
+
+    beep(
+      600,
+      180
+    );
+
   }
 
 
-  /* =====================================================
-     RESULT
-     ===================================================== */
+  const processingTime =
+    window.qrProcessingStart
 
-  function showResult(
-    result
-  ) {
+      ? (
 
-    if (showResult.timer) {
+          (
+            performance.now() -
+            window.qrProcessingStart
+          ) / 1000
 
-      clearTimeout(
-        showResult.timer
-      );
+        ).toFixed(2)
 
-    }
+      : "0.00";
 
 
-    scanOverlay.style.display =
-      "flex";
+  console.log(
+    "QR PROCESSING TIME: " +
+    processingTime +
+    " seconds"
+  );
 
 
-    const isSuccess =
-      result &&
-      result.success;
+  showResult.timer =
+    setTimeout(
+      function() {
+
+        resumeScanner();
+
+      },
+      3000
+    );
+
+}
 
 
-    const isLate =
-      isSuccess &&
-      result.status === "LATE";
+/* =====================================================
+   RESUME SCANNER
+   ===================================================== */
+
+async function resumeScanner() {
+
+  hideOverlay();
 
 
-    scanOverlay.style.background =
-      isLate || !isSuccess
-        ? "#b71c1c"
-        : "#0d47a1";
+  readyBar.textContent =
+    "● READY TO SCAN";
 
 
-    if (isSuccess) {
-
-      const name =
-        result.name || "STUDENT";
+  readyBar.style.color =
+    "#16803c";
 
 
-      const section =
-        result.section || "";
+  processing =
+    false;
 
 
-      const event =
-        result.event || "";
+  try {
 
+    if (
+      html5QrCode &&
+      scannerRunning
+    ) {
 
-      let html =
-
-        '<div style="' +
-
-        'width:100%;' +
-        'max-width:850px;' +
-        'margin:auto;' +
-        'padding:28px 20px;' +
-        'text-align:center;' +
-        'background:#0d47a1;' +
-        'border:3px solid #ffffff;' +
-        'border-radius:20px;' +
-        'box-sizing:border-box;' +
-        'color:#ffffff;' +
-        'font-family:Arial,sans-serif;' +
-
-        '">' +
-
-        '<div style="' +
-        'font-size:34px;' +
-        'font-weight:900;' +
-        'color:#ffffff;' +
-        'line-height:1.15;' +
-        'margin:15px 0;' +
-        '">' +
-
-        escapeHtml(name) +
-
-        '</div>' +
-
-        '<div style="' +
-        'font-size:22px;' +
-        'font-weight:700;' +
-        'color:#ffffff;' +
-        'margin-bottom:22px;' +
-        '">' +
-
-        escapeHtml(section) +
-
-        '</div>' +
-
-        '<div style="' +
-        'display:inline-block;' +
-        'padding:10px 25px;' +
-        'font-size:28px;' +
-        'font-weight:900;' +
-        'color:#ffffff;' +
-        'background:#1565c0;' +
-        'border:2px solid #ffffff;' +
-        'border-radius:12px;' +
-        '">' +
-
-        escapeHtml(event) +
-
-        '</div>';
-
-
-      if (isLate) {
-
-        html +=
-
-          '<div style="' +
-          'margin-top:18px;' +
-          'font-size:30px;' +
-          'font-weight:900;' +
-          'color:#ffffff;' +
-          'background:#8b0000;' +
-          'border:2px solid #ffffff;' +
-          'border-radius:12px;' +
-          'padding:8px 25px;' +
-          'display:inline-block;' +
-          '">' +
-
-          'LATE' +
-
-          '</div>';
-
-      }
-
-
-      html +=
-        '</div>';
-
-
-      overlayContent.innerHTML =
-        html;
-
+      await html5QrCode.resume();
 
     } else {
 
-      const message =
-        result &&
-        result.message
-          ? result.message
-          : "SCAN FAILED";
+      await startSelectedCamera();
+
+    }
+
+  } catch (error) {
+
+    console.error(
+      "Resume scanner error:",
+      error
+    );
 
 
-      overlayContent.innerHTML =
-
-        '<div style="' +
-
-        'width:100%;' +
-        'max-width:700px;' +
-        'margin:auto;' +
-        'padding:30px 20px;' +
-        'text-align:center;' +
-        'background:#7f0000;' +
-        'border:3px solid #ffffff;' +
-        'border-radius:20px;' +
-        'box-sizing:border-box;' +
-        'color:#ffffff;' +
-
-        '">' +
-
-        '<div style="' +
-        'font-size:30px;' +
-        'font-weight:900;' +
-        'color:#ffffff;' +
-        'margin-bottom:18px;' +
-        '">' +
-
-        'SCAN NOT RECORDED' +
-
-        '</div>' +
-
-        '<div style="' +
-        'font-size:20px;' +
-        'font-weight:700;' +
-        'color:#ffffff;' +
-        '">' +
-
-        escapeHtml(message) +
-
-        '</div>' +
-
-        '</div>';
+    scannerRunning =
+      false;
 
 
-      beep(
-        600,
-        180
-      );
+    readyBar.textContent =
+      "CAMERA ERROR";
+
+
+    readyBar.style.color =
+      "#b71c1c";
+
+  }
+
+}
+
+
+/* =====================================================
+   HIDE OVERLAY
+   ===================================================== */
+
+function hideOverlay() {
+
+  scanOverlay.style.display =
+    "none";
+
+}
+
+
+/* =====================================================
+   SWITCH CAMERA
+   ===================================================== */
+
+switchCameraBtn.addEventListener(
+  "click",
+  async function() {
+
+    if (
+      processing ||
+      cameras.length < 2 ||
+      !html5QrCode
+    ) {
+
+      return;
 
     }
 
 
-    const processingTime =
-      window.qrProcessingStart
-        ? (
-            (
-              performance.now() -
-              window.qrProcessingStart
-            ) / 1000
-          ).toFixed(2)
-        : "0.00";
+    processing =
+      true;
 
 
-    console.log(
-      "QR PROCESSING TIME: " +
-      processingTime +
-      " seconds"
-    );
-
-
-    showResult.timer =
-      setTimeout(
-        function() {
-
-          resumeScanner();
-
-        },
-        3000
-      );
-
-  }
-
-
-  /* =====================================================
-     RESUME
-     ===================================================== */
-
-  async function resumeScanner() {
-
-    hideOverlay();
+    switchCameraBtn.disabled =
+      true;
 
 
     readyBar.textContent =
-      "● READY TO SCAN";
+      "SWITCHING CAMERA...";
 
 
     readyBar.style.color =
-      "#16803c";
+      "#1267a5";
 
 
-    processing =
-      false;
+    const previousIndex =
+      currentCameraIndex;
 
 
     try {
 
-      if (
-        html5QrCode &&
-        scannerRunning
-      ) {
+      if (scannerRunning) {
 
-        await html5QrCode.resume();
+        try {
 
-      } else {
+          await html5QrCode.stop();
 
-        await startSelectedCamera();
+        } catch (error) {
+
+          console.log(
+            "Camera stop:",
+            error
+          );
+
+        }
+
+
+        scannerRunning =
+          false;
 
       }
+
+
+      currentCameraIndex =
+        (
+          currentCameraIndex +
+          1
+        ) %
+        cameras.length;
+
+
+      await startSelectedCamera();
+
 
     } catch (error) {
 
       console.error(
-        "Resume scanner error:",
+        "Camera switch error:",
         error
       );
+
+
+      currentCameraIndex =
+        previousIndex;
 
 
       scannerRunning =
         false;
 
 
-      readyBar.textContent =
-        "CAMERA ERROR";
-
-
-      readyBar.style.color =
-        "#b71c1c";
-
-    }
-
-  }
-
-
-  /* =====================================================
-     HIDE OVERLAY
-     ===================================================== */
-
-  function hideOverlay() {
-
-    scanOverlay.style.display =
-      "none";
-
-  }
-
-
-  /* =====================================================
-     SWITCH CAMERA
-     ===================================================== */
-
-  switchCameraBtn.addEventListener(
-    "click",
-    async function() {
-
-      if (
-        processing ||
-        cameras.length < 2 ||
-        !html5QrCode
-      ) {
-        return;
-      }
-
-
-      processing =
-        true;
-
-
-      switchCameraBtn.disabled =
-        true;
-
-
-      readyBar.textContent =
-        "SWITCHING CAMERA...";
-
-
-      readyBar.style.color =
-        "#1267a5";
-
-
-      const previousIndex =
-        currentCameraIndex;
-
-
       try {
-
-        if (scannerRunning) {
-
-          try {
-
-            await html5QrCode.stop();
-
-          } catch (error) {
-
-            console.log(
-              "Camera stop:",
-              error
-            );
-
-          }
-
-          scannerRunning =
-            false;
-
-        }
-
-
-        currentCameraIndex =
-          (
-            currentCameraIndex + 1
-          ) %
-          cameras.length;
-
 
         await startSelectedCamera();
 
-
-      } catch (error) {
+      } catch (recoverError) {
 
         console.error(
-          "Camera switch error:",
-          error
+          "Camera recovery error:",
+          recoverError
         );
 
-
-        currentCameraIndex =
-          previousIndex;
-
-
-        scannerRunning =
-          false;
-
-
-        try {
-
-          await startSelectedCamera();
-
-        } catch (recoverError) {
-
-          console.error(
-            "Camera recovery error:",
-            recoverError
-          );
-
-        }
-
-      } finally {
-
-        processing =
-          false;
-
-        switchCameraBtn.disabled =
-          false;
-
-
-        readyBar.textContent =
-          "● READY TO SCAN";
-
-
-        readyBar.style.color =
-          "#16803c";
-
       }
 
-    }
-  );
+    } finally {
+
+      processing =
+        false;
 
 
-  /* =====================================================
-     BUTTON
-     ===================================================== */
-
-  continueBtn.addEventListener(
-    "click",
-    verifyDevice
-  );
+      switchCameraBtn.disabled =
+        false;
 
 
-  /* =====================================================
-     ENTER
-     ===================================================== */
+      readyBar.textContent =
+        "● READY TO SCAN";
 
-  deviceCode.addEventListener(
-    "keydown",
-    function(event) {
 
-      if (
-        event.key === "Enter"
-      ) {
-
-        event.preventDefault();
-
-        verifyDevice();
-
-      }
+      readyBar.style.color =
+        "#16803c";
 
     }
-  );
+
+  }
+);
 
 
-  /* =====================================================
-     HTML ESCAPE
-     ===================================================== */
+/* =====================================================
+   CONTINUE BUTTON
+   ===================================================== */
 
-  function escapeHtml(
+continueBtn.addEventListener(
+  "click",
+  verifyDevice
+);
+
+
+/* =====================================================
+   ENTER KEY
+   ===================================================== */
+
+deviceCode.addEventListener(
+  "keydown",
+  function(event) {
+
+    if (
+      event.key ===
+      "Enter"
+    ) {
+
+      event.preventDefault();
+
+      verifyDevice();
+
+    }
+
+  }
+);
+
+
+/* =====================================================
+   HTML ESCAPE
+   ===================================================== */
+
+function escapeHtml(
+  value
+) {
+
+  return String(
     value
-  ) {
+  )
 
-    return String(value)
+    .replace(
+      /&/g,
+      "&amp;"
+    )
 
-      .replace(
-        /&/g,
-        "&amp;"
-      )
+    .replace(
+      /</g,
+      "&lt;"
+    )
 
-      .replace(
-        /</g,
-        "&lt;"
-      )
+    .replace(
+      />/g,
+      "&gt;"
+    )
 
-      .replace(
-        />/g,
-        "&gt;"
-      )
+    .replace(
+      /"/g,
+      "&quot;"
+    )
 
-      .replace(
-        /"/g,
-        "&quot;"
-      )
+    .replace(
+      /'/g,
+      "&#039;"
+    );
 
-      .replace(
-        /'/g,
-        "&#039;"
-      );
+}
+
+
+/* =====================================================
+   PHILIPPINE STANDARD TIME
+   ===================================================== */
+
+function updatePSTClock() {
+
+  const now =
+    new Date();
+
+
+  const time =
+    new Intl.DateTimeFormat(
+      "en-US",
+      {
+
+        timeZone:
+          "Asia/Manila",
+
+        hour:
+          "2-digit",
+
+        minute:
+          "2-digit",
+
+        second:
+          "2-digit",
+
+        hour12:
+          true
+
+      }
+    ).format(
+      now
+    );
+
+
+  const date =
+    new Intl.DateTimeFormat(
+      "en-US",
+      {
+
+        timeZone:
+          "Asia/Manila",
+
+        weekday:
+          "long",
+
+        month:
+          "long",
+
+        day:
+          "numeric",
+
+        year:
+          "numeric"
+
+      }
+    ).format(
+      now
+    );
+
+
+  const timeElement =
+    document.getElementById(
+      "pstTime"
+    );
+
+
+  const dateElement =
+    document.getElementById(
+      "pstDate"
+    );
+
+
+  if (timeElement) {
+
+    timeElement.textContent =
+      time;
 
   }
 
 
-  /* =====================================================
-     PHILIPPINE STANDARD TIME
-     ===================================================== */
+  if (dateElement) {
 
-  function updatePSTClock() {
-
-    const now =
-      new Date();
-
-
-    const time =
-      new Intl.DateTimeFormat(
-        "en-US",
-        {
-          timeZone: "Asia/Manila",
-          hour: "2-digit",
-          minute: "2-digit",
-          second: "2-digit",
-          hour12: true
-        }
-      ).format(now);
-
-
-    const date =
-      new Intl.DateTimeFormat(
-        "en-US",
-        {
-          timeZone: "Asia/Manila",
-          weekday: "long",
-          month: "long",
-          day: "numeric",
-          year: "numeric"
-        }
-      ).format(now);
-
-
-    const timeElement =
-      document.getElementById(
-        "pstTime"
-      );
-
-
-    const dateElement =
-      document.getElementById(
-        "pstDate"
-      );
-
-
-    if (timeElement) {
-
-      timeElement.textContent =
-        time;
-
-    }
-
-
-    if (dateElement) {
-
-      dateElement.textContent =
-        date;
-
-    }
+    dateElement.textContent =
+      date;
 
   }
 
 
-  setInterval(
-    updatePSTClock,
-    1000
-  );
+  /*
+   * Also update PM card visibility
+   * every second so it changes exactly
+   * when Philippine time reaches 12:00 PM.
+   */
+
+  updateSchoolSummaryPMDisplay();
+
+}
 
 
-  updatePSTClock();
+/* =====================================================
+   CLOCK
+   ===================================================== */
+
+setInterval(
+  updatePSTClock,
+  1000
+);
+
+
+updatePSTClock();
+
 
 </script>
 
