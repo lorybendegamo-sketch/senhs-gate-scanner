@@ -117,10 +117,6 @@
    ========================= */
 
 #userNameInput,
-#userEmailInput {
-  width: 100%;
-  max-width: 420px;
-  box-sizing: border-box;
 
   padding: 14px 16px;
   margin: 8px auto 18px;
@@ -136,9 +132,6 @@
 }
 
 #userNameInput:focus,
-#userEmailInput:focus {
-  border-color: #1a73e8;
-  box-shadow: 0 0 0 3px rgba(26,115,232,0.12);
 }
 
 #userNextBtn {
@@ -823,13 +816,7 @@
       autocomplete="name"
     >
 
-    <input
-      id="userEmailInput"
-      type="email"
-      placeholder="Enter your Email"
-      autocomplete="email"
-    >
-
+   
     <button
       id="userNextBtn"
       type="button"
@@ -1136,8 +1123,6 @@
    ===================================================== */
 
 let userName = "";
-let userEmail = "";
-
 let deviceKey = "";
 
 /* =====================================================
@@ -1189,9 +1174,6 @@ const userPage =
 const userNameInput =
   document.getElementById("userNameInput");
 
-const userEmailInput =
-  document.getElementById("userEmailInput");
-
 const userNextBtn =
   document.getElementById("userNextBtn");
 
@@ -1231,7 +1213,7 @@ const scannerPage =
   const attendanceUpdated =
     document.getElementById("attendanceUpdated");
 
-  /* =====================================================
+ /* =====================================================
    PAGE 1 — USER INFORMATION
    ===================================================== */
 
@@ -1241,9 +1223,6 @@ userNextBtn.addEventListener(
 
     const name =
       userNameInput.value.trim();
-
-    const email =
-      userEmailInput.value.trim();
 
 
     if (!name) {
@@ -1257,19 +1236,7 @@ userNextBtn.addEventListener(
     }
 
 
-    if (!email) {
-
-      userMessage.textContent =
-        "Please enter your Email.";
-
-      userEmailInput.focus();
-
-      return;
-    }
-
-
     userName = name;
-    userEmail = email;
 
 
     userMessage.textContent = "";
@@ -1284,7 +1251,7 @@ userNextBtn.addEventListener(
 
   }
 );
-
+  
   /* =====================================================
      DEVICE CODE SHOW / HIDE
      ===================================================== */
@@ -1551,10 +1518,7 @@ const requestUrl =
   "&platform=" +
   encodeURIComponent(platform) +
   "&name=" +
-  encodeURIComponent(userName) +
-  "&email=" +
-  encodeURIComponent(userEmail);
-
+  encodeURIComponent(userName);
 
     const result =
       await jsonpRequest(
