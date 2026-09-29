@@ -111,55 +111,72 @@
   overflow: hidden;
 }
 
-
 /* =========================
    USER INFORMATION INPUTS
    ========================= */
 
-#userNameInput,
+#userNameInput {
+  width: 90%;
+  max-width: 420px;
 
-  padding: 14px 16px;
-  margin: 8px auto 18px;
+  padding: 20px 18px;
+  margin: 18px auto 20px;
 
-  border: 1px solid #ccc;
-  border-radius: 12px;
+  border: 2px solid #ccc;
+  border-radius: 16px;
 
-  font-size: 16px;
+  font-size: 20px;
   font-family: inherit;
+  text-align: center;
 
   outline: none;
   background: #fff;
+
+  box-sizing: border-box;
+  display: block;
 }
 
-#userNameInput:focus,
+#userNameInput:focus {
+  border-color: #1a73e8;
+  box-shadow: 0 0 0 4px rgba(26, 115, 232, 0.12);
 }
+
 
 #userNextBtn {
-  width: 100%;
+  width: 90%;
   max-width: 420px;
 
-  padding: 14px 20px;
-  margin-top: 5px;
+  padding: 18px 20px;
+  margin: 0 auto 18px;
 
   border: none;
-  border-radius: 12px;
+  border-radius: 16px;
 
   background: #1a73e8;
   color: white;
 
-  font-size: 16px;
+  font-size: 20px;
   font-weight: bold;
+  font-family: inherit;
 
   cursor: pointer;
+
+  display: block;
+
+  box-shadow: 0 5px 12px rgba(0, 0, 0, 0.15);
+
+  transition: 0.2s ease;
 }
 
 #userNextBtn:hover {
   opacity: 0.92;
+  transform: translateY(-1px);
 }
 
 #userNextBtn:active {
   transform: scale(0.98);
 }
+
 
 #userMessage {
   min-height: 20px;
@@ -168,12 +185,15 @@
   font-size: 14px;
   font-weight: bold;
   color: #d93025;
+
+  text-align: center;
 }
 
 
 /* =========================
    DEVICE PAGE ELEMENTS
    ========================= */
+
 
 .device-watermark {
   position: absolute;
