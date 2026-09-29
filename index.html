@@ -1369,103 +1369,114 @@ userNextBtn.addEventListener(
 
   }
 
-
 /* =====================================================
-   GOOGLE APPS SCRIPT REQUEST
+   GOOGLE APPS SCRIPT JSONP REQUEST
    ===================================================== */
 
-async function jsonpRequest(url) {
+function jsonpRequest(url) {
 
-  try {
+  return new Promise(function(resolve, reject) {
+
+    const callbackName =
+      "senhsCallback_" +
+      Date.now() +
+      "_" +
+      Math.floor(Math.random() * 100000);
+
+    const script =
+      document.createElement("script");
+
+    let finished = false;
+
+    const timeout =
+      setTimeout(function() {
+
+        if (finished) return;
+
+        finished = true;
+
+        cleanup();
+
+        reject(
+          new Error(
+            "Unable to connect to server."
+          )
+        );
+
+      }, 60000);
+
+
+    function cleanup() {
+
+      clearTimeout(timeout);
+
+      if (script.parentNode) {
+        script.parentNode.removeChild(script);
+      }
+
+      try {
+        delete window[callbackName];
+      } catch (error) {
+        window[callbackName] = undefined;
+      }
+
+    }
+
+
+    window[callbackName] =
+      function(data) {
+
+        if (finished) return;
+
+        finished = true;
+
+        cleanup();
+
+        resolve(data);
+
+      };
+
+
+    script.onerror =
+      function() {
+
+        if (finished) return;
+
+        finished = true;
+
+        cleanup();
+
+        reject(
+          new Error(
+            "Unable to connect to server."
+          )
+        );
+
+      };
+
 
     const separator =
       url.indexOf("?") !== -1
         ? "&"
         : "?";
 
-    const requestUrl =
+
+    script.src =
       url +
       separator +
-      "format=json" +
+      "callback=" +
+      callbackName +
       "&_=" +
       Date.now();
 
 
-    const response =
-      await fetch(
-        requestUrl,
-        {
-          method: "GET",
-          mode: "cors",
-          cache: "no-store",
-          redirect: "follow"
-        }
-      );
+    script.async = true;
 
+    document.body.appendChild(script);
 
-    if (!response.ok) {
-
-      throw new Error(
-        "Server HTTP error: " +
-        response.status
-      );
-
-    }
-
-
-    const text =
-      await response.text();
-
-
-    if (!text) {
-
-      throw new Error(
-        "Empty response from server."
-      );
-
-    }
-
-
-    let data;
-
-
-    try {
-
-      data =
-        JSON.parse(text);
-
-    } catch (parseError) {
-
-      console.error(
-        "INVALID SERVER RESPONSE:",
-        text
-      );
-
-      throw new Error(
-        "Invalid response from server."
-      );
-
-    }
-
-
-    return data;
-
-
-  } catch (error) {
-
-    console.error(
-      "SENHS SERVER REQUEST ERROR:",
-      error
-    );
-
-    throw error;
-
-  }
+  });
 
 }
-
-  
-
 
   /* =====================================================
      DEVICE MESSAGE
