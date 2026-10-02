@@ -1561,6 +1561,30 @@ const userMessage =
 const scannerPage =
   document.getElementById("scannerPage");
 
+  const attendancePage =
+  document.getElementById("attendancePage");
+
+const attendanceRoleTitle =
+  document.getElementById("attendanceRoleTitle");
+
+const attendanceSectionWrapper =
+  document.getElementById("attendanceSectionWrapper");
+
+const attendanceSectionSelect =
+  document.getElementById("attendanceSectionSelect");
+
+const attendanceCurrentSection =
+  document.getElementById("attendanceCurrentSection");
+
+const attendanceTableBody =
+  document.getElementById("attendanceTableBody");
+
+const proceedAttendanceBtn =
+  document.getElementById("proceedAttendanceBtn");
+
+const attendanceMessage =
+  document.getElementById("attendanceMessage");
+  
   const deviceCode =
     document.getElementById("deviceCode");
 
@@ -1855,6 +1879,75 @@ function jsonpRequest(url) {
 
   }
 
+  /* =====================================================
+   OPEN ADVISER / ADMIN ATTENDANCE PAGE
+   ===================================================== */
+
+async function openAttendancePage() {
+
+  devicePage.style.display =
+    "none";
+
+  scannerPage.style.display =
+    "none";
+
+  attendancePage.style.display =
+    "block";
+
+
+  attendanceRoleTitle.textContent =
+    attendanceRole === "ADMIN"
+      ? "ADMIN ATTENDANCE"
+      : "ADVISER ATTENDANCE";
+
+
+  if (
+    attendanceRole === "ADMIN"
+  ) {
+
+    attendanceSectionWrapper.style.display =
+      "block";
+
+    attendanceSectionSelect.value =
+      "";
+
+    attendanceCurrentSection.textContent =
+      "Section: —";
+
+    attendanceTableBody.innerHTML =
+      "";
+
+    attendanceMessage.textContent =
+      "Select a section.";
+
+    return;
+
+  }
+
+
+  /* ================================
+     ADVISER
+     ================================ */
+
+  attendanceSectionWrapper.style.display =
+    "none";
+
+
+  attendanceCurrentSection.textContent =
+    "Section: " +
+    (
+      attendanceSection ||
+      "—"
+    );
+
+
+  attendanceMessage.textContent =
+    "Loading attendance...";
+
+
+  await loadAttendanceSummary();
+
+}
 
 /* =====================================================
    VERIFY ACCESS — DEVICE / ADVISER / ADMIN
