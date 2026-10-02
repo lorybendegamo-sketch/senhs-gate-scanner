@@ -1477,7 +1477,199 @@
 </div>
 
 
-<script>
+  <script>
+/* =====================================================
+   LOAD ADVISER / ADMIN ATTENDANCE
+   ===================================================== */
+
+async function loadAdviserAttendance() {
+
+  try {
+
+    const requestUrl =
+      APPS_SCRIPT_URL +
+      "?action=getEditableTodayAttendance" +
+      "&accessCode=" +
+      encodeURIComponent(
+        attendanceAccessCode
+      ) +
+      "&requestedSection=" +
+      encodeURIComponent(
+        attendanceSection
+      );
+
+    const result =
+      await jsonpRequest(
+        requestUrl
+      );
+
+    if (
+      !result ||
+      !result.success
+    ) {
+
+      throw new Error(
+        result &&
+        result.message
+          ? result.message
+          : "Unable to load attendance."
+      );
+
+    }
+
+    attendanceStudents =
+      result.students || [];
+
+    attendanceCurrentSection.textContent =
+      "Section: " +
+      (
+        result.section ||
+        attendanceSection ||
+        "—"
+      );
+
+    renderAdviserAttendanceTable(
+      attendanceStudents
+    );
+
+    attendanceMessage.textContent =
+      attendanceStudents.length +
+      " student(s) loaded.";
+
+  } catch (error) {
+
+    console.error(
+      "Adviser attendance error:",
+      error
+    );
+
+    attendanceTableBody.innerHTML =
+      "";
+
+    attendanceMessage.textContent =
+      error.message ||
+      "Unable to load attendance.";
+
+  }
+
+}
+
+  /* =====================================================
+   RENDER ADVISER / ADMIN ATTENDANCE TABLE
+   ===================================================== */
+
+function renderAdviserAttendanceTable(
+  students
+) {
+
+  attendanceTableBody.innerHTML = "";
+
+  if (
+    !students ||
+    students.length === 0
+  ) {
+
+    attendanceTableBody.innerHTML =
+      '<tr>' +
+      '<td colspan="3" style="text-align:center;">' +
+      'No students found.' +
+      '</td>' +
+      '</tr>';
+
+    return;
+  }
+
+  students.forEach(
+    function(student) {
+
+      const row =
+        document.createElement("tr");
+
+      const nameCell =
+        document.createElement("td");
+
+      nameCell.textContent =
+        student.name || "";
+
+      const amCell =
+        document.createElement("td");
+
+      const pmCell =
+        document.createElement("td");
+
+
+      /* =========================
+         AM
+         ========================= */
+
+      const amButton =
+        document.createElement("button");
+
+      amButton.type =
+        "button";
+
+      amButton.textContent =
+        student.AM === "PRESENT"
+          ? "PRESENT"
+          : "ABSENT";
+
+      amButton.className =
+        student.AM === "PRESENT"
+          ? "attendance-btn present"
+          : "attendance-btn absent";
+
+
+      /* =========================
+         PM
+         ========================= */
+
+      const pmButton =
+        document.createElement("button");
+
+      pmButton.type =
+        "button";
+
+      pmButton.textContent =
+        student.PM === "PRESENT"
+          ? "PRESENT"
+          : "ABSENT";
+
+      pmButton.className =
+        student.PM === "PRESENT"
+          ? "attendance-btn present"
+          : "attendance-btn absent";
+
+
+      amCell.appendChild(
+        amButton
+      );
+
+      pmCell.appendChild(
+        pmButton
+      );
+
+
+      row.appendChild(
+        nameCell
+      );
+
+      row.appendChild(
+        amCell
+      );
+
+      row.appendChild(
+        pmCell
+      );
+
+
+      attendanceTableBody.appendChild(
+        row
+      );
+
+    }
+  );
+
+}
 
   /* =====================================================
      CONFIGURATION
@@ -1942,12 +2134,10 @@ alert("OPEN ATTENDANCE PAGE");
     );
 
 
-  attendanceMessage.textContent =
-    "Loading attendance...";
+attendanceMessage.textContent =
+  "Attendance data loading...";
 
-
-  await loadAttendanceSummary();
-
+  await loadAdviserAttendance();
 }
 
 /* =====================================================
