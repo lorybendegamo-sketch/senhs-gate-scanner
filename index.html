@@ -433,6 +433,37 @@
       display: block;
     }
 
+#exitScannerBtn {
+  position: absolute;
+  z-index: 20;
+  left: 16px;
+  top: 16px;
+
+  padding: 10px 18px;
+
+  border: 2px solid #ffffff;
+  border-radius: 10px;
+
+  background: #b71c1c;
+  color: #ffffff;
+
+  font-size: 15px;
+  font-weight: 900;
+
+  cursor: pointer;
+
+  box-shadow: 0 3px 8px rgba(0,0,0,0.25);
+}
+
+#exitScannerBtn:hover {
+  opacity: 0.9;
+}
+
+#exitScannerBtn:active {
+  transform: scale(0.96);
+}
+
+    
     #switchCameraBtn {
       position: absolute;
       z-index: 20;
@@ -799,6 +830,223 @@
         margin: 0 auto 18px auto !important;
       }
     }
+
+
+    /* =====================================================
+   ADVISER / ADMIN ATTENDANCE PAGE
+   ===================================================== */
+
+#attendancePage {
+  width: 100%;
+  min-height: 100vh;
+  display: none;
+  position: relative;
+}
+
+#attendancePage .device-content {
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 25px 20px;
+  box-sizing: border-box;
+}
+
+#attendancePage .gate-title {
+  margin-bottom: 5px;
+}
+
+#attendanceRoleTitle {
+  margin-bottom: 18px;
+}
+
+/* SECTION SELECTOR */
+
+#attendanceSectionWrapper {
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto 15px auto;
+}
+
+#attendanceSectionSelect {
+  width: 100%;
+  padding: 13px 15px;
+  border: 2px solid #333;
+  border-radius: 10px;
+  background: #ffffff;
+  color: #222;
+  font-size: 16px;
+  font-weight: 700;
+  box-sizing: border-box;
+  outline: none;
+}
+
+#attendanceSectionSelect:focus {
+  border-color: #000;
+}
+
+/* CURRENT SECTION */
+
+#attendanceCurrentSection {
+  width: 100%;
+  margin: 12px auto 18px auto;
+  text-align: center;
+  font-size: 18px;
+  font-weight: 900;
+}
+
+/* ATTENDANCE TABLE */
+
+#attendanceTableWrapper {
+  width: 100%;
+  overflow-x: auto;
+  margin-top: 10px;
+  border-radius: 10px;
+}
+
+#attendanceTable {
+  width: 100%;
+  min-width: 650px;
+  border-collapse: collapse;
+  background: rgba(255,255,255,0.96);
+  color: #111;
+}
+
+#attendanceTable th {
+  padding: 12px 8px;
+  background: #222;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 900;
+  text-align: center;
+  border: 1px solid #555;
+}
+
+#attendanceTable td {
+  padding: 9px 8px;
+  border: 1px solid #aaa;
+  font-size: 14px;
+  font-weight: 700;
+  text-align: center;
+}
+
+#attendanceTable th:first-child,
+#attendanceTable td:first-child {
+  text-align: left;
+  min-width: 260px;
+}
+
+/* ATTENDANCE BUTTONS */
+
+.attendance-btn {
+  min-width: 82px;
+  padding: 8px 10px;
+  margin: 2px;
+  border: 2px solid #333;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #222;
+  font-size: 12px;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.attendance-btn:hover {
+  transform: translateY(-1px);
+}
+
+.attendance-btn.present {
+  background: #d9f7df;
+  border-color: #238636;
+  color: #176b2c;
+}
+
+.attendance-btn.absent {
+  background: #ffdede;
+  border-color: #d93025;
+  color: #a40000;
+}
+
+.attendance-btn.selected {
+  box-shadow: 0 0 0 3px rgba(0,0,0,0.18);
+}
+
+/* PROCEED BUTTON */
+
+#proceedAttendanceBtn {
+  display: block;
+  width: 100%;
+  max-width: 300px;
+  margin: 22px auto 10px auto;
+  padding: 14px 20px;
+  border: none;
+  border-radius: 10px;
+  background: #111;
+  color: #ffffff;
+  font-size: 17px;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+#proceedAttendanceBtn:hover {
+  opacity: 0.9;
+}
+
+#proceedAttendanceBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* MESSAGE */
+
+#attendanceMessage {
+  min-height: 24px;
+  margin-top: 10px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+/* MOBILE */
+
+@media (max-width: 600px) {
+
+  #attendancePage .device-content {
+    padding: 20px 10px;
+  }
+
+  #attendanceCurrentSection {
+    font-size: 16px;
+  }
+
+  #attendanceTable {
+    min-width: 600px;
+  }
+
+  #attendanceTable th {
+    padding: 10px 6px;
+    font-size: 12px;
+  }
+
+  #attendanceTable td {
+    padding: 7px 5px;
+    font-size: 12px;
+  }
+
+  #attendanceTable th:first-child,
+  #attendanceTable td:first-child {
+    min-width: 210px;
+  }
+
+  .attendance-btn {
+    min-width: 70px;
+    padding: 7px 6px;
+    font-size: 11px;
+  }
+
+  #proceedAttendanceBtn {
+    max-width: 260px;
+  }
+}
   </style>
 </head>
 
@@ -904,6 +1152,100 @@
 
 </div>
 
+<!-- =====================================================
+     PAGE 3 — ADVISER / ADMIN ATTENDANCE
+     ===================================================== -->
+
+<div id="attendancePage" style="display:none;">
+
+  <div class="device-watermark">SENHS</div>
+
+  <div class="device-content">
+
+    <div class="school-name">
+      SAN ESTEBAN NATIONAL HIGH SCHOOL
+    </div>
+
+    <div class="gate-title">
+      ATTENDANCE
+    </div>
+
+    <div class="subtitle" id="attendanceRoleTitle">
+      Adviser / Admin Attendance
+    </div>
+
+    <!-- SECTION SELECTOR — ADMIN ONLY -->
+    <div id="attendanceSectionWrapper" style="display:none;">
+
+      <select id="attendanceSectionSelect">
+        <option value="">Select Section</option>
+
+        <option value="7-Acacia">7-Acacia</option>
+        <option value="7-Banaba">7-Banaba</option>
+        <option value="7-Mahogany">7-Mahogany</option>
+
+        <option value="8-Camia">8-Camia</option>
+        <option value="8-Sampaguita">8-Sampaguita</option>
+        <option value="8-Rose">8-Rose</option>
+
+        <option value="9-Bonifacio">9-Bonifacio</option>
+        <option value="9-Quezon">9-Quezon</option>
+        <option value="9-Rizal">9-Rizal</option>
+
+        <option value="10-Diamond">10-Diamond</option>
+        <option value="10-Jade">10-Jade</option>
+        <option value="10-Ruby">10-Ruby</option>
+
+        <option value="11-Durkheim">11-Durkheim</option>
+        <option value="11-Einstein">11-Einstein</option>
+        <option value="11-Ramsay">11-Ramsay</option>
+
+        <option value="12-Comte">12-Comte</option>
+        <option value="12-Keller">12-Keller</option>
+        <option value="12-Newton">12-Newton</option>
+      </select>
+
+    </div>
+
+    <!-- CURRENT SECTION -->
+    <div id="attendanceCurrentSection">
+      Section: —
+    </div>
+
+    <!-- ATTENDANCE TABLE -->
+    <div id="attendanceTableWrapper">
+
+      <table id="attendanceTable">
+
+        <thead>
+          <tr>
+            <th>STUDENT NAME</th>
+            <th>AM</th>
+            <th>PM</th>
+          </tr>
+        </thead>
+
+        <tbody id="attendanceTableBody">
+        </tbody>
+
+      </table>
+
+    </div>
+
+    <!-- PROCEED -->
+    <button
+      id="proceedAttendanceBtn"
+      type="button"
+    >
+      PROCEED
+    </button>
+
+    <div id="attendanceMessage"></div>
+
+  </div>
+
+</div>
+  
   <!-- =========================
        SCANNER PAGE
        ========================= -->
@@ -943,6 +1285,13 @@
         >
           -- -- ----
         </div>
+
+        <button
+  id="exitScannerBtn"
+  type="button"
+>
+  EXIT
+</button>
 
       </div>
 
@@ -1146,6 +1495,15 @@ let userName = "";
 let deviceKey = "";
 
 /* =====================================================
+   ADVISER / ADMIN ATTENDANCE VARIABLES
+   ===================================================== */
+
+let attendanceAccessCode = "";
+let attendanceRole = "";
+let attendanceSection = "";
+let attendanceStudents = [];
+
+/* =====================================================
    DEVICE SESSION
    ===================================================== */
 
@@ -1218,6 +1576,9 @@ const scannerPage =
   const switchCameraBtn =
     document.getElementById("switchCameraBtn");
 
+  const exitScannerBtn =
+  document.getElementById("exitScannerBtn");
+  
   const scanOverlay =
     document.getElementById("scanOverlay");
 
@@ -1496,7 +1857,7 @@ function jsonpRequest(url) {
 
 
 /* =====================================================
-   VERIFY DEVICE
+   VERIFY ACCESS — DEVICE / ADVISER / ADMIN
    ===================================================== */
 
 async function verifyDevice() {
@@ -1524,32 +1885,41 @@ async function verifyDevice() {
 
 
   showDeviceMessage(
-    "Checking device...",
+    "Checking access...",
     ""
   );
 
 
   try {
 
-const requestUrl =
-  APPS_SCRIPT_URL +
-  "?device=" +
-  encodeURIComponent(key) +
-  "&platform=" +
-  encodeURIComponent(platform) +
-  "&name=" +
-  encodeURIComponent(userName);
+    /* =================================================
+       1. CHECK DEVICE CODE FIRST
+       ================================================= */
 
-    const result =
+    const deviceRequestUrl =
+      APPS_SCRIPT_URL +
+      "?device=" +
+      encodeURIComponent(key) +
+      "&platform=" +
+      encodeURIComponent(platform) +
+      "&name=" +
+      encodeURIComponent(userName);
+
+
+    const deviceResult =
       await jsonpRequest(
-        requestUrl
+        deviceRequestUrl
       );
 
 
+    /* =================================================
+       2. VALID DEVICE
+       ================================================= */
+
     if (
-      result &&
-      result.success &&
-      result.authorized
+      deviceResult &&
+      deviceResult.success &&
+      deviceResult.authorized
     ) {
 
       deviceKey =
@@ -1558,7 +1928,7 @@ const requestUrl =
 
       sessionToken =
         String(
-          result.session || ""
+          deviceResult.session || ""
         );
 
 
@@ -1591,29 +1961,107 @@ const requestUrl =
       );
 
 
-    } else {
-
-      showDeviceMessage(
-        result && result.message
-          ? result.message
-          : "Access denied. Device not recognized.",
-        "error"
-      );
-
-
-      continueBtn.disabled =
-        false;
-
-      continueBtn.textContent =
-        "CONTINUE";
+      return;
 
     }
 
 
-  } catch (error) {
+    /* =================================================
+       3. NOT A DEVICE → CHECK ADVISER / ADMIN CODE
+       ================================================= */
+
+    showDeviceMessage(
+      "Checking attendance access...",
+      ""
+    );
+
+
+    const pmRequestUrl =
+      APPS_SCRIPT_URL +
+      "?pmAccess=" +
+      encodeURIComponent(key);
+
+
+    const pmResult =
+      await jsonpRequest(
+        pmRequestUrl
+      );
+
+
+    /* =================================================
+       4. ADVISER / ADMIN AUTHORIZED
+       ================================================= */
+
+    if (
+      pmResult &&
+      pmResult.success &&
+      pmResult.authorized
+    ) {
+
+      attendanceAccessCode =
+        key;
+
+
+      attendanceRole =
+        String(
+          pmResult.role || ""
+        ).toUpperCase();
+
+
+      attendanceSection =
+        String(
+          pmResult.section || ""
+        );
+
+
+      showDeviceMessage(
+        attendanceRole === "ADMIN"
+          ? "Admin authorized."
+          : "Adviser authorized.",
+        "success"
+      );
+
+
+      setTimeout(
+        function() {
+
+          openAttendancePage();
+
+        },
+        300
+      );
+
+
+      return;
+
+    }
+
+
+    /* =================================================
+       5. INVALID CODE
+       ================================================= */
+
+    showDeviceMessage(
+      pmResult && pmResult.message
+        ? pmResult.message
+        : "Access denied. Invalid code.",
+      "error"
+    );
+
+
+    continueBtn.disabled =
+      false;
+
+    continueBtn.textContent =
+      "CONTINUE";
+
+  }
+
+
+  catch (error) {
 
     console.error(
-      "Device verification error:",
+      "Access verification error:",
       error
     );
 
@@ -2323,6 +2771,91 @@ function releaseCurrentSession() {
 
 }
 
+  /* =====================================================
+   MANUAL EXIT
+   ===================================================== */
+
+async function exitScanner() {
+
+  if (
+    !deviceKey ||
+    !sessionToken
+  ) {
+    return;
+  }
+
+
+  if (scannerRunning && html5QrCode) {
+
+    try {
+
+      await html5QrCode.stop();
+
+    } catch (error) {
+
+      console.log(
+        "Scanner stop on exit:",
+        error
+      );
+
+    }
+
+    scannerRunning =
+      false;
+
+  }
+
+
+  releaseCurrentSession();
+
+
+  sessionActive =
+    false;
+
+
+  deviceKey =
+    "";
+
+  sessionToken =
+    "";
+
+  releaseSent =
+    false;
+
+
+  if (attendanceTimer) {
+
+    clearInterval(
+      attendanceTimer
+    );
+
+    attendanceTimer =
+      null;
+
+  }
+
+
+  scannerPage.style.display =
+    "none";
+
+  devicePage.style.display =
+    "block";
+
+
+  deviceCode.value =
+    "";
+
+  deviceMessage.textContent =
+    "";
+
+  readyBar.textContent =
+    "● READY TO SCAN";
+
+
+  deviceCode.focus();
+
+}
+  
 
 /* =====================================================
    ANDROID / CHROME BACK
@@ -2360,32 +2893,6 @@ document.addEventListener(
 );
 
 
-/* =====================================================
-   PAGE LEAVE
-   ===================================================== */
-
-window.addEventListener(
-  "pagehide",
-  function() {
-
-    releaseCurrentSession();
-
-  }
-);
-
-
-/* =====================================================
-   BROWSER CLOSE / LEAVE
-   ===================================================== */
-
-window.addEventListener(
-  "beforeunload",
-  function() {
-
-    releaseCurrentSession();
-
-  }
-);
 
 /* =====================================================
    START CAMERA
@@ -3367,7 +3874,11 @@ async function resumeScanner() {
     verifyDevice
   );
 
-
+exitScannerBtn.addEventListener(
+  "click",
+  exitScanner
+);
+  
   /* =====================================================
      ENTER
      ===================================================== */
