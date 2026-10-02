@@ -1769,6 +1769,7 @@ let callbackCounter = 0;
 let attendanceTimer = null;
 
 
+```js
 /* =====================================================
    ELEMENTS
    ===================================================== */
@@ -1791,17 +1792,46 @@ const userMessage =
 const scannerPage =
   document.getElementById("scannerPage");
 
-  const attendancePage =
+const attendancePage =
   document.getElementById("attendancePage");
 
 const attendanceRoleTitle =
   document.getElementById("attendanceRoleTitle");
 
 const attendanceSectionWrapper =
-  document.getElementById("attendanceSectionWrapper");
+  document.getElementById(
+    "attendanceSectionWrapper"
+  );
 
 const attendanceSectionSelect =
-  document.getElementById("attendanceSectionSelect");
+  document.getElementById(
+    "attendanceSectionSelect"
+  );
+
+const attendanceCurrentSection =
+  document.getElementById(
+    "attendanceCurrentSection"
+  );
+
+const attendanceTableBody =
+  document.getElementById(
+    "attendanceTableBody"
+  );
+
+const proceedAttendanceBtn =
+  document.getElementById(
+    "proceedAttendanceBtn"
+  );
+
+const attendanceMessage =
+  document.getElementById(
+    "attendanceMessage"
+  );
+
+
+/* =====================================================
+   ATTENDANCE SECTION SELECT
+   ===================================================== */
 
 attendanceSectionSelect.addEventListener(
   "change",
@@ -1840,51 +1870,68 @@ attendanceSectionSelect.addEventListener(
 
   }
 );
-    
-const attendanceCurrentSection =
-  document.getElementById("attendanceCurrentSection");
 
-const attendanceTableBody =
-  document.getElementById("attendanceTableBody");
 
-const proceedAttendanceBtn =
-  document.getElementById("proceedAttendanceBtn");
+/* =====================================================
+   DEVICE / SCANNER ELEMENTS
+   ===================================================== */
 
-const attendanceMessage =
-  document.getElementById("attendanceMessage");
-  
-  const deviceCode =
-    document.getElementById("deviceCode");
+const deviceCode =
+  document.getElementById(
+    "deviceCode"
+  );
 
-  const continueBtn =
-    document.getElementById("continueBtn");
+const continueBtn =
+  document.getElementById(
+    "continueBtn"
+  );
 
-  const toggleDeviceCode =
-    document.getElementById("toggleDeviceCode");
+const toggleDeviceCode =
+  document.getElementById(
+    "toggleDeviceCode"
+  );
 
-  const deviceMessage =
-    document.getElementById("deviceMessage");
+const deviceMessage =
+  document.getElementById(
+    "deviceMessage"
+  );
 
-  const switchCameraBtn =
-    document.getElementById("switchCameraBtn");
+const switchCameraBtn =
+  document.getElementById(
+    "switchCameraBtn"
+  );
 
-  const exitScannerBtn =
-  document.getElementById("exitScannerBtn");
-  
-  const scanOverlay =
-    document.getElementById("scanOverlay");
+const exitScannerBtn =
+  document.getElementById(
+    "exitScannerBtn"
+  );
 
-  const overlayContent =
-    document.getElementById("overlayContent");
+const scanOverlay =
+  document.getElementById(
+    "scanOverlay"
+  );
 
-  const readyBar =
-    document.getElementById("readyBar");
+const overlayContent =
+  document.getElementById(
+    "overlayContent"
+  );
 
-  const sectionAttendance =
-    document.getElementById("sectionAttendance");
+const readyBar =
+  document.getElementById(
+    "readyBar"
+  );
 
-  const attendanceUpdated =
-    document.getElementById("attendanceUpdated");
+const sectionAttendance =
+  document.getElementById(
+    "sectionAttendance"
+  );
+
+const attendanceUpdated =
+  document.getElementById(
+    "attendanceUpdated"
+  );
+```
+
 
  /* =====================================================
    PAGE 1 — USER INFORMATION
