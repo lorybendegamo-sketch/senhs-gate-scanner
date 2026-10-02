@@ -1803,6 +1803,44 @@ const attendanceSectionWrapper =
 const attendanceSectionSelect =
   document.getElementById("attendanceSectionSelect");
 
+attendanceSectionSelect.addEventListener(
+  "change",
+  async function() {
+
+    const selectedSection =
+      attendanceSectionSelect.value.trim();
+
+    if (!selectedSection) {
+
+      attendanceSection = "";
+
+      attendanceCurrentSection.textContent =
+        "Section: —";
+
+      attendanceTableBody.innerHTML =
+        "";
+
+      attendanceMessage.textContent =
+        "Select a section.";
+
+      return;
+    }
+
+    attendanceSection =
+      selectedSection;
+
+    attendanceCurrentSection.textContent =
+      "Section: " +
+      selectedSection;
+
+    attendanceMessage.textContent =
+      "Loading attendance...";
+
+    await loadAdviserAttendance();
+
+  }
+);
+    
 const attendanceCurrentSection =
   document.getElementById("attendanceCurrentSection");
 
