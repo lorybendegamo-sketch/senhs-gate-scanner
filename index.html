@@ -1849,26 +1849,14 @@ proceedAttendanceBtn.addEventListener(
     try {
 
       const requestUrl =
-        APPS_SCRIPT_URL +
-        "?action=proceedAttendance" +
-        "&accessCode=" +
-        encodeURIComponent(
-          attendanceAccessCode
-        ) +
-        "&requestedSection=" +
-        encodeURIComponent(
-          attendanceSection
-        ) +
-        "&proceedBy=" +
-        encodeURIComponent(
-          userName
-        ) +
-        "&students=" +
-        encodeURIComponent(
-          JSON.stringify(
-            attendanceStudents
-          )
-        );
+  APPS_SCRIPT_URL +
+  "?action=proceedAttendance" +
+  "&accessCode=" + encodeURIComponent(attendanceAccessCode) +
+  "&requestedSection=" + encodeURIComponent(attendanceSection) +
+  "&proceedBy=" + encodeURIComponent(userName) +
+  "&students=" + encodeURIComponent(JSON.stringify(attendanceStudents)) +
+  "&callback=senhsCallback";
+      
 
       const result =
         await jsonpRequest(
