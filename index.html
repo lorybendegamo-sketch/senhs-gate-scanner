@@ -1831,7 +1831,6 @@ const attendanceMessage =
   );
 
 
-   
  /* =====================================================
    PROCEED ATTENDANCE BUTTON
    ===================================================== */
@@ -1849,14 +1848,20 @@ proceedAttendanceBtn.addEventListener(
     try {
 
       const requestUrl =
-  APPS_SCRIPT_URL +
-  "?action=proceedAttendance" +
-  "&accessCode=" + encodeURIComponent(attendanceAccessCode) +
-  "&requestedSection=" + encodeURIComponent(attendanceSection) +
-  "&proceedBy=" + encodeURIComponent(userName) +
-  "&students=" + encodeURIComponent(JSON.stringify(attendanceStudents)) +
-  "&callback=senhsCallback";
-      
+        APPS_SCRIPT_URL +
+        "?action=proceedAttendance" +
+        "&accessCode=" +
+        encodeURIComponent(
+          attendanceAccessCode
+        ) +
+        "&requestedSection=" +
+        encodeURIComponent(
+          attendanceSection
+        ) +
+        "&proceededBy=" +
+        encodeURIComponent(
+          userName
+        );
 
       const result =
         await jsonpRequest(
@@ -1891,11 +1896,16 @@ proceedAttendanceBtn.addEventListener(
         error.message ||
         "Unable to proceed attendance.";
 
-  } finally {
-  proceedAttendanceBtn.disabled = false;
-}
-});
+    } finally {
 
+      proceedAttendanceBtn.disabled =
+        false;
+
+    }
+
+  }
+);  
+ 
 /* =====================================================
    ATTENDANCE SECTION SELECT
    ===================================================== */
