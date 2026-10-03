@@ -2443,14 +2443,19 @@ attendanceMessage.textContent =
 
 async function verifyDevice() {
 
-  const key =
-    deviceCode.value.trim();
+  const key = String(
+    deviceCode.value || ""
+  ).trim();
 
+
+  /* =================================================
+     1. CHECK EMPTY INPUT
+     ================================================= */
 
   if (!key) {
 
     showDeviceMessage(
-      "Please enter the Device Code.",
+      "Please enter the Device Code or Access Code.",
       "error"
     );
 
@@ -2459,10 +2464,13 @@ async function verifyDevice() {
   }
 
 
+  /* =================================================
+     2. DISABLE BUTTON WHILE CHECKING
+     ================================================= */
+
   continueBtn.disabled = true;
 
-  continueBtn.textContent =
-    "CHECKING...";
+  continueBtn.textContent = "CHECKING...";
 
 
   showDeviceMessage(
@@ -2474,7 +2482,7 @@ async function verifyDevice() {
   try {
 
     /* =================================================
-       1. CHECK DEVICE CODE FIRST
+       3. CHECK DEVICE CODE FIRST
        ================================================= */
 
     const deviceRequestUrl =
@@ -2482,9 +2490,19 @@ async function verifyDevice() {
       "?device=" +
       encodeURIComponent(key) +
       "&platform=" +
-      encodeURIComponent(platform) +
+      encodeURIComponent(
+        String(platform || "").toLowerCase().trim()
+      ) +
       "&name=" +
-      encodeURIComponent(userName);
+      encodeURIComponent(
+        String(userName || "").trim()
+      );
+
+
+    console.log(
+      "DEVICE CHECK:",
+      deviceRequestUrl
+    );
 
 
     const deviceResult =
@@ -2493,18 +2511,23 @@ async function verifyDevice() {
       );
 
 
+    console.log(
+      "DEVICE RESULT:",
+      deviceResult
+    );
+
+
     /* =================================================
-       2. VALID DEVICE
+       4. DEVICE CODE AUTHORIZED
        ================================================= */
 
     if (
       deviceResult &&
-      deviceResult.success &&
-      deviceResult.authorized
+      deviceResult.success === true &&
+      deviceResult.authorized === true
     ) {
 
-      deviceKey =
-        key;
+      deviceKey = key;
 
 
       sessionToken =
@@ -2513,27 +2536,34 @@ async function verifyDevice() {
         );
 
 
+      /* ---------------------------------------------
+         DEVICE SESSION MUST EXIST
+         --------------------------------------------- */
+
       if (!sessionToken) {
 
         throw new Error(
-          "No session token received."
+          "No device session token received."
         );
 
       }
 
 
-      sessionActive =
-        true;
+      sessionActive = true;
 
 
       showDeviceMessage(
-        "Device authorized.",
+        "Device authorized. Opening Gate Scanner...",
         "success"
       );
 
 
+      /* ---------------------------------------------
+         OPEN SCANNER
+         --------------------------------------------- */
+
       setTimeout(
-        function() {
+        function () {
 
           openScannerPage();
 
@@ -2548,11 +2578,12 @@ async function verifyDevice() {
 
 
     /* =================================================
-       3. NOT A DEVICE → CHECK ADVISER / ADMIN CODE
+       5. DEVICE CHECK FAILED
+          NOW CHECK ADVISER / ADMIN
        ================================================= */
 
     showDeviceMessage(
-      "Checking attendance access...",
+      "Checking Adviser/Admin access...",
       ""
     );
 
@@ -2563,24 +2594,35 @@ async function verifyDevice() {
       encodeURIComponent(key);
 
 
+    console.log(
+      "PM CHECK:",
+      pmRequestUrl
+    );
+
+
     const pmResult =
       await jsonpRequest(
         pmRequestUrl
       );
 
 
+    console.log(
+      "PM RESULT:",
+      pmResult
+    );
+
+
     /* =================================================
-       4. ADVISER / ADMIN AUTHORIZED
+       6. ADVISER / ADMIN AUTHORIZED
        ================================================= */
 
     if (
       pmResult &&
-      pmResult.success &&
-      pmResult.authorized
+      pmResult.success === true &&
+      pmResult.authorized === true
     ) {
 
-      attendanceAccessCode =
-        key;
+      attendanceAccessCode = key;
 
 
       attendanceRole =
@@ -2595,16 +2637,33 @@ async function verifyDevice() {
         );
 
 
-      showDeviceMessage(
-        attendanceRole === "ADMIN"
-          ? "Admin authorized."
-          : "Adviser authorized.",
-        "success"
-      );
+      /* ---------------------------------------------
+         SHOW CORRECT MESSAGE
+         --------------------------------------------- */
 
+      if (attendanceRole === "ADMIN") {
+
+        showDeviceMessage(
+          "Admin authorized. Opening Attendance...",
+          "success"
+        );
+
+      } else {
+
+        showDeviceMessage(
+          "Adviser authorized. Opening Attendance...",
+          "success"
+        );
+
+      }
+
+
+      /* ---------------------------------------------
+         OPEN ATTENDANCE PAGE
+         --------------------------------------------- */
 
       setTimeout(
-        function() {
+        function () {
 
           openAttendancePage();
 
@@ -2619,25 +2678,75 @@ async function verifyDevice() {
 
 
     /* =================================================
-       5. INVALID CODE
+       7. BOTH DEVICE AND PM CHECK FAILED
        ================================================= */
 
+    /*
+       IMPORTANT:
+       Do NOT blindly display the PM error.
+       If the Device Code failed, we want a clear
+       message instead of confusing:
+       "Invalid Access Code."
+    */
+
+    let errorMessage =
+      "Invalid Device / Adviser / Admin Code.";
+
+
+    if (
+      pmResult &&
+      pmResult.message
+    ) {
+
+      errorMessage =
+        String(
+          pmResult.message
+        );
+
+    }
+
+
+    /*
+       If the backend specifically says the code
+       was not recognized as a Device Code AND
+       it was also not an Adviser/Admin code,
+       show a combined message.
+    */
+
+    if (
+      deviceResult &&
+      deviceResult.message ===
+        "Device Code not recognized." &&
+      pmResult &&
+      pmResult.authorized !== true
+    ) {
+
+      errorMessage =
+        "Invalid Device / Adviser / Admin Code.";
+
+    }
+
+
     showDeviceMessage(
-      pmResult && pmResult.message
-        ? pmResult.message
-        : "Access denied. Invalid code.",
+      errorMessage,
       "error"
     );
 
 
-    continueBtn.disabled =
-      false;
+    /* =================================================
+       8. ENABLE BUTTON AGAIN
+       ================================================= */
 
-    continueBtn.textContent =
-      "CONTINUE";
+    continueBtn.disabled = false;
+
+    continueBtn.textContent = "CONTINUE";
 
   }
 
+
+  /* ===================================================
+     9. SERVER / CONNECTION ERROR
+     =================================================== */
 
   catch (error) {
 
@@ -2648,61 +2757,18 @@ async function verifyDevice() {
 
 
     showDeviceMessage(
-      "Unable to connect to server.",
+      "Unable to connect to server. Please try again.",
       "error"
     );
 
 
-    continueBtn.disabled =
-      false;
+    continueBtn.disabled = false;
 
-    continueBtn.textContent =
-      "CONTINUE";
+    continueBtn.textContent = "CONTINUE";
 
   }
 
 }
-  
-
-/* =====================================================
-   OPEN SCANNER
-   ===================================================== */
-
-async function openScannerPage() {
-
-  releaseSent = false;
-
-  
-  devicePage.style.display =
-    "none";
-
-  scannerPage.style.display =
-    "block";
-
-
-  continueBtn.disabled =
-    false;
-
-  continueBtn.textContent =
-    "CONTINUE";
-
-
-  await startCamera();
-
-
-  loadAttendanceSummary();
-
-
-  if (!attendanceTimer) {
-
-    attendanceTimer =
-      setInterval(
-        loadAttendanceSummary,
-        5000
-      );
-
-  }
-
 
   /* =====================================================
      START DEVICE HEARTBEAT
