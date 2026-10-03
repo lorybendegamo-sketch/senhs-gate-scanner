@@ -1863,9 +1863,11 @@ let clientId =
   let sessionToken = "";
   
 let platform =
-  /Android|iPhone|iPad|iPod/i.test(navigator.userAgent)
-    ? "mobile"
-    : "laptop";
+  /iPad|Tablet|Android(?!.*Mobile)/i.test(navigator.userAgent)
+    ? "tablet"
+    : /Android|iPhone|iPod/i.test(navigator.userAgent)
+      ? "mobile"
+      : "laptop";
 
 let sessionActive = false;
 
