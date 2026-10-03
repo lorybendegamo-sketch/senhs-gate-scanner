@@ -894,11 +894,13 @@
   font-weight: 900;
 }
 
-/* ATTENDANCE TABLE */
+/* ========================================
+   ATTENDANCE TABLE - ADVISER / ADMIN
+   ======================================== */
 
 #attendanceTableWrapper {
   width: 100%;
-  overflow-x: auto;
+  overflow-x: hidden;
   margin-top: 10px;
   border-radius: 10px;
 }
@@ -913,7 +915,7 @@
 }
 
 #attendanceTable th {
-  padding: 12px 8px;
+  padding: 12px 6px;
   background: #222;
   color: #ffffff;
   font-size: 14px;
@@ -923,33 +925,44 @@
 }
 
 #attendanceTable td {
-  padding: 9px 8px;
+  padding: 9px 6px;
   border: 1px solid #aaa;
   font-size: 14px;
   font-weight: 700;
   text-align: center;
 }
 
-/* COLUMN WIDTHS */
+/* ========================================
+   COLUMN WIDTHS
+   STUDENT NAME = 50%
+   AM = 25%
+   PM = 25%
+   ======================================== */
+
 #attendanceTable th:first-child,
 #attendanceTable td:first-child {
-  width: 55%;
+  width: 50%;
+  min-width: 0;
   text-align: left;
+  word-break: break-word;
 }
 
 #attendanceTable th:nth-child(2),
 #attendanceTable td:nth-child(2),
 #attendanceTable th:nth-child(3),
 #attendanceTable td:nth-child(3) {
-  width: 22.5%;
+  width: 25%;
 }
 
-/* ATTENDANCE BUTTONS */
+/* ========================================
+   PRESENT / ABSENT BUTTONS
+   ======================================== */
 
 .attendance-btn {
-  min-width: 82px;
-  padding: 8px 10px;
-  margin: 2px;
+  width: 100%;
+  min-width: 0;
+  padding: 8px 3px;
+  margin: 1px 0;
   border: 2px solid #333;
   border-radius: 8px;
   background: #ffffff;
@@ -957,6 +970,8 @@
   font-size: 12px;
   font-weight: 900;
   cursor: pointer;
+  white-space: nowrap;
+  box-sizing: border-box;
 }
 
 .attendance-btn:hover {
@@ -978,7 +993,117 @@
 .attendance-btn.selected {
   box-shadow: 0 0 0 3px rgba(0,0,0,0.18);
 }
+
+
+/* ========================================
+   CELLPHONE - PORTRAIT
+   ======================================== */
+
+@media (max-width: 600px) {
+
+  #attendancePage .device-content {
+    padding: 12px 5px;
+  }
+
+  #attendanceTableWrapper {
+    width: 100%;
+    overflow-x: hidden;
+  }
+
+  #attendanceTable {
+    width: 100%;
+    min-width: 0;
+    table-layout: fixed;
+  }
+
+  /* STUDENT NAME */
+  #attendanceTable th:first-child,
+  #attendanceTable td:first-child {
+    width: 50%;
+    min-width: 0;
+    padding: 7px 4px;
+    font-size: 12px;
+    text-align: left;
+    word-break: break-word;
+  }
+
+  /* AM + PM */
+  #attendanceTable th:nth-child(2),
+  #attendanceTable td:nth-child(2),
+  #attendanceTable th:nth-child(3),
+  #attendanceTable td:nth-child(3) {
+    width: 25%;
+    padding: 5px 2px;
+  }
+
+  #attendanceTable th {
+    padding: 8px 3px;
+    font-size: 11px;
+  }
+
+  #attendanceTable td {
+    padding: 6px 2px;
+    font-size: 11px;
+  }
+
+  /* PRESENT / ABSENT SA CP */
+  .attendance-btn {
+    width: 100%;
+    min-width: 0;
+    padding: 7px 1px;
+    margin: 1px 0;
+    font-size: 10px;
+    border-width: 1px;
+    border-radius: 6px;
+    white-space: nowrap;
+  }
+
+  #proceedAttendanceBtn {
+    max-width: 260px;
+  }
+}
+
+
+/* ========================================
+   VERY SMALL CELLPHONE
+   ======================================== */
+
+@media (max-width: 380px) {
+
+  #attendancePage .device-content {
+    padding: 10px 3px;
+  }
+
+  #attendanceTable th:first-child,
+  #attendanceTable td:first-child {
+    width: 48%;
+    font-size: 11px;
+  }
+
+  #attendanceTable th:nth-child(2),
+  #attendanceTable td:nth-child(2),
+  #attendanceTable th:nth-child(3),
+  #attendanceTable td:nth-child(3) {
+    width: 26%;
+  }
+
+  #attendanceTable th {
+    font-size: 10px;
+    padding: 7px 2px;
+  }
+
+  #attendanceTable td {
+    font-size: 10px;
+    padding: 5px 1px;
+  }
+
+  .attendance-btn {
+    font-size: 9px;
+    padding: 6px 0;
+  }
+}
     
+
 /* PROCEED BUTTON */
 
 #proceedAttendanceBtn {
@@ -1015,47 +1140,6 @@
   font-weight: 700;
 }
 
-/* MOBILE */
-
-@media (max-width: 600px) {
-
-  #attendancePage .device-content {
-    padding: 20px 10px;
-  }
-
-  #attendanceCurrentSection {
-    font-size: 16px;
-  }
-
-  #attendanceTable {
-    min-width: 600px;
-  }
-
-  #attendanceTable th {
-    padding: 10px 6px;
-    font-size: 12px;
-  }
-
-  #attendanceTable td {
-    padding: 7px 5px;
-    font-size: 12px;
-  }
-
-  #attendanceTable th:first-child,
-  #attendanceTable td:first-child {
-    min-width: 210px;
-  }
-
-  .attendance-btn {
-    min-width: 70px;
-    padding: 7px 6px;
-    font-size: 11px;
-  }
-
-  #proceedAttendanceBtn {
-    max-width: 260px;
-  }
-}
   </style>
 </head>
 
@@ -4485,26 +4569,6 @@ exitScannerBtn.addEventListener(
 
 
   updatePSTClock();
-
-
-  /* =====================================================
-USER NEXT BUTTON
-===================================================== */
-userNextBtn.addEventListener("click", function() {
-  const enteredName = userNameInput.value.trim();
-
-  if (!enteredName) {
-    userMessage.textContent = "Please enter your name.";
-    return;
-  }
-
-  userName = enteredName;
-  userMessage.textContent = "";
-
-  // Hide userPage, show devicePage
-  userPage.style.display = "none";
-  devicePage.style.display = "block";
-});
 
 
 </script>
