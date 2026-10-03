@@ -1888,165 +1888,154 @@ let callbackCounter = 0;
 let attendanceTimer = null;
 
 
-
 /* =====================================================
    ELEMENTS
    ===================================================== */
 
-const devicePage =
-  document.getElementById("devicePage");
+const devicePage = document.getElementById("devicePage");
+const userPage = document.getElementById("userPage");
+const userNameInput = document.getElementById("userNameInput");
+const userNextBtn = document.getElementById("userNextBtn");
+const userMessage = document.getElementById("userMessage");
+const scannerPage = document.getElementById("scannerPage");
+const attendancePage = document.getElementById("attendancePage");
+const attendanceRoleTitle = document.getElementById("attendanceRoleTitle");
+const attendanceSectionWrapper = document.getElementById("attendanceSectionWrapper");
+const attendanceSectionSelect = document.getElementById("attendanceSectionSelect");
+const attendanceCurrentSection = document.getElementById("attendanceCurrentSection");
+const attendanceTableBody = document.getElementById("attendanceTableBody");
+const proceedAttendanceBtn = document.getElementById("proceedAttendanceBtn");
+const attendanceMessage = document.getElementById("attendanceMessage");
+const deviceCode = document.getElementById("deviceCode");
+const continueBtn = document.getElementById("continueBtn");
+const deviceMessage = document.getElementById("deviceMessage");
+const scanOverlay = document.getElementById("scanOverlay");
+const overlayContent = document.getElementById("overlayContent");
+const exitScannerBtn = document.getElementById("exitScannerBtn");
+const switchCameraBtn = document.getElementById("switchCameraBtn");
 
-const userPage =
-  document.getElementById("userPage");
+/* =====================================================
+   CONTINUE BUTTON HANDLER (Corrected)
+   ===================================================== */
 
-const userNameInput =
-  document.getElementById("userNameInput");
+continueBtn.addEventListener("click", async function () {
+  deviceMessage.textContent = "CHECKING...";
+  continueBtn.disabled = true;
 
-const userNextBtn =
-  document.getElementById("userNextBtn");
+  try {
+    const requestUrl =
+      APPS_SCRIPT_URL +
+      "?action=authorizeDevice" +
+      "&deviceCode=" +
+      encodeURIComponent(deviceCode.value) +
+      "&clientId=" +
+      encodeURIComponent(clientId);
 
-const userMessage =
-  document.getElementById("userMessage");
+    // agad ipakita ang scanner page na may overlay
+    devicePage.style.display = "none";
+    scannerPage.style.display = "block";
+    scanOverlay.style.display = "flex";
+    overlayContent.innerHTML =
+      "<div class='processing-title'>Connecting...</div><div class='processing-text'>Please wait...</div>";
 
-const scannerPage =
-  document.getElementById("scannerPage");
+    const result = await jsonpRequest(requestUrl);
 
-const attendancePage =
-  document.getElementById("attendancePage");
+    if (!result || !result.success) {
+      throw new Error(result && result.message ? result.message : "Authorization failed.");
+    }
 
-const attendanceRoleTitle =
-  document.getElementById("attendanceRoleTitle");
+    // success: update overlay
+    overlayContent.innerHTML =
+      "<div class='processing-title'>Device authorized</div><div class='processing-text'>Opening Gate Scanner...</div>";
 
-const attendanceSectionWrapper =
-  document.getElementById(
-    "attendanceSectionWrapper"
-  );
+    setTimeout(() => {
+      scanOverlay.style.display = "none";
+    }, 1200);
 
-const attendanceSectionSelect =
-  document.getElementById(
-    "attendanceSectionSelect"
-  );
+  } catch (error) {
+    scannerPage.style.display = "none";
+    devicePage.style.display = "block";
+    deviceMessage.textContent = error.message || "Unable to authorize device.";
+  } finally {
+    continueBtn.disabled = false;
+  }
+});
 
-const attendanceCurrentSection =
-  document.getElementById(
-    "attendanceCurrentSection"
-  );
-
-const attendanceTableBody =
-  document.getElementById(
-    "attendanceTableBody"
-  );
-
-
-  const proceedAttendanceBtn =
-  document.getElementById(
-    "proceedAttendanceBtn"
-  );
-
-    
-const attendanceMessage =
-  document.getElementById(
-    "attendanceMessage"
-  );
-
-
- /* =====================================================
+/* =====================================================
    PROCEED ATTENDANCE BUTTON
    ===================================================== */
 
-proceedAttendanceBtn.addEventListener(
-  "click",
-  async function() {
+proceedAttendanceBtn.addEventListener("click", async function () {
+  attendanceMessage.textContent = "Saving attendance...";
+  proceedAttendanceBtn.disabled = true;
 
-    attendanceMessage.textContent =
-      "Saving attendance...";
+  try {
+    const requestUrl =
+      APPS_SCRIPT_URL +
+      "?action=proceedAttendance" +
+      "&accessCode=" +
+      encodeURIComponent(attendanceAccessCode) +
+      "&requestedSection=" +
+      encodeURIComponent(attendanceSection) +
+      "&proceededBy=" +
+      encodeURIComponent(userName);
 
-    proceedAttendanceBtn.disabled =
-      true;
+    const result = await jsonpRequest(requestUrl);
 
-    try {
-
-      const requestUrl =
-        APPS_SCRIPT_URL +
-        "?action=proceedAttendance" +
-        "&accessCode=" +
-        encodeURIComponent(
-          attendanceAccessCode
-        ) +
-        "&requestedSection=" +
-        encodeURIComponent(
-          attendanceSection
-        ) +
-        "&proceededBy=" +
-        encodeURIComponent(
-          userName
-        );
-
-      const result =
-        await jsonpRequest(
-          requestUrl
-        );
-
-      if (
-        !result ||
-        !result.success
-      ) {
-
-        throw new Error(
-          result &&
-          result.message
-            ? result.message
-            : "Unable to proceed attendance."
-        );
-
-      }
-
-      attendanceMessage.textContent =
-        "Attendance proceeded successfully.";
-
-    } catch (error) {
-
-      console.error(
-        "Proceed attendance error:",
-        error
-      );
-
-      attendanceMessage.textContent =
-        error.message ||
-        "Unable to proceed attendance.";
-
-    } finally {
-
-      proceedAttendanceBtn.disabled =
-        false;
-
+    if (!result || !result.success) {
+      throw new Error(result && result.message ? result.message : "Unable to proceed attendance.");
     }
 
+    attendanceMessage.textContent = "Attendance proceeded successfully.";
+
+  } catch (error) {
+    console.error("Proceed attendance error:", error);
+    attendanceMessage.textContent = error.message || "Unable to proceed attendance.";
+  } finally {
+    proceedAttendanceBtn.disabled = false;
   }
-);  
- 
+});
+
 /* =====================================================
-   ATTENDANCE SECTION SELECT
+   EXIT SCANNER BUTTON (Logout)
    ===================================================== */
 
-attendanceSectionSelect.addEventListener(
-  "change",
-  async function() {
-    const selectedSection = attendanceSectionSelect.value.trim();
-    if (!selectedSection) {
-      attendanceSection = "";
-      attendanceCurrentSection.textContent = "Section: —";
-      attendanceTableBody.innerHTML = "";
-      attendanceMessage.textContent = "Select a section";
-      return;
-    }
-
-    attendanceSection = selectedSection;
-    attendanceCurrentSection.textContent = "Section: " + attendanceSection;
-    attendanceMessage.textContent = "Loading attendance...";
-    await loadAdviserAttendance();
+exitScannerBtn.addEventListener("click", function () {
+  // stop scanner if running
+  if (html5QrCode && scannerRunning) {
+    html5QrCode.stop().catch(err => console.error("Stop scanner error:", err));
+    scannerRunning = false;
   }
-);
+  scannerPage.style.display = "none";
+  devicePage.style.display = "block";
+  deviceMessage.textContent = "You have logged out.";
+});
+
+/* =====================================================
+   SWITCH CAMERA BUTTON
+   ===================================================== */
+
+switchCameraBtn.addEventListener("click", async function () {
+  if (!cameras || cameras.length === 0) {
+    deviceMessage.textContent = "No cameras found.";
+    return;
+  }
+  try {
+    currentCameraIndex = (currentCameraIndex + 1) % cameras.length;
+    await html5QrCode.stop();
+    await html5QrCode.start(
+      cameras[currentCameraIndex].id,
+      { fps: 10, qrbox: 250 },
+      qrCodeMessage => {
+        console.log("QR Code detected:", qrCodeMessage);
+      }
+    );
+    scannerRunning = true;
+  } catch (err) {
+    console.error("Switch camera error:", err);
+    deviceMessage.textContent = "Unable to switch camera.";
+  }
+});
 
 
 
