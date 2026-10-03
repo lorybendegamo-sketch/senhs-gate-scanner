@@ -947,6 +947,33 @@
       cursor: not-allowed;
     }
 
+    /* =========================
+   ATTENDANCE LOGOUT
+   ========================= */
+
+#attendanceLogoutBtn {
+  display: block;
+  width: 100%;
+  max-width: 300px;
+  margin: 10px auto 20px auto;
+  padding: 14px 20px;
+  border: none;
+  border-radius: 10px;
+  background: #b71c1c;
+  color: #ffffff;
+  font-size: 17px;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+#attendanceLogoutBtn:hover {
+  opacity: 0.9;
+}
+
+#attendanceLogoutBtn:active {
+  transform: scale(0.98);
+}
+
     #attendanceMessage {
       min-height: 24px;
       margin-top: 10px;
@@ -1208,7 +1235,7 @@
 
       </div>
 
-      <button
+      
         id="continueBtn"
         type="button"
       >
@@ -1317,6 +1344,13 @@
       >
         PROCEED
       </button>
+
+      <button
+  id="attendanceLogoutBtn"
+  type="button"
+>
+  LOGOUT
+</button>
 
       <div id="attendanceMessage"></div>
 
@@ -1741,6 +1775,11 @@ const attendanceMessage =
     "attendanceMessage"
   );
 
+const attendanceLogoutBtn =
+  document.getElementById(
+    "attendanceLogoutBtn"
+  );
+  
 const deviceCode =
   document.getElementById(
     "deviceCode"
@@ -4980,6 +5019,103 @@ switchCameraBtn.addEventListener(
   }
 );
 
+  /* =====================================================
+   ADVISER / ADMIN LOGOUT
+   ===================================================== */
+
+attendanceLogoutBtn.addEventListener(
+  "click",
+  function () {
+
+    console.log(
+      "ADVISER / ADMIN LOGOUT STARTED"
+    );
+
+    /* ================================
+       CLEAR ATTENDANCE SESSION
+       ================================ */
+
+    attendanceAccessCode =
+      "";
+
+    attendanceRole =
+      "";
+
+    attendanceSection =
+      "";
+
+    attendanceStudents =
+      [];
+
+
+    /* ================================
+       RESET ATTENDANCE PAGE
+       ================================ */
+
+    attendanceRoleTitle.textContent =
+      "Adviser / Admin Attendance";
+
+    attendanceSectionSelect.value =
+      "";
+
+    attendanceCurrentSection.textContent =
+      "Section: —";
+
+    attendanceTableBody.innerHTML =
+      "";
+
+    attendanceMessage.textContent =
+      "";
+
+    attendanceSectionWrapper.style.display =
+      "none";
+
+    proceedAttendanceBtn.disabled =
+      true;
+
+
+    /* ================================
+       RETURN TO ACCESS PAGE
+       ================================ */
+
+    attendancePage.style.display =
+      "none";
+
+    scannerPage.style.display =
+      "none";
+
+    devicePage.style.display =
+      "block";
+
+
+    /* ================================
+       RESET DEVICE ACCESS UI
+       ================================ */
+
+    deviceCode.value =
+      "";
+
+    deviceMessage.textContent =
+      "";
+
+    deviceMessage.className =
+      "";
+
+    continueBtn.disabled =
+      false;
+
+    continueBtn.textContent =
+      "CONTINUE";
+
+
+    deviceCode.focus();
+
+    console.log(
+      "ADVISER / ADMIN LOGOUT COMPLETED"
+    );
+
+  }
+);
 
 /* =====================================================
    BUTTON EVENTS
