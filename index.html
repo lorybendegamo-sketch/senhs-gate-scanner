@@ -3343,21 +3343,49 @@ function startDeviceHeartbeat() {
 function releaseDeviceSession() {
 
   if (!deviceKey || !sessionToken) {
+    console.log(
+      "Release skipped: no device session."
+    );
     return;
   }
+
+
+  const currentDevice =
+    String(deviceKey);
+
+
+  const currentSession =
+    String(sessionToken);
+
+
+  const currentPlatform =
+    String(platform || "").toLowerCase().trim();
 
 
   const requestUrl =
     APPS_SCRIPT_URL +
     "?release=1" +
     "&device=" +
-    encodeURIComponent(deviceKey) +
+    encodeURIComponent(
+      currentDevice
+    ) +
     "&session=" +
-    encodeURIComponent(sessionToken) +
+    encodeURIComponent(
+      currentSession
+    ) +
     "&platform=" +
-    encodeURIComponent(platform) +
+    encodeURIComponent(
+      currentPlatform
+    ) +
     "&_=" +
     Date.now();
+
+
+  console.log(
+    "RELEASING DEVICE:",
+    currentDevice,
+    currentPlatform
+  );
 
 
   try {
@@ -3368,6 +3396,11 @@ function releaseDeviceSession() {
     image.src =
       requestUrl;
 
+
+    console.log(
+      "RELEASE REQUEST SENT"
+    );
+
   } catch (error) {
 
     console.log(
@@ -3377,6 +3410,10 @@ function releaseDeviceSession() {
 
   }
 
+
+  /* =========================================
+     STOP HEARTBEAT
+     ========================================= */
 
   if (heartbeatTimer) {
 
@@ -3391,11 +3428,13 @@ function releaseDeviceSession() {
 
 }
 
+
 /* =====================================================
    RELEASE WHEN LEAVING / HIDING PAGE
    ===================================================== */
 
-let releaseSent = false;
+let releaseSent =
+  false;
 
 
 function releaseCurrentSession() {
@@ -3410,28 +3449,48 @@ function releaseCurrentSession() {
   }
 
 
-  releaseSent = true;
+  releaseSent =
+    true;
 
 
   releaseDeviceSession();
 
 }
 
-  /* =====================================================
-   MANUAL EXIT
+
+/* =====================================================
+   MANUAL EXIT / LOGOUT
    ===================================================== */
 
 async function exitScanner() {
+
+  console.log(
+    "LOGOUT / EXIT SCANNER STARTED"
+  );
+
 
   if (
     !deviceKey ||
     !sessionToken
   ) {
+
+    console.log(
+      "No active device session to release."
+    );
+
     return;
+
   }
 
 
-  if (scannerRunning && html5QrCode) {
+  /* =========================================
+     STOP SCANNER
+     ========================================= */
+
+  if (
+    scannerRunning &&
+    html5QrCode
+  ) {
 
     try {
 
@@ -3446,14 +3505,23 @@ async function exitScanner() {
 
     }
 
+
     scannerRunning =
       false;
 
   }
 
 
+  /* =========================================
+     RELEASE DEVICE SESSION
+     ========================================= */
+
   releaseCurrentSession();
 
+
+  /* =========================================
+     CLEAR LOCAL SESSION
+     ========================================= */
 
   sessionActive =
     false;
@@ -3465,9 +3533,14 @@ async function exitScanner() {
   sessionToken =
     "";
 
+
   releaseSent =
     false;
 
+
+  /* =========================================
+     STOP ATTENDANCE TIMER
+     ========================================= */
 
   if (attendanceTimer) {
 
@@ -3481,8 +3554,13 @@ async function exitScanner() {
   }
 
 
+  /* =========================================
+     RETURN TO DEVICE PAGE
+     ========================================= */
+
   scannerPage.style.display =
     "none";
+
 
   devicePage.style.display =
     "block";
@@ -3491,8 +3569,10 @@ async function exitScanner() {
   deviceCode.value =
     "";
 
+
   deviceMessage.textContent =
     "";
+
 
   readyBar.textContent =
     "● READY TO SCAN";
@@ -3500,8 +3580,13 @@ async function exitScanner() {
 
   deviceCode.focus();
 
+
+  console.log(
+    "LOGOUT / EXIT SCANNER COMPLETED"
+  );
+
 }
-  
+
 
 /* =====================================================
    ANDROID / CHROME BACK
