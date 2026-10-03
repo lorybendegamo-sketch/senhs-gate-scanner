@@ -905,7 +905,8 @@
 
 #attendanceTable {
   width: 100%;
-  min-width: 650px;
+  min-width: 0;
+  table-layout: fixed;
   border-collapse: collapse;
   background: rgba(255,255,255,0.96);
   color: #111;
@@ -929,10 +930,18 @@
   text-align: center;
 }
 
+/* COLUMN WIDTHS */
 #attendanceTable th:first-child,
 #attendanceTable td:first-child {
+  width: 55%;
   text-align: left;
-  min-width: 260px;
+}
+
+#attendanceTable th:nth-child(2),
+#attendanceTable td:nth-child(2),
+#attendanceTable th:nth-child(3),
+#attendanceTable td:nth-child(3) {
+  width: 22.5%;
 }
 
 /* ATTENDANCE BUTTONS */
@@ -969,7 +978,7 @@
 .attendance-btn.selected {
   box-shadow: 0 0 0 3px rgba(0,0,0,0.18);
 }
-
+    
 /* PROCEED BUTTON */
 
 #proceedAttendanceBtn {
