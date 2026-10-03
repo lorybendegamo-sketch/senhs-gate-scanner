@@ -1918,40 +1918,22 @@ proceedAttendanceBtn.addEventListener(
 attendanceSectionSelect.addEventListener(
   "change",
   async function() {
-
-    const selectedSection =
-      attendanceSectionSelect.value.trim();
-
+    const selectedSection = attendanceSectionSelect.value.trim();
     if (!selectedSection) {
-
       attendanceSection = "";
-
-      attendanceCurrentSection.textContent =
-        "Section: —";
-
-      attendanceTableBody.innerHTML =
-        "";
-
-      attendanceMessage.textContent =
-        "Select a section.";
-
+      attendanceCurrentSection.textContent = "Section: —";
+      attendanceTableBody.innerHTML = "";
+      attendanceMessage.textContent = "Select a section";
       return;
     }
 
-    attendanceSection =
-      selectedSection;
-
-    attendanceCurrentSection.textContent =
-      "Section: " +
-      selectedSection;
-
-    attendanceMessage.textContent =
-      "Loading attendance...";
-
+    attendanceSection = selectedSection;
+    attendanceCurrentSection.textContent = "Section: " + attendanceSection;
+    attendanceMessage.textContent = "Loading attendance...";
     await loadAdviserAttendance();
-
   }
 );
+
 
 
 /* =====================================================
