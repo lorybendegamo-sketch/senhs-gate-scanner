@@ -1830,6 +1830,28 @@ const attendanceMessage =
     "attendanceMessage"
   );
 
+
+/* =====================================================
+USER NEXT BUTTON
+===================================================== */
+userNextBtn.addEventListener("click", function() {
+  const enteredName = userNameInput.value.trim();
+
+  if (!enteredName) {
+    userMessage.textContent = "Please enter your name.";
+    return;
+  }
+
+  userName = enteredName;
+  userMessage.textContent = "";
+
+  // Hide userPage, show devicePage
+  userPage.style.display = "none";
+  devicePage.style.display = "block";
+});
+
+
+    
     /* =====================================================
    PROCEED ATTENDANCE BUTTON
    ===================================================== */
