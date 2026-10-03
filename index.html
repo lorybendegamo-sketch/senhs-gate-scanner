@@ -1819,8 +1819,97 @@ const attendanceTableBody =
   );
 
 
-  
+  const proceedAttendanceBtn =
+  document.getElementById(
+    "proceedAttendanceBtn"
+  );
 
+    
+const attendanceMessage =
+  document.getElementById(
+    "attendanceMessage"
+  );
+
+    /* =====================================================
+   PROCEED ATTENDANCE BUTTON
+   ===================================================== */
+
+proceedAttendanceBtn.addEventListener(
+  "click",
+  async function() {
+
+    attendanceMessage.textContent =
+      "Saving attendance...";
+
+    proceedAttendanceBtn.disabled =
+      true;
+
+    try {
+
+      const requestUrl =
+        APPS_SCRIPT_URL +
+        "?action=proceedAttendance" +
+        "&accessCode=" +
+        encodeURIComponent(
+          attendanceAccessCode
+        ) +
+        "&requestedSection=" +
+        encodeURIComponent(
+          attendanceSection
+        ) +
+        "&proceedBy=" +
+        encodeURIComponent(
+          userName
+        ) +
+        "&students=" +
+        encodeURIComponent(
+          JSON.stringify(
+            attendanceStudents
+          )
+        );
+
+      const result =
+        await jsonpRequest(
+          requestUrl
+        );
+
+      if (
+        !result ||
+        !result.success
+      ) {
+
+        throw new Error(
+          result &&
+          result.message
+            ? result.message
+            : "Unable to proceed attendance."
+        );
+
+      }
+
+      attendanceMessage.textContent =
+        "Attendance proceeded successfully.";
+
+    } catch (error) {
+
+      console.error(
+        "Proceed attendance error:",
+        error
+      );
+
+      attendanceMessage.textContent =
+        error.message ||
+        "Unable to proceed attendance.";
+
+    } finally {
+
+      proceedAttendanceBtn.disabled =
+        false;
+
+    }
+
+  }
+);
 
 /* =====================================================
    ATTENDANCE SECTION SELECT
