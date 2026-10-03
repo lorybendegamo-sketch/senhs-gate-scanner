@@ -906,7 +906,6 @@
 #attendanceTable {
   width: 100%;
   min-width: 650px;
-  table-layout: fixed;
   border-collapse: collapse;
   background: rgba(255,255,255,0.96);
   color: #111;
@@ -932,16 +931,8 @@
 
 #attendanceTable th:first-child,
 #attendanceTable td:first-child {
-  width: 180px;
-  min-width: 180px;
   text-align: left;
-}
-
-#attendanceTable th:nth-child(2),
-#attendanceTable td:nth-child(2),
-#attendanceTable th:nth-child(3),
-#attendanceTable td:nth-child(3) {
-  width: 110px;
+  min-width: 260px;
 }
 
 /* ATTENDANCE BUTTONS */
