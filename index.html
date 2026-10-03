@@ -4239,6 +4239,46 @@ async function startSelectedCamera() {
 
 }
 
+/* =====================================================
+   QR SCAN BEEP
+   ===================================================== */
+
+function beep(
+  frequency = 1000,
+  duration = 130
+) {
+  
+  try {
+    const audioContext =
+      new (window.AudioContext ||
+        window.webkitAudioContext)();
+
+    const oscillator =
+      audioContext.createOscillator();
+
+    const gainNode =
+      audioContext.createGain();
+
+    oscillator.type = "sine";
+    oscillator.frequency.value =  frequency;
+
+    gainNode.gain.value = 0.15;
+
+    oscillator.connect(gainNode);
+    gainNode.connect(audioContext.destination);
+
+    oscillator.start();
+
+    setTimeout(function () {
+      oscillator.stop();
+      audioContext.close();
+    }, duration);
+
+  } catch (error) {
+    console.log("Beep error:", error);
+  }
+}
+
 
 /* =====================================================
    QR DETECTED
@@ -4248,6 +4288,7 @@ async function onQrDetected(
   decodedText
 ) {
 
+  
   if (processing) {
     return;
   }
