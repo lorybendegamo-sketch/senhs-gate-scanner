@@ -4239,19 +4239,58 @@ async function startSelectedCamera() {
 
 }
 
+  
 /* =====================================================
    QR SCAN BEEP
    ===================================================== */
+
+let audioContext = null;
+
+function unlockAudio() {
+
+  try {
+
+    if (!audioContext) {
+
+      audioContext =
+        new (window.AudioContext ||
+          window.webkitAudioContext)();
+
+    }
+
+    if (
+      audioContext.state ===
+      "suspended"
+    ) {
+
+      audioContext.resume();
+
+    }
+
+  } catch (error) {
+
+    console.log(
+      "Audio unlock error:",
+      error
+    );
+
+  }
+
+}
+
 
 function beep(
   frequency = 1000,
   duration = 130
 ) {
-  
+
   try {
-    const audioContext =
-      new (window.AudioContext ||
-        window.webkitAudioContext)();
+
+    unlockAudio();
+
+    if (!audioContext) {
+      return;
+    }
 
     const oscillator =
       audioContext.createOscillator();
@@ -4259,25 +4298,41 @@ function beep(
     const gainNode =
       audioContext.createGain();
 
-    oscillator.type = "sine";
-    oscillator.frequency.value =  frequency;
+    oscillator.type =
+      "sine";
 
-    gainNode.gain.value = 0.15;
+    oscillator.frequency.value =
+      frequency;
 
-    oscillator.connect(gainNode);
-    gainNode.connect(audioContext.destination);
+    gainNode.gain.value =
+      0.15;
+
+    oscillator.connect(
+      gainNode
+    );
+
+    gainNode.connect(
+      audioContext.destination
+    );
 
     oscillator.start();
 
-    setTimeout(function () {
-      oscillator.stop();
-      audioContext.close();
-    }, duration);
+    oscillator.stop(
+      audioContext.currentTime +
+      duration / 1000
+    );
 
   } catch (error) {
-    console.log("Beep error:", error);
+
+    console.log(
+      "Beep error:",
+      error
+    );
+
   }
+
 }
+
 
 
 /* =====================================================
