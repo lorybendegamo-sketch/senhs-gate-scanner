@@ -3930,52 +3930,66 @@ async function exitScanner() {
     false;
 
 
-  /* =================================================
-     RETURN TO DEVICE PAGE
-     ================================================= */
+/* =================================================
+   RETURN TO USER / NAME PAGE
+   ================================================= */
 
-  scannerPage.style.display =
-    "none";
+scannerPage.style.display =
+  "none";
 
-  attendancePage.style.display =
-    "none";
+attendancePage.style.display =
+  "none";
 
-  devicePage.style.display =
-    "block";
+devicePage.style.display =
+  "none";
 
-
-  deviceCode.value =
-    "";
-
-  deviceMessage.textContent =
-    "";
-
-  deviceMessage.className =
-    "";
+userPage.style.display =
+  "block";
 
 
-  readyBar.textContent =
-    "● READY TO SCAN";
+/* RESET NAME */
 
-  readyBar.style.color =
-    "#16803c";
+userName = "";
 
+userNameInput.value =
+  "";
 
-  continueBtn.disabled =
-    false;
+userMessage.textContent =
+  "";
 
-  continueBtn.textContent =
-    "CONTINUE";
-
-
-  deviceCode.focus();
+userMessage.className =
+  "";
 
 
-  console.log(
-    "LOGOUT / EXIT SCANNER COMPLETED"
-  );
+/* RESET DEVICE PAGE */
 
-}
+deviceCode.value =
+  "";
+
+deviceMessage.textContent =
+  "";
+
+deviceMessage.className =
+  "";
+
+
+readyBar.textContent =
+  "● READY TO SCAN";
+
+readyBar.style.color =
+  "#16803c";
+
+
+continueBtn.disabled =
+  false;
+
+continueBtn.textContent =
+  "CONTINUE";
+
+
+/* FOCUS NAME */
+
+userNameInput.focus();
 
 
 /* =====================================================
@@ -5019,7 +5033,7 @@ switchCameraBtn.addEventListener(
   }
 );
 
-  /* =====================================================
+ /* =====================================================
    ADVISER / ADMIN LOGOUT
    ===================================================== */
 
@@ -5030,6 +5044,7 @@ attendanceLogoutBtn.addEventListener(
     console.log(
       "ADVISER / ADMIN LOGOUT STARTED"
     );
+
 
     /* ================================
        CLEAR ATTENDANCE SESSION
@@ -5075,7 +5090,7 @@ attendanceLogoutBtn.addEventListener(
 
 
     /* ================================
-       RETURN TO ACCESS PAGE
+       RETURN TO USER / NAME PAGE
        ================================ */
 
     attendancePage.style.display =
@@ -5085,7 +5100,27 @@ attendanceLogoutBtn.addEventListener(
       "none";
 
     devicePage.style.display =
+      "none";
+
+    userPage.style.display =
       "block";
+
+
+    /* ================================
+       RESET NAME
+       ================================ */
+
+    userName =
+      "";
+
+    userNameInput.value =
+      "";
+
+    userMessage.textContent =
+      "";
+
+    userMessage.className =
+      "";
 
 
     /* ================================
@@ -5108,7 +5143,12 @@ attendanceLogoutBtn.addEventListener(
       "CONTINUE";
 
 
-    deviceCode.focus();
+    /* ================================
+       FOCUS NAME INPUT
+       ================================ */
+
+    userNameInput.focus();
+
 
     console.log(
       "ADVISER / ADMIN LOGOUT COMPLETED"
