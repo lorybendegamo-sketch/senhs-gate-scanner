@@ -1914,6 +1914,28 @@ const overlayContent = document.getElementById("overlayContent");
 const exitScannerBtn = document.getElementById("exitScannerBtn");
 const switchCameraBtn = document.getElementById("switchCameraBtn");
 
+    /* =====================================================
+   USER NEXT BUTTON HANDLER
+   ===================================================== */
+
+userNextBtn.addEventListener("click", function () {
+  const enteredName = userNameInput.value.trim();
+
+  if (!enteredName) {
+    userMessage.textContent = "Please enter your name.";
+    return;
+  }
+
+  // save name
+  userName = enteredName;
+  userMessage.textContent = "";
+
+  // hide userPage, show devicePage
+  userPage.style.display = "none";
+  devicePage.style.display = "block";
+});
+
+    
 /* =====================================================
    CONTINUE BUTTON HANDLER (Corrected)
    ===================================================== */
