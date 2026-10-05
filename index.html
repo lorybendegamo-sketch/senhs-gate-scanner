@@ -2846,7 +2846,7 @@ async function loadAdviserAttendance(
 
 }
 
-   /* =====================================================
+ /* =====================================================
    AUTOMATIC ATTENDANCE REFRESH
    EVERY 5 SECONDS
    ===================================================== */
@@ -2854,32 +2854,32 @@ async function loadAdviserAttendance(
 setInterval(
   function () {
 
+    const attendancePage =
+      document.getElementById("attendancePage");
+
+    if (
+      !attendancePage ||
+      attendancePage.style.display === "none"
+    ) {
+      return;
+    }
+
     if (
       !attendanceSection
     ) {
-
       return;
-
     }
 
-
-    if (
-      attendanceEditing
-    ) {
-
-      return;
-
-    }
-
-
-    loadAdviserAttendance(
-      true
+    console.log(
+      "AUTO REFRESH: Loading latest attendance..."
     );
+
+    loadAdviserAttendance(true);
 
   },
   5000
 );
-
+  
 /* =====================================================
    RENDER ADVISER / ADMIN ATTENDANCE
    ===================================================== */
