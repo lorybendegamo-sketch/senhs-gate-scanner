@@ -1809,7 +1809,83 @@ const proceedAttendanceBtn =
 
 let attendanceSaved = false;
 
-  proceedAttendanceBtn.disabled = true;
+
+/* =========================================
+   PM PROCEED TIME WINDOW
+   1:00 PM TO 8:00 PM
+   ========================================= */
+
+function isPMProceedTime() {
+
+  const now =
+    new Date();
+
+  const timeParts =
+    new Intl.DateTimeFormat(
+      "en-US",
+      {
+        timeZone: "Asia/Manila",
+        hour: "2-digit",
+        minute: "2-digit",
+        hourCycle: "h23"
+      }
+    ).formatToParts(now);
+
+  let hour = 0;
+  let minute = 0;
+
+  timeParts.forEach(
+    function(part) {
+
+      if (
+        part.type === "hour"
+      ) {
+        hour =
+          Number(part.value);
+      }
+
+      if (
+        part.type === "minute"
+      ) {
+        minute =
+          Number(part.value);
+      }
+
+    }
+  );
+
+  const currentMinutes =
+    hour * 60 +
+    minute;
+
+  return (
+    currentMinutes >= 780 &&
+    currentMinutes <= 1200
+  );
+
+}
+
+
+/* =========================================
+   PROCEED BUTTON STATE
+   ========================================= */
+
+function updateProceedButtonState() {
+
+  proceedAttendanceBtn.disabled =
+    !attendanceSaved ||
+    !isPMProceedTime();
+
+}
+
+
+updateProceedButtonState();
+
+
+setInterval(
+  updateProceedButtonState,
+  30000
+);
   
 const attendanceMessage =
   document.getElementById(
@@ -2784,7 +2860,7 @@ amButton.addEventListener("click", function () {
       : "attendance-btn absent";
 
   attendanceSaved = false;
-  proceedAttendanceBtn.disabled = true;
+updateProceedButtonState();
 });
 
 
@@ -2837,10 +2913,8 @@ pmButton.addEventListener(
         : "attendance-btn absent";
 
 
-    attendanceSaved = false;
-
-    proceedAttendanceBtn.disabled =
-      true;
+    attendanceSaved = true;
+updateProceedButtonState();
 
   }
 );
