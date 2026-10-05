@@ -2846,6 +2846,40 @@ async function loadAdviserAttendance(
 
 }
 
+   /* =====================================================
+   AUTOMATIC ATTENDANCE REFRESH
+   EVERY 5 SECONDS
+   ===================================================== */
+
+setInterval(
+  function () {
+
+    if (
+      !attendanceSection
+    ) {
+
+      return;
+
+    }
+
+
+    if (
+      attendanceEditing
+    ) {
+
+      return;
+
+    }
+
+
+    loadAdviserAttendance(
+      true
+    );
+
+  },
+  5000
+);
+
 /* =====================================================
    RENDER ADVISER / ADMIN ATTENDANCE
    ===================================================== */
@@ -5804,39 +5838,7 @@ console.log(
 );
 
 
-  /* =====================================================
-   AUTOMATIC ATTENDANCE REFRESH
-   EVERY 5 SECONDS
-   ===================================================== */
-
-setInterval(
-  function () {
-
-    if (
-      !attendanceSection
-    ) {
-
-      return;
-
-    }
-
-
-    if (
-      attendanceEditing
-    ) {
-
-      return;
-
-    }
-
-
-    loadAdviserAttendance(
-      true
-    );
-
-  },
-  5000
-);
+ 
   
 </script>
 
