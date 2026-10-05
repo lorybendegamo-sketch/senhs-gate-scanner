@@ -1802,6 +1802,11 @@ const proceedAttendanceBtn =
     "proceedAttendanceBtn"
   );
 
+  const saveAttendanceBtn =
+  document.getElementById(
+    "saveAttendanceBtn"
+  );
+
 const attendanceMessage =
   document.getElementById(
     "attendanceMessage"
@@ -2926,7 +2931,117 @@ attendanceSectionSelect.addEventListener(
   }
 );
 
+/* =====================================================
+   SAVE ATTENDANCE
+   ===================================================== */
 
+saveAttendanceBtn.addEventListener(
+  "click",
+  async function () {
+
+    if (
+      !attendanceAccessCode ||
+      !attendanceSection
+    ) {
+
+      attendanceMessage.textContent =
+        "Please select a section.";
+
+      return;
+
+    }
+
+
+    if (
+      !attendanceStudents ||
+      attendanceStudents.length === 0
+    ) {
+
+      attendanceMessage.textContent =
+        "No attendance data to save.";
+
+      return;
+
+    }
+
+
+    attendanceMessage.textContent =
+      "Saving attendance...";
+
+    saveAttendanceBtn.disabled =
+      true;
+
+
+    try {
+
+      const attendanceData =
+        JSON.stringify(
+          attendanceStudents
+        );
+
+
+      const requestUrl =
+        APPS_SCRIPT_URL +
+        "?action=saveAttendance" +
+        "&accessCode=" +
+        encodeURIComponent(
+          attendanceAccessCode
+        ) +
+        "&requestedSection=" +
+        encodeURIComponent(
+          attendanceSection
+        ) +
+        "&attendanceData=" +
+        encodeURIComponent(
+          attendanceData
+        );
+
+
+      const result =
+        await jsonpRequest(
+          requestUrl
+        );
+
+
+      if (
+        !result ||
+        !result.success
+      ) {
+
+        throw new Error(
+          result &&
+          result.message
+            ? result.message
+            : "Unable to save attendance."
+        );
+
+      }
+
+
+      attendanceMessage.textContent =
+        "Attendance saved successfully.";
+
+    } catch (error) {
+
+      console.error(
+        "Save attendance error:",
+        error
+      );
+
+      attendanceMessage.textContent =
+        error.message ||
+        "Unable to save attendance.";
+
+    }
+
+
+    saveAttendanceBtn.disabled =
+      false;
+
+  }
+);
+
+  
 /* =====================================================
    PROCEED ATTENDANCE
    ===================================================== */
