@@ -1299,6 +1299,24 @@
         Adviser / Admin Attendance
       </div>
 
+<!-- PHILIPPINE STANDARD TIME -->
+
+<div class="pst-clock">
+
+  <div class="pst-label">
+    Philippine Standard Time
+  </div>
+
+  <div id="attendancePstTime">
+    12:25:18 AM
+  </div>
+
+  <div id="attendancePstDate">
+    Tuesday, October 6, 2026
+  </div>
+
+</div>
+      
       <!-- ADMIN SECTION SELECTOR -->
 
       <div
@@ -5712,6 +5730,32 @@ function updatePSTClock() {
 
   }
 
+  const attendanceTimeElement =
+  document.getElementById(
+    "attendancePstTime"
+  );
+
+const attendanceDateElement =
+  document.getElementById(
+    "attendancePstDate"
+  );
+
+
+if (attendanceTimeElement) {
+
+  attendanceTimeElement.textContent =
+    time;
+
+}
+
+
+if (attendanceDateElement) {
+
+  attendanceDateElement.textContent =
+    date;
+
+}
+  
 }
 
 
