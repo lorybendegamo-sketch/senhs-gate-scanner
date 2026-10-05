@@ -1807,6 +1807,10 @@ const proceedAttendanceBtn =
     "saveAttendanceBtn"
   );
 
+let attendanceSaved = false;
+
+  proceedAttendanceBtn.disabled = true;
+  
 const attendanceMessage =
   document.getElementById(
     "attendanceMessage"
@@ -2767,29 +2771,21 @@ function renderAdviserAttendanceTable(
           : "attendance-btn absent";
 
 
-      amButton.addEventListener(
-        "click",
-        function () {
+amButton.addEventListener("click", function () {
+  student.AM =
+    student.AM === "PRESENT"
+      ? "ABSENT"
+      : "PRESENT";
 
-          student.AM =
-            student.AM ===
-            "PRESENT"
-              ? "ABSENT"
-              : "PRESENT";
+  amButton.textContent = student.AM;
+  amButton.className =
+    student.AM === "PRESENT"
+      ? "attendance-btn present"
+      : "attendance-btn absent";
 
-
-          amButton.textContent =
-            student.AM;
-
-
-          amButton.className =
-            student.AM ===
-            "PRESENT"
-              ? "attendance-btn present"
-              : "attendance-btn absent";
-
-        }
-      );
+  attendanceSaved = false;
+  proceedAttendanceBtn.disabled = true;
+});
 
 
       /* =================================================
@@ -2819,29 +2815,35 @@ function renderAdviserAttendanceTable(
           : "attendance-btn absent";
 
 
-      pmButton.addEventListener(
-        "click",
-        function () {
+pmButton.addEventListener(
+  "click",
+  function () {
 
-          student.PM =
-            student.PM ===
-            "PRESENT"
-              ? "ABSENT"
-              : "PRESENT";
-
-
-          pmButton.textContent =
-            student.PM;
+    student.PM =
+      student.PM ===
+      "PRESENT"
+        ? "ABSENT"
+        : "PRESENT";
 
 
-          pmButton.className =
-            student.PM ===
-            "PRESENT"
-              ? "attendance-btn present"
-              : "attendance-btn absent";
+    pmButton.textContent =
+      student.PM;
 
-        }
-      );
+
+    pmButton.className =
+      student.PM ===
+      "PRESENT"
+        ? "attendance-btn present"
+        : "attendance-btn absent";
+
+
+    attendanceSaved = false;
+
+    proceedAttendanceBtn.disabled =
+      true;
+
+  }
+);
 
 
       amCell.appendChild(
@@ -3021,6 +3023,9 @@ saveAttendanceBtn.addEventListener(
       attendanceMessage.textContent =
         "Attendance saved successfully.";
 
+      attendanceSaved = true;
+proceedAttendanceBtn.disabled = false;
+
     } catch (error) {
 
       console.error(
@@ -3050,6 +3055,12 @@ proceedAttendanceBtn.addEventListener(
   "click",
   async function () {
 
+if (!attendanceSaved) {
+  attendanceMessage.textContent =
+    "Please SAVE the attendance first.";
+  return;
+}
+    
     if (
       !attendanceAccessCode ||
       !attendanceSection
