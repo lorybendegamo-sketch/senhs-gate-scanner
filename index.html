@@ -2661,26 +2661,69 @@ async function openAttendancePage() {
 
 /* =====================================================
    LOAD ADVISER / ADMIN ATTENDANCE
+   AUTO REFRESH SUPPORT
    ===================================================== */
 
-async function loadAdviserAttendance() {
+let attendanceRefreshing = false;
+
+
+async function loadAdviserAttendance(
+  silentRefresh
+) {
 
   try {
+
+    /*
+       Kapag may ginagawa pang unsaved
+       manual edit si Adviser/Admin,
+       huwag munang mag-refresh.
+    */
+
+    if (
+      silentRefresh &&
+      attendanceEditing
+    ) {
+
+      return;
+
+    }
+
 
     if (
       !attendanceSection
     ) {
 
-      attendanceTableBody.innerHTML =
-        '<tr>' +
-        '<td colspan="3" style="text-align:center;">' +
-        'Please select a section.' +
-        '</td>' +
-        '</tr>';
+      if (!silentRefresh) {
+
+        attendanceTableBody.innerHTML =
+          '<tr>' +
+          '<td colspan="3" style="text-align:center;">' +
+          'Please select a section.' +
+          '</td>' +
+          '</tr>';
+
+      }
 
       return;
 
     }
+
+
+    /*
+       Prevent overlapping requests.
+    */
+
+    if (
+      attendanceRefreshing
+    ) {
+
+      return;
+
+    }
+
+
+    attendanceRefreshing =
+      true;
 
 
     const requestUrl =
@@ -2735,10 +2778,20 @@ async function loadAdviserAttendance() {
     );
 
 
-    attendanceMessage.textContent =
-      attendanceStudents.length +
-      " student(s) loaded.";
+    /*
+       Huwag palitan ang message
+       kada silent refresh.
+    */
 
+    if (
+      !silentRefresh
+    ) {
+
+      attendanceMessage.textContent =
+        attendanceStudents.length +
+        " student(s) loaded.";
+
+    }
 
   } catch (error) {
 
@@ -2748,18 +2801,32 @@ async function loadAdviserAttendance() {
     );
 
 
-    attendanceTableBody.innerHTML =
-      "";
+    /*
+       Huwag burahin ang current table
+       dahil lang sa failed silent refresh.
+    */
 
+    if (
+      !silentRefresh
+    ) {
 
-    attendanceMessage.textContent =
-      error.message ||
-      "Unable to load attendance.";
+      attendanceTableBody.innerHTML =
+        "";
+
+      attendanceMessage.textContent =
+        error.message ||
+        "Unable to load attendance.";
+
+    }
+
+  } finally {
+
+    attendanceRefreshing =
+      false;
 
   }
 
 }
-
 
 /* =====================================================
    RENDER ADVISER / ADMIN ATTENDANCE
@@ -2913,7 +2980,7 @@ pmButton.addEventListener(
         : "attendance-btn absent";
 
 
-    attendanceSaved = true;
+   attendanceSaved = false;
 updateProceedButtonState();
 
   }
@@ -5692,6 +5759,41 @@ console.log(
   platform
 );
 
+
+  /* =====================================================
+   AUTOMATIC ATTENDANCE REFRESH
+   EVERY 5 SECONDS
+   ===================================================== */
+
+setInterval(
+  function () {
+
+    if (
+      !attendanceSection
+    ) {
+
+      return;
+
+    }
+
+
+    if (
+      attendanceEditing
+    ) {
+
+      return;
+
+    }
+
+
+    loadAdviserAttendance(
+      true
+    );
+
+  },
+  5000
+);
+  
 </script>
 
 </body>
