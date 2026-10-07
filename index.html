@@ -4950,11 +4950,9 @@ async function onQrDetected(
         requestUrl
       );
 
-
     showResult(
       result
     );
-
 
     if (
       result &&
@@ -4966,14 +4964,32 @@ async function onQrDetected(
         180
       );
 
+      if (result.backgroundRow) {
 
-      setTimeout(
-        loadAttendanceSummary,
-        500
-      );
+        const backgroundUrl =
+          APPS_SCRIPT_URL +
+          "?background=1" +
+          "&row=" + encodeURIComponent(result.backgroundRow) +
+          "&lrn=" + encodeURIComponent(lrn) +
+          "&device=" + encodeURIComponent(deviceKey) +
+          "&session=" + encodeURIComponent(sessionToken) +
+          "&platform=" + encodeURIComponent(platform);
+
+        jsonpRequest(backgroundUrl)
+          .then(function(backgroundResult) {
+            console.log("BACKGROUND SCAN COMPLETE:", backgroundResult);
+            loadAttendanceSummary();
+          })
+          .catch(function(backgroundError) {
+            console.error("BACKGROUND SCAN ERROR:", backgroundError);
+            loadAttendanceSummary();
+          });
+
+      } else {
+        loadAttendanceSummary();
+      }
 
     }
-
 
   } catch (error) {
 
