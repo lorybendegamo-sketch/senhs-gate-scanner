@@ -1687,24 +1687,6 @@
 
 <script>
 
-  function showProcessingOverlay(message) {
-  // agad na lumabas (~1s)
-  overlayContent.innerHTML = `
-    <div class="processing-title">Processing...</div>
-    <div class="processing-text">${message}</div>
-  `;
-  scanOverlay.style.display = "flex";
-
-  // pagkatapos ng 3s, palitan ng final result
-  setTimeout(() => {
-    overlayContent.innerHTML = `
-      <div class="processing-title">Result</div>
-      <div class="processing-text">${message}</div>
-    `;
-  }, 3000);
-}
-
-
 /* =====================================================
    CONFIGURATION
    ===================================================== */
@@ -4504,65 +4486,108 @@ async function startCamera() {
 /* =====================================================
    START SELECTED CAMERA
    ===================================================== */
+
 async function startSelectedCamera() {
 
-  if (!html5QrCode) return;
-  if (!cameras.length) return;
-
-  const camera = cameras[currentCameraIndex];
-  if (!camera) return;
-  if (scannerRunning) return;
-
-  // === Step 2: Callback function ===
-  function onScanSuccess(decodedText, decodedResult) {
-    // agad na overlay
-    showProcessingOverlay("QR scanned: " + decodedText);
-
-    // tawag sa Apps Script para i‑record ang scan
-    const url = APPS_SCRIPT_URL +
-      "?lrn=" + encodeURIComponent(decodedText) +
-      "&device=" + encodeURIComponent(deviceKey) +
-      "&session=" + encodeURIComponent(sessionToken) +
-      "&platform=" + encodeURIComponent(platform);
-
-    fetch(url)
-      .then(res => res.json())
-      .then(data => {
-        showProcessingOverlay(data.message || "Scan complete");
-      })
-      .catch(err => {
-        showProcessingOverlay("Error: " + err.message);
-      });
+  if (!html5QrCode) {
+    return;
   }
 
+  if (!cameras.length) {
+    return;
+  }
+
+
+  const camera =
+    cameras[
+      currentCameraIndex
+    ];
+
+
+  if (!camera) {
+    return;
+  }
+
+
+  if (scannerRunning) {
+    return;
+  }
+
+
   try {
+
     await html5QrCode.start(
+
       camera.id,
+
       {
-        fps: 15,
-        qrbox: function (viewfinderWidth, viewfinderHeight) {
-          const size = Math.min(viewfinderWidth, viewfinderHeight) * 0.80;
-          return { width: size, height: size };
-        },
-        aspectRatio: 1.0
+        fps:
+          15,
+
+        qrbox:
+          function (
+            viewfinderWidth,
+            viewfinderHeight
+          ) {
+
+            const size =
+              Math.min(
+                viewfinderWidth,
+                viewfinderHeight
+              ) *
+              0.80;
+
+
+            return {
+              width:
+                size,
+
+              height:
+                size
+            };
+
+          },
+
+        aspectRatio:
+          1.0
+
       },
-      onScanSuccess, // ← callback na ginawa mo
+
+      onQrDetected,
+
       function () {
         /* Normal scanning errors */
       }
+
     );
 
-    scannerRunning = true;
-    processing = false;
+
+    scannerRunning =
+      true;
+
+    processing =
+      false;
+
+
     hideOverlay();
 
-    readyBar.textContent = "● READY TO SCAN";
-    readyBar.style.color = "#16803c";
+
+    readyBar.textContent =
+      "● READY TO SCAN";
+
+    readyBar.style.color =
+      "#16803c";
+
 
   } catch (error) {
-    scannerRunning = false;
+
+    scannerRunning =
+      false;
+
     throw error;
+
   }
+
 }
 
   
