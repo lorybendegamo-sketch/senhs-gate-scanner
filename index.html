@@ -1827,6 +1827,7 @@ const proceedAttendanceBtn =
 
 let attendanceSaved = false;
 
+  let pendingAttendanceEdits = {};
 
 /* =========================================
    PM PROCEED TIME WINDOW
@@ -2681,9 +2682,7 @@ async function openAttendancePage() {
    LOAD ADVISER / ADMIN ATTENDANCE
    AUTO REFRESH SUPPORT
    ===================================================== */
-
 let attendanceRefreshing = false;
-
 
 async function loadAdviserAttendance(
   silentRefresh
@@ -2691,25 +2690,7 @@ async function loadAdviserAttendance(
 
   try {
 
-    /*
-       Kapag may ginagawa pang unsaved
-       manual edit si Adviser/Admin,
-       huwag munang mag-refresh.
-    */
-
-    if (
-      silentRefresh &&
-      attendanceEditing
-    ) {
-
-      return;
-
-    }
-
-
-    if (
-      !attendanceSection
-    ) {
+    if (!attendanceSection) {
 
       if (!silentRefresh) {
 
@@ -2723,25 +2704,20 @@ async function loadAdviserAttendance(
       }
 
       return;
-
     }
 
 
     /*
        Prevent overlapping requests.
+       Kahit may manual editing,
+       TULOY pa rin ang auto-refresh.
     */
 
-    if (
-      attendanceRefreshing
-    ) {
-
+    if (attendanceRefreshing) {
       return;
-
     }
 
-
-    attendanceRefreshing =
-      true;
+    attendanceRefreshing = true;
 
 
     const requestUrl =
@@ -2778,8 +2754,76 @@ async function loadAdviserAttendance(
     }
 
 
-    attendanceStudents =
+    /*
+       Fresh data galing sa Google Sheets
+    */
+
+    const freshStudents =
       result.students || [];
+
+
+    /*
+       PRESERVE UNSAVED MANUAL EDITS
+
+       Kung may binago ang Adviser/Admin
+       pero hindi pa SAVE,
+       iyon ang gagamitin sa display.
+
+       Ang bagong QR scan naman na walang
+       pending manual edit ay manggagaling
+       diretso sa latest server data.
+    */
+
+    freshStudents.forEach(
+      function(student) {
+
+        const lrn =
+          String(
+            student.lrn || ""
+          ).trim();
+
+
+        if (!lrn) {
+          return;
+        }
+
+
+        const pending =
+          pendingAttendanceEdits[lrn];
+
+
+        if (!pending) {
+          return;
+        }
+
+
+        if (
+          pending.AM === "PRESENT" ||
+          pending.AM === "ABSENT"
+        ) {
+
+          student.AM =
+            pending.AM;
+
+        }
+
+
+        if (
+          pending.PM === "PRESENT" ||
+          pending.PM === "ABSENT"
+        ) {
+
+          student.PM =
+            pending.PM;
+
+        }
+
+      }
+    );
+
+
+    attendanceStudents =
+      freshStudents;
 
 
     attendanceCurrentSection.textContent =
@@ -2791,25 +2835,27 @@ async function loadAdviserAttendance(
       );
 
 
+    /*
+       Re-render table.
+
+       Dahil na-merge na natin ang
+       pending manual edits bago dito,
+       hindi mawawala ang unsaved changes.
+    */
+
     renderAdviserAttendanceTable(
       attendanceStudents
     );
 
 
-    /*
-       Huwag palitan ang message
-       kada silent refresh.
-    */
-
-    if (
-      !silentRefresh
-    ) {
+    if (!silentRefresh) {
 
       attendanceMessage.textContent =
         attendanceStudents.length +
         " student(s) loaded.";
 
     }
+
 
   } catch (error) {
 
@@ -2819,17 +2865,9 @@ async function loadAdviserAttendance(
     );
 
 
-    /*
-       Huwag burahin ang current table
-       dahil lang sa failed silent refresh.
-    */
+    if (!silentRefresh) {
 
-    if (
-      !silentRefresh
-    ) {
-
-      attendanceTableBody.innerHTML =
-        "";
+      attendanceTableBody.innerHTML = "";
 
       attendanceMessage.textContent =
         error.message ||
@@ -2839,8 +2877,7 @@ async function loadAdviserAttendance(
 
   } finally {
 
-    attendanceRefreshing =
-      false;
+    attendanceRefreshing = false;
 
   }
 
@@ -2888,8 +2925,7 @@ function renderAdviserAttendanceTable(
   students
 ) {
 
-  attendanceTableBody.innerHTML =
-    "";
+  attendanceTableBody.innerHTML = "";
 
 
   if (
@@ -2910,133 +2946,182 @@ function renderAdviserAttendanceTable(
 
 
   students.forEach(
-    function (student) {
+    function(student) {
 
       const row =
-        document.createElement(
-          "tr"
-        );
+        document.createElement("tr");
 
 
       const nameCell =
-        document.createElement(
-          "td"
-        );
+        document.createElement("td");
 
       nameCell.textContent =
         student.name || "";
 
 
       const amCell =
-        document.createElement(
-          "td"
-        );
-
+        document.createElement("td");
 
       const pmCell =
-        document.createElement(
-          "td"
-        );
+        document.createElement("td");
 
 
-      /* =================================================
+      /* =====================================
          AM BUTTON
-         ================================================= */
+         ===================================== */
 
       const amButton =
-        document.createElement(
-          "button"
-        );
+        document.createElement("button");
 
       amButton.type =
         "button";
 
-
       amButton.textContent =
-        student.AM ===
-        "PRESENT"
+        student.AM === "PRESENT"
           ? "PRESENT"
           : "ABSENT";
 
-
       amButton.className =
-        student.AM ===
-        "PRESENT"
+        student.AM === "PRESENT"
           ? "attendance-btn present"
           : "attendance-btn absent";
 
 
-amButton.addEventListener("click", function () {
-  student.AM =
-    student.AM === "PRESENT"
-      ? "ABSENT"
-      : "PRESENT";
+      amButton.addEventListener(
+        "click",
+        function() {
 
-  amButton.textContent = student.AM;
-  amButton.className =
-    student.AM === "PRESENT"
-      ? "attendance-btn present"
-      : "attendance-btn absent";
-
-  attendanceSaved = false;
-updateProceedButtonState();
-});
+          student.AM =
+            student.AM === "PRESENT"
+              ? "ABSENT"
+              : "PRESENT";
 
 
-      /* =================================================
+          amButton.textContent =
+            student.AM;
+
+
+          amButton.className =
+            student.AM === "PRESENT"
+              ? "attendance-btn present"
+              : "attendance-btn absent";
+
+
+          /*
+             SAVE THIS AS UNSAVED MANUAL EDIT
+          */
+
+          const lrn =
+            String(
+              student.lrn || ""
+            ).trim();
+
+
+          if (lrn) {
+
+            if (
+              !pendingAttendanceEdits[lrn]
+            ) {
+
+              pendingAttendanceEdits[lrn] =
+                {};
+
+            }
+
+
+            pendingAttendanceEdits[lrn].AM =
+              student.AM;
+
+          }
+
+
+          attendanceSaved =
+            false;
+
+
+          updateProceedButtonState();
+
+        }
+      );
+
+
+      /* =====================================
          PM BUTTON
-         ================================================= */
+         ===================================== */
 
       const pmButton =
-        document.createElement(
-          "button"
-        );
+        document.createElement("button");
 
       pmButton.type =
         "button";
 
-
       pmButton.textContent =
-        student.PM ===
-        "PRESENT"
+        student.PM === "PRESENT"
           ? "PRESENT"
           : "ABSENT";
 
-
       pmButton.className =
-        student.PM ===
-        "PRESENT"
+        student.PM === "PRESENT"
           ? "attendance-btn present"
           : "attendance-btn absent";
 
 
-pmButton.addEventListener(
-  "click",
-  function () {
+      pmButton.addEventListener(
+        "click",
+        function() {
 
-    student.PM =
-      student.PM ===
-      "PRESENT"
-        ? "ABSENT"
-        : "PRESENT";
-
-
-    pmButton.textContent =
-      student.PM;
+          student.PM =
+            student.PM === "PRESENT"
+              ? "ABSENT"
+              : "PRESENT";
 
 
-    pmButton.className =
-      student.PM ===
-      "PRESENT"
-        ? "attendance-btn present"
-        : "attendance-btn absent";
+          pmButton.textContent =
+            student.PM;
 
 
-   attendanceSaved = false;
-updateProceedButtonState();
+          pmButton.className =
+            student.PM === "PRESENT"
+              ? "attendance-btn present"
+              : "attendance-btn absent";
 
-  }
-);
+
+          /*
+             SAVE THIS AS UNSAVED MANUAL EDIT
+          */
+
+          const lrn =
+            String(
+              student.lrn || ""
+            ).trim();
+
+
+          if (lrn) {
+
+            if (
+              !pendingAttendanceEdits[lrn]
+            ) {
+
+              pendingAttendanceEdits[lrn] =
+                {};
+
+            }
+
+
+            pendingAttendanceEdits[lrn].PM =
+              student.PM;
+
+          }
+
+
+          attendanceSaved =
+            false;
+
+
+          updateProceedButtonState();
+
+        }
+      );
 
 
       amCell.appendChild(
@@ -3216,7 +3301,14 @@ saveAttendanceBtn.addEventListener(
       attendanceMessage.textContent =
         "Attendance saved successfully.";
 
-      attendanceSaved = true;
+    attendanceSaved = true;
+
+/*
+   Wala nang unsaved manual changes
+   dahil successful na ang SAVE.
+*/
+pendingAttendanceEdits = {};
+
 proceedAttendanceBtn.disabled = false;
 
     } catch (error) {
