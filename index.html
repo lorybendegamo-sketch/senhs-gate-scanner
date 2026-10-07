@@ -4786,7 +4786,6 @@ async function onQrDetected(
   decodedText
 ) {
 
-  
   if (processing) {
     return;
   }
@@ -4806,8 +4805,7 @@ async function onQrDetected(
   }
 
 
-  processing =
-    true;
+  processing = true;
 
 
   window.qrProcessingStart =
@@ -4853,68 +4851,77 @@ async function onQrDetected(
   showProcessing();
 
 
-  let lrn =
+  /* =================================================
+     NEW SENHS QR FORMAT
+
+     Example:
+     SENHS|QR|123456789012
+
+     Hindi URL.
+     Hindi website.
+     ================================================= */
+
+  let qrText =
     String(
       decodedText || ""
     ).trim();
 
 
-  /* =================================================
-     QR FORMAT
-     ================================================= */
-
-  try {
-
-    if (
-      lrn.startsWith(
-        "http://"
-      ) ||
-      lrn.startsWith(
-        "https://"
-      )
-    ) {
-
-      const qrUrl =
-        new URL(
-          lrn
-        );
+  const qrParts =
+    qrText.split("|");
 
 
-      const urlLrn =
-        qrUrl.searchParams.get(
-          "lrn"
-        );
-
-
-      const urlId =
-        qrUrl.searchParams.get(
-          "id"
-        );
-
-
-      if (urlLrn) {
-
-        lrn =
-          urlLrn.trim();
-
-      } else if (urlId) {
-
-        lrn =
-          urlId.trim();
-
-      }
-
-    }
-
-  } catch (error) {
+  if (
+    qrParts.length !== 3 ||
+    qrParts[0].trim().toUpperCase() !== "SENHS" ||
+    qrParts[1].trim().toUpperCase() !== "QR"
+  ) {
 
     console.log(
-      "QR URL parsing skipped:",
-      error
+      "Invalid SENHS QR format:",
+      qrText
     );
+
+
+    showResult({
+
+      success: false,
+
+      message:
+        "INVALID SENHS QR CODE"
+
+    });
+
+
+    return;
 
   }
 
+
+  const lrn =
+    qrParts[2].trim();
+
+
+  if (!lrn) {
+
+    showResult({
+
+      success: false,
+
+      message:
+        "INVALID QR CODE"
+
+    });
+
+
+    return;
+
+  }
+
+
+  /* =================================================
+     SEND LRN TO GOOGLE APPS SCRIPT
+     ================================================= */
 
   try {
 
