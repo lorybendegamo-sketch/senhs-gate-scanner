@@ -1014,6 +1014,28 @@ box-sizing: border-box;
 overflow-wrap: anywhere;
 }
 
+    /* TABLET: MAKE PROCESSING AND RESULT OVERLAYS BIGGER */
+@media screen and (min-width: 600px) and (max-width: 1200px) {
+#scannerPage #overlayContent {
+width: min(90vw, 650px) !important;
+max-width: 650px !important;
+font-size: 1.35em;
+}
+
+#scannerPage #overlayContent > * {
+max-width: 100%;
+box-sizing: border-box;
+}
+
+#scannerPage .processing-title {
+font-size: 36px !important;
+}
+
+#scannerPage .processing-text {
+font-size: 22px !important;
+}
+}
+
     
   </style>
 </head>
