@@ -4515,7 +4515,285 @@ console.log(
   "PLATFORM =",
   platform
 );
- 
+
+  
+/* =====================================================
+   MONTHLY ATTENDANCE MATRIX — SENHS
+   ===================================================== */
+
+async function loadMonthlyAttendance() {
+  const monthSelect = document.getElementById(
+    "monthlyAttendanceMonth"
+  );
+  const loadButton = document.getElementById(
+    "loadMonthlyAttendanceBtn"
+  );
+  const message = document.getElementById(
+    "monthlyAttendanceMessage"
+  );
+  const matrixHead = document.getElementById(
+    "monthlyAttendanceTableHead"
+  );
+  const matrixBody = document.getElementById(
+    "monthlyAttendanceTableBody"
+  );
+  const summaryBody = document.getElementById(
+    "monthlySummaryTableBody"
+  );
+  const saveHistoryButton = document.getElementById(
+    "saveHistoricalSummaryBtn"
+  );
+
+  const month = monthSelect.value;
+  const section = String(attendanceSection || "").trim();
+
+  if (!attendanceAccessCode || !section) {
+    message.textContent = "Please select a section and log in.";
+    return;
+  }
+
+  loadButton.disabled = true;
+  message.textContent = "Loading monthly attendance...";
+  matrixHead.innerHTML = "";
+  matrixBody.innerHTML = "";
+  summaryBody.innerHTML = "";
+
+  try {
+    const requestUrl =
+      APPS_SCRIPT_URL +
+      "?action=getMonthlyAttendance" +
+      "&accessCode=" +
+      encodeURIComponent(attendanceAccessCode) +
+      "&requestedSection=" +
+      encodeURIComponent(section) +
+      "&month=" +
+      encodeURIComponent(month);
+
+    const result = await jsonpRequest(requestUrl);
+
+    if (!result || !result.success) {
+      throw new Error(
+        result && result.message
+          ? result.message
+          : "Unable to load monthly attendance."
+      );
+    }
+
+    const students = result.students || [];
+    const days = result.days || [];
+    const historical = /^\d{4}-(06|07|08|09)$/.test(month);
+
+    // MATRIX HEADER
+    const headerRow = document.createElement("tr");
+
+    const nameHeader = document.createElement("th");
+    nameHeader.textContent = "STUDENT NAME";
+    headerRow.appendChild(nameHeader);
+
+    days.forEach(function(day) {
+      const th = document.createElement("th");
+      th.textContent = day.day;
+      th.title = day.date;
+      headerRow.appendChild(th);
+    });
+
+    matrixHead.appendChild(headerRow);
+
+    // MATRIX ROWS
+    students.forEach(function(student) {
+      const row = document.createElement("tr");
+      const nameCell = document.createElement("td");
+      nameCell.textContent = student.name || "";
+      row.appendChild(nameCell);
+
+      (student.daily || []).forEach(function(day) {
+        const cell = document.createElement("td");
+        const code = day.code || "—";
+        cell.textContent = code;
+        cell.title = day.date || "";
+
+        if (code === "P/P") {
+          cell.className = "status-pp";
+        } else if (code === "P/A" || code === "A/P") {
+          cell.className = "status-half";
+        } else if (code === "A/A") {
+          cell.className = "status-aa";
+        } else {
+          cell.className = "status-none";
+        }
+
+        row.appendChild(cell);
+      });
+
+      matrixBody.appendChild(row);
+    });
+
+    // MONTHLY SUMMARY
+    students.forEach(function(student) {
+      const row = document.createElement("tr");
+
+      const nameCell = document.createElement("td");
+      nameCell.textContent = student.name || "";
+      row.appendChild(nameCell);
+
+      ["present", "absent"].forEach(function(field) {
+        const cell = document.createElement("td");
+
+        if (historical) {
+          const input = document.createElement("input");
+          input.type = "number";
+          input.min = "0";
+          input.step = "0.5";
+          input.value = Number(student[field] || 0);
+          input.dataset.lrn = student.lrn;
+          input.dataset.field = field;
+          input.setAttribute(
+            "aria-label",
+            (student.name || "") + " " + field
+          );
+          cell.appendChild(input);
+        } else {
+          cell.textContent = Number(student[field] || 0)
+            .toLocaleString("en-PH", {
+              maximumFractionDigits: 1
+            });
+        }
+
+        row.appendChild(cell);
+      });
+
+      summaryBody.appendChild(row);
+    });
+
+    saveHistoryButton.style.display =
+      historical ? "block" : "none";
+
+    message.textContent =
+      result.section + " — " + month +
+      ": " + students.length + " student(s) loaded.";
+
+  } catch (error) {
+    console.error("Monthly attendance error:", error);
+    message.textContent =
+      error.message || "Unable to load monthly attendance.";
+  } finally {
+    loadButton.disabled = false;
+  }
+}
+
+
+/* LOAD MONTH BUTTON */
+document.getElementById(
+  "loadMonthlyAttendanceBtn"
+).addEventListener("click", loadMonthlyAttendance);
+
+
+/* SAVE JUNE–SEPTEMBER HISTORICAL TOTALS */
+document.getElementById(
+  "saveHistoricalSummaryBtn"
+).addEventListener("click", async function() {
+  const month = document.getElementById(
+    "monthlyAttendanceMonth"
+  ).value;
+
+  const section = String(attendanceSection || "").trim();
+  const message = document.getElementById(
+    "monthlyAttendanceMessage"
+  );
+  const saveButton = this;
+
+  if (!/^\d{4}-(06|07|08|09)$/.test(month)) {
+    message.textContent =
+      "Historical totals can only be saved for June to September.";
+    return;
+  }
+
+  if (!attendanceAccessCode || !section) {
+    message.textContent = "Please select a section and log in.";
+    return;
+  }
+
+  const inputs = document.querySelectorAll(
+    "#monthlySummaryTableBody input[data-lrn]"
+  );
+
+  const entriesByStudent = {};
+
+  inputs.forEach(function(input) {
+    const lrn = input.dataset.lrn;
+
+    if (!entriesByStudent[lrn]) {
+      entriesByStudent[lrn] = {
+        lrn: lrn,
+        month: month,
+        present: 0,
+        absent: 0
+      };
+    }
+
+    entriesByStudent[lrn][input.dataset.field] =
+      input.value === "" ? NaN : Number(input.value);
+  });
+
+  const entries = Object.values(entriesByStudent);
+
+  if (entries.length === 0) {
+    message.textContent =
+      "No student totals to save. Load the month first.";
+    return;
+  }
+
+  const invalid = entries.some(function(entry) {
+    return (
+      !Number.isFinite(entry.present) ||
+      !Number.isFinite(entry.absent) ||
+      entry.present < 0 ||
+      entry.absent < 0
+    );
+  });
+
+  if (invalid) {
+    message.textContent =
+      "Please enter valid non-negative Present and Absent totals for every student.";
+    return;
+  }
+
+  saveButton.disabled = true;
+  message.textContent = "Saving historical totals...";
+
+  try {
+    const requestUrl =
+      APPS_SCRIPT_URL +
+      "?action=saveHistoricalMonthlySummary" +
+      "&accessCode=" +
+      encodeURIComponent(attendanceAccessCode) +
+      "&requestedSection=" +
+      encodeURIComponent(section) +
+      "&summaryData=" +
+      encodeURIComponent(JSON.stringify(entries));
+
+    const result = await jsonpRequest(requestUrl);
+
+    if (!result || !result.success) {
+      throw new Error(
+        result && result.message
+          ? result.message
+          : "Unable to save historical totals."
+      );
+    }
+
+    message.textContent =
+      "Historical totals saved successfully (" +
+      result.saved + " student record(s)).";
+
+  } catch (error) {
+    console.error("Historical summary save error:", error);
+    message.textContent =
+      error.message || "Unable to save historical totals.";
+  } finally {
+    saveButton.disabled = false;
+  }
+});
   
 </script>
 </body>
