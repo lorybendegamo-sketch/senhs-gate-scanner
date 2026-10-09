@@ -1745,7 +1745,14 @@ function showDeviceMessage(
    VERIFY ACCESS - DEVICE / ADVISER / ADMIN
    ===================================================== */
 async function verifyDevice() {
-  const key = String(deviceCode.value || "").trim();
+
+const savedDeviceCode = localStorage.getItem("SENHS_SAVED_DEVICE_CODE") || "";
+
+if (!String(deviceCode.value || "").trim() && savedDeviceCode) {
+  deviceCode.value = savedDeviceCode;
+}
+
+const key = String(deviceCode.value || "").trim();
 
   if (!key) {
     showDeviceMessage(
