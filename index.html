@@ -2,25 +2,19 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-
   <meta
     name="viewport"
     content="width=device-width, initial-scale=1.0"
   >
-
   <title>SENHS Gate Scanner</title>
-
   <script
     src="https://unpkg.com/html5-qrcode"
     type="text/javascript"
   ></script>
-
   <style>
-
     /* ========================================
        GLOBAL CENTER ALIGNMENT
        ======================================== */
-
     #userPage,
     #devicePage,
     #attendancePage,
@@ -28,42 +22,34 @@
     #loginPage {
       text-align: center;
     }
-
     h1,
     h2,
     h3 {
       text-align: center;
     }
-
     .page-title,
     .section-title {
       text-align: center;
     }
-
     * {
       box-sizing: border-box;
     }
-
     body {
       margin: 0;
       font-family: Arial, Helvetica, sans-serif;
       color: #123;
-
       background-image:
         linear-gradient(
           rgba(255,255,255,0.72),
           rgba(255,255,255,0.72)
         ),
         url("./logo.png");
-
       background-size: cover;
       background-position: center;
       background-repeat: no-repeat;
       background-attachment: fixed;
-
       min-height: 100vh;
     }
-
     .page {
       min-height: 100vh;
       display: flex;
@@ -71,148 +57,112 @@
       align-items: center;
       padding: 20px;
     }
-
     .container {
       width: 100%;
       max-width: 620px;
       position: relative;
     }
-
     /* =========================
        PAGE 1
        ========================= */
-
     #userPage {
       position: relative;
       min-height: calc(100vh - 40px);
       display: block;
-
       background-image:
         linear-gradient(
           rgba(255,255,255,0.78),
           rgba(255,255,255,0.78)
         ),
         url("./logo.png");
-
       background-size: cover;
       background-position: center;
       background-repeat: no-repeat;
-
       border-radius: 24px;
       padding: 35px 25px;
       box-shadow: 0 10px 35px rgba(0,0,0,0.12);
       text-align: center;
       overflow: hidden;
     }
-
     /* =========================
        PAGE 2 — DEVICE CODE
        ========================= */
-
     #devicePage {
       display: none;
-
       position: relative;
       min-height: calc(100vh - 40px);
-
       background-image:
         linear-gradient(
           rgba(255,255,255,0.78),
           rgba(255,255,255,0.78)
         ),
         url("./logo.png");
-
       background-size: cover;
       background-position: center;
       background-repeat: no-repeat;
-
       border-radius: 24px;
       padding: 35px 25px;
       box-shadow: 0 10px 35px rgba(0,0,0,0.12);
       text-align: center;
       overflow: hidden;
     }
-
     /* =========================
        USER INFORMATION INPUTS
        ========================= */
-
     #userNameInput {
       width: 90%;
       max-width: 420px;
-
       padding: 20px 18px;
       margin: 18px auto 20px;
-
       border: 2px solid #ccc;
       border-radius: 16px;
-
       font-size: 20px;
       font-family: inherit;
       text-align: center;
-
       outline: none;
       background: #fff;
-
       box-sizing: border-box;
       display: block;
     }
-
     #userNameInput:focus {
       border-color: #1a73e8;
       box-shadow: 0 0 0 4px rgba(26, 115, 232, 0.12);
     }
-
     #userNextBtn {
       width: 90%;
       max-width: 420px;
-
       padding: 18px 20px;
       margin: 0 auto 18px;
-
       border: none;
       border-radius: 16px;
-
       background: #1a73e8;
       color: white;
-
       font-size: 20px;
       font-weight: bold;
       font-family: inherit;
-
       cursor: pointer;
-
       display: block;
-
       box-shadow: 0 5px 12px rgba(0, 0, 0, 0.15);
-
       transition: 0.2s ease;
     }
-
     #userNextBtn:hover {
       opacity: 0.92;
       transform: translateY(-1px);
     }
-
     #userNextBtn:active {
       transform: scale(0.98);
     }
-
     #userMessage {
       min-height: 20px;
       margin-top: 15px;
-
       font-size: 14px;
       font-weight: bold;
       color: #d93025;
-
       text-align: center;
     }
-
     /* =========================
        DEVICE PAGE ELEMENTS
        ========================= */
-
     .device-watermark {
       position: absolute;
       left: 50%;
@@ -225,12 +175,10 @@
       white-space: nowrap;
       z-index: 0;
     }
-
     .device-content {
       position: relative;
       z-index: 1;
     }
-
     .school-name {
       font-size: 30px;
       font-weight: 900;
@@ -238,20 +186,17 @@
       line-height: 1.2;
       color: #124b7c;
     }
-
     .gate-title {
       margin-top: 6px;
       font-size: 24px;
       font-weight: 800;
       color: #123;
     }
-
     .subtitle {
       margin-top: 8px;
       color: #667;
       font-size: 15px;
     }
-
     .device-label {
       display: block;
       margin-top: 35px;
@@ -260,13 +205,11 @@
       font-weight: bold;
       color: #345;
     }
-
     .device-input-wrapper {
       position: relative;
       width: 100%;
       margin: 25px auto 0;
     }
-
     #deviceCode {
       width: 100%;
       padding: 17px;
@@ -278,11 +221,9 @@
       text-align: center;
       letter-spacing: 1px;
     }
-
     #deviceCode:focus {
       border-color: #1677c8;
     }
-
     #toggleDeviceCode {
       position: absolute;
       right: 6px;
@@ -302,11 +243,9 @@
       margin: 0;
       z-index: 10;
     }
-
     #toggleDeviceCode:hover {
       background: rgba(0,0,0,0.06);
     }
-
     #continueBtn {
       width: 100%;
       margin-top: 18px;
@@ -319,60 +258,47 @@
       font-weight: 800;
       cursor: pointer;
     }
-
     #continueBtn:disabled {
       opacity: 0.7;
       cursor: wait;
     }
-
     #continueBtn:active {
       transform: scale(0.98);
     }
-
     #deviceMessage {
       min-height: 25px;
       margin-top: 15px;
       font-weight: bold;
     }
-
     .error {
       color: #c62828;
     }
-
     .success {
       color: #16803c;
     }
-
     /* =========================
        SCANNER PAGE
        ========================= */
-
     #scannerPage {
       display: none;
     }
-
     .scanner-container {
       position: relative;
       width: 100%;
       min-height: 100vh;
-
       overflow: hidden;
       border-radius: 24px;
-
       background-image:
         linear-gradient(
           rgba(255,255,255,0.78),
           rgba(255,255,255,0.78)
         ),
         url("./logo.png");
-
       background-size: cover;
       background-position: center;
       background-repeat: no-repeat;
-
       box-shadow: 0 10px 35px rgba(0,0,0,0.20);
     }
-
     .scanner-watermark {
       position: absolute;
       z-index: 1;
@@ -385,7 +311,6 @@
       pointer-events: none;
       white-space: nowrap;
     }
-
     .scanner-header {
       position: relative;
       z-index: 5;
@@ -393,21 +318,18 @@
       padding: 20px 15px 16px;
       background: rgba(255,255,255,0.96);
     }
-
     .scanner-school {
       font-size: 25px;
       font-weight: 900;
       color: #124b7c;
       line-height: 1.2;
     }
-
     .scanner-title {
       margin-top: 5px;
       font-size: 21px;
       font-weight: 800;
       color: #111;
     }
-
     .pst-label {
       margin-top: 12px;
       font-size: 14px;
@@ -415,7 +337,6 @@
       letter-spacing: 1px;
       color: #124b7c;
     }
-
     .pst-time {
       margin-top: 2px;
       font-size: 38px;
@@ -424,61 +345,47 @@
       color: #111;
       letter-spacing: 1px;
     }
-
     .pst-date {
       margin-top: 5px;
       font-size: 16px;
       font-weight: 700;
       color: #333;
     }
-
     .camera-area {
       position: relative;
       background: #000;
       min-height: 400px;
     }
-
     #reader {
       width: 100%;
       min-height: 400px;
     }
-
     #reader video {
       width: 100% !important;
       height: auto !important;
       display: block;
     }
-
     #exitScannerBtn {
       position: absolute;
       z-index: 20;
       right: 16px;
       top: 55px;
-
       padding: 10px 18px;
-
       border: 2px solid #ffffff;
       border-radius: 10px;
-
       background: #b71c1c;
       color: #ffffff;
-
       font-size: 15px;
       font-weight: 900;
-
       cursor: pointer;
-
       box-shadow: 0 3px 8px rgba(0,0,0,0.25);
     }
-
     #exitScannerBtn:hover {
       opacity: 0.9;
     }
-
     #exitScannerBtn:active {
       transform: scale(0.96);
     }
-
     #switchCameraBtn {
       position: absolute;
       z-index: 20;
@@ -497,12 +404,10 @@
       align-items: center;
       justify-content: center;
     }
-
     #switchCameraBtn:disabled {
       opacity: 0.5;
       cursor: wait;
     }
-
     .ready-bar {
       position: relative;
       z-index: 5;
@@ -513,11 +418,9 @@
       font-size: 17px;
       font-weight: 900;
     }
-
     /* =========================
        ATTENDANCE MONITOR
        ========================= */
-
     #attendanceMonitor {
       position: relative;
       z-index: 5;
@@ -525,7 +428,6 @@
       padding: 18px 12px 22px;
       background: #07131e;
     }
-
     .attendance-title {
       font-size: 21px;
       font-weight: 900;
@@ -537,16 +439,13 @@
       color: #ffffff;
       letter-spacing: 0.5px;
     }
-
     .section-title {
       margin-top: 22px;
     }
-
     .school-group {
       width: 100%;
       margin-bottom: 16px;
     }
-
     .school-group-title {
       width: 100%;
       margin-bottom: 8px;
@@ -558,22 +457,18 @@
       font-weight: 900;
       letter-spacing: 0.4px;
     }
-
     .school-group.jhs .school-group-title {
       background: #1565c0;
     }
-
     .school-group.shs .school-group-title {
       background: #6a1b9a;
     }
-
     .school-summary {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 9px;
       width: 100%;
     }
-
     .summary-card {
       min-height: 88px;
       border-radius: 14px;
@@ -585,54 +480,43 @@
       flex-direction: column;
       justify-content: center;
     }
-
     .summary-label {
       font-size: 10px;
       font-weight: 900;
       line-height: 1.2;
       color: #ffffff;
     }
-
     .summary-number {
       font-size: 28px;
       font-weight: 900;
       color: #ffffff;
       margin-top: 5px;
     }
-
     .summary-card.total {
       background: #1976d2;
     }
-
     .summary-card.am-present {
       background: #16803c;
     }
-
     .summary-card.am-absent {
       background: #d32f2f;
     }
-
     .summary-card.am-late {
       background: #f57c00;
     }
-
     .summary-card.pm-present {
       background: #00897b;
     }
-
     .summary-card.pm-absent {
       background: #c62828;
     }
-
     .summary-card.pm-late {
       background: #ef6c00;
     }
-
     #sectionAttendance {
       display: block;
       width: 100%;
     }
-
     .section-table-wrap {
       width: 100%;
       overflow-x: auto;
@@ -641,7 +525,6 @@
       box-shadow: 0 4px 12px rgba(0,0,0,0.18);
       -webkit-overflow-scrolling: touch;
     }
-
     .section-table {
       width: 100%;
       min-width: 610px;
@@ -650,7 +533,6 @@
       text-align: center;
       font-size: 13px;
     }
-
     .section-table th {
       padding: 10px 7px;
       color: #ffffff;
@@ -659,39 +541,30 @@
       white-space: nowrap;
       line-height: 1.15;
     }
-
     .section-table th.section-head {
       background: #1565c0;
     }
-
     .section-table th.total-head {
       background: #3949ab;
     }
-
     .section-table th.am-present-head {
       background: #2e7d32;
     }
-
     .section-table th.am-absent-head {
       background: #c62828;
     }
-
     .section-table th.am-late-head {
       background: #ef6c00;
     }
-
     .section-table th.pm-present-head {
       background: #00897b;
     }
-
     .section-table th.pm-absent-head {
       background: #ad1457;
     }
-
     .section-table th.pm-late-head {
       background: #f57c00;
     }
-
     .section-table td {
       padding: 9px 7px;
       border: 1px solid #d5e0ea;
@@ -699,63 +572,51 @@
       background: #ffffff;
       white-space: nowrap;
     }
-
     .section-table tbody tr:nth-child(even) td {
       background: #eef6ff;
     }
-
     .section-table-name {
       text-align: left !important;
       color: #124b7c;
       font-weight: 900 !important;
     }
-
     .total-cell {
       color: #3949ab !important;
       background: #eef2ff !important;
     }
-
     .am-present-cell {
       color: #16803c !important;
       background: #e8f5e9 !important;
     }
-
     .am-absent-cell {
       color: #c62828 !important;
       background: #ffebee !important;
     }
-
     .am-late-cell {
       color: #ef6c00 !important;
       background: #fff3e0 !important;
     }
-
     .pm-present-cell {
       color: #00695c !important;
       background: #e0f2f1 !important;
     }
-
     .pm-absent-cell {
       color: #880e4f !important;
       background: #fce4ec !important;
     }
-
     .pm-late-cell {
       color: #e65100 !important;
       background: #fff3e0 !important;
     }
-
     #attendanceUpdated {
       text-align: center;
       font-size: 10px;
       color: #9fb0bd;
       margin-top: 10px;
     }
-
     /* =========================
        OVERLAY
        ========================= */
-
     .scan-overlay {
       position: absolute;
       z-index: 30;
@@ -767,30 +628,25 @@
       background: rgba(0,0,0,0.72);
       backdrop-filter: blur(4px);
     }
-
     .processing-title {
       font-size: 27px;
       font-weight: 900;
       color: #ffffff;
     }
-
     .processing-text {
       margin-top: 8px;
       font-size: 15px;
       color: #ffffff;
     }
-
     /* =========================
        ADVISER / ADMIN ATTENDANCE
        ========================= */
-
     #attendancePage {
       width: 100%;
       min-height: 100vh;
       display: none;
       position: relative;
     }
-
     #attendancePage .device-content {
       width: 100%;
       max-width: 1100px;
@@ -798,21 +654,17 @@
       padding: 25px 20px;
       box-sizing: border-box;
     }
-
     #attendancePage .gate-title {
       margin-bottom: 5px;
     }
-
     #attendanceRoleTitle {
       margin-bottom: 18px;
     }
-
     #attendanceSectionWrapper {
       width: 100%;
       max-width: 500px;
       margin: 0 auto 15px auto;
     }
-
     #attendanceSectionSelect {
       width: 100%;
       padding: 13px 15px;
@@ -825,11 +677,9 @@
       box-sizing: border-box;
       outline: none;
     }
-
     #attendanceSectionSelect:focus {
       border-color: #000;
     }
-
     #attendanceCurrentSection {
       width: 100%;
       margin: 12px auto 18px auto;
@@ -837,14 +687,12 @@
       font-size: 18px;
       font-weight: 900;
     }
-
     #attendanceTableWrapper {
       width: 100%;
       overflow-x: hidden;
       margin-top: 10px;
       border-radius: 10px;
     }
-
     #attendanceTable {
       width: 100%;
       min-width: 0;
@@ -853,7 +701,6 @@
       background: rgba(255,255,255,0.96);
       color: #111;
     }
-
     #attendanceTable th {
       padding: 12px 6px;
       background: #222;
@@ -863,7 +710,6 @@
       text-align: center;
       border: 1px solid #555;
     }
-
     #attendanceTable td {
       padding: 9px 6px;
       border: 1px solid #aaa;
@@ -871,7 +717,6 @@
       font-weight: 700;
       text-align: center;
     }
-
     #attendanceTable th:first-child,
     #attendanceTable td:first-child {
       width: 50%;
@@ -879,14 +724,12 @@
       text-align: left;
       word-break: break-word;
     }
-
     #attendanceTable th:nth-child(2),
     #attendanceTable td:nth-child(2),
     #attendanceTable th:nth-child(3),
     #attendanceTable td:nth-child(3) {
       width: 25%;
     }
-
     .attendance-btn {
       width: 100%;
       min-width: 0;
@@ -902,27 +745,22 @@
       white-space: nowrap;
       box-sizing: border-box;
     }
-
     .attendance-btn:hover {
       transform: translateY(-1px);
     }
-
     .attendance-btn.present {
       background: #d9f7df;
       border-color: #238636;
       color: #176b2c;
     }
-
     .attendance-btn.absent {
       background: #ffdede;
       border-color: #d93025;
       color: #a40000;
     }
-
     .attendance-btn.selected {
       box-shadow: 0 0 0 3px rgba(0,0,0,0.18);
     }
-
     #proceedAttendanceBtn {
       display: block;
       width: 100%;
@@ -937,16 +775,13 @@
       font-weight: 900;
       cursor: pointer;
     }
-
     #proceedAttendanceBtn:hover {
       opacity: 0.9;
     }
-
     #proceedAttendanceBtn:disabled {
       opacity: 0.5;
       cursor: not-allowed;
     }
-
 #saveAttendanceBtn {
   display: block;
   width: 100%;
@@ -961,21 +796,17 @@
   font-weight: 900;
   cursor: pointer;
 }
-
 #saveAttendanceBtn:hover {
   opacity: 0.9;
 }
-
 #saveAttendanceBtn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
-
     
     /* =========================
    ATTENDANCE LOGOUT
    ========================= */
-
 #attendanceLogoutBtn {
   display: block;
   width: 100%;
@@ -990,15 +821,12 @@
   font-weight: 900;
   cursor: pointer;
 }
-
 #attendanceLogoutBtn:hover {
   opacity: 0.9;
 }
-
 #attendanceLogoutBtn:active {
   transform: scale(0.98);
 }
-
     #attendanceMessage {
       min-height: 24px;
       margin-top: 10px;
@@ -1006,51 +834,40 @@
       font-size: 14px;
       font-weight: 700;
     }
-
     @media (max-width: 600px) {
-
       .school-summary {
         grid-template-columns: repeat(2, 1fr);
       }
-
       .summary-card {
         min-height: 82px;
         padding: 9px 4px;
       }
-
       .summary-label {
         font-size: 9px;
       }
-
       .summary-number {
         font-size: 25px;
       }
-
       .section-table {
         font-size: 12px;
         min-width: 610px;
       }
-
       .section-table th,
       .section-table td {
         padding: 8px 6px;
       }
-
       #attendancePage .device-content {
         padding: 12px 5px;
       }
-
       #attendanceTableWrapper {
         width: 100%;
         overflow-x: hidden;
       }
-
       #attendanceTable {
         width: 100%;
         min-width: 0;
         table-layout: fixed;
       }
-
       #attendanceTable th:first-child,
       #attendanceTable td:first-child {
         width: 50%;
@@ -1060,7 +877,6 @@
         text-align: left;
         word-break: break-word;
       }
-
       #attendanceTable th:nth-child(2),
       #attendanceTable td:nth-child(2),
       #attendanceTable th:nth-child(3),
@@ -1068,17 +884,14 @@
         width: 25%;
         padding: 5px 2px;
       }
-
       #attendanceTable th {
         padding: 8px 3px;
         font-size: 11px;
       }
-
       #attendanceTable td {
         padding: 6px 2px;
         font-size: 11px;
       }
-
       .attendance-btn {
         width: 100%;
         min-width: 0;
@@ -1089,167 +902,124 @@
         border-radius: 6px;
         white-space: nowrap;
       }
-
       #proceedAttendanceBtn {
         max-width: 260px;
       }
     }
-
     @media (max-width: 480px) {
-
       .page {
         padding: 10px;
       }
-
       .school-name {
         font-size: 25px;
       }
-
       .gate-title {
         font-size: 22px;
       }
-
       .scanner-school {
         font-size: 22px;
       }
-
       .scanner-title {
         font-size: 20px;
       }
-
       .camera-area,
       #reader {
         min-height: 350px;
       }
-
       .scanner-watermark {
         font-size: 110px;
       }
-
       .device-code-wrapper {
         width: 100% !important;
         max-width: 420px !important;
         margin: 0 auto 18px auto !important;
       }
     }
-
     @media (max-width: 380px) {
-
       #attendancePage .device-content {
         padding: 10px 3px;
       }
-
       #attendanceTable th:first-child,
       #attendanceTable td:first-child {
         width: 48%;
         font-size: 11px;
       }
-
       #attendanceTable th:nth-child(2),
       #attendanceTable td:nth-child(2),
       #attendanceTable th:nth-child(3),
       #attendanceTable td:nth-child(3) {
         width: 26%;
       }
-
       #attendanceTable th {
         font-size: 10px;
         padding: 7px 2px;
       }
-
       #attendanceTable td {
         font-size: 10px;
         padding: 5px 1px;
       }
-
       .attendance-btn {
         font-size: 9px;
         padding: 6px 0;
       }
     }
-
   </style>
 </head>
-
 <body>
-
 <div class="page">
 <div class="container">
-
   <!-- =====================================================
        PAGE 1 — USER INFORMATION
        ===================================================== -->
-
   <div id="userPage">
-
     <div class="device-watermark">SENHS</div>
-
     <div class="device-content">
-
       <div class="school-name">
         SAN ESTEBAN NATIONAL HIGH SCHOOL
       </div>
-
       <div class="gate-title">
         GATE SCANNER
       </div>
-
       <div class="subtitle">
         User Information
       </div>
-
       <input
         id="userNameInput"
         type="text"
         placeholder="Enter your Name"
         autocomplete="name"
       >
-
       <button
         id="userNextBtn"
         type="button"
       >
         NEXT
       </button>
-
       <div id="userMessage"></div>
-
     </div>
-
   </div>
-
-
   <!-- =====================================================
        PAGE 2 — DEVICE / ACCESS CODE
        ===================================================== -->
-
   <div id="devicePage">
-
     <div class="device-watermark">SENHS</div>
-
     <div class="device-content">
-
       <div class="school-name">
         SAN ESTEBAN NATIONAL HIGH SCHOOL
       </div>
-
       <div class="gate-title">
         GATE SCANNER
       </div>
-
       <div class="subtitle">
         Authorized Gate Device
       </div>
-
       <div class="device-input-wrapper">
-
         <input
           id="deviceCode"
           type="password"
           placeholder="Enter Device Code"
           autocomplete="off"
         >
-
         <button
           id="toggleDeviceCode"
           type="button"
@@ -1257,115 +1027,81 @@
         >
           👁
         </button>
-
       </div>
-
       <button
         id="continueBtn"
         type="button"
       >
         CONTINUE
       </button>
-
       <div id="deviceMessage"></div>
-
     </div>
-
   </div>
-
-
   <!-- =====================================================
        PAGE 3 — ADVISER / ADMIN ATTENDANCE
        ===================================================== -->
-
   <div id="attendancePage">
-
     <div class="device-watermark">SENHS</div>
-
     <div class="device-content">
-
       <div class="school-name">
         SAN ESTEBAN NATIONAL HIGH SCHOOL
       </div>
-
       <div class="gate-title">
         ATTENDANCE
       </div>
-
       <div
         class="subtitle"
         id="attendanceRoleTitle"
       >
         Adviser / Admin Attendance
       </div>
-
 <!-- PHILIPPINE STANDARD TIME -->
-
 <div class="pst-clock">
-
   <div class="pst-label">
     Philippine Standard Time
   </div>
-
   <div id="attendancePstTime">
     12:25:18 AM
   </div>
-
   <div id="attendancePstDate">
     Tuesday, October 6, 2026
   </div>
-
 </div>
       
       <!-- ADMIN SECTION SELECTOR -->
-
       <div
         id="attendanceSectionWrapper"
         style="display:none;"
       >
-
         <select id="attendanceSectionSelect">
-
           <option value="">
             Select Section
           </option>
-
           <option value="7-Acacia">7-Acacia</option>
           <option value="7-Banaba">7-Banaba</option>
           <option value="7-Mahogany">7-Mahogany</option>
-
           <option value="8-Camia">8-Camia</option>
           <option value="8-Sampaguita">8-Sampaguita</option>
           <option value="8-Rose">8-Rose</option>
-
           <option value="9-Bonifacio">9-Bonifacio</option>
           <option value="9-Quezon">9-Quezon</option>
           <option value="9-Rizal">9-Rizal</option>
-
           <option value="10-Diamond">10-Diamond</option>
           <option value="10-Jade">10-Jade</option>
           <option value="10-Ruby">10-Ruby</option>
-
           <option value="11-Durkheim">11-Durkheim</option>
           <option value="11-Einstein">11-Einstein</option>
           <option value="11-Ramsay">11-Ramsay</option>
-
           <option value="12-Comte">12-Comte</option>
           <option value="12-Keller">12-Keller</option>
           <option value="12-Newton">12-Newton</option>
-
         </select>
-
       </div>
-
       <div id="attendanceCurrentSection">
         Section: —
       </div>
-
       <div id="attendanceTableWrapper">
-
         <table id="attendanceTable">
-
           <thead>
             <tr>
               <th>STUDENT NAME</th>
@@ -1373,96 +1109,70 @@
               <th>PM</th>
             </tr>
           </thead>
-
           <tbody id="attendanceTableBody">
           </tbody>
-
         </table>
-
       </div>
-
       <button
         id="saveAttendanceBtn"
         type="button"
       >
           SAVE
 </button>
-
       <button
   id="proceedAttendanceBtn"
   type="button"
         >
         PROCEED
       </button>
-
       <button
   id="attendanceLogoutBtn"
   type="button"
 >
   LOGOUT
 </button>
-
       <div id="attendanceMessage"></div>
-
     </div>
-
   </div>
-
-
   <!-- =====================================================
        PAGE 4 — SCANNER
        ===================================================== -->
-
   <div id="scannerPage">
-
     <div class="scanner-container">
-
       <div class="scanner-watermark">
         SENHS
       </div>
-
       <div class="scanner-header">
-
         <div class="scanner-school">
           SAN ESTEBAN NATIONAL HIGH SCHOOL
         </div>
-
         <div class="scanner-title">
           GATE SCANNER
         </div>
-
         <div class="pst-label">
           PHILIPPINE STANDARD TIME
         </div>
-
         <div
           id="pstTime"
           class="pst-time"
         >
           --:--:-- --
         </div>
-
         <div
           id="pstDate"
           class="pst-date"
         >
           -- -- ----
         </div>
-
         <button
           id="exitScannerBtn"
           type="button"
         >
           EXIT
         </button>
-
       </div>
-
-
       <div class="camera-area">
-
         <div id="reader"></div>
-
         <button
           id="switchCameraBtn"
           title="Switch Camera"
@@ -1471,48 +1181,32 @@
         >
           ↔
         </button>
-
         <div
           id="scanOverlay"
           class="scan-overlay"
         >
-
           <div id="overlayContent"></div>
-
         </div>
-
       </div>
-
-
       <div
         id="readyBar"
         class="ready-bar"
       >
         ● READY TO SCAN
       </div>
-
-
       <!-- =================================================
            ATTENDANCE MONITOR
            ================================================= -->
-
       <div id="attendanceMonitor">
-
         <div class="attendance-title">
           SCHOOL SUMMARY
         </div>
-
-
         <!-- JHS -->
-
         <div class="school-group jhs">
-
           <div class="school-group-title">
             JHS — GRADES 7–10
           </div>
-
           <div class="school-summary">
-
             <div class="summary-card total">
               <div class="summary-label">TOTAL</div>
               <div
@@ -1520,7 +1214,6 @@
                 class="summary-number"
               >0</div>
             </div>
-
             <div class="summary-card am-present">
               <div class="summary-label">AM PRESENT</div>
               <div
@@ -1528,7 +1221,6 @@
                 class="summary-number"
               >0</div>
             </div>
-
             <div class="summary-card am-absent">
               <div class="summary-label">AM ABSENT</div>
               <div
@@ -1536,7 +1228,6 @@
                 class="summary-number"
               >0</div>
             </div>
-
             <div class="summary-card am-late">
               <div class="summary-label">AM LATE</div>
               <div
@@ -1544,7 +1235,6 @@
                 class="summary-number"
               >0</div>
             </div>
-
             <div
               id="jhsPmPresentCard"
               class="summary-card pm-present"
@@ -1555,7 +1245,6 @@
                 class="summary-number"
               >0</div>
             </div>
-
             <div
               id="jhsPmAbsentCard"
               class="summary-card pm-absent"
@@ -1566,7 +1255,6 @@
                 class="summary-number"
               >0</div>
             </div>
-
             <div
               id="jhsPmLateCard"
               class="summary-card pm-late"
@@ -1577,22 +1265,14 @@
                 class="summary-number"
               >0</div>
             </div>
-
           </div>
-
         </div>
-
-
         <!-- SHS -->
-
         <div class="school-group shs">
-
           <div class="school-group-title">
             SHS — GRADES 11–12
           </div>
-
           <div class="school-summary">
-
             <div class="summary-card total">
               <div class="summary-label">TOTAL</div>
               <div
@@ -1600,7 +1280,6 @@
                 class="summary-number"
               >0</div>
             </div>
-
             <div class="summary-card am-present">
               <div class="summary-label">AM PRESENT</div>
               <div
@@ -1608,7 +1287,6 @@
                 class="summary-number"
               >0</div>
             </div>
-
             <div class="summary-card am-absent">
               <div class="summary-label">AM ABSENT</div>
               <div
@@ -1616,7 +1294,6 @@
                 class="summary-number"
               >0</div>
             </div>
-
             <div class="summary-card am-late">
               <div class="summary-label">AM LATE</div>
               <div
@@ -1624,7 +1301,6 @@
                 class="summary-number"
               >0</div>
             </div>
-
             <div
               id="shsPmPresentCard"
               class="summary-card pm-present"
@@ -1635,7 +1311,6 @@
                 class="summary-number"
               >0</div>
             </div>
-
             <div
               id="shsPmAbsentCard"
               class="summary-card pm-absent"
@@ -1646,7 +1321,6 @@
                 class="summary-number"
               >0</div>
             </div>
-
             <div
               id="shsPmLateCard"
               class="summary-card pm-late"
@@ -1657,60 +1331,37 @@
                 class="summary-number"
               >0</div>
             </div>
-
           </div>
-
         </div>
-
-
         <div class="attendance-title section-title">
           SECTION ATTENDANCE
         </div>
-
         <div id="sectionAttendance">
           Loading attendance...
         </div>
-
         <div id="attendanceUpdated">
           Updating...
         </div>
-
       </div>
-
     </div>
-
   </div>
-
 </div>
 </div>
-
-
 <script>
-
 /* =====================================================
    CONFIGURATION
    ===================================================== */
-
 const APPS_SCRIPT_URL =
   "https://script.google.com/macros/s/AKfycbyXwfLu_wjourRT3BwQDTwA-H9vIJfu5LvqbjjbG3jwv5JVb0mi_1SO5CRPq60S5KdaCg/exec";
-
-
 /* =====================================================
    VARIABLES
    ===================================================== */
-
 let userName = "";
-
 let deviceKey = "";
-
 let attendanceAccessCode = "";
-
 let attendanceRole = "";
-
 let attendanceSection = "";
-
 let attendanceStudents = [];
-
 let clientId =
   "SENHS_" +
   Date.now() +
@@ -1718,9 +1369,7 @@ let clientId =
   Math.random()
     .toString(36)
     .substring(2, 10);
-
 let sessionToken = "";
-
 let platform =
   /iPad|Tablet|Android(?!.*Mobile)/i.test(
     navigator.userAgent
@@ -1731,114 +1380,83 @@ let platform =
       )
       ? "mobile"
       : "laptop";
-
 let sessionActive = false;
-
 let heartbeatTimer = null;
-
 let html5QrCode = null;
-
 let cameras = [];
-
 let currentCameraIndex = 0;
-
 let scannerRunning = false;
-
 let processing = false;
-
 let attendanceTimer = null;
-
 let releaseSent = false;
-
-
 /* =====================================================
    ELEMENTS
    ===================================================== */
-
 const devicePage =
   document.getElementById(
     "devicePage"
   );
-
 const userPage =
   document.getElementById(
     "userPage"
   );
-
 const userNameInput =
   document.getElementById(
     "userNameInput"
   );
-
 const userNextBtn =
   document.getElementById(
     "userNextBtn"
   );
-
 const userMessage =
   document.getElementById(
     "userMessage"
   );
-
 const scannerPage =
   document.getElementById(
     "scannerPage"
   );
-
 const attendancePage =
   document.getElementById(
     "attendancePage"
   );
-
 const attendanceRoleTitle =
   document.getElementById(
     "attendanceRoleTitle"
   );
-
 const attendanceSectionWrapper =
   document.getElementById(
     "attendanceSectionWrapper"
   );
-
 const attendanceSectionSelect =
   document.getElementById(
     "attendanceSectionSelect"
   );
-
 const attendanceCurrentSection =
   document.getElementById(
     "attendanceCurrentSection"
   );
-
 const attendanceTableBody =
   document.getElementById(
     "attendanceTableBody"
   );
-
 const proceedAttendanceBtn =
   document.getElementById(
     "proceedAttendanceBtn"
   );
-
   const saveAttendanceBtn =
   document.getElementById(
     "saveAttendanceBtn"
   );
-
 let attendanceSaved = false;
-
   let pendingAttendanceEdits = {};
-
 /* =========================================
    PM PROCEED TIME WINDOW
    1:00 PM TO 8:00 PM
    ========================================= */
-
 function isPMProceedTime() {
-
   const now =
     new Date();
-
   const timeParts =
     new Intl.DateTimeFormat(
       "en-US",
@@ -1849,58 +1467,41 @@ function isPMProceedTime() {
         hourCycle: "h23"
       }
     ).formatToParts(now);
-
   let hour = 0;
   let minute = 0;
-
   timeParts.forEach(
     function(part) {
-
       if (
         part.type === "hour"
       ) {
         hour =
           Number(part.value);
       }
-
       if (
         part.type === "minute"
       ) {
         minute =
           Number(part.value);
       }
-
     }
   );
-
   const currentMinutes =
     hour * 60 +
     minute;
-
   return (
     currentMinutes >= 780 &&
     currentMinutes <= 1200
   );
-
 }
-
-
 /* =========================================
    PROCEED BUTTON STATE
    ========================================= */
-
 function updateProceedButtonState() {
-
   proceedAttendanceBtn.disabled =
     !attendanceSaved ||
     !isPMProceedTime();
-
 }
-
-
 updateProceedButtonState();
-
-
 setInterval(
   updateProceedButtonState,
   30000
@@ -1910,7 +1511,6 @@ const attendanceMessage =
   document.getElementById(
     "attendanceMessage"
   );
-
 const attendanceLogoutBtn =
   document.getElementById(
     "attendanceLogoutBtn"
@@ -1920,152 +1520,110 @@ const deviceCode =
   document.getElementById(
     "deviceCode"
   );
-
 const toggleDeviceCode =
   document.getElementById(
     "toggleDeviceCode"
   );
-
 const continueBtn =
   document.getElementById(
     "continueBtn"
   );
-
 const deviceMessage =
   document.getElementById(
     "deviceMessage"
   );
-
 const scanOverlay =
   document.getElementById(
     "scanOverlay"
   );
-
 const overlayContent =
   document.getElementById(
     "overlayContent"
   );
-
 const exitScannerBtn =
   document.getElementById(
     "exitScannerBtn"
   );
-
 const switchCameraBtn =
   document.getElementById(
     "switchCameraBtn"
   );
-
 const readyBar =
   document.getElementById(
     "readyBar"
   );
-
 const sectionAttendance =
   document.getElementById(
     "sectionAttendance"
   );
-
 const attendanceUpdated =
   document.getElementById(
     "attendanceUpdated"
   );
-
-
 /* =====================================================
    USER NEXT
    ===================================================== */
-
 userNextBtn.addEventListener(
   "click",
   function () {
-
     const name =
       userNameInput.value.trim();
-
     if (!name) {
-
       userMessage.textContent =
         "Please enter your Name.";
-
       userNameInput.focus();
-
       return;
     }
-
     userName =
       name;
-
     userMessage.textContent =
       "";
-
     userPage.style.display =
       "none";
-
     devicePage.style.display =
       "block";
-
     deviceCode.focus();
-
   }
 );
-
-
 /* =====================================================
    DEVICE CODE SHOW / HIDE
    ===================================================== */
-
 toggleDeviceCode.addEventListener(
   "click",
   function () {
-
     if (
       deviceCode.type ===
       "password"
     ) {
-
       deviceCode.type =
         "text";
-
       toggleDeviceCode.textContent =
         "🙈";
-
       toggleDeviceCode.setAttribute(
         "aria-label",
         "Hide device code"
       );
-
     } else {
-
       deviceCode.type =
         "password";
-
       toggleDeviceCode.textContent =
         "👁";
-
       toggleDeviceCode.setAttribute(
         "aria-label",
         "Show device code"
       );
-
     }
-
   }
 );
-
-
 /* =====================================================
    GOOGLE APPS SCRIPT JSONP
    ===================================================== */
-
 function jsonpRequest(url) {
-
   return new Promise(
     function (
       resolve,
       reject
     ) {
-
       const callbackName =
         "senhsCallback_" +
         Date.now() +
@@ -2073,118 +1631,80 @@ function jsonpRequest(url) {
         Math.floor(
           Math.random() * 100000
         );
-
       const script =
         document.createElement(
           "script"
         );
-
       let finished =
         false;
-
       const timeout =
         setTimeout(
           function () {
-
             if (finished) {
               return;
             }
-
             finished =
               true;
-
             cleanup();
-
             reject(
               new Error(
                 "Unable to connect to server."
               )
             );
-
           },
           20000
         );
-
-
       function cleanup() {
-
         clearTimeout(
           timeout
         );
-
         if (
           script.parentNode
         ) {
-
           script.parentNode.removeChild(
             script
           );
-
         }
-
         try {
-
           delete window[
             callbackName
           ];
-
         } catch (error) {
-
           window[
             callbackName
           ] = undefined;
-
         }
-
       }
-
-
       window[
         callbackName
       ] =
         function (data) {
-
           if (finished) {
             return;
           }
-
           finished =
             true;
-
           cleanup();
-
           resolve(data);
-
         };
-
-
       script.onerror =
         function () {
-
           if (finished) {
             return;
           }
-
           finished =
             true;
-
           cleanup();
-
           reject(
             new Error(
               "Unable to connect to server."
             )
           );
-
         };
-
-
       const separator =
         url.indexOf("?") !== -1
           ? "&"
           : "?";
-
-
       script.src =
         url +
         separator +
@@ -2194,82 +1714,54 @@ function jsonpRequest(url) {
         ) +
         "&_=" +
         Date.now();
-
-
       script.async =
         true;
-
       document.body.appendChild(
         script
       );
-
     }
   );
-
 }
-
-
 /* =====================================================
    DEVICE MESSAGE
    ===================================================== */
-
 function showDeviceMessage(
   message,
   type
 ) {
-
   deviceMessage.textContent =
     message;
-
   deviceMessage.className =
     type || "";
-
 }
-
-
 /* =====================================================
    VERIFY ACCESS
    DEVICE / ADVISER / ADMIN
    ===================================================== */
-
 async function verifyDevice() {
-
   const key =
     String(
       deviceCode.value || ""
     ).trim();
-
-
   if (!key) {
-
     showDeviceMessage(
       "Please enter the Device Code or Access Code.",
       "error"
     );
-
     return;
   }
-
-
   continueBtn.disabled =
     true;
-
   continueBtn.textContent =
     "CHECKING...";
-
-
   showDeviceMessage(
     "Checking access...",
     ""
   );
-
-
   try {
-
     /* =================================================
        DEVICE CHECK
        ================================================= */
-
     const deviceRequestUrl =
       APPS_SCRIPT_URL +
       "?device=" +
@@ -2290,206 +1782,139 @@ async function verifyDevice() {
           userName || ""
         ).trim()
       );
-
-
     console.log(
       "DEVICE CHECK:",
       deviceRequestUrl
     );
-
     console.log(
       "VERIFY DEVICE STARTED:",
       key,
       platform
     );
-
-
     const deviceResult =
       await jsonpRequest(
         deviceRequestUrl
       );
-
-
     console.log(
       "DEVICE RESULT:",
       JSON.stringify(
         deviceResult
       )
     );
-
-
     /* =================================================
        DEVICE AUTHORIZED
        ================================================= */
-
     if (
       deviceResult &&
       deviceResult.success === true &&
       deviceResult.authorized === true
     ) {
-
       deviceKey =
         key;
-
       sessionToken =
         String(
           deviceResult.session || ""
         );
-
-
       if (!sessionToken) {
-
         throw new Error(
           "No device session token received."
         );
-
       }
-
-
       sessionActive =
         true;
-
       releaseSent =
         false;
-
-
       showDeviceMessage(
         "Device authorized. Opening Gate Scanner...",
         "success"
       );
-
-
       setTimeout(
         function () {
-
           openScannerPage();
-
         },
         300
       );
-
-
       return;
-
     }
-
-
     /* =================================================
        CHECK ADVISER / ADMIN
        ================================================= */
-
     showDeviceMessage(
       "Checking Adviser/Admin access...",
       ""
     );
-
-
     const pmRequestUrl =
       APPS_SCRIPT_URL +
       "?pmAccess=" +
       encodeURIComponent(
         key
       );
-
-
     console.log(
       "PM CHECK:",
       pmRequestUrl
     );
-
-
     const pmResult =
       await jsonpRequest(
         pmRequestUrl
       );
-
-
     console.log(
       "PM RESULT:",
       pmResult
     );
-
-
     /* =================================================
        ADVISER / ADMIN AUTHORIZED
        ================================================= */
-
     if (
       pmResult &&
       pmResult.success === true &&
       pmResult.authorized === true
     ) {
-
       attendanceAccessCode =
         key;
-
       attendanceRole =
         String(
           pmResult.role || ""
         ).toUpperCase();
-
       attendanceSection =
         String(
           pmResult.section || ""
         );
-
-
       if (
         attendanceRole ===
         "ADMIN"
       ) {
-
         showDeviceMessage(
           "Admin authorized. Opening Attendance...",
           "success"
         );
-
       } else {
-
         showDeviceMessage(
           "Adviser authorized. Opening Attendance...",
           "success"
         );
-
       }
-
-
       setTimeout(
         function () {
-
           openAttendancePage();
-
         },
         300
       );
-
-
       return;
-
     }
-
-
     /* =================================================
        BOTH FAILED
        ================================================= */
-
     let errorMessage =
       "Invalid Device / Adviser / Admin Code.";
-
-
     if (
       pmResult &&
       pmResult.message
     ) {
-
       errorMessage =
         String(
           pmResult.message
         );
-
     }
-
-
     if (
       deviceResult &&
       deviceResult.message ===
@@ -2497,229 +1922,144 @@ async function verifyDevice() {
       pmResult &&
       pmResult.authorized !== true
     ) {
-
       errorMessage =
         "Invalid Device / Adviser / Admin Code.";
-
     }
-
-
     showDeviceMessage(
       errorMessage,
       "error"
     );
-
-
     continueBtn.disabled =
       false;
-
     continueBtn.textContent =
       "CONTINUE";
-
   } catch (error) {
-
     console.error(
       "Access verification error:",
       error
     );
-
-
     showDeviceMessage(
       "Unable to connect to server. Please try again.",
       "error"
     );
-
-
     continueBtn.disabled =
       false;
-
     continueBtn.textContent =
       "CONTINUE";
-
   }
-
 }
-
-
 /* =====================================================
    OPEN SCANNER PAGE
    ===================================================== */
-
 async function openScannerPage() {
-
   releaseSent =
     false;
-
   devicePage.style.display =
     "none";
-
   attendancePage.style.display =
     "none";
-
   scannerPage.style.display =
     "block";
-
-
   readyBar.textContent =
     "● STARTING CAMERA...";
-
   readyBar.style.color =
     "#1267a5";
-
-
   try {
-
     await startCamera();
-
     loadAttendanceSummary();
-
-
     if (!attendanceTimer) {
-
       attendanceTimer =
         setInterval(
           loadAttendanceSummary,
           5000
         );
-
     }
-
-
     startDeviceHeartbeat();
-
-
   } catch (error) {
-
     console.error(
       "Open scanner error:",
       error
     );
-
   }
-
 }
-
-
 /* =====================================================
    OPEN ADVISER / ADMIN ATTENDANCE
    ===================================================== */
-
 async function openAttendancePage() {
-
   devicePage.style.display =
     "none";
-
   scannerPage.style.display =
     "none";
-
   attendancePage.style.display =
     "block";
-
-
   attendanceRoleTitle.textContent =
     attendanceRole === "ADMIN"
       ? "ADMIN ATTENDANCE"
       : "ADVISER ATTENDANCE";
-
-
   if (
     attendanceRole ===
     "ADMIN"
   ) {
-
     attendanceSectionWrapper.style.display =
       "block";
-
     attendanceSectionSelect.value =
       "";
-
     attendanceCurrentSection.textContent =
       "Section: —";
-
     attendanceTableBody.innerHTML =
       "";
-
     attendanceMessage.textContent =
       "Select a section.";
-
     proceedAttendanceBtn.disabled =
       true;
-
     return;
-
   }
-
-
   /* =================================================
      ADVISER
      ================================================= */
-
   attendanceSectionWrapper.style.display =
     "none";
-
   proceedAttendanceBtn.disabled =
     false;
-
-
   attendanceCurrentSection.textContent =
     "Section: " +
     (
       attendanceSection ||
       "—"
     );
-
-
   attendanceMessage.textContent =
     "Attendance data loading...";
-
-
   await loadAdviserAttendance();
-
 }
-
-
 /* =====================================================
    LOAD ADVISER / ADMIN ATTENDANCE
    AUTO REFRESH SUPPORT
    ===================================================== */
 let attendanceRefreshing = false;
-
 async function loadAdviserAttendance(
   silentRefresh
 ) {
-
   try {
-
     if (!attendanceSection) {
-
       if (!silentRefresh) {
-
         attendanceTableBody.innerHTML =
           '<tr>' +
           '<td colspan="3" style="text-align:center;">' +
           'Please select a section.' +
           '</td>' +
           '</tr>';
-
       }
-
       return;
     }
-
-
     /*
        Prevent overlapping requests.
        Kahit may manual editing,
        TULOY pa rin ang auto-refresh.
     */
-
     if (attendanceRefreshing) {
       return;
     }
-
     attendanceRefreshing = true;
-
-
     const requestUrl =
       APPS_SCRIPT_URL +
       "?action=getEditableTodayAttendance" +
@@ -2731,101 +2071,67 @@ async function loadAdviserAttendance(
       encodeURIComponent(
         attendanceSection
       );
-
-
     const result =
       await jsonpRequest(
         requestUrl
       );
-
-
     if (
       !result ||
       !result.success
     ) {
-
       throw new Error(
         result &&
         result.message
           ? result.message
           : "Unable to load attendance."
       );
-
     }
-
-
     /*
        Fresh data galing sa Google Sheets
     */
-
     const freshStudents =
       result.students || [];
-
-
     /*
        PRESERVE UNSAVED MANUAL EDITS
-
        Kung may binago ang Adviser/Admin
        pero hindi pa SAVE,
        iyon ang gagamitin sa display.
-
        Ang bagong QR scan naman na walang
        pending manual edit ay manggagaling
        diretso sa latest server data.
     */
-
     freshStudents.forEach(
       function(student) {
-
         const lrn =
           String(
             student.lrn || ""
           ).trim();
-
-
         if (!lrn) {
           return;
         }
-
-
         const pending =
           pendingAttendanceEdits[lrn];
-
-
         if (!pending) {
           return;
         }
-
-
         if (
           pending.AM === "PRESENT" ||
           pending.AM === "ABSENT"
         ) {
-
           student.AM =
             pending.AM;
-
         }
-
-
         if (
           pending.PM === "PRESENT" ||
           pending.PM === "ABSENT"
         ) {
-
           student.PM =
             pending.PM;
-
         }
-
       }
     );
-
-
     attendanceStudents =
       freshStudents;
-
-
     attendanceCurrentSection.textContent =
       "Section: " +
       (
@@ -2833,86 +2139,58 @@ async function loadAdviserAttendance(
         attendanceSection ||
         "—"
       );
-
-
     /*
        Re-render table.
-
        Dahil na-merge na natin ang
        pending manual edits bago dito,
        hindi mawawala ang unsaved changes.
     */
-
     renderAdviserAttendanceTable(
       attendanceStudents
     );
-
-
     if (!silentRefresh) {
-
       attendanceMessage.textContent =
         attendanceStudents.length +
         " student(s) loaded.";
-
     }
-
-
   } catch (error) {
-
     console.error(
       "Adviser attendance error:",
       error
     );
-
-
     if (!silentRefresh) {
-
       attendanceTableBody.innerHTML = "";
-
       attendanceMessage.textContent =
         error.message ||
         "Unable to load attendance.";
-
     }
-
   } finally {
-
     attendanceRefreshing = false;
-
   }
-
 }
-
  /* =====================================================
    AUTOMATIC ATTENDANCE REFRESH
    EVERY 5 SECONDS
    ===================================================== */
-
 setInterval(
   function () {
-
     const attendancePage =
       document.getElementById("attendancePage");
-
     if (
       !attendancePage ||
       attendancePage.style.display === "none"
     ) {
       return;
     }
-
     if (
       !attendanceSection
     ) {
       return;
     }
-
     console.log(
       "AUTO REFRESH: Loading latest attendance..."
     );
-
     loadAdviserAttendance(true);
-
   },
   5000
 );
@@ -2920,346 +2198,219 @@ setInterval(
 /* =====================================================
    RENDER ADVISER / ADMIN ATTENDANCE
    ===================================================== */
-
 function renderAdviserAttendanceTable(
   students
 ) {
-
   attendanceTableBody.innerHTML = "";
-
-
   if (
     !students ||
     students.length === 0
   ) {
-
     attendanceTableBody.innerHTML =
       '<tr>' +
       '<td colspan="3" style="text-align:center;">' +
       'No students found.' +
       '</td>' +
       '</tr>';
-
     return;
-
   }
-
-
   students.forEach(
     function(student) {
-
       const row =
         document.createElement("tr");
-
-
       const nameCell =
         document.createElement("td");
-
       nameCell.textContent =
         student.name || "";
-
-
       const amCell =
         document.createElement("td");
-
       const pmCell =
         document.createElement("td");
-
-
       /* =====================================
          AM BUTTON
          ===================================== */
-
       const amButton =
         document.createElement("button");
-
       amButton.type =
         "button";
-
       amButton.textContent =
         student.AM === "PRESENT"
           ? "PRESENT"
           : "ABSENT";
-
       amButton.className =
         student.AM === "PRESENT"
           ? "attendance-btn present"
           : "attendance-btn absent";
-
-
       amButton.addEventListener(
         "click",
         function() {
-
           student.AM =
             student.AM === "PRESENT"
               ? "ABSENT"
               : "PRESENT";
-
-
           amButton.textContent =
             student.AM;
-
-
           amButton.className =
             student.AM === "PRESENT"
               ? "attendance-btn present"
               : "attendance-btn absent";
-
-
           /*
              SAVE THIS AS UNSAVED MANUAL EDIT
           */
-
           const lrn =
             String(
               student.lrn || ""
             ).trim();
-
-
           if (lrn) {
-
             if (
               !pendingAttendanceEdits[lrn]
             ) {
-
               pendingAttendanceEdits[lrn] =
                 {};
-
             }
-
-
             pendingAttendanceEdits[lrn].AM =
               student.AM;
-
           }
-
-
           attendanceSaved =
             false;
-
-
           updateProceedButtonState();
-
         }
       );
-
-
       /* =====================================
          PM BUTTON
          ===================================== */
-
       const pmButton =
         document.createElement("button");
-
       pmButton.type =
         "button";
-
       pmButton.textContent =
         student.PM === "PRESENT"
           ? "PRESENT"
           : "ABSENT";
-
       pmButton.className =
         student.PM === "PRESENT"
           ? "attendance-btn present"
           : "attendance-btn absent";
-
-
       pmButton.addEventListener(
         "click",
         function() {
-
           student.PM =
             student.PM === "PRESENT"
               ? "ABSENT"
               : "PRESENT";
-
-
           pmButton.textContent =
             student.PM;
-
-
           pmButton.className =
             student.PM === "PRESENT"
               ? "attendance-btn present"
               : "attendance-btn absent";
-
-
           /*
              SAVE THIS AS UNSAVED MANUAL EDIT
           */
-
           const lrn =
             String(
               student.lrn || ""
             ).trim();
-
-
           if (lrn) {
-
             if (
               !pendingAttendanceEdits[lrn]
             ) {
-
               pendingAttendanceEdits[lrn] =
                 {};
-
             }
-
-
             pendingAttendanceEdits[lrn].PM =
               student.PM;
-
           }
-
-
           attendanceSaved =
             false;
-
-
           updateProceedButtonState();
-
         }
       );
-
-
       amCell.appendChild(
         amButton
       );
-
       pmCell.appendChild(
         pmButton
       );
-
-
       row.appendChild(
         nameCell
       );
-
       row.appendChild(
         amCell
       );
-
       row.appendChild(
         pmCell
       );
-
-
       attendanceTableBody.appendChild(
         row
       );
-
     }
   );
-
 }
-
-
 /* =====================================================
    ADMIN SECTION CHANGE
    ===================================================== */
-
 attendanceSectionSelect.addEventListener(
   "change",
   async function () {
-
     const selectedSection =
       String(
         attendanceSectionSelect.value || ""
       ).trim();
-
-
     attendanceSection =
       selectedSection;
-
-
     if (!selectedSection) {
-
       attendanceCurrentSection.textContent =
         "Section: —";
-
       attendanceTableBody.innerHTML =
         "";
-
       attendanceMessage.textContent =
         "Select a section.";
-
       proceedAttendanceBtn.disabled =
         true;
-
       return;
-
     }
-
-
     proceedAttendanceBtn.disabled =
       false;
-
-
     attendanceCurrentSection.textContent =
       "Section: " +
       selectedSection;
-
-
     attendanceMessage.textContent =
       "Loading attendance...";
-
-
     await loadAdviserAttendance();
-
   }
 );
-
 /* =====================================================
    SAVE ATTENDANCE
    ===================================================== */
-
 saveAttendanceBtn.addEventListener(
   "click",
   async function () {
-
     if (
       !attendanceAccessCode ||
       !attendanceSection
     ) {
-
       attendanceMessage.textContent =
         "Please select a section.";
-
       return;
-
     }
-
-
     if (
       !attendanceStudents ||
       attendanceStudents.length === 0
     ) {
-
       attendanceMessage.textContent =
         "No attendance data to save.";
-
       return;
-
     }
-
-
     attendanceMessage.textContent =
       "Saving attendance...";
-
     saveAttendanceBtn.disabled =
       true;
-
-
     try {
-
       const attendanceData =
         JSON.stringify(
           attendanceStudents
         );
-
-
       const requestUrl =
         APPS_SCRIPT_URL +
         "?action=saveAttendance" +
@@ -3275,71 +2426,50 @@ saveAttendanceBtn.addEventListener(
         encodeURIComponent(
           attendanceData
         );
-
-
       const result =
         await jsonpRequest(
           requestUrl
         );
-
-
       if (
         !result ||
         !result.success
       ) {
-
         throw new Error(
           result &&
           result.message
             ? result.message
             : "Unable to save attendance."
         );
-
       }
-
-
       attendanceMessage.textContent =
         "Attendance saved successfully.";
-
     attendanceSaved = true;
-
 /*
    Wala nang unsaved manual changes
    dahil successful na ang SAVE.
 */
 pendingAttendanceEdits = {};
-
 proceedAttendanceBtn.disabled = false;
-
     } catch (error) {
-
       console.error(
         "Save attendance error:",
         error
       );
-
       attendanceMessage.textContent =
         error.message ||
         "Unable to save attendance.";
-
     }
-
-
     saveAttendanceBtn.disabled =
       false;
-
   }
 );
-
   
 /* =====================================================
    PROCEED ATTENDANCE
    ===================================================== */
-
 proceedAttendanceBtn.addEventListener(
   "click",
   async function () {
-
 if (!attendanceSaved) {
   attendanceMessage.textContent =
     "Please SAVE the attendance first.";
@@ -3350,25 +2480,15 @@ if (!attendanceSaved) {
       !attendanceAccessCode ||
       !attendanceSection
     ) {
-
       attendanceMessage.textContent =
         "Please select a section.";
-
       return;
-
     }
-
-
     attendanceMessage.textContent =
       "Saving attendance...";
-
-
     proceedAttendanceBtn.disabled =
       true;
-
-
     try {
-
       const requestUrl =
         APPS_SCRIPT_URL +
         "?action=proceedAttendance" +
@@ -3384,133 +2504,84 @@ if (!attendanceSaved) {
         encodeURIComponent(
           userName
         );
-
-
       const result =
         await jsonpRequest(
           requestUrl
         );
-
-
       if (
         !result ||
         !result.success
       ) {
-
         throw new Error(
           result &&
           result.message
             ? result.message
             : "Unable to proceed attendance."
         );
-
       }
-
-
       attendanceMessage.textContent =
         "Attendance proceeded successfully.";
-
-
     } catch (error) {
-
       console.error(
         "Proceed attendance error:",
         error
       );
-
-
       attendanceMessage.textContent =
         error.message ||
         "Unable to proceed attendance.";
-
-
       proceedAttendanceBtn.disabled =
         false;
-
       return;
-
     }
-
-
     proceedAttendanceBtn.disabled =
       false;
-
   }
 );
-
-
 /* =====================================================
    PM DISPLAY
    ===================================================== */
-
 function isPMDisplayTime() {
-
   const now =
     new Date();
-
   const currentMinutes =
     now.getHours() * 60 +
     now.getMinutes();
-
-
   return (
     currentMinutes >= 725
   );
-
 }
-
-
 function updateSchoolSummaryPMDisplay() {
-
   const showPM =
     isPMDisplayTime();
-
-
   const pmCards = [
-
     "jhsPmPresentCard",
     "jhsPmAbsentCard",
     "jhsPmLateCard",
     "shsPmPresentCard",
     "shsPmAbsentCard",
     "shsPmLateCard"
-
   ];
-
-
   pmCards.forEach(
     function (id) {
-
       const card =
         document.getElementById(
           id
         );
-
-
       if (!card) {
         return;
       }
-
-
       card.style.display =
         showPM
           ? ""
           : "none";
-
     }
   );
-
 }
-
-
 /* =====================================================
    EMPTY SUMMARY
    ===================================================== */
-
 function createEmptySummary() {
-
   return {
-
     total: 0,
     amPresent: 0,
     amAbsent: 0,
@@ -3518,254 +2589,173 @@ function createEmptySummary() {
     pmPresent: 0,
     pmAbsent: 0,
     pmLate: 0
-
   };
-
 }
-
-
 /* =====================================================
    JHS / SHS SUMMARY
    ===================================================== */
-
 function getJhsShsSummary(
   sections
 ) {
-
   const jhs =
     createEmptySummary();
-
   const shs =
     createEmptySummary();
-
-
   (
     sections || []
   ).forEach(
     function (section) {
-
       const sectionName =
         String(
           section.section || ""
         ).trim();
-
-
       const grade =
         getGradeNumber(
           sectionName
         );
-
-
       let target =
         null;
-
-
       if (
         grade >= 7 &&
         grade <= 10
       ) {
-
         target =
           jhs;
-
       } else if (
         grade >= 11 &&
         grade <= 12
       ) {
-
         target =
           shs;
-
       }
-
-
       if (!target) {
         return;
       }
-
-
       target.total +=
         Number(
           section.total || 0
         );
-
       target.amPresent +=
         Number(
           section.amPresent || 0
         );
-
       target.amAbsent +=
         Number(
           section.amAbsent || 0
         );
-
       target.amLate +=
         Number(
           section.amLate || 0
         );
-
       target.pmPresent +=
         Number(
           section.pmPresent || 0
         );
-
       target.pmAbsent +=
         Number(
           section.pmAbsent || 0
         );
-
       target.pmLate +=
         Number(
           section.pmLate || 0
         );
-
     }
   );
-
-
   return {
-
     jhs:
       jhs,
-
     shs:
       shs
-
   };
-
 }
-
-
 /* =====================================================
    DISPLAY SUMMARY
    ===================================================== */
-
 function displayGroupSummary(
   prefix,
   data
 ) {
-
   const values = {
-
     Total:
       Number(
         data.total || 0
       ),
-
     AmPresent:
       Number(
         data.amPresent || 0
       ),
-
     AmAbsent:
       Number(
         data.amAbsent || 0
       ),
-
     AmLate:
       Number(
         data.amLate || 0
       ),
-
     PmPresent:
       Number(
         data.pmPresent || 0
       ),
-
     PmAbsent:
       Number(
         data.pmAbsent || 0
       ),
-
     PmLate:
       Number(
         data.pmLate || 0
       )
-
   };
-
-
   Object.keys(
     values
   ).forEach(
     function (suffix) {
-
       const element =
         document.getElementById(
           prefix + suffix
         );
-
-
       if (element) {
-
         element.textContent =
           values[suffix];
-
       }
-
     }
   );
-
 }
-
-
 /* =====================================================
    LOAD ATTENDANCE SUMMARY
    ===================================================== */
-
 async function loadAttendanceSummary() {
-
   try {
-
     const requestUrl =
       APPS_SCRIPT_URL +
       "?summary=today";
-
-
     const result =
       await jsonpRequest(
         requestUrl
       );
-
-
     if (
       !result ||
       !result.success
     ) {
-
       throw new Error(
         "Unable to load attendance."
       );
-
     }
-
-
     const grouped =
       getJhsShsSummary(
         result.sections || []
       );
-
-
     displayGroupSummary(
       "jhs",
       grouped.jhs
     );
-
-
     displayGroupSummary(
       "shs",
       grouped.shs
     );
-
-
     updateSchoolSummaryPMDisplay();
-
-
     renderSectionAttendance(
       result.sections || []
     );
-
-
     attendanceUpdated.textContent =
       "Updated " +
       new Date().toLocaleTimeString(
@@ -3773,68 +2763,46 @@ async function loadAttendanceSummary() {
         {
           hour:
             "2-digit",
-
           minute:
             "2-digit",
-
           second:
             "2-digit"
         }
       );
-
-
   } catch (error) {
-
     console.error(
       "Attendance update error:",
       error
     );
-
-
     attendanceUpdated.textContent =
       "Unable to update attendance.";
-
   }
-
 }
-
-
 /* =====================================================
    GRADE
    ===================================================== */
-
 function getGradeNumber(
   sectionName
 ) {
-
   const match =
     String(
       sectionName || ""
     ).match(
       /\b(7|8|9|10|11|12)\b/
     );
-
-
   if (!match) {
     return 99;
   }
-
-
   return Number(
     match[1]
   );
-
 }
-
-
 /* =====================================================
    SORT SECTIONS
    ===================================================== */
-
 function sortSections(
   sections
 ) {
-
   return (
     sections || []
   )
@@ -3844,89 +2812,62 @@ function sortSections(
         a,
         b
       ) {
-
         const nameA =
           String(
             a.section || ""
           );
-
         const nameB =
           String(
             b.section || ""
           );
-
-
         const gradeA =
           getGradeNumber(
             nameA
           );
-
         const gradeB =
           getGradeNumber(
             nameB
           );
-
-
         if (
           gradeA !== gradeB
         ) {
-
           return (
             gradeA -
             gradeB
           );
-
         }
-
-
         return nameA.localeCompare(
           nameB,
           undefined,
           {
             numeric:
               true,
-
             sensitivity:
               "base"
           }
         );
-
       }
     );
-
 }
-
-
 /* =====================================================
    SECTION TABLE
    ===================================================== */
-
 function renderSectionAttendance(
   sections
 ) {
-
   const sorted =
     sortSections(
       sections
     );
-
-
   if (
     sorted.length === 0
   ) {
-
     sectionAttendance.innerHTML =
       '<div style="color:#ffffff;text-align:center;padding:15px;">No section data available.</div>';
-
     return;
-
   }
-
-
   const showPM =
     isPMDisplayTime();
-
-
   let html =
     '<div class="section-table-wrap">' +
     '<table class="section-table">' +
@@ -3937,135 +2878,93 @@ function renderSectionAttendance(
     '<th class="am-present-head">AM<br>P</th>' +
     '<th class="am-absent-head">AM<br>A</th>' +
     '<th class="am-late-head">AM<br>L</th>';
-
-
   if (showPM) {
-
     html +=
       '<th class="pm-present-head">PM<br>P</th>' +
       '<th class="pm-absent-head">PM<br>A</th>' +
       '<th class="pm-late-head">PM<br>L</th>';
-
   }
-
-
   html +=
     '</tr>' +
     '</thead>' +
     '<tbody>';
-
-
   sorted.forEach(
     function (section) {
-
       html +=
         '<tr>' +
-
         '<td class="section-table-name">' +
         escapeHtml(
           section.section || ""
         ) +
         '</td>' +
-
         '<td class="total-cell">' +
         Number(
           section.total || 0
         ) +
         '</td>' +
-
         '<td class="am-present-cell">' +
         Number(
           section.amPresent || 0
         ) +
         '</td>' +
-
         '<td class="am-absent-cell">' +
         Number(
           section.amAbsent || 0
         ) +
         '</td>' +
-
         '<td class="am-late-cell">' +
         Number(
           section.amLate || 0
         ) +
         '</td>';
-
-
       if (showPM) {
-
         html +=
           '<td class="pm-present-cell">' +
           Number(
             section.pmPresent || 0
           ) +
           '</td>' +
-
           '<td class="pm-absent-cell">' +
           Number(
             section.pmAbsent || 0
           ) +
           '</td>' +
-
           '<td class="pm-late-cell">' +
           Number(
             section.pmLate || 0
           ) +
           '</td>';
-
       }
-
-
       html +=
         '</tr>';
-
     }
   );
-
-
   html +=
     '</tbody>' +
     '</table>' +
     '</div>';
-
-
   sectionAttendance.innerHTML =
     html;
-
 }
-
-
 /* =====================================================
    DEVICE HEARTBEAT
    ===================================================== */
-
 function startDeviceHeartbeat() {
-
   if (heartbeatTimer) {
-
     clearInterval(
       heartbeatTimer
     );
-
   }
-
-
   heartbeatTimer =
     setInterval(
       async function () {
-
         if (
           !deviceKey ||
           !sessionToken
         ) {
-
           return;
-
         }
-
-
         try {
-
           const requestUrl =
             APPS_SCRIPT_URL +
             "?heartbeat=1" +
@@ -4081,76 +2980,51 @@ function startDeviceHeartbeat() {
             encodeURIComponent(
               platform
             );
-
-
           await jsonpRequest(
             requestUrl
           );
-
-
         } catch (error) {
-
           console.log(
             "Heartbeat error:",
             error
           );
-
         }
-
       },
       20000
     );
-
 }
-
-
 /* =====================================================
    RELEASE DEVICE SESSION
    ===================================================== */
-
 function releaseDeviceSession() {
-
   return new Promise(
     function (resolve) {
-
       if (
         !deviceKey ||
         !sessionToken
       ) {
-
         console.log(
           "Release skipped: no device session."
         );
-
         resolve(
           false
         );
-
         return;
-
       }
-
-
       const currentDevice =
         String(
           deviceKey
         );
-
-
       const currentSession =
         String(
           sessionToken
         );
-
-
       const currentPlatform =
         String(
           platform || ""
         )
           .toLowerCase()
           .trim();
-
-
       const requestUrl =
         APPS_SCRIPT_URL +
         "?release=1" +
@@ -4168,849 +3042,479 @@ function releaseDeviceSession() {
         ) +
         "&_=" +
         Date.now();
-
-
       console.log(
         "RELEASING DEVICE:",
         currentDevice,
         currentPlatform
       );
-
-
       const image =
         new Image();
-
-
       let completed =
         false;
-
-
       const finish =
         function () {
-
           if (completed) {
             return;
           }
-
           completed =
             true;
-
           if (heartbeatTimer) {
-
             clearInterval(
               heartbeatTimer
             );
-
             heartbeatTimer =
               null;
-
           }
-
           resolve(
             true
           );
-
         };
-
-
       image.onload =
         finish;
-
       image.onerror =
         finish;
-
-
       try {
-
         image.src =
           requestUrl;
-
         console.log(
           "RELEASE REQUEST SENT"
         );
-
       } catch (error) {
-
         console.log(
           "Release error:",
           error
         );
-
         finish();
-
       }
-
-
       /* Safety timeout */
-
       setTimeout(
         finish,
         5000
       );
-
     }
   );
-
 }
-
-
 /* =====================================================
    MANUAL EXIT / LOGOUT
    ===================================================== */
-
 async function exitScanner() {
-
   console.log(
     "LOGOUT / EXIT SCANNER STARTED"
   );
-
-
   /* =================================================
      STOP SCANNER
      ================================================= */
-
   if (
     scannerRunning &&
     html5QrCode
   ) {
-
     try {
-
       await html5QrCode.stop();
-
     } catch (error) {
-
       console.log(
         "Scanner stop on exit:",
         error
       );
-
     }
-
     scannerRunning =
       false;
-
   }
-
-
   /* =================================================
      RELEASE DEVICE SESSION
      ================================================= */
-
   if (
     deviceKey &&
     sessionToken
   ) {
-
     await releaseDeviceSession();
-
   }
-
-
   /* =================================================
      CLEAR LOCAL SESSION
      ================================================= */
-
   sessionActive =
     false;
-
   deviceKey =
     "";
-
   sessionToken =
     "";
-
   releaseSent =
     false;
-
-
   /* =================================================
      STOP HEARTBEAT
      ================================================= */
-
   if (heartbeatTimer) {
-
     clearInterval(
       heartbeatTimer
     );
-
     heartbeatTimer =
       null;
-
   }
-
-
   /* =================================================
      STOP ATTENDANCE TIMER
      ================================================= */
-
   if (attendanceTimer) {
-
     clearInterval(
       attendanceTimer
     );
-
     attendanceTimer =
       null;
-
   }
-
-
   /* =================================================
      RESET SCANNER OBJECT
      ================================================= */
-
   html5QrCode =
     null;
-
   cameras =
     [];
-
   currentCameraIndex =
     0;
-
   processing =
     false;
-
-
 /* =================================================
    RETURN TO USER / NAME PAGE
    ================================================= */
-
 scannerPage.style.display =
   "none";
-
 attendancePage.style.display =
   "none";
-
 devicePage.style.display =
   "none";
-
 userPage.style.display =
   "block";
-
-
 /* RESET NAME */
-
 userName = "";
-
 userNameInput.value =
   "";
-
 userMessage.textContent =
   "";
-
 userMessage.className =
   "";
-
-
 /* RESET DEVICE PAGE */
-
 deviceCode.value =
   "";
-
 deviceMessage.textContent =
   "";
-
 deviceMessage.className =
   "";
-
-
 readyBar.textContent =
   "● READY TO SCAN";
-
 readyBar.style.color =
   "#16803c";
-
-
 continueBtn.disabled =
   false;
-
 continueBtn.textContent =
   "CONTINUE";
-
-
 /* FOCUS NAME */
-
 userNameInput.focus();
-
 }
   
 /* =====================================================
    VISIBILITY CHANGE
    DO NOT RELEASE SESSION
    ===================================================== */
-
 document.addEventListener(
   "visibilitychange",
   function () {
-
     if (
       document.visibilityState ===
       "visible"
     ) {
-
       if (
         deviceKey &&
         sessionToken &&
         !heartbeatTimer
       ) {
-
         startDeviceHeartbeat();
-
       }
-
     }
-
   }
 );
-
-
 /* =====================================================
    START CAMERA
    ===================================================== */
-
 async function startCamera() {
-
   try {
-
     if (
       navigator.permissions &&
       navigator.permissions.query
     ) {
-
       try {
-
         const permission =
           await navigator.permissions.query({
             name:
               "camera"
           });
-
-
         console.log(
           "Camera permission:",
           permission.state
         );
-
-
       } catch (permissionError) {
-
         console.log(
           "Camera permission check skipped:",
           permissionError
         );
-
       }
-
     }
-
-
     cameras =
       await Html5Qrcode.getCameras();
-
-
     if (
       !cameras ||
       cameras.length === 0
     ) {
-
       showOverlay(
         "CAMERA ERROR",
         "No camera was found on this device.",
         true
       );
-
       return;
-
     }
-
-
     const backIndex =
       cameras.findIndex(
         function (camera) {
-
           return /back|rear|environment/i.test(
             camera.label || ""
           );
-
         }
       );
-
-
     currentCameraIndex =
       backIndex >= 0
         ? backIndex
         : 0;
-
-
     html5QrCode =
       new Html5Qrcode(
         "reader"
       );
-
-
     await startSelectedCamera();
-
-
   } catch (error) {
-
     console.error(
       "Start camera error:",
       error
     );
-
-
     showOverlay(
       "CAMERA ERROR",
       "Please allow camera permission and try again.",
       true
     );
-
-
     throw error;
-
   }
-
 }
-
-
 /* =====================================================
    START SELECTED CAMERA
    ===================================================== */
-
 async function startSelectedCamera() {
-
   if (!html5QrCode) {
     return;
   }
-
   if (!cameras.length) {
     return;
   }
-
-
   const camera =
     cameras[
       currentCameraIndex
     ];
-
-
   if (!camera) {
     return;
   }
-
-
   if (scannerRunning) {
     return;
   }
-
-
   try {
-
     await html5QrCode.start(
-
       camera.id,
-
       {
         fps:
           15,
-
         qrbox:
           function (
             viewfinderWidth,
             viewfinderHeight
           ) {
-
             const size =
               Math.min(
                 viewfinderWidth,
                 viewfinderHeight
               ) *
               0.80;
-
-
             return {
               width:
                 size,
-
               height:
                 size
             };
-
           },
-
         aspectRatio:
           1.0
-
       },
-
       onQrDetected,
-
       function () {
         /* Normal scanning errors */
       }
-
     );
-
-
     scannerRunning =
       true;
-
     processing =
       false;
-
-
     hideOverlay();
-
-
     readyBar.textContent =
       "● READY TO SCAN";
-
     readyBar.style.color =
       "#16803c";
-
-
   } catch (error) {
-
     scannerRunning =
       false;
-
     throw error;
-
   }
-
 }
-
   
 /* =====================================================
    QR SCAN BEEP
    ===================================================== */
-
 let audioContext = null;
-
 function unlockAudio() {
-
   try {
-
     if (!audioContext) {
-
       audioContext =
         new (window.AudioContext ||
           window.webkitAudioContext)();
-
     }
-
     if (
       audioContext.state ===
       "suspended"
     ) {
-
       audioContext.resume();
-
     }
-
   } catch (error) {
-
     console.log(
       "Audio unlock error:",
       error
     );
-
   }
-
 }
-
-
 function beep(
   frequency = 1000,
   duration = 130
 ) {
-
   try {
-
     unlockAudio();
-
     if (!audioContext) {
       return;
     }
-
     const oscillator =
       audioContext.createOscillator();
-
     const gainNode =
       audioContext.createGain();
-
     oscillator.type =
       "sine";
-
     oscillator.frequency.value =
       frequency;
-
     gainNode.gain.value =
       0.15;
-
     oscillator.connect(
       gainNode
     );
-
     gainNode.connect(
       audioContext.destination
     );
-
     oscillator.start();
-
     oscillator.stop(
       audioContext.currentTime +
       duration / 1000
     );
-
   } catch (error) {
-
     console.log(
       "Beep error:",
       error
     );
-
   }
-
 }
-
-
-
 /* =====================================================
    QR DETECTED
    ===================================================== */
-
 async function onQrDetected(
   decodedText
 ) {
-
-  if (processing) {
+  if (processing) return;
+  if (!deviceKey || !sessionToken) {
+    console.log("QR ignored: no active device session.");
     return;
   }
-
-
-  if (
-    !deviceKey ||
-    !sessionToken
-  ) {
-
-    console.log(
-      "QR ignored: no active device session."
-    );
-
-    return;
-
-  }
-
 
   processing = true;
-
-
-  window.qrProcessingStart =
-    performance.now();
-
-
-  beep(
-    1000,
-    130
-  );
-
+  window.qrProcessingStart = performance.now();
+  beep(1000, 130);
 
   try {
-
-    if (
-      html5QrCode &&
-      scannerRunning
-    ) {
-
-      await html5QrCode.pause(
-        true
-      );
-
+    if (html5QrCode && scannerRunning) {
+      await html5QrCode.pause(true);
     }
-
   } catch (error) {
-
-    console.log(
-      "Pause error:",
-      error
-    );
-
+    console.log("Pause error:", error);
   }
 
-
-  readyBar.textContent =
-    "PROCESSING...";
-
-  readyBar.style.color =
-    "#1267a5";
-
-
+  readyBar.textContent = "PROCESSING...";
+  readyBar.style.color = "#1267a5";
   showProcessing();
 
+  // Accept both the current section|LRN QR and the legacy SENHS|QR|LRN QR.
+  // For section|LRN, pass the complete payload to Apps Script so it can
+  // validate the section against STUDENTS column C.
+  const qrText = String(decodedText || "").trim();
+  const qrParts = qrText.split("|");
+  let payloadForServer = "";
 
-  /* =================================================
-     NEW SENHS QR FORMAT
-
-     Example:
-     SENHS|QR|123456789012
-
-     Hindi URL.
-     Hindi website.
-     ================================================= */
-
-  let qrText =
-    String(
-      decodedText || ""
-    ).trim();
-
-
-  const qrParts =
-    qrText.split("|");
-
-
-  if (
-    qrParts.length !== 3 ||
-    qrParts[0].trim().toUpperCase() !== "SENHS" ||
-    qrParts[1].trim().toUpperCase() !== "QR"
+  if (qrParts.length === 2 && /^\d+\s*[-–]\s*.+$/.test(qrParts[0].trim())) {
+    const section = qrParts[0].trim();
+    const lrn = qrParts[1].trim();
+    if (section && /^\d{12}$/.test(lrn)) payloadForServer = section + "|" + lrn;
+  } else if (
+    qrParts.length === 3 &&
+    qrParts[0].trim().toUpperCase() === "SENHS" &&
+    qrParts[1].trim().toUpperCase() === "QR" &&
+    /^\d{12}$/.test(qrParts[2].trim())
   ) {
-
-    console.log(
-      "Invalid SENHS QR format:",
-      qrText
-    );
-
-
-    showResult({
-
-      success: false,
-
-      message:
-        "INVALID SENHS QR CODE"
-
-    });
-
-
-    return;
-
+    // Legacy QR remains supported; the Apps Script receives the LRN only.
+    payloadForServer = qrParts[2].trim();
+  } else if (/^\d{12}$/.test(qrText)) {
+    // Also accept a plain 12-digit LRN for existing QR cards.
+    payloadForServer = qrText;
   }
 
-
-  const lrn =
-    qrParts[2].trim();
-
-
-  if (!lrn) {
-
+  if (!payloadForServer) {
     showResult({
-
       success: false,
-
-      message:
-        "INVALID QR CODE"
-
+      message: "INVALID QR. Expected 7-Banaba|12-digit-LRN or SENHS|QR|12-digit-LRN."
     });
-
-
     return;
-
   }
-
-
-  /* =================================================
-     SEND LRN TO GOOGLE APPS SCRIPT
-     ================================================= */
 
   try {
-
     const requestUrl =
       APPS_SCRIPT_URL +
-      "?lrn=" +
-      encodeURIComponent(
-        lrn
-      ) +
-      "&device=" +
-      encodeURIComponent(
-        deviceKey
-      ) +
-      "&session=" +
-      encodeURIComponent(
-        sessionToken
-      ) +
-      "&platform=" +
-      encodeURIComponent(
-        platform
-      );
+      "?lrn=" + encodeURIComponent(payloadForServer) +
+      "&device=" + encodeURIComponent(deviceKey) +
+      "&session=" + encodeURIComponent(sessionToken) +
+      "&platform=" + encodeURIComponent(platform);
 
+    const result = await jsonpRequest(requestUrl);
+    showResult(result);
 
-    const result =
-      await jsonpRequest(
-        requestUrl
-      );
-
-
-    showResult(
-      result
-    );
-
-
-    if (
-      result &&
-      result.success
-    ) {
-
-      beep(
-        1400,
-        180
-      );
-
-
-      setTimeout(
-        loadAttendanceSummary,
-        500
-      );
-
+    if (result && result.success) {
+      beep(1400, 180);
+      setTimeout(loadAttendanceSummary, 500);
     }
-
-
   } catch (error) {
-
-    console.error(
-      "QR server error:",
-      error
-    );
-
-
-    showResult({
-
-      success:
-        false,
-
-      message:
-        "Unable to connect to server."
-
-    });
-
+    console.error("QR server error:", error);
+    showResult({ success: false, message: "Unable to connect to server." });
   }
-
 }
-
-
 /* =====================================================
    PROCESSING
    ===================================================== */
-
 function showProcessing() {
-
   scanOverlay.style.display =
     "flex";
-
   scanOverlay.style.background =
     "rgba(0,0,0,0.72)";
-
-
   overlayContent.innerHTML =
     '<div style="' +
     'width:100%;' +
@@ -5023,40 +3527,28 @@ function showProcessing() {
     'box-sizing:border-box;' +
     'color:#ffffff;' +
     '">' +
-
     '<div class="processing-title">' +
     'PROCESSING...' +
     '</div>' +
-
     '<div class="processing-text">' +
     'Please wait while the attendance is being recorded.' +
     '</div>' +
-
     '</div>';
-
 }
-
-
 /* =====================================================
    ERROR OVERLAY
    ===================================================== */
-
 function showOverlay(
   title,
   message,
   isError
 ) {
-
   scanOverlay.style.display =
     "flex";
-
-
   scanOverlay.style.background =
     isError
       ? "#b71c1c"
       : "rgba(0,0,0,0.72)";
-
-
   overlayContent.innerHTML =
     '<div style="' +
     'width:100%;' +
@@ -5075,96 +3567,65 @@ function showOverlay(
     'box-sizing:border-box;' +
     'color:#ffffff;' +
     '">' +
-
     '<div style="' +
     'font-size:30px;' +
     'font-weight:900;' +
     'color:#ffffff;' +
     'margin-bottom:18px;' +
     '">' +
-
     escapeHtml(
       title ||
       "NOTICE"
     ) +
-
     '</div>' +
-
     '<div style="' +
     'font-size:20px;' +
     'font-weight:700;' +
     'color:#ffffff;' +
     '">' +
-
     escapeHtml(
       message || ""
     ) +
-
     '</div>' +
-
     '</div>';
-
 }
-
-
 /* =====================================================
    RESULT
    ===================================================== */
-
 function showResult(
   result
 ) {
-
   if (
     showResult.timer
   ) {
-
     clearTimeout(
       showResult.timer
     );
-
   }
-
-
   scanOverlay.style.display =
     "flex";
-
-
   const isSuccess =
     result &&
     result.success;
-
-
   const isLate =
     isSuccess &&
     result.status ===
       "LATE";
-
-
   scanOverlay.style.background =
     isLate ||
     !isSuccess
       ? "#b71c1c"
       : "#0d47a1";
-
-
   if (isSuccess) {
-
     const name =
       result.name ||
       "STUDENT";
-
-
     const section =
       result.section ||
       "";
-
-
     const event =
       result.event ||
       "";
-
-
     let html =
       '<div style="' +
       'width:100%;' +
@@ -5179,7 +3640,6 @@ function showResult(
       'color:#ffffff;' +
       'font-family:Arial,sans-serif;' +
       '">' +
-
       '<div style="' +
       'font-size:34px;' +
       'font-weight:900;' +
@@ -5187,26 +3647,20 @@ function showResult(
       'line-height:1.15;' +
       'margin:15px 0;' +
       '">' +
-
       escapeHtml(
         name
       ) +
-
       '</div>' +
-
       '<div style="' +
       'font-size:22px;' +
       'font-weight:700;' +
       'color:#ffffff;' +
       'margin-bottom:22px;' +
       '">' +
-
       escapeHtml(
         section
       ) +
-
       '</div>' +
-
       '<div style="' +
       'display:inline-block;' +
       'padding:10px 25px;' +
@@ -5217,16 +3671,11 @@ function showResult(
       'border:2px solid #ffffff;' +
       'border-radius:12px;' +
       '">' +
-
       escapeHtml(
         event
       ) +
-
       '</div>';
-
-
     if (isLate) {
-
       html +=
         '<div style="' +
         'margin-top:18px;' +
@@ -5239,31 +3688,19 @@ function showResult(
         'padding:8px 25px;' +
         'display:inline-block;' +
         '">' +
-
         'LATE' +
-
         '</div>';
-
     }
-
-
     html +=
       '</div>';
-
-
     overlayContent.innerHTML =
       html;
-
-
   } else {
-
     const message =
       result &&
       result.message
         ? result.message
         : "SCAN FAILED";
-
-
     overlayContent.innerHTML =
       '<div style="' +
       'width:100%;' +
@@ -5277,41 +3714,29 @@ function showResult(
       'box-sizing:border-box;' +
       'color:#ffffff;' +
       '">' +
-
       '<div style="' +
       'font-size:30px;' +
       'font-weight:900;' +
       'color:#ffffff;' +
       'margin-bottom:18px;' +
       '">' +
-
       'SCAN NOT RECORDED' +
-
       '</div>' +
-
       '<div style="' +
       'font-size:20px;' +
       'font-weight:700;' +
       'color:#ffffff;' +
       '">' +
-
       escapeHtml(
         message
       ) +
-
       '</div>' +
-
       '</div>';
-
-
     beep(
       600,
       180
     );
-
   }
-
-
   const processingTime =
     window.qrProcessingStart
       ? (
@@ -5322,435 +3747,272 @@ function showResult(
           1000
         ).toFixed(2)
       : "0.00";
-
-
   console.log(
     "QR PROCESSING TIME: " +
     processingTime +
     " seconds"
   );
-
-
   showResult.timer =
     setTimeout(
       function () {
-
         resumeScanner();
-
       },
       2000
     );
-
 }
-
-
 /* =====================================================
    RESUME SCANNER
    ===================================================== */
-
 async function resumeScanner() {
-
   hideOverlay();
-
   processing =
     false;
-
-
   readyBar.textContent =
     "● READY TO SCAN";
-
   readyBar.style.color =
     "#16803c";
-
-
   try {
-
     if (
       html5QrCode &&
       scannerRunning
     ) {
-
       try {
-
         await html5QrCode.resume();
-
         console.log(
           "Scanner resumed successfully."
         );
-
         return;
-
       } catch (resumeError) {
-
         console.log(
           "Resume failed. Restarting scanner...",
           resumeError
         );
-
       }
-
     }
-
-
     if (
       html5QrCode &&
       scannerRunning
     ) {
-
       try {
-
         await html5QrCode.stop();
-
       } catch (stopError) {
-
         console.log(
           "Scanner stop error:",
           stopError
         );
-
       }
-
     }
-
-
     scannerRunning =
       false;
-
-
     await startSelectedCamera();
-
-
     console.log(
       "Scanner restarted successfully."
     );
-
-
   } catch (error) {
-
     console.error(
       "Scanner recovery error:",
       error
     );
-
-
     scannerRunning =
       false;
-
-
     readyBar.textContent =
       "CAMERA ERROR";
-
     readyBar.style.color =
       "#b71c1c";
-
   }
-
 }
-
-
 /* =====================================================
    HIDE OVERLAY
    ===================================================== */
-
 function hideOverlay() {
-
   scanOverlay.style.display =
     "none";
-
 }
-
-
 /* =====================================================
    SWITCH CAMERA
    ===================================================== */
-
 switchCameraBtn.addEventListener(
   "click",
   async function () {
-
     if (
       processing ||
       cameras.length < 2 ||
       !html5QrCode
     ) {
-
       return;
-
     }
-
-
     processing =
       true;
-
     switchCameraBtn.disabled =
       true;
-
-
     readyBar.textContent =
       "SWITCHING CAMERA...";
-
     readyBar.style.color =
       "#1267a5";
-
-
     const previousIndex =
       currentCameraIndex;
-
-
     try {
-
       if (scannerRunning) {
-
         try {
-
           await html5QrCode.stop();
-
         } catch (error) {
-
           console.log(
             "Camera stop:",
             error
           );
-
         }
-
         scannerRunning =
           false;
-
       }
-
-
       currentCameraIndex =
         (
           currentCameraIndex +
           1
         ) %
         cameras.length;
-
-
       await startSelectedCamera();
-
-
     } catch (error) {
-
       console.error(
         "Camera switch error:",
         error
       );
-
-
       currentCameraIndex =
         previousIndex;
-
-
       scannerRunning =
         false;
-
-
       try {
-
         await startSelectedCamera();
-
       } catch (recoverError) {
-
         console.error(
           "Camera recovery error:",
           recoverError
         );
-
       }
-
     } finally {
-
       processing =
         false;
-
       switchCameraBtn.disabled =
         false;
-
-
       readyBar.textContent =
         "● READY TO SCAN";
-
       readyBar.style.color =
         "#16803c";
-
     }
-
   }
 );
-
  /* =====================================================
    ADVISER / ADMIN LOGOUT
    ===================================================== */
-
 attendanceLogoutBtn.addEventListener(
   "click",
   function () {
-
     console.log(
       "ADVISER / ADMIN LOGOUT STARTED"
     );
-
-
     /* ================================
        CLEAR ATTENDANCE SESSION
        ================================ */
-
     attendanceAccessCode =
       "";
-
     attendanceRole =
       "";
-
     attendanceSection =
       "";
-
     attendanceStudents =
       [];
-
-
     /* ================================
        RESET ATTENDANCE PAGE
        ================================ */
-
     attendanceRoleTitle.textContent =
       "Adviser / Admin Attendance";
-
     attendanceSectionSelect.value =
       "";
-
     attendanceCurrentSection.textContent =
       "Section: —";
-
     attendanceTableBody.innerHTML =
       "";
-
     attendanceMessage.textContent =
       "";
-
     attendanceSectionWrapper.style.display =
       "none";
-
     proceedAttendanceBtn.disabled =
       true;
-
-
     /* ================================
        RETURN TO USER / NAME PAGE
        ================================ */
-
     attendancePage.style.display =
       "none";
-
     scannerPage.style.display =
       "none";
-
     devicePage.style.display =
       "none";
-
     userPage.style.display =
       "block";
-
-
     /* ================================
        RESET NAME
        ================================ */
-
     userName =
       "";
-
     userNameInput.value =
       "";
-
     userMessage.textContent =
       "";
-
     userMessage.className =
       "";
-
-
     /* ================================
        RESET DEVICE ACCESS UI
        ================================ */
-
     deviceCode.value =
       "";
-
     deviceMessage.textContent =
       "";
-
     deviceMessage.className =
       "";
-
     continueBtn.disabled =
       false;
-
     continueBtn.textContent =
       "CONTINUE";
-
-
     /* ================================
        FOCUS NAME INPUT
        ================================ */
-
     userNameInput.focus();
-
-
     console.log(
       "ADVISER / ADMIN LOGOUT COMPLETED"
     );
-
   }
 );
-
 /* =====================================================
    BUTTON EVENTS
    ===================================================== */
-
 continueBtn.addEventListener(
   "click",
   verifyDevice
 );
-
-
 exitScannerBtn.addEventListener(
   "click",
   exitScanner
 );
-
-
 /* =====================================================
    ENTER KEY
    ===================================================== */
-
 deviceCode.addEventListener(
   "keydown",
   function (event) {
-
     if (
       event.key ===
       "Enter"
     ) {
-
       event.preventDefault();
-
       verifyDevice();
-
     }
-
   }
 );
-
-
 /* =====================================================
    HTML ESCAPE
    ===================================================== */
-
 function escapeHtml(
   value
 ) {
-
   return String(
     value
   )
@@ -5774,172 +4036,114 @@ function escapeHtml(
       /'/g,
       "&#039;"
     );
-
 }
-
-
 /* =====================================================
    PHILIPPINE STANDARD TIME
    ===================================================== */
-
 function updatePSTClock() {
-
   const now =
     new Date();
-
-
   const time =
     new Intl.DateTimeFormat(
       "en-US",
       {
         timeZone:
           "Asia/Manila",
-
         hour:
           "2-digit",
-
         minute:
           "2-digit",
-
         second:
           "2-digit",
-
         hour12:
           true
       }
     ).format(
       now
     );
-
-
   const date =
     new Intl.DateTimeFormat(
       "en-US",
       {
         timeZone:
           "Asia/Manila",
-
         weekday:
           "long",
-
         month:
           "long",
-
         day:
           "numeric",
-
         year:
           "numeric"
       }
     ).format(
       now
     );
-
-
   const timeElement =
     document.getElementById(
       "pstTime"
     );
-
-
   const dateElement =
     document.getElementById(
       "pstDate"
     );
-
-
   if (timeElement) {
-
     timeElement.textContent =
       time;
-
   }
-
-
   if (dateElement) {
-
     dateElement.textContent =
       date;
-
   }
-
   const attendanceTimeElement =
   document.getElementById(
     "attendancePstTime"
   );
-
 const attendanceDateElement =
   document.getElementById(
     "attendancePstDate"
   );
-
-
 if (attendanceTimeElement) {
-
   attendanceTimeElement.textContent =
     time;
-
 }
-
-
 if (attendanceDateElement) {
-
   attendanceDateElement.textContent =
     date;
-
 }
   
 }
-
-
 setInterval(
   updatePSTClock,
   1000
 );
-
-
 updatePSTClock();
-
-
 /* =====================================================
    INITIAL STATE
    ===================================================== */
-
 userPage.style.display =
   "block";
-
 devicePage.style.display =
   "none";
-
 scannerPage.style.display =
   "none";
-
 attendancePage.style.display =
   "none";
-
 continueBtn.disabled =
   false;
-
 continueBtn.textContent =
   "CONTINUE";
-
 proceedAttendanceBtn.disabled =
   true;
-
-
 console.log(
   "SENHS GATE SCANNER READY"
 );
-
 console.log(
   "PLATFORM =",
   platform
 );
-
-
  
   
 </script>
-
 </body>
 </html>
