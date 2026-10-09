@@ -3455,34 +3455,27 @@ async function onQrDetected(
   readyBar.style.color = "#1267a5";
   showProcessing();
 
-  // Accept both the current section|LRN QR and the legacy SENHS|QR|LRN QR.
-  // For section|LRN, pass the complete payload to Apps Script so it can
-  // validate the section against STUDENTS column C.
+
+  // NEW QR FORMAT ONLY: SECTION|LRN
+  // Example: 7-Banaba|123456789012
   const qrText = String(decodedText || "").trim();
   const qrParts = qrText.split("|");
   let payloadForServer = "";
 
-  if (qrParts.length === 2 && /^\d+\s*[-–]\s*.+$/.test(qrParts[0].trim())) {
+  if (
+    qrParts.length === 2 &&
+    /^\d+\s*[-–]\s*.+$/.test(qrParts[0].trim()) &&
+    /^\d{12}$/.test(qrParts[1].trim())
+  ) {
     const section = qrParts[0].trim();
     const lrn = qrParts[1].trim();
-    if (section && /^\d{12}$/.test(lrn)) payloadForServer = section + "|" + lrn;
-  } else if (
-    qrParts.length === 3 &&
-    qrParts[0].trim().toUpperCase() === "SENHS" &&
-    qrParts[1].trim().toUpperCase() === "QR" &&
-    /^\d{12}$/.test(qrParts[2].trim())
-  ) {
-    // Legacy QR remains supported; the Apps Script receives the LRN only.
-    payloadForServer = qrParts[2].trim();
-  } else if (/^\d{12}$/.test(qrText)) {
-    // Also accept a plain 12-digit LRN for existing QR cards.
-    payloadForServer = qrText;
+    payloadForServer = section + "|" + lrn;
   }
 
   if (!payloadForServer) {
     showResult({
       success: false,
-      message: "INVALID QR. Expected 7-Banaba|12-digit-LRN or SENHS|QR|12-digit-LRN."
+      message: "INVALID OR OLD QR CODE. Use the new SECTION|LRN QR code."
     });
     return;
   }
@@ -3504,9 +3497,13 @@ async function onQrDetected(
     }
   } catch (error) {
     console.error("QR server error:", error);
-    showResult({ success: false, message: "Unable to connect to server." });
+    showResult({
+      success: false,
+      message: "Unable to connect to server."
+    });
   }
 }
+  
 /* =====================================================
    PROCESSING
    ===================================================== */
