@@ -1265,6 +1265,106 @@ font-size: 22px !important;
   white-space: nowrap;
 }
     
+
+/* ===== REPORT PAGE DESIGN + NAVIGATION ===== */
+#mamPage, #smsPage {
+  width: 100%;
+  min-height: 100vh;
+  padding: 18px;
+  box-sizing: border-box;
+}
+#mamPage .device-content, #smsPage .device-content {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 22px;
+  border-radius: 18px;
+  background: rgba(255,255,255,.97);
+  box-shadow: 0 8px 28px rgba(0,0,0,.16);
+  box-sizing: border-box;
+}
+#mamPage h2, #smsPage h2 {
+  margin: 6px 0 18px;
+  color: #124b7c;
+  font-size: clamp(22px, 3vw, 30px);
+  font-weight: 900;
+}
+.report-navigation {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+  margin: 16px auto 22px;
+  width: 100%;
+}
+.report-navigation button,
+#attendanceReportNavigation button {
+  flex: 1 1 160px;
+  min-height: 52px;
+  padding: 13px 18px;
+  border: 0;
+  border-radius: 12px;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 900;
+  letter-spacing: .3px;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0,0,0,.16);
+  transition: transform .15s ease, filter .15s ease;
+}
+.report-navigation button:hover,
+#attendanceReportNavigation button:hover { filter: brightness(1.08); transform: translateY(-1px); }
+#openMAMPageBtn, #goMAMFromSYMSBtn { background: linear-gradient(135deg,#1565c0,#2196f3); }
+#openSMSPageBtn, #goSYMSFromMAMBtn { background: linear-gradient(135deg,#6a1b9a,#ab47bc); }
+#goDailyFromMAMBtn, #goDailyFromSYMSBtn { background: linear-gradient(135deg,#00897b,#26a69a); }
+#mamLogoutBtn, #smsLogoutBtn {
+  display: block;
+  width: 100%;
+  max-width: 320px;
+  min-height: 50px;
+  margin: 28px auto 4px;
+  padding: 13px 18px;
+  border: 0;
+  border-radius: 12px;
+  background: #b71c1c;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 900;
+  cursor: pointer;
+}
+#attendanceReportNavigation {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+  margin: 20px auto 8px;
+  width: 100%;
+}
+#attendanceReportNavigation #openMAMPageBtn { background: linear-gradient(135deg,#1565c0,#2196f3); }
+#attendanceReportNavigation #openSMSPageBtn { background: linear-gradient(135deg,#6a1b9a,#ab47bc); }
+#attendanceLogoutBtn { margin-top: 22px; }
+#monthlyAttendanceMonth {
+  display:block; width:100%; max-width:340px; margin:10px auto 14px;
+  padding:12px; border:2px solid #c8d8e8; border-radius:10px;
+  background:#fff; font-size:16px; font-weight:700;
+}
+#loadMonthlyAttendanceBtn, #updateSYSummaryBtn, #saveSYSummaryBtn, #cancelSYSummaryUpdateBtn {
+  min-height:48px; padding:12px 20px; border:0; border-radius:10px;
+  color:#fff; font-weight:900; font-size:15px; cursor:pointer;
+  box-shadow:0 3px 8px rgba(0,0,0,.14); margin:8px 5px;
+}
+#loadMonthlyAttendanceBtn { background:#1976d2; }
+#updateSYSummaryBtn { background:#ef6c00; }
+#saveSYSummaryBtn { background:#238636; }
+#cancelSYSummaryUpdateBtn { background:#616161; }
+#sySummaryMessage, #monthlyAttendanceMessage { font-weight:800; text-align:center; }
+#sySummaryTable, #monthlyAttendanceTable { width:max-content; min-width:100%; }
+@media(max-width:600px) {
+  #mamPage, #smsPage { padding:8px; }
+  #mamPage .device-content, #smsPage .device-content { padding:14px 8px; }
+  .report-navigation button, #attendanceReportNavigation button { flex:1 1 100%; min-height:48px; }
+}
+
   </style>
 </head>
 <body>
@@ -1428,27 +1528,16 @@ font-size: 22px !important;
         >
         PROCEED
       </button>
-      <button
-  id="attendanceLogoutBtn"
-  type="button"
->
-  LOGOUT
-</button>
-      
-
 <!-- REPORT NAVIGATION BUTTONS -->
 <div id="attendanceReportNavigation">
-  <button id="openMAMPageBtn" type="button">
-    MAM
-  </button>
-
-  <button id="openSMSPageBtn" type="button">
-    SMS
-  </button>
+  <button id="openMAMPageBtn" type="button">MAM</button>
+  <button id="openSMSPageBtn" type="button">SYMS</button>
 </div>
 <!-- END REPORT NAVIGATION BUTTONS -->
-      
-      <div id="attendanceMessage"></div>
+
+<div id="attendanceMessage"></div>
+
+<button id="attendanceLogoutBtn" type="button">LOG OUT</button>
     </div>
   </div>
 
@@ -1460,9 +1549,10 @@ font-size: 22px !important;
   <div class="device-content">
     <h2>MONTHLY ATTENDANCE MATRIX</h2>
 
-    <button id="mamLogoutBtn" type="button">
-      LOGOUT
-    </button>
+    <div class="report-navigation" aria-label="MAM navigation">
+      <button id="goDailyFromMAMBtn" type="button">DAILY ATT</button>
+      <button id="goSYMSFromMAMBtn" type="button">SYMS</button>
+    </div>
 
     <label for="monthlyAttendanceMonth">
       Select Month:
@@ -1493,19 +1583,21 @@ font-size: 22px !important;
         <tbody id="monthlyAttendanceTableBody"></tbody>
       </table>
     </div>
+    <button id="mamLogoutBtn" type="button">LOG OUT</button>
   </div>
 </div>
 
 <!-- =====================================================
-     PAGE — SCHOOL YEAR MONTHLY SUMMARY (SMS)
+     PAGE — SCHOOL YEAR MONTHLY SUMMARY (SYMS)
      ===================================================== -->
 <div id="smsPage" style="display:none;">
   <div class="device-content">
-    <h2>SCHOOL YEAR MONTHLY SUMMARY</h2>
+    <h2>SCHOOL YEAR MONTHLY SUMMARY (SYMS)</h2>
 
-    <button id="smsLogoutBtn" type="button">
-      LOGOUT
-    </button>
+    <div class="report-navigation" aria-label="SYMS navigation">
+      <button id="goDailyFromSYMSBtn" type="button">DAILY ATT</button>
+      <button id="goMAMFromSYMSBtn" type="button">MAM</button>
+    </div>
 
     <p id="sySummaryMessage">
       School Year 2026–2027
@@ -1536,6 +1628,7 @@ font-size: 22px !important;
         CANCEL
       </button>
     </div>
+    <button id="smsLogoutBtn" type="button">LOG OUT</button>
   </div>
 </div>
   
@@ -4434,6 +4527,38 @@ attendanceLogoutBtn.addEventListener(
   }
 );
 /* =====================================================
+   REPORT PAGE NAVIGATION
+   Navigation buttons must NOT log the user out.
+   ===================================================== */
+function senhsOpenDailyAttendance() {
+  senhsShowReportPage("attendancePage");
+}
+
+[
+  "goDailyFromMAMBtn",
+  "goDailyFromSYMSBtn"
+].forEach(function(id) {
+  const button = document.getElementById(id);
+  if (button) button.addEventListener("click", senhsOpenDailyAttendance);
+});
+
+const senhsGoSYMSFromMAM = document.getElementById("goSYMSFromMAMBtn");
+if (senhsGoSYMSFromMAM) {
+  senhsGoSYMSFromMAM.addEventListener("click", function() {
+    senhsShowReportPage("smsPage");
+    loadSYSummary();
+  });
+}
+
+const senhsGoMAMFromSYMS = document.getElementById("goMAMFromSYMSBtn");
+if (senhsGoMAMFromSYMS) {
+  senhsGoMAMFromSYMS.addEventListener("click", function() {
+    senhsShowReportPage("mamPage");
+    loadMonthlyAttendance();
+  });
+}
+
+/* =====================================================
    BUTTON EVENTS
    ===================================================== */
 continueBtn.addEventListener(
@@ -4663,13 +4788,7 @@ function senhsShowReportPage(pageName) {
 }
 
 function senhsReturnToAttendance() {
-  const logout = document.getElementById("attendanceLogoutBtn");
-
-  if (logout) {
-    logout.click();
-    return;
-  }
-
+  // Navigation only: preserve the adviser/admin session and attendance state.
   senhsShowReportPage("attendancePage");
 }
 
@@ -5250,16 +5369,19 @@ const senhsMAMLogoutButton = document.getElementById("mamLogoutBtn");
 if (senhsMAMLogoutButton) {
   senhsMAMLogoutButton.addEventListener(
     "click",
-    senhsReturnToAttendance
+    function() {
+      const logout = document.getElementById("attendanceLogoutBtn");
+      if (logout) logout.click();
+    }
   );
 }
 
 const senhsSMSLogoutButton = document.getElementById("smsLogoutBtn");
 if (senhsSMSLogoutButton) {
-  senhsSMSLogoutButton.addEventListener(
-    "click",
-    senhsReturnToAttendance
-  );
+  senhsSMSLogoutButton.addEventListener("click", function() {
+    const logout = document.getElementById("attendanceLogoutBtn");
+    if (logout) logout.click();
+  });
 }
   
 </script>
