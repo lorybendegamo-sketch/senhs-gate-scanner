@@ -615,30 +615,47 @@
       color: #9fb0bd;
       margin-top: 10px;
     }
-    /* =========================
-       OVERLAY
-       ========================= */
-    .scan-overlay {
-      position: absolute;
-      z-index: 30;
-      inset: 0;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-      background: rgba(0,0,0,0.72);
-      backdrop-filter: blur(4px);
-    }
-    .processing-title {
-      font-size: 27px;
-      font-weight: 900;
-      color: #ffffff;
-    }
-    .processing-text {
-      margin-top: 8px;
-      font-size: 15px;
-      color: #ffffff;
-    }
+   
+/* =========================
+   SCAN OVERLAY - RESPONSIVE
+   ========================= */
+.scan-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+
+  display: none;
+  align-items: center;
+  justify-content: center;
+
+  box-sizing: border-box;
+  padding: 16px;
+
+  background: rgba(0, 0, 0, 0.72);
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+}
+
+.scan-overlay > * {
+  box-sizing: border-box;
+  max-width: 100%;
+}
+
+.processing-title {
+  font-size: clamp(21px, 4vw, 27px);
+  font-weight: 900;
+  color: #ffffff;
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+
+.processing-text {
+  margin-top: 8px;
+  font-size: clamp(14px, 2.5vw, 15px);
+  color: #ffffff;
+  text-align: center;
+  overflow-wrap: anywhere;
+}
     /* =========================
        ADVISER / ADMIN ATTENDANCE
        ========================= */
@@ -3553,25 +3570,36 @@ async function onQrDetected(
     showResult({ success: false, message: "Unable to connect to server." });
   }
 }
+
+
 /* =====================================================
-   PROCESSING
+   PROCESSING - RESPONSIVE
    ===================================================== */
 function showProcessing() {
-  scanOverlay.style.display =
-    "flex";
-  scanOverlay.style.background =
-    "rgba(0,0,0,0.72)";
+  scanOverlay.style.display = "flex";
+  scanOverlay.style.position = "fixed";
+  scanOverlay.style.inset = "0";
+  scanOverlay.style.zIndex = "9999";
+  scanOverlay.style.alignItems = "center";
+  scanOverlay.style.justifyContent = "center";
+  scanOverlay.style.boxSizing = "border-box";
+  scanOverlay.style.padding = "16px";
+  scanOverlay.style.background = "rgba(0,0,0,0.72)";
+
   overlayContent.innerHTML =
     '<div style="' +
     'width:100%;' +
     'max-width:700px;' +
-    'padding:30px 20px;' +
+    'max-height:85vh;' +
+    'overflow-y:auto;' +
+    'padding:clamp(20px,4vw,30px);' +
     'text-align:center;' +
     'background:#0d47a1;' +
     'border:3px solid #ffffff;' +
     'border-radius:20px;' +
     'box-sizing:border-box;' +
     'color:#ffffff;' +
+    'font-family:Arial,sans-serif;' +
     '">' +
     '<div class="processing-title">' +
     'PROCESSING...' +
@@ -3581,103 +3609,94 @@ function showProcessing() {
     '</div>' +
     '</div>';
 }
+
 /* =====================================================
-   ERROR OVERLAY
+   ERROR / NOTICE OVERLAY - RESPONSIVE
    ===================================================== */
-function showOverlay(
-  title,
-  message,
-  isError
-) {
-  scanOverlay.style.display =
-    "flex";
-  scanOverlay.style.background =
-    isError
-      ? "#b71c1c"
-      : "rgba(0,0,0,0.72)";
+function showOverlay(title, message, isError) {
+  scanOverlay.style.display = "flex";
+  scanOverlay.style.position = "fixed";
+  scanOverlay.style.inset = "0";
+  scanOverlay.style.zIndex = "9999";
+  scanOverlay.style.alignItems = "center";
+  scanOverlay.style.justifyContent = "center";
+  scanOverlay.style.boxSizing = "border-box";
+  scanOverlay.style.padding = "16px";
+  scanOverlay.style.background = isError
+    ? "#b71c1c"
+    : "rgba(0,0,0,0.72)";
+
   overlayContent.innerHTML =
     '<div style="' +
     'width:100%;' +
     'max-width:700px;' +
-    'padding:30px 20px;' +
+    'max-height:85vh;' +
+    'overflow-y:auto;' +
+    'padding:clamp(20px,4vw,30px);' +
     'text-align:center;' +
-    'background:' +
-    (
-      isError
-        ? "#7f0000"
-        : "#0d47a1"
-    ) +
-    ';' +
+    'background:' + (isError ? "#7f0000" : "#0d47a1") + ';' +
     'border:3px solid #ffffff;' +
     'border-radius:20px;' +
     'box-sizing:border-box;' +
     'color:#ffffff;' +
+    'font-family:Arial,sans-serif;' +
     '">' +
     '<div style="' +
-    'font-size:30px;' +
+    'font-size:clamp(23px,4vw,30px);' +
     'font-weight:900;' +
-    'color:#ffffff;' +
+    'line-height:1.2;' +
+    'overflow-wrap:anywhere;' +
     'margin-bottom:18px;' +
     '">' +
-    escapeHtml(
-      title ||
-      "NOTICE"
-    ) +
+    escapeHtml(title || "NOTICE") +
     '</div>' +
     '<div style="' +
-    'font-size:20px;' +
+    'font-size:clamp(16px,3vw,20px);' +
     'font-weight:700;' +
-    'color:#ffffff;' +
+    'line-height:1.4;' +
+    'overflow-wrap:anywhere;' +
     '">' +
-    escapeHtml(
-      message || ""
-    ) +
+    escapeHtml(message || "") +
     '</div>' +
     '</div>';
 }
+
 /* =====================================================
-   RESULT
+   RESULT - RESPONSIVE
    ===================================================== */
-function showResult(
-  result
-) {
-  if (
-    showResult.timer
-  ) {
-    clearTimeout(
-      showResult.timer
-    );
+function showResult(result) {
+  if (showResult.timer) {
+    clearTimeout(showResult.timer);
   }
-  scanOverlay.style.display =
-    "flex";
-  const isSuccess =
-    result &&
-    result.success;
-  const isLate =
-    isSuccess &&
-    result.status ===
-      "LATE";
+
+  scanOverlay.style.display = "flex";
+  scanOverlay.style.position = "fixed";
+  scanOverlay.style.inset = "0";
+  scanOverlay.style.zIndex = "9999";
+  scanOverlay.style.alignItems = "center";
+  scanOverlay.style.justifyContent = "center";
+  scanOverlay.style.boxSizing = "border-box";
+  scanOverlay.style.padding = "16px";
+
+  const isSuccess = !!(result && result.success);
+  const isLate = isSuccess && result.status === "LATE";
+
   scanOverlay.style.background =
-    isLate ||
-    !isSuccess
-      ? "#b71c1c"
-      : "#0d47a1";
+    isLate || !isSuccess ? "#b71c1c" : "rgba(0,0,0,0.72)";
+
   if (isSuccess) {
-    const name =
-      result.name ||
-      "STUDENT";
-    const section =
-      result.section ||
-      "";
-    const event =
-      result.event ||
-      "";
+    const name = result.name || "STUDENT";
+    const section = result.section || "";
+    const event = result.event || "";
+
     let html =
       '<div style="' +
       'width:100%;' +
       'max-width:850px;' +
+      'max-height:85vh;' +
+      'overflow-y:auto;' +
       'margin:auto;' +
-      'padding:28px 20px;' +
+      'padding:clamp(18px,4vw,28px) 16px;' +
       'text-align:center;' +
       'background:#0d47a1;' +
       'border:3px solid #ffffff;' +
@@ -3687,125 +3706,123 @@ function showResult(
       'font-family:Arial,sans-serif;' +
       '">' +
       '<div style="' +
-      'font-size:34px;' +
+      'font-size:clamp(22px,5vw,34px);' +
       'font-weight:900;' +
-      'color:#ffffff;' +
-      'line-height:1.15;' +
-      'margin:15px 0;' +
+      'line-height:1.2;' +
+      'overflow-wrap:anywhere;' +
+      'margin:12px 0;' +
       '">' +
-      escapeHtml(
-        name
-      ) +
+      escapeHtml(name) +
       '</div>' +
       '<div style="' +
-      'font-size:22px;' +
+      'font-size:clamp(16px,3.5vw,22px);' +
       'font-weight:700;' +
-      'color:#ffffff;' +
-      'margin-bottom:22px;' +
+      'line-height:1.3;' +
+      'overflow-wrap:anywhere;' +
+      'margin-bottom:20px;' +
       '">' +
-      escapeHtml(
-        section
-      ) +
+      escapeHtml(section) +
       '</div>' +
       '<div style="' +
       'display:inline-block;' +
-      'padding:10px 25px;' +
-      'font-size:28px;' +
+      'max-width:100%;' +
+      'padding:10px 20px;' +
+      'font-size:clamp(20px,4.5vw,28px);' +
       'font-weight:900;' +
+      'line-height:1.2;' +
+      'overflow-wrap:anywhere;' +
       'color:#ffffff;' +
       'background:#1565c0;' +
       'border:2px solid #ffffff;' +
       'border-radius:12px;' +
+      'box-sizing:border-box;' +
       '">' +
-      escapeHtml(
-        event
-      ) +
+      escapeHtml(event) +
       '</div>';
+
     if (isLate) {
       html +=
         '<div style="' +
-        'margin-top:18px;' +
-        'font-size:30px;' +
+        'margin:16px auto 0;' +
+        'max-width:100%;' +
+        'font-size:clamp(22px,4.5vw,30px);' +
         'font-weight:900;' +
         'color:#ffffff;' +
         'background:#8b0000;' +
         'border:2px solid #ffffff;' +
         'border-radius:12px;' +
-        'padding:8px 25px;' +
-        'display:inline-block;' +
+        'padding:8px 20px;' +
+        'display:table;' +
+        'box-sizing:border-box;' +
         '">' +
         'LATE' +
         '</div>';
     }
-    html +=
-      '</div>';
-    overlayContent.innerHTML =
-      html;
+
+    html += '</div>';
+    overlayContent.innerHTML = html;
+
   } else {
     const message =
-      result &&
-      result.message
+      result && result.message
         ? result.message
         : "SCAN FAILED";
+
     overlayContent.innerHTML =
       '<div style="' +
       'width:100%;' +
       'max-width:700px;' +
+      'max-height:85vh;' +
+      'overflow-y:auto;' +
       'margin:auto;' +
-      'padding:30px 20px;' +
+      'padding:clamp(20px,4vw,30px) 16px;' +
       'text-align:center;' +
       'background:#7f0000;' +
       'border:3px solid #ffffff;' +
       'border-radius:20px;' +
       'box-sizing:border-box;' +
       'color:#ffffff;' +
+      'font-family:Arial,sans-serif;' +
       '">' +
       '<div style="' +
-      'font-size:30px;' +
+      'font-size:clamp(23px,4vw,30px);' +
       'font-weight:900;' +
-      'color:#ffffff;' +
+      'line-height:1.2;' +
+      'overflow-wrap:anywhere;' +
       'margin-bottom:18px;' +
       '">' +
       'SCAN NOT RECORDED' +
       '</div>' +
       '<div style="' +
-      'font-size:20px;' +
+      'font-size:clamp(16px,3vw,20px);' +
       'font-weight:700;' +
-      'color:#ffffff;' +
+      'line-height:1.4;' +
+      'overflow-wrap:anywhere;' +
       '">' +
-      escapeHtml(
-        message
-      ) +
+      escapeHtml(message) +
       '</div>' +
       '</div>';
-    beep(
-      600,
-      180
-    );
+
+    beep(600, 180);
   }
-  const processingTime =
-    window.qrProcessingStart
-      ? (
-          (
-            performance.now() -
-            window.qrProcessingStart
-          ) /
-          1000
-        ).toFixed(2)
-      : "0.00";
+
+  const processingTime = window.qrProcessingStart
+    ? (
+        (performance.now() - window.qrProcessingStart) / 1000
+      ).toFixed(2)
+    : "0.00";
+
   console.log(
-    "QR PROCESSING TIME: " +
-    processingTime +
-    " seconds"
+    "QR PROCESSING TIME: " + processingTime + " seconds"
   );
-  showResult.timer =
-    setTimeout(
-      function () {
-        resumeScanner();
-      },
-      1000
-    );
+
+  /* Keep the result visible long enough to read. */
+  showResult.timer = setTimeout(function () {
+    resumeScanner();
+  }, 2000);
 }
+
+  
 /* =====================================================
    RESUME SCANNER
    ===================================================== */
