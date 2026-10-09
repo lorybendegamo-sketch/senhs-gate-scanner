@@ -1219,6 +1219,51 @@ font-size: 22px !important;
         max-width: 145px;
       }
     }
+
+    
+/* FIXED STUDENT NAME — MONTHLY ATTENDANCE MATRIX */
+#monthlyAttendanceTable,
+#monthlySummaryTable {
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+#monthlyAttendanceTable th:first-child,
+#monthlyAttendanceTable td:first-child,
+#monthlySummaryTable th:first-child,
+#monthlySummaryTable td:first-child {
+  position: sticky;
+  left: 0;
+  z-index: 3;
+  min-width: 180px;
+  width: 180px;
+  background: #ffffff;
+  text-align: left;
+  box-shadow: 2px 0 3px rgba(0, 0, 0, 0.12);
+}
+
+/* Keep the student-name header above the scrolling cells */
+#monthlyAttendanceTable thead th:first-child,
+#monthlySummaryTable thead th:first-child {
+  position: sticky;
+  left: 0;
+  z-index: 5;
+  background: #e9eef5;
+}
+
+/* Allow horizontal scrolling for both tables */
+#monthlyAttendanceTableWrapper,
+#monthlySummaryTableWrapper {
+  overflow-x: auto;
+  max-width: 100%;
+  position: relative;
+}
+
+/* Keep student names readable */
+#monthlyAttendanceTable td:first-child,
+#monthlySummaryTable td:first-child {
+  white-space: nowrap;
+}
     
   </style>
 </head>
@@ -1390,76 +1435,110 @@ font-size: 22px !important;
   LOGOUT
 </button>
       
-      <!-- MONTHLY ATTENDANCE MATRIX -->
-      <div id="monthlyAttendancePanel">
-        <hr>
-        <h3>MONTHLY ATTENDANCE MATRIX</h3>
 
-        <label for="monthlyAttendanceMonth">
-          Select Month:
-        </label>
+<!-- REPORT NAVIGATION BUTTONS -->
+<div id="attendanceReportNavigation">
+  <button id="openMAMPageBtn" type="button">
+    MAM
+  </button>
 
-        <select id="monthlyAttendanceMonth">
-          <option value="2026-06">June 2026</option>
-          <option value="2026-07">July 2026</option>
-          <option value="2026-08">August 2026</option>
-          <option value="2026-09">September 2026</option>
-          <option value="2026-10" selected>October 2026</option>
-          <option value="2026-11">November 2026</option>
-          <option value="2026-12">December 2026</option>
-        </select>
-
-        <button
-          id="loadMonthlyAttendanceBtn"
-          type="button"
-        >
-          LOAD MONTH
-        </button>
-
-        <div id="monthlyAttendanceMessage">
-          Select a month, then click LOAD MONTH.
-        </div>
-
-        <div
-          id="monthlyAttendanceTableWrapper"
-          style="overflow-x:auto; max-width:100%;"
-        >
-          <table id="monthlyAttendanceTable">
-            <thead id="monthlyAttendanceTableHead"></thead>
-            <tbody id="monthlyAttendanceTableBody"></tbody>
-          </table>
-        </div>
-
-        <h3>MONTHLY SUMMARY</h3>
-
-        <div
-          id="monthlySummaryTableWrapper"
-          style="overflow-x:auto; max-width:100%;"
-        >
-          <table id="monthlySummaryTable">
-            <thead>
-              <tr>
-                <th>STUDENT NAME</th>
-                <th>TOTAL PRESENT</th>
-                <th>TOTAL ABSENT</th>
-              </tr>
-            </thead>
-            <tbody id="monthlySummaryTableBody"></tbody>
-          </table>
-        </div>
-
-        <button
-          id="saveHistoricalSummaryBtn"
-          type="button"
-          style="display:none;"
-        >
-          SAVE HISTORICAL SUMMARY
-        </button>
-      </div>
-      <!-- END MONTHLY ATTENDANCE MATRIX -->
+  <button id="openSMSPageBtn" type="button">
+    SMS
+  </button>
+</div>
+<!-- END REPORT NAVIGATION BUTTONS -->
+      
       <div id="attendanceMessage"></div>
     </div>
   </div>
+
+  
+<!-- =====================================================
+     PAGE — MONTHLY ATTENDANCE MATRIX (MAM)
+     ===================================================== -->
+<div id="mamPage" style="display:none;">
+  <div class="device-content">
+    <h2>MONTHLY ATTENDANCE MATRIX</h2>
+
+    <button id="mamLogoutBtn" type="button">
+      LOGOUT
+    </button>
+
+    <label for="monthlyAttendanceMonth">
+      Select Month:
+    </label>
+
+    <select id="monthlyAttendanceMonth">
+      <option value="2026-06">June 2026</option>
+      <option value="2026-07">July 2026</option>
+      <option value="2026-08">August 2026</option>
+      <option value="2026-09">September 2026</option>
+      <option value="2026-10" selected>October 2026</option>
+      <option value="2026-11">November 2026</option>
+      <option value="2026-12">December 2026</option>
+    </select>
+
+    <button id="loadMonthlyAttendanceBtn" type="button">
+      LOAD MONTH
+    </button>
+
+    <div id="monthlyAttendanceMessage">
+      Select a month, then click LOAD MONTH.
+    </div>
+
+    <div id="monthlyAttendanceTableWrapper"
+         style="overflow-x:auto;max-width:100%;">
+      <table id="monthlyAttendanceTable">
+        <thead id="monthlyAttendanceTableHead"></thead>
+        <tbody id="monthlyAttendanceTableBody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- =====================================================
+     PAGE — SCHOOL YEAR MONTHLY SUMMARY (SMS)
+     ===================================================== -->
+<div id="smsPage" style="display:none;">
+  <div class="device-content">
+    <h2>SCHOOL YEAR MONTHLY SUMMARY</h2>
+
+    <button id="smsLogoutBtn" type="button">
+      LOGOUT
+    </button>
+
+    <p id="sySummaryMessage">
+      School Year 2026–2027
+    </p>
+
+    <div id="sySummaryTableWrapper"
+         style="overflow-x:auto;max-width:100%;">
+      <table id="sySummaryTable">
+        <thead id="sySummaryTableHead"></thead>
+        <tbody id="sySummaryTableBody"></tbody>
+      </table>
+    </div>
+
+    <button id="updateSYSummaryBtn" type="button">
+      UPDATE
+    </button>
+
+    <div id="sySummaryUpdatePanel" style="display:none;">
+      <p>
+        Update the historical Present and Absent totals
+        for June to September 2026.
+      </p>
+      <div id="syHistoricalInputs"></div>
+      <button id="saveSYSummaryBtn" type="button">
+        SAVE UPDATE
+      </button>
+      <button id="cancelSYSummaryUpdateBtn" type="button">
+        CANCEL
+      </button>
+    </div>
+  </div>
+</div>
+  
   <!-- =====================================================
        PAGE 4 — SCANNER
        ===================================================== -->
@@ -4517,8 +4596,110 @@ console.log(
 );
 
   
+
 /* =====================================================
-   MONTHLY ATTENDANCE MATRIX — SENHS
+   SENHS — MAM AND SCHOOL YEAR MONTHLY SUMMARY
+   ===================================================== */
+
+const SENHS_SY_MONTHS = [
+  "2026-06", "2026-07", "2026-08", "2026-09",
+  "2026-10", "2026-11", "2026-12",
+  "2027-01", "2027-02", "2027-03",
+  "2027-04", "2027-05"
+];
+
+const SENHS_SY_MONTH_LABELS = {
+  "2026-06": "June 2026",
+  "2026-07": "July 2026",
+  "2026-08": "August 2026",
+  "2026-09": "September 2026",
+  "2026-10": "October 2026",
+  "2026-11": "November 2026",
+  "2026-12": "December 2026",
+  "2027-01": "January 2027",
+  "2027-02": "February 2027",
+  "2027-03": "March 2027",
+  "2027-04": "April 2027",
+  "2027-05": "May 2027"
+};
+
+let senhsMonthlyCache = {};
+let senhsSummaryCache = [];
+let senhsSummaryLoading = false;
+
+function senhsMonthlyHistorical(month) {
+  return /^\d{4}-(06|07|08|09)$/.test(month);
+}
+
+function senhsGetSelectedSection() {
+  if (
+    typeof attendanceRole !== "undefined" &&
+    attendanceRole === "ADMIN"
+  ) {
+    const selector = document.getElementById(
+      "attendanceSectionSelect"
+    );
+    return String(selector ? selector.value : "").trim();
+  }
+
+  return String(
+    typeof attendanceSection !== "undefined"
+      ? attendanceSection
+      : ""
+  ).trim();
+}
+
+function senhsShowReportPage(pageName) {
+  const attendance = document.getElementById("attendancePage");
+  const mam = document.getElementById("mamPage");
+  const sms = document.getElementById("smsPage");
+
+  if (attendance) attendance.style.display = "none";
+  if (mam) mam.style.display = "none";
+  if (sms) sms.style.display = "none";
+
+  const target = document.getElementById(pageName);
+  if (target) target.style.display = "block";
+}
+
+function senhsReturnToAttendance() {
+  const logout = document.getElementById("attendanceLogoutBtn");
+
+  if (logout) {
+    logout.click();
+    return;
+  }
+
+  senhsShowReportPage("attendancePage");
+}
+
+async function senhsFetchMonth(month, section) {
+  const requestUrl =
+    APPS_SCRIPT_URL +
+    "?action=getMonthlyAttendance" +
+    "&accessCode=" +
+    encodeURIComponent(attendanceAccessCode) +
+    "&requestedSection=" +
+    encodeURIComponent(section) +
+    "&month=" +
+    encodeURIComponent(month);
+
+  const result = await jsonpRequest(requestUrl);
+
+  if (!result || !result.success) {
+    throw new Error(
+      result && result.message
+        ? result.message
+        : "Unable to load " + month
+    );
+  }
+
+  return result;
+}
+
+/* =====================================================
+   MAM — MONTHLY ATTENDANCE MATRIX
+   Weekends are hidden in this matrix.
    ===================================================== */
 
 async function loadMonthlyAttendance() {
@@ -4537,18 +4718,23 @@ async function loadMonthlyAttendance() {
   const matrixBody = document.getElementById(
     "monthlyAttendanceTableBody"
   );
-  const summaryBody = document.getElementById(
-    "monthlySummaryTableBody"
-  );
-  const saveHistoryButton = document.getElementById(
-    "saveHistoricalSummaryBtn"
-  );
+
+  if (
+    !monthSelect ||
+    !loadButton ||
+    !message ||
+    !matrixHead ||
+    !matrixBody
+  ) {
+    console.error("MAM HTML elements are missing.");
+    return;
+  }
 
   const month = monthSelect.value;
-  const section = String(attendanceSection || "").trim();
+  const section = senhsGetSelectedSection();
 
   if (!attendanceAccessCode || !section) {
-    message.textContent = "Please select a section and log in.";
+    message.textContent = "Please select a section first.";
     return;
   }
 
@@ -4556,36 +4742,23 @@ async function loadMonthlyAttendance() {
   message.textContent = "Loading monthly attendance...";
   matrixHead.innerHTML = "";
   matrixBody.innerHTML = "";
-  summaryBody.innerHTML = "";
 
   try {
-    const requestUrl =
-      APPS_SCRIPT_URL +
-      "?action=getMonthlyAttendance" +
-      "&accessCode=" +
-      encodeURIComponent(attendanceAccessCode) +
-      "&requestedSection=" +
-      encodeURIComponent(section) +
-      "&month=" +
-      encodeURIComponent(month);
+    const result = await senhsFetchMonth(month, section);
+    senhsMonthlyCache[section + "|" + month] = result;
 
-    const result = await jsonpRequest(requestUrl);
-
-    if (!result || !result.success) {
-      throw new Error(
-        result && result.message
-          ? result.message
-          : "Unable to load monthly attendance."
+    const days = (result.days || []).filter(function(day) {
+      const dateParts = String(day.date || "").split("-");
+      const date = new Date(
+        Number(dateParts[0]),
+        Number(dateParts[1]) - 1,
+        Number(dateParts[2])
       );
-    }
 
-    const students = result.students || [];
-    const days = result.days || [];
-    const historical = /^\d{4}-(06|07|08|09)$/.test(month);
+      return date.getDay() !== 0 && date.getDay() !== 6;
+    });
 
-    // MATRIX HEADER
     const headerRow = document.createElement("tr");
-
     const nameHeader = document.createElement("th");
     nameHeader.textContent = "STUDENT NAME";
     headerRow.appendChild(nameHeader);
@@ -4599,16 +4772,22 @@ async function loadMonthlyAttendance() {
 
     matrixHead.appendChild(headerRow);
 
-    // MATRIX ROWS
-    students.forEach(function(student) {
+    (result.students || []).forEach(function(student) {
       const row = document.createElement("tr");
       const nameCell = document.createElement("td");
       nameCell.textContent = student.name || "";
       row.appendChild(nameCell);
 
+      const dailyByDate = {};
       (student.daily || []).forEach(function(day) {
+        dailyByDate[day.date] = day;
+      });
+
+      days.forEach(function(day) {
         const cell = document.createElement("td");
-        const code = day.code || "—";
+        const daily = dailyByDate[day.date] || {};
+        const code = daily.code || "—";
+
         cell.textContent = code;
         cell.title = day.date || "";
 
@@ -4628,52 +4807,14 @@ async function loadMonthlyAttendance() {
       matrixBody.appendChild(row);
     });
 
-    // MONTHLY SUMMARY
-    students.forEach(function(student) {
-      const row = document.createElement("tr");
-
-      const nameCell = document.createElement("td");
-      nameCell.textContent = student.name || "";
-      row.appendChild(nameCell);
-
-      ["present", "absent"].forEach(function(field) {
-        const cell = document.createElement("td");
-
-        if (historical) {
-          const input = document.createElement("input");
-          input.type = "number";
-          input.min = "0";
-          input.step = "0.5";
-          input.value = Number(student[field] || 0);
-          input.dataset.lrn = student.lrn;
-          input.dataset.field = field;
-          input.setAttribute(
-            "aria-label",
-            (student.name || "") + " " + field
-          );
-          cell.appendChild(input);
-        } else {
-          cell.textContent = Number(student[field] || 0)
-            .toLocaleString("en-PH", {
-              maximumFractionDigits: 1
-            });
-        }
-
-        row.appendChild(cell);
-      });
-
-      summaryBody.appendChild(row);
-    });
-
-    saveHistoryButton.style.display =
-      historical ? "block" : "none";
-
     message.textContent =
-      result.section + " — " + month +
-      ": " + students.length + " student(s) loaded.";
+      result.section + " — " +
+      (SENHS_SY_MONTH_LABELS[month] || month) +
+      ": " + (result.students || []).length +
+      " student(s) loaded. Weekends hidden.";
 
   } catch (error) {
-    console.error("Monthly attendance error:", error);
+    console.error("MAM loading error:", error);
     message.textContent =
       error.message || "Unable to load monthly attendance.";
   } finally {
@@ -4681,65 +4822,300 @@ async function loadMonthlyAttendance() {
   }
 }
 
+/* =====================================================
+   SMS — SCHOOL YEAR MONTHLY SUMMARY
+   ===================================================== */
 
-/* LOAD MONTH BUTTON */
-document.getElementById(
-  "loadMonthlyAttendanceBtn"
-).addEventListener("click", loadMonthlyAttendance);
+async function loadSYSummary() {
+  const message = document.getElementById("sySummaryMessage");
+  const head = document.getElementById("sySummaryTableHead");
+  const body = document.getElementById("sySummaryTableBody");
 
-
-/* SAVE JUNE–SEPTEMBER HISTORICAL TOTALS */
-document.getElementById(
-  "saveHistoricalSummaryBtn"
-).addEventListener("click", async function() {
-  const month = document.getElementById(
-    "monthlyAttendanceMonth"
-  ).value;
-
-  const section = String(attendanceSection || "").trim();
-  const message = document.getElementById(
-    "monthlyAttendanceMessage"
-  );
-  const saveButton = this;
-
-  if (!/^\d{4}-(06|07|08|09)$/.test(month)) {
-    message.textContent =
-      "Historical totals can only be saved for June to September.";
+  if (!message || !head || !body) {
+    console.error("School year summary HTML elements are missing.");
     return;
   }
 
+  const section = senhsGetSelectedSection();
+
   if (!attendanceAccessCode || !section) {
-    message.textContent = "Please select a section and log in.";
+    message.textContent = "Please select a section first.";
+    return;
+  }
+
+  if (senhsSummaryLoading) return;
+
+  senhsSummaryLoading = true;
+  message.textContent = "Loading school year summary...";
+  head.innerHTML = "";
+  body.innerHTML = "";
+
+  try {
+    const results = await Promise.all(
+      SENHS_SY_MONTHS.map(function(month) {
+        return senhsFetchMonth(month, section);
+      })
+    );
+
+    senhsSummaryCache = results.map(function(result, index) {
+      const month = SENHS_SY_MONTHS[index];
+      senhsMonthlyCache[section + "|" + month] = result;
+
+      return {
+        month: month,
+        result: result,
+        students: result.students || []
+      };
+    });
+
+    const studentMap = {};
+
+    senhsSummaryCache.forEach(function(item) {
+      item.students.forEach(function(student) {
+        if (!studentMap[student.lrn]) {
+          studentMap[student.lrn] = {
+            lrn: student.lrn,
+            name: student.name || "",
+            months: {}
+          };
+        }
+
+        studentMap[student.lrn].months[item.month] = {
+          present: Number(student.present) || 0,
+          absent: Number(student.absent) || 0
+        };
+      });
+    });
+
+    const allStudents = Object.values(studentMap);
+
+    const activeMonths = senhsSummaryCache.filter(function(item) {
+      return item.students.some(function(student) {
+        if (
+          Number(student.present) > 0 ||
+          Number(student.absent) > 0
+        ) {
+          return true;
+        }
+
+        return (student.daily || []).some(function(day) {
+          return day.code && day.code !== "—";
+        });
+      });
+    });
+
+    const headerRow = document.createElement("tr");
+
+    const nameHeader = document.createElement("th");
+    nameHeader.textContent = "STUDENT NAME";
+    headerRow.appendChild(nameHeader);
+
+    activeMonths.forEach(function(item) {
+      const th = document.createElement("th");
+      th.textContent = SENHS_SY_MONTH_LABELS[item.month];
+      th.colSpan = 2;
+      headerRow.appendChild(th);
+    });
+
+    const presentTotalHeader = document.createElement("th");
+    presentTotalHeader.textContent = "SY PRESENT";
+    headerRow.appendChild(presentTotalHeader);
+
+    const absentTotalHeader = document.createElement("th");
+    absentTotalHeader.textContent = "SY ABSENT";
+    headerRow.appendChild(absentTotalHeader);
+
+    head.appendChild(headerRow);
+
+    const subHeader = document.createElement("tr");
+    const blankName = document.createElement("th");
+    blankName.textContent = "";
+    subHeader.appendChild(blankName);
+
+    activeMonths.forEach(function() {
+      ["Present", "Absent"].forEach(function(label) {
+        const th = document.createElement("th");
+        th.textContent = label;
+        subHeader.appendChild(th);
+      });
+    });
+
+    const blankPresent = document.createElement("th");
+    blankPresent.textContent = "";
+    subHeader.appendChild(blankPresent);
+
+    const blankAbsent = document.createElement("th");
+    blankAbsent.textContent = "";
+    subHeader.appendChild(blankAbsent);
+
+    head.appendChild(subHeader);
+
+    allStudents.forEach(function(student) {
+      const row = document.createElement("tr");
+      const nameCell = document.createElement("td");
+      nameCell.textContent = student.name;
+      row.appendChild(nameCell);
+
+      let totalPresent = 0;
+      let totalAbsent = 0;
+
+      activeMonths.forEach(function(item) {
+        const totals = student.months[item.month] || {
+          present: 0,
+          absent: 0
+        };
+
+        totalPresent += totals.present;
+        totalAbsent += totals.absent;
+
+        const presentCell = document.createElement("td");
+        presentCell.textContent = totals.present;
+        row.appendChild(presentCell);
+
+        const absentCell = document.createElement("td");
+        absentCell.textContent = totals.absent;
+        row.appendChild(absentCell);
+      });
+
+      const totalPresentCell = document.createElement("td");
+      totalPresentCell.textContent = totalPresent;
+      row.appendChild(totalPresentCell);
+
+      const totalAbsentCell = document.createElement("td");
+      totalAbsentCell.textContent = totalAbsent;
+      row.appendChild(totalAbsentCell);
+
+      body.appendChild(row);
+    });
+
+    message.textContent =
+      "School Year 2026–2027 — Section " + section +
+      ". " + allStudents.length + " student(s).";
+
+    senhsBuildHistoricalEditor(allStudents);
+
+  } catch (error) {
+    console.error("School year summary error:", error);
+    message.textContent =
+      "Unable to load summary: " +
+      (error.message || "Unknown error.");
+  } finally {
+    senhsSummaryLoading = false;
+  }
+}
+
+/* =====================================================
+   UPDATE — JUNE TO SEPTEMBER HISTORICAL TOTALS
+   ===================================================== */
+
+function senhsBuildHistoricalEditor(students) {
+  const container = document.getElementById("syHistoricalInputs");
+  if (!container) return;
+
+  container.innerHTML = "";
+
+  const historicalMonths = [
+    "2026-06", "2026-07", "2026-08", "2026-09"
+  ];
+
+  students.forEach(function(student) {
+    historicalMonths.forEach(function(month) {
+      const cached = senhsMonthlyCache[
+        senhsGetSelectedSection() + "|" + month
+      ];
+
+      const sourceStudent = cached &&
+        (cached.students || []).find(function(item) {
+          return String(item.lrn) === String(student.lrn);
+        });
+
+      const totals = student.months[month] || {
+        present: 0,
+        absent: 0
+      };
+
+      const line = document.createElement("div");
+      line.style.display = "grid";
+      line.style.gridTemplateColumns =
+        "minmax(140px, 1fr) minmax(110px, 1fr) minmax(110px, 1fr)";
+      line.style.gap = "8px";
+      line.style.marginBottom = "8px";
+      line.style.alignItems = "center";
+
+      const label = document.createElement("label");
+      label.textContent =
+        student.name + " — " + SENHS_SY_MONTH_LABELS[month];
+      line.appendChild(label);
+
+      ["present", "absent"].forEach(function(field) {
+        const input = document.createElement("input");
+        input.type = "number";
+        input.min = "0";
+        input.step = "0.5";
+        input.value = Number(
+          sourceStudent && sourceStudent[field] !== undefined
+            ? sourceStudent[field]
+            : totals[field]
+        );
+
+        input.dataset.lrn = student.lrn;
+        input.dataset.month = month;
+        input.dataset.field = field;
+        input.dataset.name = student.name;
+
+        input.setAttribute(
+          "aria-label",
+          student.name + " " +
+          SENHS_SY_MONTH_LABELS[month] + " " + field
+        );
+
+        input.placeholder =
+          field === "present" ? "Present" : "Absent";
+
+        line.appendChild(input);
+      });
+
+      container.appendChild(line);
+    });
+  });
+}
+
+async function saveSYSummaryUpdate() {
+  const message = document.getElementById("sySummaryMessage");
+  const button = document.getElementById("saveSYSummaryBtn");
+  const section = senhsGetSelectedSection();
+
+  if (!attendanceAccessCode || !section) {
+    message.textContent = "Please select a section first.";
     return;
   }
 
   const inputs = document.querySelectorAll(
-    "#monthlySummaryTableBody input[data-lrn]"
+    "#syHistoricalInputs input[data-lrn]"
   );
 
-  const entriesByStudent = {};
+  const grouped = {};
 
   inputs.forEach(function(input) {
-    const lrn = input.dataset.lrn;
+    const key = input.dataset.lrn + "|" + input.dataset.month;
 
-    if (!entriesByStudent[lrn]) {
-      entriesByStudent[lrn] = {
-        lrn: lrn,
-        month: month,
-        present: 0,
-        absent: 0
+    if (!grouped[key]) {
+      grouped[key] = {
+        lrn: input.dataset.lrn,
+        month: input.dataset.month,
+        present: NaN,
+        absent: NaN
       };
     }
 
-    entriesByStudent[lrn][input.dataset.field] =
-      input.value === "" ? NaN : Number(input.value);
+    grouped[key][input.dataset.field] =
+      input.value.trim() === "" ? NaN : Number(input.value);
   });
 
-  const entries = Object.values(entriesByStudent);
+  const entries = Object.values(grouped);
 
-  if (entries.length === 0) {
-    message.textContent =
-      "No student totals to save. Load the month first.";
+  if (!entries.length) {
+    message.textContent = "No historical totals to save.";
     return;
   }
 
@@ -4754,11 +5130,11 @@ document.getElementById(
 
   if (invalid) {
     message.textContent =
-      "Please enter valid non-negative Present and Absent totals for every student.";
+      "Check the Present and Absent values. Use non-negative numbers.";
     return;
   }
 
-  saveButton.disabled = true;
+  if (button) button.disabled = true;
   message.textContent = "Saving historical totals...";
 
   try {
@@ -4784,16 +5160,107 @@ document.getElementById(
 
     message.textContent =
       "Historical totals saved successfully (" +
-      result.saved + " student record(s)).";
+      (result.saved || entries.length) +
+      " record(s)). Reloading summary...";
+
+    await loadSYSummary();
 
   } catch (error) {
-    console.error("Historical summary save error:", error);
+    console.error("Save school year summary error:", error);
     message.textContent =
       error.message || "Unable to save historical totals.";
   } finally {
-    saveButton.disabled = false;
+    if (button) button.disabled = false;
   }
-});
+}
+
+/* =====================================================
+   BUTTON EVENTS
+   ===================================================== */
+
+const senhsOpenMAMButton = document.getElementById("openMAMPageBtn");
+if (senhsOpenMAMButton) {
+  senhsOpenMAMButton.addEventListener("click", function() {
+    if (!senhsGetSelectedSection()) {
+      const message = document.getElementById("attendanceMessage");
+      if (message) message.textContent = "Please select a section first.";
+      return;
+    }
+
+    senhsShowReportPage("mamPage");
+    loadMonthlyAttendance();
+  });
+}
+
+const senhsOpenSMSButton = document.getElementById("openSMSPageBtn");
+if (senhsOpenSMSButton) {
+  senhsOpenSMSButton.addEventListener("click", function() {
+    if (!senhsGetSelectedSection()) {
+      const message = document.getElementById("attendanceMessage");
+      if (message) message.textContent = "Please select a section first.";
+      return;
+    }
+
+    senhsShowReportPage("smsPage");
+    loadSYSummary();
+  });
+}
+
+const senhsLoadMonthButton = document.getElementById(
+  "loadMonthlyAttendanceBtn"
+);
+if (senhsLoadMonthButton) {
+  senhsLoadMonthButton.addEventListener(
+    "click",
+    loadMonthlyAttendance
+  );
+}
+
+const senhsUpdateButton = document.getElementById("updateSYSummaryBtn");
+if (senhsUpdateButton) {
+  senhsUpdateButton.addEventListener("click", function() {
+    const panel = document.getElementById("sySummaryUpdatePanel");
+    if (panel) {
+      panel.style.display =
+        panel.style.display === "none" ? "block" : "none";
+    }
+  });
+}
+
+const senhsSaveUpdateButton = document.getElementById("saveSYSummaryBtn");
+if (senhsSaveUpdateButton) {
+  senhsSaveUpdateButton.addEventListener(
+    "click",
+    saveSYSummaryUpdate
+  );
+}
+
+const senhsCancelUpdateButton = document.getElementById(
+  "cancelSYSummaryUpdateBtn"
+);
+if (senhsCancelUpdateButton) {
+  senhsCancelUpdateButton.addEventListener("click", function() {
+    const panel = document.getElementById("sySummaryUpdatePanel");
+    if (panel) panel.style.display = "none";
+    loadSYSummary();
+  });
+}
+
+const senhsMAMLogoutButton = document.getElementById("mamLogoutBtn");
+if (senhsMAMLogoutButton) {
+  senhsMAMLogoutButton.addEventListener(
+    "click",
+    senhsReturnToAttendance
+  );
+}
+
+const senhsSMSLogoutButton = document.getElementById("smsLogoutBtn");
+if (senhsSMSLogoutButton) {
+  senhsSMSLogoutButton.addEventListener(
+    "click",
+    senhsReturnToAttendance
+  );
+}
   
 </script>
 </body>
