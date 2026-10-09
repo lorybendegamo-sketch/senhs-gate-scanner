@@ -1037,11 +1037,195 @@ font-size: 22px !important;
 }
 
     
+    /* =========================================
+       MONTHLY ATTENDANCE MATRIX
+       ========================================= */
+    #monthlyAttendancePanel {
+      width: 100%;
+      margin-top: 24px;
+      padding: 12px 6px;
+      box-sizing: border-box;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.96);
+      color: #111;
+    }
+
+    #monthlyAttendancePanel h3 {
+      margin: 16px 0 12px;
+      font-size: 16px;
+      font-weight: 900;
+      text-align: center;
+    }
+
+    #monthlyAttendanceMonth {
+      display: block;
+      width: 100%;
+      max-width: 300px;
+      margin: 8px auto 12px;
+      padding: 10px;
+      font-size: 15px;
+      border: 1px solid #888;
+      border-radius: 8px;
+      box-sizing: border-box;
+    }
+
+    #loadMonthlyAttendanceBtn,
+    #saveHistoricalSummaryBtn {
+      display: block;
+      width: 100%;
+      max-width: 300px;
+      margin: 10px auto;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      background: #1976d2;
+      color: #fff;
+      font-size: 14px;
+      font-weight: 900;
+      cursor: pointer;
+    }
+
+    #saveHistoricalSummaryBtn {
+      background: #238636;
+    }
+
+    #monthlyAttendanceMessage {
+      margin: 12px 0;
+      text-align: center;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    #monthlyAttendanceTableWrapper,
+    #monthlySummaryTableWrapper {
+      width: 100%;
+      overflow-x: auto;
+      margin: 12px 0 20px;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    #monthlyAttendanceTable,
+    #monthlySummaryTable {
+      border-collapse: collapse;
+      background: #fff;
+      color: #111;
+      font-size: 12px;
+    }
+
+    #monthlyAttendanceTable {
+      width: max-content;
+      min-width: 100%;
+    }
+
+    #monthlySummaryTable {
+      width: 100%;
+      min-width: 300px;
+    }
+
+    #monthlyAttendanceTable th,
+    #monthlyAttendanceTable td,
+    #monthlySummaryTable th,
+    #monthlySummaryTable td {
+      padding: 7px 8px;
+      border: 1px solid #aaa;
+      text-align: center;
+      white-space: nowrap;
+    }
+
+    #monthlyAttendanceTable th,
+    #monthlySummaryTable th {
+      background: #222;
+      color: #fff;
+      font-weight: 900;
+    }
+
+    #monthlyAttendanceTable th:first-child,
+    #monthlyAttendanceTable td:first-child,
+    #monthlySummaryTable th:first-child,
+    #monthlySummaryTable td:first-child {
+      text-align: left;
+    }
+
+    #monthlyAttendanceTable th:first-child,
+    #monthlyAttendanceTable td:first-child {
+      position: sticky;
+      left: 0;
+      z-index: 1;
+      min-width: 145px;
+      max-width: 180px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      background-color: #f2f2f2;
+      color: #111;
+    }
+
+    #monthlyAttendanceTable th:first-child {
+      z-index: 2;
+      background: #222;
+      color: #fff;
+    }
+
+    #monthlyAttendanceTable td.status-pp {
+      background: #d9f7df;
+      color: #176b2c;
+      font-weight: 900;
+    }
+
+    #monthlyAttendanceTable td.status-half {
+      background: #ffe3b3;
+      color: #814900;
+      font-weight: 900;
+    }
+
+    #monthlyAttendanceTable td.status-aa {
+      background: #ffdede;
+      color: #a40000;
+      font-weight: 900;
+    }
+
+    #monthlyAttendanceTable td.status-none {
+      background: #eee;
+      color: #666;
+    }
+
+    #monthlySummaryTable input {
+      width: 75px;
+      max-width: 100%;
+      padding: 6px 3px;
+      box-sizing: border-box;
+      text-align: center;
+      font-size: 13px;
+    }
+
+    @media (max-width: 600px) {
+      #monthlyAttendancePanel {
+        padding: 10px 3px;
+      }
+
+      #monthlyAttendancePanel h3 {
+        font-size: 14px;
+      }
+
+      #monthlyAttendanceTable th,
+      #monthlyAttendanceTable td {
+        padding: 7px 6px;
+        font-size: 11px;
+      }
+
+      #monthlyAttendanceTable th:first-child,
+      #monthlyAttendanceTable td:first-child {
+        min-width: 125px;
+        max-width: 145px;
+      }
+    }
+    
   </style>
 </head>
 <body>
 <div class="page">
 <div class="container">
+  
   <!-- =====================================================
        PAGE 1 — USER INFORMATION
        ===================================================== -->
@@ -1205,6 +1389,74 @@ font-size: 22px !important;
 >
   LOGOUT
 </button>
+      
+      <!-- MONTHLY ATTENDANCE MATRIX -->
+      <div id="monthlyAttendancePanel">
+        <hr>
+        <h3>MONTHLY ATTENDANCE MATRIX</h3>
+
+        <label for="monthlyAttendanceMonth">
+          Select Month:
+        </label>
+
+        <select id="monthlyAttendanceMonth">
+          <option value="2026-06">June 2026</option>
+          <option value="2026-07">July 2026</option>
+          <option value="2026-08">August 2026</option>
+          <option value="2026-09">September 2026</option>
+          <option value="2026-10" selected>October 2026</option>
+          <option value="2026-11">November 2026</option>
+          <option value="2026-12">December 2026</option>
+        </select>
+
+        <button
+          id="loadMonthlyAttendanceBtn"
+          type="button"
+        >
+          LOAD MONTH
+        </button>
+
+        <div id="monthlyAttendanceMessage">
+          Select a month, then click LOAD MONTH.
+        </div>
+
+        <div
+          id="monthlyAttendanceTableWrapper"
+          style="overflow-x:auto; max-width:100%;"
+        >
+          <table id="monthlyAttendanceTable">
+            <thead id="monthlyAttendanceTableHead"></thead>
+            <tbody id="monthlyAttendanceTableBody"></tbody>
+          </table>
+        </div>
+
+        <h3>MONTHLY SUMMARY</h3>
+
+        <div
+          id="monthlySummaryTableWrapper"
+          style="overflow-x:auto; max-width:100%;"
+        >
+          <table id="monthlySummaryTable">
+            <thead>
+              <tr>
+                <th>STUDENT NAME</th>
+                <th>TOTAL PRESENT</th>
+                <th>TOTAL ABSENT</th>
+              </tr>
+            </thead>
+            <tbody id="monthlySummaryTableBody"></tbody>
+          </table>
+        </div>
+
+        <button
+          id="saveHistoricalSummaryBtn"
+          type="button"
+          style="display:none;"
+        >
+          SAVE HISTORICAL SUMMARY
+        </button>
+      </div>
+      <!-- END MONTHLY ATTENDANCE MATRIX -->
       <div id="attendanceMessage"></div>
     </div>
   </div>
@@ -2465,6 +2717,7 @@ function renderAdviserAttendanceTable(
     }
   );
 }
+  
 /* =====================================================
    ADMIN SECTION CHANGE
    ===================================================== */
@@ -2498,6 +2751,7 @@ attendanceSectionSelect.addEventListener(
     await loadAdviserAttendance();
   }
 );
+  
 /* =====================================================
    SAVE ATTENDANCE
    ===================================================== */
