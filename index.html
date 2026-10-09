@@ -1380,6 +1380,9 @@ let platform =
       )
       ? "mobile"
       : "laptop";
+   console.log("DEVICE USER AGENT:", navigator.userAgent);
+console.log("DETECTED PLATFORM:", platform);
+  
 let sessionActive = false;
 let heartbeatTimer = null;
 let html5QrCode = null;
@@ -1389,7 +1392,8 @@ let scannerRunning = false;
 let processing = false;
 let attendanceTimer = null;
 let releaseSent = false;
-/* =====================================================
+ 
+  /* =====================================================
    ELEMENTS
    ===================================================== */
 const devicePage =
