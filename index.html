@@ -1797,6 +1797,9 @@ async function verifyDevice() {
 
       deviceResult = await jsonpRequest(deviceRequestUrl);
 
+      console.log("TABLET PLATFORM:", platform);
+console.log("TABLET DEVICE RESPONSE:", JSON.stringify(deviceResult));
+      
       console.log("DEVICE RESULT:", deviceResult);
 
       if (isAuthorized(deviceResult)) {
