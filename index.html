@@ -1741,18 +1741,33 @@ function showDeviceMessage(
 }
 
 
+
 /* =====================================================
    VERIFY ACCESS - DEVICE / ADVISER / ADMIN
    ===================================================== */
 async function verifyDevice() {
 
-const savedDeviceCode = localStorage.getItem("SENHS_SAVED_DEVICE_CODE") || "";
+  // LOAD SAVED DEVICE CODE SAFELY
+  let savedDeviceCode = "";
 
-if (!String(deviceCode.value || "").trim() && savedDeviceCode) {
-  deviceCode.value = savedDeviceCode;
-}
+  try {
+    savedDeviceCode =
+      window.localStorage.getItem("SENHS_SAVED_DEVICE_CODE") || "";
+  } catch (error) {
+    console.warn(
+      "Unable to read saved Device Code:",
+      error
+    );
+  }
 
-const key = String(deviceCode.value || "").trim();
+  if (
+    !String(deviceCode.value || "").trim() &&
+    savedDeviceCode
+  ) {
+    deviceCode.value = savedDeviceCode;
+  }
+
+  const key = String(deviceCode.value || "").trim();
 
   if (!key) {
     showDeviceMessage(
@@ -1796,7 +1811,7 @@ const key = String(deviceCode.value || "").trim();
   try {
     console.log("VERIFY ACCESS STARTED");
     console.log("PLATFORM:", platform);
-
+    
     /* ================================================
        1. DEVICE CODE CHECK
        ================================================ */
