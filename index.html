@@ -1775,7 +1775,6 @@ async function verifyDevice() {
 
   try {
     console.log("VERIFY ACCESS STARTED");
-    console.log("CODE LENGTH:", key.length);
     console.log("PLATFORM:", platform);
 
     /* ================================================
@@ -1793,12 +1792,9 @@ async function verifyDevice() {
         name: String(userName || "").trim()
       });
 
-      console.log("DEVICE CHECK URL:", deviceRequestUrl);
-
+  
       deviceResult = await jsonpRequest(deviceRequestUrl);
 
-      console.log("TABLET PLATFORM:", platform);
-console.log("TABLET DEVICE RESPONSE:", JSON.stringify(deviceResult));
       
       console.log("DEVICE RESULT:", deviceResult);
 
@@ -1847,7 +1843,6 @@ console.log("TABLET DEVICE RESPONSE:", JSON.stringify(deviceResult));
         pmAccess: key
       });
 
-      console.log("PM CHECK URL:", pmRequestUrl);
 
       pmResult = await jsonpRequest(pmRequestUrl);
 
@@ -1965,7 +1960,7 @@ async function openScannerPage() {
       attendanceTimer =
         setInterval(
           loadAttendanceSummary,
-          5000
+          15000
         );
     }
     startDeviceHeartbeat();
@@ -3494,7 +3489,8 @@ async function onQrDetected(
 
     if (result && result.success) {
       beep(1400, 180);
-      setTimeout(loadAttendanceSummary, 500);
+      // Summary refresh runs on its normal background polling interval.
+      // Do not add a second request to the scan's critical path.
     }
   } catch (error) {
     console.error("QR server error:", error);
@@ -3751,7 +3747,7 @@ function showResult(
       function () {
         resumeScanner();
       },
-      2000
+      1000
     );
 }
 /* =====================================================
