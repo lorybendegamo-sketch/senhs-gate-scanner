@@ -1493,6 +1493,7 @@ function isPMProceedTime() {
     currentMinutes <= 1200
   );
 }
+  
 /* =========================================
    PROCEED BUTTON STATE
    ========================================= */
@@ -1532,34 +1533,80 @@ const deviceMessage =
   document.getElementById(
     "deviceMessage"
   );
+  
+/* =====================================================
+   TABLET ONLY — SAVE DEVICE CODE
+   Device Code lang ang ise-save.
+   Hindi ise-save ang pangalan o session token.
+   ===================================================== */
+
+const TABLET_DEVICE_CODE_STORAGE_KEY = "SENHS_TABLET_DEVICE_CODE";
+
+function getSavedTabletDeviceCode() {
+  if (platform !== "tablet") return "";
+
+  try {
+    const savedCode =
+      localStorage.getItem(TABLET_DEVICE_CODE_STORAGE_KEY) || "";
+
+    return /^DEVICE_[1-6]$/i.test(savedCode.trim())
+      ? savedCode.trim().toUpperCase()
+      : "";
+  } catch (error) {
+    console.warn("Unable to read saved tablet Device Code.", error);
+    return "";
+  }
+}
+
+function rememberTabletDeviceCode(code) {
+  if (
+    platform !== "tablet" ||
+    !/^DEVICE_[1-6]$/i.test(String(code || "").trim())
+  ) {
+    return;
+  }
+
+  try {
+    localStorage.setItem(
+      TABLET_DEVICE_CODE_STORAGE_KEY,
+      String(code).trim().toUpperCase()
+    );
+  } catch (error) {
+    console.warn("Unable to save tablet Device Code.", error);
+  }
+}
+
+function restoreTabletDeviceCode() {
+  const savedCode = getSavedTabletDeviceCode();
+
+  if (savedCode) {
+    deviceCode.value = savedCode;
+  }
+}
+
+restoreTabletDeviceCode();
+
 const scanOverlay =
-  document.getElementById(
-    "scanOverlay"
-  );
+  document.getElementById("scanOverlay");
+
 const overlayContent =
-  document.getElementById(
-    "overlayContent"
-  );
+  document.getElementById("overlayContent");
+
 const exitScannerBtn =
-  document.getElementById(
-    "exitScannerBtn"
-  );
+  document.getElementById("exitScannerBtn");
+
 const switchCameraBtn =
-  document.getElementById(
-    "switchCameraBtn"
-  );
+  document.getElementById("switchCameraBtn");
+
 const readyBar =
-  document.getElementById(
-    "readyBar"
-  );
+  document.getElementById("readyBar");
+
 const sectionAttendance =
-  document.getElementById(
-    "sectionAttendance"
-  );
+  document.getElementById("sectionAttendance");
+
 const attendanceUpdated =
-  document.getElementById(
-    "attendanceUpdated"
-  );
+  document.getElementById("attendanceUpdated");
+
 /* =====================================================
    USER NEXT
    ===================================================== */
@@ -1801,41 +1848,48 @@ async function verifyDevice() {
         deviceResult
       )
     );
-    /* =================================================
-       DEVICE AUTHORIZED
-       ================================================= */
-    if (
-      deviceResult &&
-      deviceResult.success === true &&
-      deviceResult.authorized === true
-    ) {
-      deviceKey =
-        key;
-      sessionToken =
-        String(
-          deviceResult.session || ""
-        );
-      if (!sessionToken) {
-        throw new Error(
-          "No device session token received."
-        );
-      }
-      sessionActive =
-        true;
-      releaseSent =
-        false;
-      showDeviceMessage(
-        "Device authorized. Opening Gate Scanner...",
-        "success"
-      );
-      setTimeout(
-        function () {
-          openScannerPage();
-        },
-        300
-      );
-      return;
-    }
+
+/* =================================================
+   DEVICE AUTHORIZED
+   ================================================= */
+if (
+  deviceResult &&
+  deviceResult.success === true &&
+  deviceResult.authorized === true
+) {
+  // Save Device Code on tablets only.
+  rememberTabletDeviceCode(key);
+
+  deviceKey = key;
+
+  sessionToken = String(
+    deviceResult.session || ""
+  );
+
+  if (!sessionToken) {
+    throw new Error(
+      "No device session token received."
+    );
+  }
+
+  sessionActive = true;
+  releaseSent = false;
+
+  showDeviceMessage(
+    "Device authorized. Opening Gate Scanner...",
+    "success"
+  );
+
+  setTimeout(
+    function () {
+      openScannerPage();
+    },
+    300
+  );
+
+  return;
+}
+    
     /* =================================================
        CHECK ADVISER / ADMIN
        ================================================= */
