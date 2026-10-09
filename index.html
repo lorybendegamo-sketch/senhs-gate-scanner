@@ -981,6 +981,40 @@
         padding: 6px 0;
       }
     }
+
+    /* FIX: CENTER SCAN OVERLAY ON TABLETS */
+#scannerPage #scanOverlay {
+position: fixed !important;
+top: 0 !important;
+right: 0 !important;
+bottom: 0 !important;
+left: 0 !important;
+
+width: 100vw !important;
+height: 100vh !important;
+height: 100dvh !important;
+
+margin: 0 !important;
+padding: 16px !important;
+box-sizing: border-box !important;
+
+display: none;
+align-items: center !important;
+justify-content: center !important;
+
+z-index: 99999 !important;
+}
+
+#scannerPage #overlayContent {
+width: min(100%, 420px);
+max-width: 100%;
+max-height: calc(100dvh - 32px);
+margin: auto;
+box-sizing: border-box;
+overflow-wrap: anywhere;
+}
+
+    
   </style>
 </head>
 <body>
