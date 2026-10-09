@@ -1831,6 +1831,7 @@ const key = String(deviceCode.value || "").trim();
         }
 
         deviceKey = key;
+        localStorage.setItem("SENHS_SAVED_DEVICE_CODE", key);
         sessionToken = receivedSession;
         sessionActive = true;
         releaseSent = false;
