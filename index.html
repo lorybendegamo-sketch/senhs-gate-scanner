@@ -1739,8 +1739,7 @@ function showDeviceMessage(
     type || "";
 }
 
-
-
+```javascript
 /* =====================================================
    VERIFY ACCESS - DEVICE / ADVISER / ADMIN
    ===================================================== */
@@ -1759,7 +1758,6 @@ async function verifyDevice() {
   continueBtn.textContent = "CHECKING...";
   showDeviceMessage("Checking access...", "");
 
-  // Accept boolean true and string "true".
   function isAuthorized(result) {
     return !!result &&
       result.success === true &&
@@ -1768,9 +1766,23 @@ async function verifyDevice() {
 
   function buildUrl(params) {
     const query = new URLSearchParams(params);
+
     return APPS_SCRIPT_URL +
       (APPS_SCRIPT_URL.includes("?") ? "&" : "?") +
       query.toString();
+  }
+
+  function getServerMessage(result) {
+    if (!result || typeof result !== "object") {
+      return "";
+    }
+
+    return String(
+      result.message ||
+      result.error ||
+      result.details ||
+      ""
+    ).trim();
   }
 
   try {
@@ -1792,11 +1804,12 @@ async function verifyDevice() {
         name: String(userName || "").trim()
       });
 
-  
       deviceResult = await jsonpRequest(deviceRequestUrl);
 
-      
-      console.log("DEVICE RESULT:", deviceResult);
+      console.log(
+        "DEVICE RESPONSE DETAILS:",
+        JSON.stringify(deviceResult, null, 2)
+      );
 
       if (isAuthorized(deviceResult)) {
         const receivedSession = String(
@@ -1833,7 +1846,10 @@ async function verifyDevice() {
     /* ================================================
        2. ADVISER / ADMIN ACCESS CHECK
        ================================================ */
-    showDeviceMessage("Checking Adviser/Admin access...", "");
+    showDeviceMessage(
+      "Checking Adviser/Admin access...",
+      ""
+    );
 
     let pmResult = null;
     let pmError = null;
@@ -1843,43 +1859,41 @@ async function verifyDevice() {
         pmAccess: key
       });
 
-
       pmResult = await jsonpRequest(pmRequestUrl);
 
-      console.log("PM RESULT:", pmResult);
+      console.log(
+        "ADVISER / ADMIN RESPONSE DETAILS:",
+        JSON.stringify(pmResult, null, 2)
+      );
 
       if (isAuthorized(pmResult)) {
-        attendanceAccessCode = key;
-
-        attendanceRole = String(
+        const role = String(
           pmResult.role || ""
         ).trim().toUpperCase();
 
-        attendanceSection = String(
+        const section = String(
           pmResult.section || ""
         ).trim();
 
-        if (
-          attendanceRole !== "ADMIN" &&
-          attendanceRole !== "ADVISER"
-        ) {
+        if (role !== "ADMIN" && role !== "ADVISER") {
           throw new Error(
             "Access granted, but the returned role is invalid: " +
-            (attendanceRole || "EMPTY")
+            (role || "EMPTY")
           );
         }
 
-        if (
-          attendanceRole === "ADVISER" &&
-          !attendanceSection
-        ) {
+        if (role === "ADVISER" && !section) {
           throw new Error(
             "Adviser access was granted, but no section was returned."
           );
         }
 
+        attendanceAccessCode = key;
+        attendanceRole = role;
+        attendanceSection = section;
+
         showDeviceMessage(
-          attendanceRole === "ADMIN"
+          role === "ADMIN"
             ? "Admin authorized. Opening Attendance..."
             : "Adviser authorized. Opening Attendance...",
           "success"
@@ -1893,16 +1907,31 @@ async function verifyDevice() {
       }
     } catch (error) {
       pmError = error;
-      console.error("ADVISER / ADMIN CHECK ERROR:", error);
+      console.error(
+        "ADVISER / ADMIN CHECK ERROR:",
+        error
+      );
     }
 
     /* ================================================
        3. BOTH CHECKS FAILED
        ================================================ */
-    console.error("DEVICE RESPONSE:", deviceResult);
-    console.error("DEVICE ERROR:", deviceError);
-    console.error("PM RESPONSE:", pmResult);
-    console.error("PM ERROR:", pmError);
+    console.error(
+      "DEVICE RESPONSE:",
+      deviceResult
+    );
+    console.error(
+      "DEVICE ERROR:",
+      deviceError
+    );
+    console.error(
+      "PM RESPONSE:",
+      pmResult
+    );
+    console.error(
+      "PM ERROR:",
+      pmError
+    );
 
     if (deviceError && pmError) {
       showDeviceMessage(
@@ -1911,31 +1940,38 @@ async function verifyDevice() {
       );
     } else {
       const serverMessage =
-        (pmResult && pmResult.message) ||
-        (deviceResult && deviceResult.message);
+        getServerMessage(pmResult) ||
+        getServerMessage(deviceResult);
 
       showDeviceMessage(
-        serverMessage
-          ? String(serverMessage)
-          : "Code not accepted. Check the access code and Apps Script verification rules.",
+        serverMessage ||
+          "Code not accepted. Check the access code and Apps Script verification rules.",
         "error"
       );
     }
 
   } catch (error) {
-    console.error("VERIFY ACCESS ERROR:", error);
+    console.error(
+      "VERIFY ACCESS ERROR:",
+      error
+    );
 
     showDeviceMessage(
-      error.message ||
-        "Unable to verify access. Please try again.",
+      error && error.message
+        ? error.message
+        : "Unable to verify access. Please try again.",
       "error"
     );
+
   } finally {
     continueBtn.disabled = false;
     continueBtn.textContent = "CONTINUE";
   }
 }
-  
+```
+
+
+
   
 /* =====================================================
    OPEN SCANNER PAGE
