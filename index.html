@@ -5127,8 +5127,10 @@ async function loadSYSummary() {
             studentMap[lrn].name.length < String(student.name).length)
         ) {
           studentMap[lrn].name = student.name;
-        }
-
+          }
+      }
+    });
+    
 const dailyOrder = (senhsDailyAttendanceStudents || [])
   .map(function(student) {
     return String(student.lrn || "").trim();
