@@ -5116,18 +5116,32 @@ async function loadSYSummary() {
         ) {
           studentMap[lrn].name = student.name;
         }
+v
+const dailyOrder = (senhsDailyAttendanceStudents || [])
+  .map(function(student) {
+    return String(student.lrn || "").trim();
+  });
 
-        // Store the latest values returned by Apps Script.
-        studentMap[lrn].months[item.month] = {
-          present: Number(student.present) || 0,
-          absent: Number(student.absent) || 0
-        };
-      });
-    });
+const orderIndex = new Map(
+  dailyOrder.map(function(lrn, index) {
+    return [lrn, index];
+  })
+);
 
-    const allStudents = Object.values(studentMap);
+allStudents.sort(function(a, b) {
+  const aIndex = orderIndex.has(String(a.lrn || "").trim())
+    ? orderIndex.get(String(a.lrn || "").trim())
+    : Number.MAX_SAFE_INTEGER;
 
-    const activeMonths = senhsSummaryCache;
+  const bIndex = orderIndex.has(String(b.lrn || "").trim())
+    ? orderIndex.get(String(b.lrn || "").trim())
+    : Number.MAX_SAFE_INTEGER;
+
+  return aIndex - bIndex;
+});
+
+const activeMonths = senhsSummaryCache;
+
 
     // -----------------------------
     // TABLE HEADER
