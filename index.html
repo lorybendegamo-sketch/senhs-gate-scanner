@@ -10,6 +10,7 @@
   <script
     src="https://unpkg.com/html5-qrcode"
     type="text/javascript"
+    onerror="(function(){var s=document.createElement('script');s.src='https://cdn.jsdelivr.net/npm/html5-qrcode';s.onerror=function(){console.error('QR scanner library failed to load from both CDNs.');};document.head.appendChild(s);})()"
   ></script>
   <style>
     
@@ -1420,6 +1421,37 @@ font-size: 22px !important;
   #mamPage .device-content, #smsPage .device-content { padding:14px 8px; }
   .report-navigation button, #attendanceReportNavigation button { flex:1 1 100%; min-height:48px; }
 }
+
+
+    /* Responsive scanner/report safety rules for laptop, tablet and phone */
+    #scannerPage, #scannerPage .scanner-container,
+    #mamPage, #smsPage, #attendancePage { max-width: 100%; box-sizing: border-box; }
+    #scannerPage .scanner-container { width: 100%; overflow-x: hidden; }
+    #scannerPage .camera-area { width: 100%; overflow: hidden; }
+    #scannerPage #reader { width: 100% !important; max-width: 100%; overflow: hidden; }
+    #scannerPage #reader video,
+    #scannerPage #reader canvas { max-width: 100% !important; }
+    #mamPage, #smsPage { overflow-x: hidden; }
+    #mamPage table, #smsPage table, #attendancePage table { max-width: 100%; }
+    #mamPage .table-wrapper, #smsPage .table-wrapper,
+    #mamPage .table-responsive, #smsPage .table-responsive,
+    #mamPage .report-table-wrapper, #smsPage .report-table-wrapper {
+      width: 100%; max-width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch;
+    }
+    @media (max-width: 900px) {
+      #mamPage, #smsPage { padding-left: 10px; padding-right: 10px; }
+      #mamPage input, #mamPage select, #mamPage button,
+      #smsPage input, #smsPage select, #smsPage button { max-width: 100%; }
+      #mamPage .report-navigation, #smsPage .report-navigation { display: flex; flex-wrap: wrap; gap: 8px; }
+      #mamPage .report-navigation button, #smsPage .report-navigation button { flex: 1 1 130px; }
+    }
+    @media (max-width: 600px) {
+      #scannerPage .camera-area, #scannerPage #reader { min-height: 280px; }
+      #scannerPage #reader video { object-fit: cover; }
+      #scannerPage .scanner-container { padding-left: 8px; padding-right: 8px; }
+      #mamPage table, #smsPage table { font-size: 12px; }
+      #mamPage th, #mamPage td, #smsPage th, #smsPage td { padding: 6px 5px; }
+    }
 
   </style>
 </head>
@@ -3850,6 +3882,14 @@ document.addEventListener(
    ===================================================== */
 async function startCamera() {
   try {
+    if (typeof window.Html5Qrcode === "undefined") {
+      showOverlay(
+        "SCANNER LIBRARY ERROR",
+        "Hindi ma-load ang QR scanner library. I-refresh ang page, siguraduhing may internet, at subukan muli.",
+        true
+      );
+      throw new Error("Html5Qrcode library is not loaded.");
+    }
     if (
       navigator.permissions &&
       navigator.permissions.query
@@ -3935,37 +3975,22 @@ async function startSelectedCamera() {
     return;
   }
   try {
-    await html5QrCode.start(
-      camera.id,
-      {
-        fps:
-          15,
-        qrbox:
-          function (
-            viewfinderWidth,
-            viewfinderHeight
-          ) {
-            const size =
-              Math.min(
-                viewfinderWidth,
-                viewfinderHeight
-              ) *
-              0.80;
-            return {
-              width:
-                size,
-              height:
-                size
-            };
-          },
-        aspectRatio:
-          1.0
+    const scanConfig = {
+      fps: 12,
+      qrbox: function (viewfinderWidth, viewfinderHeight) {
+        // Use an integer square that fits even on narrow phone screens.
+        const size = Math.max(180, Math.floor(Math.min(viewfinderWidth, viewfinderHeight) * 0.72));
+        return { width: Math.min(size, viewfinderWidth), height: Math.min(size, viewfinderHeight) };
       },
-      onQrDetected,
-      function () {
-        /* Normal scanning errors */
-      }
-    );
+      aspectRatio: 1.0,
+      rememberLastUsedCamera: true
+    };
+    try {
+      await html5QrCode.start(camera.id, scanConfig, onQrDetected, function () {});
+    } catch (cameraIdError) {
+      console.warn("Camera ID startup failed; trying rear-camera constraints.", cameraIdError);
+      await html5QrCode.start({ facingMode: "environment" }, scanConfig, onQrDetected, function () {});
+    }
     scannerRunning =
       true;
     processing =
