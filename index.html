@@ -1671,18 +1671,27 @@ font-size: 22px !important;
       UPDATE
     </button>
 
-    <div id="sySummaryUpdatePanel" style="display:none;">
-      <p>
-        Update the historical Present and Absent totals
-        for June to September 2026.
-      </p>
-      <div id="syHistoricalInputs"></div>
-      <button id="saveSYSummaryBtn" type="button">
-        SAVE UPDATE
-      </button>
-      <button id="cancelSYSummaryUpdateBtn" type="button">
-        CANCEL
-      </button>
+   <div id="sySummaryUpdatePanel" style="display:none;">
+  <h3>UPDATE MONTHLY ATTENDANCE</h3>
+
+  <p>
+    Edit Present and Absent totals for any month
+    from June 2026 to May 2027. Only changed months
+    will be saved.
+  </p>
+
+  <div id="syHistoricalInputs"
+       style="overflow-x:auto;max-width:100%;">
+  </div>
+
+  <button id="saveSYSummaryBtn" type="button">
+    SAVE UPDATE
+  </button>
+
+  <button id="cancelSYSummaryUpdateBtn" type="button">
+    CANCEL
+  </button>
+</div>
     </div>
     <button id="smsLogoutBtn" type="button">LOG OUT</button>
   </div>
@@ -5384,16 +5393,23 @@ async function saveSYSummaryUpdate() {
   }
 }
 
+
 /* =====================================================
    BUTTON EVENTS
    ===================================================== */
 
+// OPEN MAM PAGE
 const senhsOpenMAMButton = document.getElementById("openMAMPageBtn");
+
 if (senhsOpenMAMButton) {
   senhsOpenMAMButton.addEventListener("click", function() {
     if (!senhsGetSelectedSection()) {
       const message = document.getElementById("attendanceMessage");
-      if (message) message.textContent = "Please select a section first.";
+
+      if (message) {
+        message.textContent = "Please select a section first.";
+      }
+
       return;
     }
 
@@ -5402,12 +5418,19 @@ if (senhsOpenMAMButton) {
   });
 }
 
+
+// OPEN SYMS PAGE
 const senhsOpenSMSButton = document.getElementById("openSMSPageBtn");
+
 if (senhsOpenSMSButton) {
   senhsOpenSMSButton.addEventListener("click", function() {
     if (!senhsGetSelectedSection()) {
       const message = document.getElementById("attendanceMessage");
-      if (message) message.textContent = "Please select a section first.";
+
+      if (message) {
+        message.textContent = "Please select a section first.";
+      }
+
       return;
     }
 
@@ -5416,9 +5439,12 @@ if (senhsOpenSMSButton) {
   });
 }
 
+
+// LOAD MONTHLY ATTENDANCE
 const senhsLoadMonthButton = document.getElementById(
   "loadMonthlyAttendanceBtn"
 );
+
 if (senhsLoadMonthButton) {
   senhsLoadMonthButton.addEventListener(
     "click",
@@ -5426,54 +5452,97 @@ if (senhsLoadMonthButton) {
   );
 }
 
-const senhsUpdateButton = document.getElementById("updateSYSummaryBtn");
+
+// OPEN / HIDE SYMS UPDATE PANEL
+const senhsUpdateButton = document.getElementById(
+  "updateSYSummaryBtn"
+);
+
 if (senhsUpdateButton) {
   senhsUpdateButton.addEventListener("click", function() {
     const panel = document.getElementById("sySummaryUpdatePanel");
-    if (panel) {
-      panel.style.display =
-        panel.style.display === "none" ? "block" : "none";
+
+    if (!panel) {
+      console.error("SYMS update panel was not found.");
+      return;
+    }
+
+    const isHidden =
+      window.getComputedStyle(panel).display === "none";
+
+    if (isHidden) {
+      panel.style.display = "block";
+
+      panel.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+      });
+    } else {
+      panel.style.display = "none";
     }
   });
 }
 
-const senhsSaveUpdateButton = document.getElementById("saveSYSummaryBtn");
+
+// SAVE SYMS UPDATE
+const senhsSaveUpdateButton = document.getElementById(
+  "saveSYSummaryBtn"
+);
+
 if (senhsSaveUpdateButton) {
-  senhsSaveUpdateButton.addEventListener(
-    "click",
-    saveSYSummaryUpdate
-  );
+  senhsSaveUpdateButton.addEventListener("click", async function() {
+    await saveSYSummaryUpdate();
+  });
 }
 
+
+// CANCEL SYMS UPDATE
 const senhsCancelUpdateButton = document.getElementById(
   "cancelSYSummaryUpdateBtn"
 );
+
 if (senhsCancelUpdateButton) {
   senhsCancelUpdateButton.addEventListener("click", function() {
     const panel = document.getElementById("sySummaryUpdatePanel");
-    if (panel) panel.style.display = "none";
+
+    if (panel) {
+      panel.style.display = "none";
+    }
+
+    // Do not save anything when CANCEL is clicked.
+    // Reload the displayed summary to discard unsaved edits.
     loadSYSummary();
   });
 }
 
+
+// MAM LOGOUT
 const senhsMAMLogoutButton = document.getElementById("mamLogoutBtn");
+
 if (senhsMAMLogoutButton) {
-  senhsMAMLogoutButton.addEventListener(
-    "click",
-    function() {
-      const logout = document.getElementById("attendanceLogoutBtn");
-      if (logout) logout.click();
+  senhsMAMLogoutButton.addEventListener("click", function() {
+    const logout = document.getElementById("attendanceLogoutBtn");
+
+    if (logout) {
+      logout.click();
     }
-  );
+  });
 }
 
+
+// SYMS LOGOUT
 const senhsSMSLogoutButton = document.getElementById("smsLogoutBtn");
+
 if (senhsSMSLogoutButton) {
   senhsSMSLogoutButton.addEventListener("click", function() {
     const logout = document.getElementById("attendanceLogoutBtn");
-    if (logout) logout.click();
+
+    if (logout) {
+      logout.click();
+    }
   });
 }
+
   
 </script>
 </body>
