@@ -1358,7 +1358,63 @@ font-size: 22px !important;
 #saveSYSummaryBtn { background:#238636; }
 #cancelSYSummaryUpdateBtn { background:#616161; }
 #sySummaryMessage, #monthlyAttendanceMessage { font-weight:800; text-align:center; }
-#sySummaryTable, #monthlyAttendanceTable { width:max-content; min-width:100%; }
+#sySummaryTable, #monthlyAttendanceTable {
+  width: max-content;
+  min-width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: #fff;
+  color: #111;
+  font-size: 12px;
+}
+#sySummaryTable th,
+#sySummaryTable td {
+  border: 1px solid #aab4bf;
+  padding: 8px 10px;
+  text-align: center;
+  white-space: nowrap;
+  min-width: 72px;
+}
+#sySummaryTable thead th {
+  background: #243447;
+  color: #fff;
+  font-weight: 900;
+  text-align: center;
+  vertical-align: middle;
+}
+#sySummaryTable th:first-child,
+#sySummaryTable td:first-child {
+  position: sticky;
+  left: 0;
+  min-width: 210px;
+  max-width: 260px;
+  text-align: left;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  background: #f1f5f9;
+  color: #111;
+  z-index: 2;
+}
+#sySummaryTable thead th:first-child {
+  background: #243447;
+  color: #fff;
+  z-index: 4;
+}
+#sySummaryTable tbody td:not(:first-child) {
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+#sySummaryTable tbody td:nth-last-child(-n+2) {
+  background: #e8f2ff;
+  font-weight: 900;
+}
+#sySummaryTableWrapper {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin: 12px 0 20px;
+}
 @media(max-width:600px) {
   #mamPage, #smsPage { padding:8px; }
   #mamPage .device-content, #smsPage .device-content { padding:14px 8px; }
@@ -2528,6 +2584,13 @@ async function openScannerPage() {
    OPEN ADVISER / ADMIN ATTENDANCE
    ===================================================== */
 async function openAttendancePage() {
+  // Always start ADMIN / ADVISER sessions on DAILY ATT.
+  // Hide any report page left open by the previous session.
+  const mamReportPage = document.getElementById("mamPage");
+  const symsReportPage = document.getElementById("smsPage");
+  if (mamReportPage) mamReportPage.style.display = "none";
+  if (symsReportPage) symsReportPage.style.display = "none";
+
   devicePage.style.display =
     "none";
   scannerPage.style.display =
@@ -5008,20 +5071,9 @@ async function loadSYSummary() {
 
     const allStudents = Object.values(studentMap);
 
-    const activeMonths = senhsSummaryCache.filter(function(item) {
-      return item.students.some(function(student) {
-        if (
-          Number(student.present) > 0 ||
-          Number(student.absent) > 0
-        ) {
-          return true;
-        }
-
-        return (student.daily || []).some(function(day) {
-          return day.code && day.code !== "—";
-        });
-      });
-    });
+    // Keep every school-year month visible, even when the month has no records yet.
+    // This preserves a consistent monthly Present/Absent table for every section.
+    const activeMonths = senhsSummaryCache;
 
     const headerRow = document.createElement("tr");
 
@@ -5036,13 +5088,13 @@ async function loadSYSummary() {
       headerRow.appendChild(th);
     });
 
-    const presentTotalHeader = document.createElement("th");
-    presentTotalHeader.textContent = "SY PRESENT";
-    headerRow.appendChild(presentTotalHeader);
-
     const absentTotalHeader = document.createElement("th");
     absentTotalHeader.textContent = "SY ABSENT";
     headerRow.appendChild(absentTotalHeader);
+
+    const presentTotalHeader = document.createElement("th");
+    presentTotalHeader.textContent = "SY PRESENT";
+    headerRow.appendChild(presentTotalHeader);
 
     head.appendChild(headerRow);
 
@@ -5059,13 +5111,13 @@ async function loadSYSummary() {
       });
     });
 
-    const blankPresent = document.createElement("th");
-    blankPresent.textContent = "";
-    subHeader.appendChild(blankPresent);
-
     const blankAbsent = document.createElement("th");
     blankAbsent.textContent = "";
     subHeader.appendChild(blankAbsent);
+
+    const blankPresent = document.createElement("th");
+    blankPresent.textContent = "";
+    subHeader.appendChild(blankPresent);
 
     head.appendChild(subHeader);
 
@@ -5096,13 +5148,13 @@ async function loadSYSummary() {
         row.appendChild(absentCell);
       });
 
-      const totalPresentCell = document.createElement("td");
-      totalPresentCell.textContent = totalPresent;
-      row.appendChild(totalPresentCell);
-
       const totalAbsentCell = document.createElement("td");
       totalAbsentCell.textContent = totalAbsent;
       row.appendChild(totalAbsentCell);
+
+      const totalPresentCell = document.createElement("td");
+      totalPresentCell.textContent = totalPresent;
+      row.appendChild(totalPresentCell);
 
       body.appendChild(row);
     });
