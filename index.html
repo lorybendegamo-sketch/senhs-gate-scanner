@@ -5125,11 +5125,7 @@ async function loadSYSummary() {
       });
     });
 
-    const allStudents = Object.values(studentMap).sort(
-      function(a, b) {
-        return String(a.name).localeCompare(String(b.name));
-      }
-    );
+    const allStudents = Object.values(studentMap);
 
     const activeMonths = senhsSummaryCache;
 
