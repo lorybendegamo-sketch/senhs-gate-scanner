@@ -2,10 +2,17 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
   <title>SENHS Gate Scanner</title>
-  <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+  <script
+    src="https://unpkg.com/html5-qrcode"
+    type="text/javascript"
+  ></script>
   <style>
+    
     /* ========================================
        GLOBAL CENTER ALIGNMENT
        ======================================== */
@@ -33,7 +40,10 @@
       font-family: Arial, Helvetica, sans-serif;
       color: #123;
       background-image:
-        linear-gradient(rgba(255,255,255,0.72), rgba(255,255,255,0.72)),
+        linear-gradient(
+          rgba(255,255,255,0.72),
+          rgba(255,255,255,0.72)
+        ),
         url("./logo.png");
       background-size: cover;
       background-position: center;
@@ -61,7 +71,10 @@
       min-height: calc(100vh - 40px);
       display: block;
       background-image:
-        linear-gradient(rgba(255,255,255,0.78), rgba(255,255,255,0.78)),
+        linear-gradient(
+          rgba(255,255,255,0.78),
+          rgba(255,255,255,0.78)
+        ),
         url("./logo.png");
       background-size: cover;
       background-position: center;
@@ -71,15 +84,6 @@
       box-shadow: 0 10px 35px rgba(0,0,0,0.12);
       text-align: center;
       overflow: hidden;
-      z-index: 1;
-    }
-    .device-content {
-      position: relative;
-      z-index: 5;
-      pointer-events: none;
-    }
-    .device-content > * {
-      pointer-events: auto;
     }
     /* =========================
        PAGE 2 — DEVICE CODE
@@ -89,7 +93,10 @@
       position: relative;
       min-height: calc(100vh - 40px);
       background-image:
-        linear-gradient(rgba(255,255,255,0.78), rgba(255,255,255,0.78)),
+        linear-gradient(
+          rgba(255,255,255,0.78),
+          rgba(255,255,255,0.78)
+        ),
         url("./logo.png");
       background-size: cover;
       background-position: center;
@@ -138,9 +145,6 @@
       display: block;
       box-shadow: 0 5px 12px rgba(0, 0, 0, 0.15);
       transition: 0.2s ease;
-      position: relative;
-      z-index: 10;
-      pointer-events: auto;
     }
     #userNextBtn:hover {
       opacity: 0.92;
@@ -171,6 +175,10 @@
       pointer-events: none;
       white-space: nowrap;
       z-index: 0;
+    }
+    .device-content {
+      position: relative;
+      z-index: 1;
     }
     .school-name {
       font-size: 30px;
@@ -282,7 +290,10 @@
       overflow: hidden;
       border-radius: 24px;
       background-image:
-        linear-gradient(rgba(255,255,255,0.78), rgba(255,255,255,0.78)),
+        linear-gradient(
+          rgba(255,255,255,0.78),
+          rgba(255,255,255,0.78)
+        ),
         url("./logo.png");
       background-size: cover;
       background-position: center;
@@ -604,40 +615,47 @@
       color: #9fb0bd;
       margin-top: 10px;
     }
-    /* =========================
-       SCAN OVERLAY - RESPONSIVE
-       ========================= */
-    .scan-overlay {
-      position: fixed;
-      inset: 0;
-      z-index: 9999;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      box-sizing: border-box;
-      padding: 16px;
-      background: rgba(0, 0, 0, 0.72);
-      -webkit-backdrop-filter: blur(4px);
-      backdrop-filter: blur(4px);
-    }
-    .scan-overlay > * {
-      box-sizing: border-box;
-      max-width: 100%;
-    }
-    .processing-title {
-      font-size: clamp(21px, 4vw, 27px);
-      font-weight: 900;
-      color: #ffffff;
-      text-align: center;
-      overflow-wrap: anywhere;
-    }
-    .processing-text {
-      margin-top: 8px;
-      font-size: clamp(14px, 2.5vw, 15px);
-      color: #ffffff;
-      text-align: center;
-      overflow-wrap: anywhere;
-    }
+   
+/* =========================
+   SCAN OVERLAY - RESPONSIVE
+   ========================= */
+.scan-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+
+  display: none;
+  align-items: center;
+  justify-content: center;
+
+  box-sizing: border-box;
+  padding: 16px;
+
+  background: rgba(0, 0, 0, 0.72);
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+}
+
+.scan-overlay > * {
+  box-sizing: border-box;
+  max-width: 100%;
+}
+
+.processing-title {
+  font-size: clamp(21px, 4vw, 27px);
+  font-weight: 900;
+  color: #ffffff;
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+
+.processing-text {
+  margin-top: 8px;
+  font-size: clamp(14px, 2.5vw, 15px);
+  color: #ffffff;
+  text-align: center;
+  overflow-wrap: anywhere;
+}
     /* =========================
        ADVISER / ADMIN ATTENDANCE
        ========================= */
@@ -782,47 +800,51 @@
       opacity: 0.5;
       cursor: not-allowed;
     }
-    #saveAttendanceBtn {
-      display: block;
-      width: 100%;
-      max-width: 300px;
-      margin: 22px auto 10px auto;
-      padding: 14px 20px;
-      border: none;
-      border-radius: 10px;
-      background: #1976d2;
-      color: #ffffff;
-      font-size: 17px;
-      font-weight: 900;
-      cursor: pointer;
-    }
-    #saveAttendanceBtn:hover {
-      opacity: 0.9;
-    }
-    #saveAttendanceBtn:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
-    #attendanceLogoutBtn {
-      display: block;
-      width: 100%;
-      max-width: 300px;
-      margin: 10px auto 20px auto;
-      padding: 14px 20px;
-      border: none;
-      border-radius: 10px;
-      background: #b71c1c;
-      color: #ffffff;
-      font-size: 17px;
-      font-weight: 900;
-      cursor: pointer;
-    }
-    #attendanceLogoutBtn:hover {
-      opacity: 0.9;
-    }
-    #attendanceLogoutBtn:active {
-      transform: scale(0.98);
-    }
+#saveAttendanceBtn {
+  display: block;
+  width: 100%;
+  max-width: 300px;
+  margin: 22px auto 10px auto;
+  padding: 14px 20px;
+  border: none;
+  border-radius: 10px;
+  background: #1976d2;
+  color: #ffffff;
+  font-size: 17px;
+  font-weight: 900;
+  cursor: pointer;
+}
+#saveAttendanceBtn:hover {
+  opacity: 0.9;
+}
+#saveAttendanceBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+    
+    /* =========================
+   ATTENDANCE LOGOUT
+   ========================= */
+#attendanceLogoutBtn {
+  display: block;
+  width: 100%;
+  max-width: 300px;
+  margin: 10px auto 20px auto;
+  padding: 14px 20px;
+  border: none;
+  border-radius: 10px;
+  background: #b71c1c;
+  color: #ffffff;
+  font-size: 17px;
+  font-weight: 900;
+  cursor: pointer;
+}
+#attendanceLogoutBtn:hover {
+  opacity: 0.9;
+}
+#attendanceLogoutBtn:active {
+  transform: scale(0.98);
+}
     #attendanceMessage {
       min-height: 24px;
       margin-top: 10px;
@@ -959,50 +981,62 @@
         padding: 6px 0;
       }
     }
+
     /* FIX: CENTER SCAN OVERLAY ON TABLETS */
-    #scannerPage #scanOverlay {
-      position: fixed !important;
-      top: 0 !important;
-      right: 0 !important;
-      bottom: 0 !important;
-      left: 0 !important;
-      width: 100vw !important;
-      height: 100vh !important;
-      height: 100dvh !important;
-      margin: 0 !important;
-      padding: 16px !important;
-      box-sizing: border-box !important;
-      display: none;
-      align-items: center !important;
-      justify-content: center !important;
-      z-index: 99999 !important;
-    }
-    #scannerPage #overlayContent {
-      width: min(100%, 420px);
-      max-width: 100%;
-      max-height: calc(100dvh - 32px);
-      margin: auto;
-      box-sizing: border-box;
-      overflow-wrap: anywhere;
-    }
+#scannerPage #scanOverlay {
+position: fixed !important;
+top: 0 !important;
+right: 0 !important;
+bottom: 0 !important;
+left: 0 !important;
+
+width: 100vw !important;
+height: 100vh !important;
+height: 100dvh !important;
+
+margin: 0 !important;
+padding: 16px !important;
+box-sizing: border-box !important;
+
+display: none;
+align-items: center !important;
+justify-content: center !important;
+
+z-index: 99999 !important;
+}
+
+#scannerPage #overlayContent {
+width: min(100%, 420px);
+max-width: 100%;
+max-height: calc(100dvh - 32px);
+margin: auto;
+box-sizing: border-box;
+overflow-wrap: anywhere;
+}
+
     /* TABLET: MAKE PROCESSING AND RESULT OVERLAYS BIGGER */
-    @media screen and (min-width: 600px) and (max-width: 1200px) {
-      #scannerPage #overlayContent {
-        width: min(90vw, 650px) !important;
-        max-width: 650px !important;
-        font-size: 1.35em;
-      }
-      #scannerPage #overlayContent > * {
-        max-width: 100%;
-        box-sizing: border-box;
-      }
-      #scannerPage .processing-title {
-        font-size: 36px !important;
-      }
-      #scannerPage .processing-text {
-        font-size: 22px !important;
-      }
-    }
+@media screen and (min-width: 600px) and (max-width: 1200px) {
+#scannerPage #overlayContent {
+width: min(90vw, 650px) !important;
+max-width: 650px !important;
+font-size: 1.35em;
+}
+
+#scannerPage #overlayContent > * {
+max-width: 100%;
+box-sizing: border-box;
+}
+
+#scannerPage .processing-title {
+font-size: 36px !important;
+}
+
+#scannerPage .processing-text {
+font-size: 22px !important;
+}
+}
+
+    
     /* =========================================
        MONTHLY ATTENDANCE MATRIX
        ========================================= */
@@ -1016,12 +1050,14 @@
       background: rgba(255, 255, 255, 0.96);
       color: #111;
     }
+
     #monthlyAttendancePanel h3 {
       margin: 16px 0 12px;
       font-size: 16px;
       font-weight: 900;
       text-align: center;
     }
+
     #monthlyAttendanceMonth {
       display: block;
       width: 100%;
@@ -1033,6 +1069,7 @@
       border-radius: 8px;
       box-sizing: border-box;
     }
+
     #loadMonthlyAttendanceBtn,
     #saveHistoricalSummaryBtn {
       display: block;
@@ -1048,15 +1085,18 @@
       font-weight: 900;
       cursor: pointer;
     }
+
     #saveHistoricalSummaryBtn {
       background: #238636;
     }
+
     #monthlyAttendanceMessage {
       margin: 12px 0;
       text-align: center;
       font-size: 13px;
       font-weight: 700;
     }
+
     #monthlyAttendanceTableWrapper,
     #monthlySummaryTableWrapper {
       width: 100%;
@@ -1064,22 +1104,25 @@
       margin: 12px 0 20px;
       -webkit-overflow-scrolling: touch;
     }
+
     #monthlyAttendanceTable,
     #monthlySummaryTable {
-      border-collapse: separate;
-      border-spacing: 0;
+      border-collapse: collapse;
       background: #fff;
       color: #111;
       font-size: 12px;
     }
+
     #monthlyAttendanceTable {
       width: max-content;
       min-width: 100%;
     }
+
     #monthlySummaryTable {
       width: 100%;
       min-width: 300px;
     }
+
     #monthlyAttendanceTable th,
     #monthlyAttendanceTable td,
     #monthlySummaryTable th,
@@ -1089,49 +1132,63 @@
       text-align: center;
       white-space: nowrap;
     }
+
     #monthlyAttendanceTable th,
     #monthlySummaryTable th {
       background: #222;
       color: #fff;
       font-weight: 900;
     }
+
     #monthlyAttendanceTable th:first-child,
     #monthlyAttendanceTable td:first-child,
     #monthlySummaryTable th:first-child,
     #monthlySummaryTable td:first-child {
       text-align: left;
+    }
+
+    #monthlyAttendanceTable th:first-child,
+    #monthlyAttendanceTable td:first-child {
       position: sticky;
       left: 0;
-      z-index: 3;
-      min-width: 180px;
-      width: 180px;
-      background: #ffffff;
-      box-shadow: 2px 0 3px rgba(0, 0, 0, 0.12);
+      z-index: 1;
+      min-width: 145px;
+      max-width: 180px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      background-color: #f2f2f2;
+      color: #111;
     }
-    #monthlyAttendanceTable thead th:first-child,
-    #monthlySummaryTable thead th:first-child {
-      z-index: 5;
-      background: #e9eef5;
+
+    #monthlyAttendanceTable th:first-child {
+      z-index: 2;
+      background: #222;
+      color: #fff;
     }
+
     #monthlyAttendanceTable td.status-pp {
       background: #d9f7df;
       color: #176b2c;
       font-weight: 900;
     }
+
     #monthlyAttendanceTable td.status-half {
       background: #ffe3b3;
       color: #814900;
       font-weight: 900;
     }
+
     #monthlyAttendanceTable td.status-aa {
       background: #ffdede;
       color: #a40000;
       font-weight: 900;
     }
+
     #monthlyAttendanceTable td.status-none {
       background: #eee;
       color: #666;
     }
+
     #monthlySummaryTable input {
       width: 75px;
       max-width: 100%;
@@ -1140,234 +1197,230 @@
       text-align: center;
       font-size: 13px;
     }
+
     @media (max-width: 600px) {
       #monthlyAttendancePanel {
         padding: 10px 3px;
       }
+
       #monthlyAttendancePanel h3 {
         font-size: 14px;
       }
+
       #monthlyAttendanceTable th,
       #monthlyAttendanceTable td {
         padding: 7px 6px;
         font-size: 11px;
       }
+
       #monthlyAttendanceTable th:first-child,
       #monthlyAttendanceTable td:first-child {
         min-width: 125px;
         max-width: 145px;
       }
     }
-    /* ===== REPORT PAGE DESIGN + NAVIGATION ===== */
-    #mamPage, #smsPage {
-      width: 100%;
-      min-height: 100vh;
-      padding: 18px;
-      box-sizing: border-box;
-      display: none;
-    }
-    #mamPage .device-content, #smsPage .device-content {
-      width: 100%;
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 22px;
-      border-radius: 18px;
-      background: rgba(255,255,255,.97);
-      box-shadow: 0 8px 28px rgba(0,0,0,.16);
-      box-sizing: border-box;
-    }
-    #mamPage h2, #smsPage h2 {
-      margin: 6px 0 18px;
-      color: #124b7c;
-      font-size: clamp(22px, 3vw, 30px);
-      font-weight: 900;
-    }
-    .report-navigation {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 12px;
-      margin: 16px auto 22px;
-      width: 100%;
-    }
-    .report-navigation button,
-    #attendanceReportNavigation button {
-      flex: 1 1 160px;
-      min-height: 52px;
-      padding: 13px 18px;
-      border: 0;
-      border-radius: 12px;
-      color: #fff;
-      font-size: 16px;
-      font-weight: 900;
-      letter-spacing: .3px;
-      cursor: pointer;
-      box-shadow: 0 4px 10px rgba(0,0,0,.16);
-      transition: transform .15s ease, filter .15s ease;
-    }
-    .report-navigation button:hover,
-    #attendanceReportNavigation button:hover {
-      filter: brightness(1.08);
-      transform: translateY(-1px);
-    }
-    #openMAMPageBtn, #goMAMFromSYMSBtn {
-      background: linear-gradient(135deg,#1565c0,#2196f3);
-    }
-    #openSMSPageBtn, #goSYMSFromMAMBtn {
-      background: linear-gradient(135deg,#6a1b9a,#ab47bc);
-    }
-    #goDailyFromMAMBtn, #goDailyFromSYMSBtn {
-      background: linear-gradient(135deg,#00897b,#26a69a);
-    }
-    #mamLogoutBtn, #smsLogoutBtn {
-      display: block;
-      width: 100%;
-      max-width: 320px;
-      min-height: 50px;
-      margin: 28px auto 4px;
-      padding: 13px 18px;
-      border: 0;
-      border-radius: 12px;
-      background: #b71c1c;
-      color: #fff;
-      font-size: 16px;
-      font-weight: 900;
-      cursor: pointer;
-    }
-    #attendanceReportNavigation {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 12px;
-      margin: 20px auto 8px;
-      width: 100%;
-    }
-    #attendanceReportNavigation #openMAMPageBtn {
-      background: linear-gradient(135deg,#1565c0,#2196f3);
-    }
-    #attendanceReportNavigation #openSMSPageBtn {
-      background: linear-gradient(135deg,#6a1b9a,#ab47bc);
-    }
-    #attendanceLogoutBtn {
-      margin-top: 22px;
-    }
-    #monthlyAttendanceMonth {
-      display:block;
-      width:100%;
-      max-width:340px;
-      margin:10px auto 14px;
-      padding:12px;
-      border:2px solid #c8d8e8;
-      border-radius:10px;
-      background:#fff;
-      font-size:16px;
-      font-weight:700;
-    }
-    #loadMonthlyAttendanceBtn, #updateSYSummaryBtn, #saveSYSummaryBtn, #cancelSYSummaryUpdateBtn {
-      min-height:48px;
-      padding:12px 20px;
-      border:0;
-      border-radius:10px;
-      color:#fff;
-      font-weight:900;
-      font-size:15px;
-      cursor:pointer;
-      box-shadow:0 3px 8px rgba(0,0,0,.14);
-      margin:8px 5px;
-    }
-    #loadMonthlyAttendanceBtn {
-      background:#1976d2;
-    }
-    #updateSYSummaryBtn {
-      background:#ef6c00;
-    }
-    #saveSYSummaryBtn {
-      background:#238636;
-    }
-    #cancelSYSummaryUpdateBtn {
-      background:#616161;
-    }
-    #sySummaryMessage, #monthlyAttendanceMessage {
-      font-weight:800;
-      text-align:center;
-    }
-    #sySummaryTable {
-      width: max-content;
-      min-width: 100%;
-      border-collapse: separate;
-      border-spacing: 0;
-      background: #fff;
-      color: #111;
-      font-size: 12px;
-    }
-    #sySummaryTable th,
-    #sySummaryTable td {
-      border: 1px solid #aab4bf;
-      padding: 8px 10px;
-      text-align: center;
-      white-space: nowrap;
-      min-width: 72px;
-    }
-    #sySummaryTable thead th {
-      background: #243447;
-      color: #fff;
-      font-weight: 900;
-      text-align: center;
-      vertical-align: middle;
-    }
-    #sySummaryTable th:first-child,
-    #sySummaryTable td:first-child {
-      position: sticky;
-      left: 0;
-      min-width: 210px;
-      max-width: 260px;
-      text-align: left;
-      white-space: normal;
-      overflow-wrap: anywhere;
-      background: #f1f5f9;
-      color: #111;
-      z-index: 2;
-    }
-    #sySummaryTable thead th:first-child {
-      background: #243447;
-      color: #fff;
-      z-index: 4;
-    }
-    #sySummaryTable tbody td:not(:first-child) {
-      text-align: center;
-      font-variant-numeric: tabular-nums;
-    }
-    #sySummaryTable tbody td:nth-last-child(-n+2) {
-      background: #e8f2ff;
-      font-weight: 900;
-    }
-    #sySummaryTableWrapper {
-      width: 100%;
-      max-width: 100%;
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
-      margin: 12px 0 20px;
-    }
-    #sySummaryUpdatePanel {
-      display: none;
-      margin-top: 20px;
-      padding: 15px;
-      border: 1px solid #ccc;
-      border-radius: 10px;
-      background: #f9f9f9;
-    }
-    @media(max-width:600px) {
-      #mamPage, #smsPage {
-        padding:8px;
-      }
-      #mamPage .device-content, #smsPage .device-content {
-        padding:14px 8px;
-      }
-      .report-navigation button, #attendanceReportNavigation button {
-        flex:1 1 100%;
-        min-height:48px;
-      }
-    }
+
+    
+/* FIXED STUDENT NAME — MONTHLY ATTENDANCE MATRIX */
+#monthlyAttendanceTable,
+#monthlySummaryTable {
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+#monthlyAttendanceTable th:first-child,
+#monthlyAttendanceTable td:first-child,
+#monthlySummaryTable th:first-child,
+#monthlySummaryTable td:first-child {
+  position: sticky;
+  left: 0;
+  z-index: 3;
+  min-width: 180px;
+  width: 180px;
+  background: #ffffff;
+  text-align: left;
+  box-shadow: 2px 0 3px rgba(0, 0, 0, 0.12);
+}
+
+/* Keep the student-name header above the scrolling cells */
+#monthlyAttendanceTable thead th:first-child,
+#monthlySummaryTable thead th:first-child {
+  position: sticky;
+  left: 0;
+  z-index: 5;
+  background: #e9eef5;
+}
+
+/* Allow horizontal scrolling for both tables */
+#monthlyAttendanceTableWrapper,
+#monthlySummaryTableWrapper {
+  overflow-x: auto;
+  max-width: 100%;
+  position: relative;
+}
+
+/* Keep student names readable */
+#monthlyAttendanceTable td:first-child,
+#monthlySummaryTable td:first-child {
+  white-space: nowrap;
+}
+    
+
+/* ===== REPORT PAGE DESIGN + NAVIGATION ===== */
+#mamPage, #smsPage {
+  width: 100%;
+  min-height: 100vh;
+  padding: 18px;
+  box-sizing: border-box;
+}
+#mamPage .device-content, #smsPage .device-content {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 22px;
+  border-radius: 18px;
+  background: rgba(255,255,255,.97);
+  box-shadow: 0 8px 28px rgba(0,0,0,.16);
+  box-sizing: border-box;
+}
+#mamPage h2, #smsPage h2 {
+  margin: 6px 0 18px;
+  color: #124b7c;
+  font-size: clamp(22px, 3vw, 30px);
+  font-weight: 900;
+}
+.report-navigation {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+  margin: 16px auto 22px;
+  width: 100%;
+}
+.report-navigation button,
+#attendanceReportNavigation button {
+  flex: 1 1 160px;
+  min-height: 52px;
+  padding: 13px 18px;
+  border: 0;
+  border-radius: 12px;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 900;
+  letter-spacing: .3px;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0,0,0,.16);
+  transition: transform .15s ease, filter .15s ease;
+}
+.report-navigation button:hover,
+#attendanceReportNavigation button:hover { filter: brightness(1.08); transform: translateY(-1px); }
+#openMAMPageBtn, #goMAMFromSYMSBtn { background: linear-gradient(135deg,#1565c0,#2196f3); }
+#openSMSPageBtn, #goSYMSFromMAMBtn { background: linear-gradient(135deg,#6a1b9a,#ab47bc); }
+#goDailyFromMAMBtn, #goDailyFromSYMSBtn { background: linear-gradient(135deg,#00897b,#26a69a); }
+#mamLogoutBtn, #smsLogoutBtn {
+  display: block;
+  width: 100%;
+  max-width: 320px;
+  min-height: 50px;
+  margin: 28px auto 4px;
+  padding: 13px 18px;
+  border: 0;
+  border-radius: 12px;
+  background: #b71c1c;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 900;
+  cursor: pointer;
+}
+#attendanceReportNavigation {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+  margin: 20px auto 8px;
+  width: 100%;
+}
+#attendanceReportNavigation #openMAMPageBtn { background: linear-gradient(135deg,#1565c0,#2196f3); }
+#attendanceReportNavigation #openSMSPageBtn { background: linear-gradient(135deg,#6a1b9a,#ab47bc); }
+#attendanceLogoutBtn { margin-top: 22px; }
+#monthlyAttendanceMonth {
+  display:block; width:100%; max-width:340px; margin:10px auto 14px;
+  padding:12px; border:2px solid #c8d8e8; border-radius:10px;
+  background:#fff; font-size:16px; font-weight:700;
+}
+#loadMonthlyAttendanceBtn, #updateSYSummaryBtn, #saveSYSummaryBtn, #cancelSYSummaryUpdateBtn {
+  min-height:48px; padding:12px 20px; border:0; border-radius:10px;
+  color:#fff; font-weight:900; font-size:15px; cursor:pointer;
+  box-shadow:0 3px 8px rgba(0,0,0,.14); margin:8px 5px;
+}
+#loadMonthlyAttendanceBtn { background:#1976d2; }
+#updateSYSummaryBtn { background:#ef6c00; }
+#saveSYSummaryBtn { background:#238636; }
+#cancelSYSummaryUpdateBtn { background:#616161; }
+#sySummaryMessage, #monthlyAttendanceMessage { font-weight:800; text-align:center; }
+#sySummaryTable, #monthlyAttendanceTable {
+  width: max-content;
+  min-width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: #fff;
+  color: #111;
+  font-size: 12px;
+}
+#sySummaryTable th,
+#sySummaryTable td {
+  border: 1px solid #aab4bf;
+  padding: 8px 10px;
+  text-align: center;
+  white-space: nowrap;
+  min-width: 72px;
+}
+#sySummaryTable thead th {
+  background: #243447;
+  color: #fff;
+  font-weight: 900;
+  text-align: center;
+  vertical-align: middle;
+}
+#sySummaryTable th:first-child,
+#sySummaryTable td:first-child {
+  position: sticky;
+  left: 0;
+  min-width: 210px;
+  max-width: 260px;
+  text-align: left;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  background: #f1f5f9;
+  color: #111;
+  z-index: 2;
+}
+#sySummaryTable thead th:first-child {
+  background: #243447;
+  color: #fff;
+  z-index: 4;
+}
+#sySummaryTable tbody td:not(:first-child) {
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+#sySummaryTable tbody td:nth-last-child(-n+2) {
+  background: #e8f2ff;
+  font-weight: 900;
+}
+#sySummaryTableWrapper {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin: 12px 0 20px;
+}
+@media(max-width:600px) {
+  #mamPage, #smsPage { padding:8px; }
+  #mamPage .device-content, #smsPage .device-content { padding:14px 8px; }
+  .report-navigation button, #attendanceReportNavigation button { flex:1 1 100%; min-height:48px; }
+}
+
   </style>
 </head>
 <body>
@@ -1382,4 +1435,4274 @@
     <div class="device-content">
       <div class="school-name">
         SAN ESTEBAN NATIONAL HIGH SCHOOL
-      </div
+      </div>
+      <div class="gate-title">
+        GATE SCANNER
+      </div>
+      <div class="subtitle">
+        User Information
+      </div>
+      <input
+        id="userNameInput"
+        type="text"
+        placeholder="Enter your Name"
+        autocomplete="name"
+      >
+      <button
+        id="userNextBtn"
+        type="button"
+      >
+        NEXT
+      </button>
+      <div id="userMessage"></div>
+    </div>
+  </div>
+  <!-- =====================================================
+       PAGE 2 — DEVICE / ACCESS CODE
+       ===================================================== -->
+  <div id="devicePage">
+    <div class="device-watermark">SENHS</div>
+    <div class="device-content">
+      <div class="school-name">
+        SAN ESTEBAN NATIONAL HIGH SCHOOL
+      </div>
+      <div class="gate-title">
+        GATE SCANNER
+      </div>
+      <div class="subtitle">
+        Authorized Gate Device
+      </div>
+      <div class="device-input-wrapper">
+        <input
+          id="deviceCode"
+          type="password"
+          placeholder="Enter Device Code"
+          autocomplete="off"
+        >
+        <button
+          id="toggleDeviceCode"
+          type="button"
+          aria-label="Show device code"
+        >
+          👁
+        </button>
+      </div>
+      <button
+        id="continueBtn"
+        type="button"
+      >
+        CONTINUE
+      </button>
+      <div id="deviceMessage"></div>
+    </div>
+  </div>
+  <!-- =====================================================
+       PAGE 3 — ADVISER / ADMIN ATTENDANCE
+       ===================================================== -->
+  <div id="attendancePage">
+    <div class="device-watermark">SENHS</div>
+    <div class="device-content">
+      <div class="school-name">
+        SAN ESTEBAN NATIONAL HIGH SCHOOL
+      </div>
+      <div class="gate-title">
+        ATTENDANCE
+      </div>
+      <div
+        class="subtitle"
+        id="attendanceRoleTitle"
+      >
+        Adviser / Admin Attendance
+      </div>
+<!-- PHILIPPINE STANDARD TIME -->
+<div class="pst-clock">
+  <div class="pst-label">
+    Philippine Standard Time
+  </div>
+  <div id="attendancePstTime">
+    12:25:18 AM
+  </div>
+  <div id="attendancePstDate">
+    Tuesday, October 6, 2026
+  </div>
+</div>
+      
+      <!-- ADMIN SECTION SELECTOR -->
+      <div
+        id="attendanceSectionWrapper"
+        style="display:none;"
+      >
+        <select id="attendanceSectionSelect">
+          <option value="">
+            Select Section
+          </option>
+          <option value="7-Acacia">7-Acacia</option>
+          <option value="7-Banaba">7-Banaba</option>
+          <option value="7-Mahogany">7-Mahogany</option>
+          <option value="8-Camia">8-Camia</option>
+          <option value="8-Sampaguita">8-Sampaguita</option>
+          <option value="8-Rose">8-Rose</option>
+          <option value="9-Bonifacio">9-Bonifacio</option>
+          <option value="9-Quezon">9-Quezon</option>
+          <option value="9-Rizal">9-Rizal</option>
+          <option value="10-Diamond">10-Diamond</option>
+          <option value="10-Jade">10-Jade</option>
+          <option value="10-Ruby">10-Ruby</option>
+          <option value="11-Durkheim">11-Durkheim</option>
+          <option value="11-Einstein">11-Einstein</option>
+          <option value="11-Ramsay">11-Ramsay</option>
+          <option value="12-Comte">12-Comte</option>
+          <option value="12-Keller">12-Keller</option>
+          <option value="12-Newton">12-Newton</option>
+        </select>
+      </div>
+      <div id="attendanceCurrentSection">
+        Section: —
+      </div>
+      <div id="attendanceTableWrapper">
+        <table id="attendanceTable">
+          <thead>
+            <tr>
+              <th>STUDENT NAME</th>
+              <th>AM</th>
+              <th>PM</th>
+            </tr>
+          </thead>
+          <tbody id="attendanceTableBody">
+          </tbody>
+        </table>
+      </div>
+      <button
+        id="saveAttendanceBtn"
+        type="button"
+      >
+          SAVE
+</button>
+      <button
+  id="proceedAttendanceBtn"
+  type="button"
+        >
+        PROCEED
+      </button>
+<!-- REPORT NAVIGATION BUTTONS -->
+<div id="attendanceReportNavigation">
+  <button id="openMAMPageBtn" type="button">MAM</button>
+  <button id="openSMSPageBtn" type="button">SYMS</button>
+</div>
+<!-- END REPORT NAVIGATION BUTTONS -->
+
+<div id="attendanceMessage"></div>
+
+<button id="attendanceLogoutBtn" type="button">LOG OUT</button>
+    </div>
+  </div>
+
+  
+<!-- =====================================================
+     PAGE — MONTHLY ATTENDANCE MATRIX (MAM)
+     ===================================================== -->
+<div id="mamPage" style="display:none;">
+  <div class="device-content">
+    <h2>MONTHLY ATTENDANCE MATRIX</h2>
+
+    <div class="report-navigation" aria-label="MAM navigation">
+      <button id="goDailyFromMAMBtn" type="button">DAILY ATT</button>
+      <button id="goSYMSFromMAMBtn" type="button">SYMS</button>
+    </div>
+
+    <label for="monthlyAttendanceMonth">
+      Select Month:
+    </label>
+
+    <select id="monthlyAttendanceMonth">
+      <option value="2026-06">June 2026</option>
+      <option value="2026-07">July 2026</option>
+      <option value="2026-08">August 2026</option>
+      <option value="2026-09">September 2026</option>
+      <option value="2026-10" selected>October 2026</option>
+      <option value="2026-11">November 2026</option>
+      <option value="2026-12">December 2026</option>
+    </select>
+
+    <button id="loadMonthlyAttendanceBtn" type="button">
+      LOAD MONTH
+    </button>
+
+    <div id="monthlyAttendanceMessage">
+      Select a month, then click LOAD MONTH.
+    </div>
+
+    <div id="monthlyAttendanceTableWrapper"
+         style="overflow-x:auto;max-width:100%;">
+      <table id="monthlyAttendanceTable">
+        <thead id="monthlyAttendanceTableHead"></thead>
+        <tbody id="monthlyAttendanceTableBody"></tbody>
+      </table>
+    </div>
+    <button id="mamLogoutBtn" type="button">LOG OUT</button>
+  </div>
+</div>
+
+<!-- =====================================================
+     PAGE — SCHOOL YEAR MONTHLY SUMMARY (SYMS)
+     ===================================================== -->
+<div id="smsPage" style="display:none;">
+  <div class="device-content">
+    <h2>SCHOOL YEAR MONTHLY SUMMARY (SYMS)</h2>
+
+    <div class="report-navigation" aria-label="SYMS navigation">
+      <button id="goDailyFromSYMSBtn" type="button">DAILY ATT</button>
+      <button id="goMAMFromSYMSBtn" type="button">MAM</button>
+    </div>
+
+    <p id="sySummaryMessage">
+      School Year 2026–2027
+    </p>
+
+    <div id="sySummaryTableWrapper"
+         style="overflow-x:auto;max-width:100%;">
+      <table id="sySummaryTable">
+        <thead id="sySummaryTableHead"></thead>
+        <tbody id="sySummaryTableBody"></tbody>
+      </table>
+    </div>
+
+    <button id="updateSYSummaryBtn" type="button">
+      NEED UPDATE
+    </button>
+
+   <div id="sySummaryUpdatePanel" style="display:none;">
+  <h3>UPDATE MONTHLY ATTENDANCE</h3>
+
+  <p>
+    Edit Present and Absent totals for any month
+    from June 2026 to May 2027. Only changed months
+    will be saved.
+  </p>
+
+  <div id="syHistoricalInputs"
+       style="overflow-x:auto;max-width:100%;">
+  </div>
+
+  <button id="saveSYSummaryBtn" type="button">
+    SAVE UPDATE
+  </button>
+
+  <button id="cancelSYSummaryUpdateBtn" type="button">
+    CANCEL
+  </button>
+</div>
+    </div>
+    <button id="smsLogoutBtn" type="button">LOG OUT</button>
+  </div>
+</div>
+  
+  <!-- =====================================================
+       PAGE 4 — SCANNER
+       ===================================================== -->
+  <div id="scannerPage">
+    <div class="scanner-container">
+      <div class="scanner-watermark">
+        SENHS
+      </div>
+      <div class="scanner-header">
+        <div class="scanner-school">
+          SAN ESTEBAN NATIONAL HIGH SCHOOL
+        </div>
+        <div class="scanner-title">
+          GATE SCANNER
+        </div>
+        <div class="pst-label">
+          PHILIPPINE STANDARD TIME
+        </div>
+        <div
+          id="pstTime"
+          class="pst-time"
+        >
+          --:--:-- --
+        </div>
+        <div
+          id="pstDate"
+          class="pst-date"
+        >
+          -- -- ----
+        </div>
+        <button
+          id="exitScannerBtn"
+          type="button"
+        >
+          EXIT
+        </button>
+      </div>
+      <div class="camera-area">
+        <div id="reader"></div>
+        <button
+          id="switchCameraBtn"
+          title="Switch Camera"
+          aria-label="Switch Camera"
+          type="button"
+        >
+          ↔
+        </button>
+        <div
+          id="scanOverlay"
+          class="scan-overlay"
+        >
+          <div id="overlayContent"></div>
+        </div>
+      </div>
+      <div
+        id="readyBar"
+        class="ready-bar"
+      >
+        ● READY TO SCAN
+      </div>
+      <!-- =================================================
+           ATTENDANCE MONITOR
+           ================================================= -->
+      <div id="attendanceMonitor">
+        <div class="attendance-title">
+          SCHOOL SUMMARY
+        </div>
+        <!-- JHS -->
+        <div class="school-group jhs">
+          <div class="school-group-title">
+            JHS — GRADES 7–10
+          </div>
+          <div class="school-summary">
+            <div class="summary-card total">
+              <div class="summary-label">TOTAL</div>
+              <div
+                id="jhsTotal"
+                class="summary-number"
+              >0</div>
+            </div>
+            <div class="summary-card am-present">
+              <div class="summary-label">AM PRESENT</div>
+              <div
+                id="jhsAmPresent"
+                class="summary-number"
+              >0</div>
+            </div>
+            <div class="summary-card am-absent">
+              <div class="summary-label">AM ABSENT</div>
+              <div
+                id="jhsAmAbsent"
+                class="summary-number"
+              >0</div>
+            </div>
+            <div class="summary-card am-late">
+              <div class="summary-label">AM LATE</div>
+              <div
+                id="jhsAmLate"
+                class="summary-number"
+              >0</div>
+            </div>
+            <div
+              id="jhsPmPresentCard"
+              class="summary-card pm-present"
+            >
+              <div class="summary-label">PM PRESENT</div>
+              <div
+                id="jhsPmPresent"
+                class="summary-number"
+              >0</div>
+            </div>
+            <div
+              id="jhsPmAbsentCard"
+              class="summary-card pm-absent"
+            >
+              <div class="summary-label">PM ABSENT</div>
+              <div
+                id="jhsPmAbsent"
+                class="summary-number"
+              >0</div>
+            </div>
+            <div
+              id="jhsPmLateCard"
+              class="summary-card pm-late"
+            >
+              <div class="summary-label">PM LATE</div>
+              <div
+                id="jhsPmLate"
+                class="summary-number"
+              >0</div>
+            </div>
+          </div>
+        </div>
+        <!-- SHS -->
+        <div class="school-group shs">
+          <div class="school-group-title">
+            SHS — GRADES 11–12
+          </div>
+          <div class="school-summary">
+            <div class="summary-card total">
+              <div class="summary-label">TOTAL</div>
+              <div
+                id="shsTotal"
+                class="summary-number"
+              >0</div>
+            </div>
+            <div class="summary-card am-present">
+              <div class="summary-label">AM PRESENT</div>
+              <div
+                id="shsAmPresent"
+                class="summary-number"
+              >0</div>
+            </div>
+            <div class="summary-card am-absent">
+              <div class="summary-label">AM ABSENT</div>
+              <div
+                id="shsAmAbsent"
+                class="summary-number"
+              >0</div>
+            </div>
+            <div class="summary-card am-late">
+              <div class="summary-label">AM LATE</div>
+              <div
+                id="shsAmLate"
+                class="summary-number"
+              >0</div>
+            </div>
+            <div
+              id="shsPmPresentCard"
+              class="summary-card pm-present"
+            >
+              <div class="summary-label">PM PRESENT</div>
+              <div
+                id="shsPmPresent"
+                class="summary-number"
+              >0</div>
+            </div>
+            <div
+              id="shsPmAbsentCard"
+              class="summary-card pm-absent"
+            >
+              <div class="summary-label">PM ABSENT</div>
+              <div
+                id="shsPmAbsent"
+                class="summary-number"
+              >0</div>
+            </div>
+            <div
+              id="shsPmLateCard"
+              class="summary-card pm-late"
+            >
+              <div class="summary-label">PM LATE</div>
+              <div
+                id="shsPmLate"
+                class="summary-number"
+              >0</div>
+            </div>
+          </div>
+        </div>
+        <div class="attendance-title section-title">
+          SECTION ATTENDANCE
+        </div>
+        <div id="sectionAttendance">
+          Loading attendance...
+        </div>
+        <div id="attendanceUpdated">
+          Updating...
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+<script>
+/* =====================================================
+   CONFIGURATION
+   ===================================================== */
+const APPS_SCRIPT_URL =
+  "https://script.google.com/macros/s/AKfycbyXwfLu_wjourRT3BwQDTwA-H9vIJfu5LvqbjjbG3jwv5JVb0mi_1SO5CRPq60S5KdaCg/exec";
+/* =====================================================
+   VARIABLES
+   ===================================================== */
+let userName = "";
+let deviceKey = "";
+let attendanceAccessCode = "";
+let attendanceRole = "";
+let attendanceSection = "";
+let attendanceStudents = [];
+let clientId =
+  "SENHS_" +
+  Date.now() +
+  "_" +
+  Math.random()
+    .toString(36)
+    .substring(2, 10);
+let sessionToken = "";
+let platform =
+  /iPad|Tablet|Android(?!.*Mobile)/i.test(
+    navigator.userAgent
+  )
+    ? "tablet"
+    : /Android|iPhone|iPod/i.test(
+        navigator.userAgent
+      )
+      ? "mobile"
+      : "laptop";
+   console.log("DEVICE USER AGENT:", navigator.userAgent);
+console.log("DETECTED PLATFORM:", platform);
+  
+let sessionActive = false;
+let heartbeatTimer = null;
+let html5QrCode = null;
+let cameras = [];
+let currentCameraIndex = 0;
+let scannerRunning = false;
+let processing = false;
+let attendanceTimer = null;
+let releaseSent = false;
+ 
+  /* =====================================================
+   ELEMENTS
+   ===================================================== */
+const devicePage =
+  document.getElementById(
+    "devicePage"
+  );
+const userPage =
+  document.getElementById(
+    "userPage"
+  );
+const userNameInput =
+  document.getElementById(
+    "userNameInput"
+  );
+const userNextBtn =
+  document.getElementById(
+    "userNextBtn"
+  );
+const userMessage =
+  document.getElementById(
+    "userMessage"
+  );
+const scannerPage =
+  document.getElementById(
+    "scannerPage"
+  );
+const attendancePage =
+  document.getElementById(
+    "attendancePage"
+  );
+const attendanceRoleTitle =
+  document.getElementById(
+    "attendanceRoleTitle"
+  );
+const attendanceSectionWrapper =
+  document.getElementById(
+    "attendanceSectionWrapper"
+  );
+const attendanceSectionSelect =
+  document.getElementById(
+    "attendanceSectionSelect"
+  );
+const attendanceCurrentSection =
+  document.getElementById(
+    "attendanceCurrentSection"
+  );
+const attendanceTableBody =
+  document.getElementById(
+    "attendanceTableBody"
+  );
+const proceedAttendanceBtn =
+  document.getElementById(
+    "proceedAttendanceBtn"
+  );
+  const saveAttendanceBtn =
+  document.getElementById(
+    "saveAttendanceBtn"
+  );
+let attendanceSaved = false;
+  let pendingAttendanceEdits = {};
+/* =========================================
+   PM PROCEED TIME WINDOW
+   1:00 PM TO 8:00 PM
+   ========================================= */
+function isPMProceedTime() {
+  const now =
+    new Date();
+  const timeParts =
+    new Intl.DateTimeFormat(
+      "en-US",
+      {
+        timeZone: "Asia/Manila",
+        hour: "2-digit",
+        minute: "2-digit",
+        hourCycle: "h23"
+      }
+    ).formatToParts(now);
+  let hour = 0;
+  let minute = 0;
+  timeParts.forEach(
+    function(part) {
+      if (
+        part.type === "hour"
+      ) {
+        hour =
+          Number(part.value);
+      }
+      if (
+        part.type === "minute"
+      ) {
+        minute =
+          Number(part.value);
+      }
+    }
+  );
+  const currentMinutes =
+    hour * 60 +
+    minute;
+  return (
+    currentMinutes >= 780 &&
+    currentMinutes <= 1200
+  );
+}
+/* =========================================
+   PROCEED BUTTON STATE
+   ========================================= */
+function updateProceedButtonState() {
+  proceedAttendanceBtn.disabled =
+    !attendanceSaved ||
+    !isPMProceedTime();
+}
+updateProceedButtonState();
+setInterval(
+  updateProceedButtonState,
+  30000
+);
+  
+const attendanceMessage =
+  document.getElementById(
+    "attendanceMessage"
+  );
+const attendanceLogoutBtn =
+  document.getElementById(
+    "attendanceLogoutBtn"
+  );
+  
+const deviceCode =
+  document.getElementById(
+    "deviceCode"
+  );
+const toggleDeviceCode =
+  document.getElementById(
+    "toggleDeviceCode"
+  );
+const continueBtn =
+  document.getElementById(
+    "continueBtn"
+  );
+const deviceMessage =
+  document.getElementById(
+    "deviceMessage"
+  );
+const scanOverlay =
+  document.getElementById(
+    "scanOverlay"
+  );
+const overlayContent =
+  document.getElementById(
+    "overlayContent"
+  );
+const exitScannerBtn =
+  document.getElementById(
+    "exitScannerBtn"
+  );
+const switchCameraBtn =
+  document.getElementById(
+    "switchCameraBtn"
+  );
+const readyBar =
+  document.getElementById(
+    "readyBar"
+  );
+const sectionAttendance =
+  document.getElementById(
+    "sectionAttendance"
+  );
+const attendanceUpdated =
+  document.getElementById(
+    "attendanceUpdated"
+  );
+/* =====================================================
+   USER NEXT
+   ===================================================== */
+userNextBtn.addEventListener(
+  "click",
+  function () {
+    const name =
+      userNameInput.value.trim();
+    if (!name) {
+      userMessage.textContent =
+        "Please enter your Name.";
+      userNameInput.focus();
+      return;
+    }
+    userName =
+      name;
+    userMessage.textContent =
+      "";
+    userPage.style.display =
+      "none";
+    devicePage.style.display =
+      "block";
+    deviceCode.focus();
+  }
+);
+/* =====================================================
+   DEVICE CODE SHOW / HIDE
+   ===================================================== */
+toggleDeviceCode.addEventListener(
+  "click",
+  function () {
+    if (
+      deviceCode.type ===
+      "password"
+    ) {
+      deviceCode.type =
+        "text";
+      toggleDeviceCode.textContent =
+        "🙈";
+      toggleDeviceCode.setAttribute(
+        "aria-label",
+        "Hide device code"
+      );
+    } else {
+      deviceCode.type =
+        "password";
+      toggleDeviceCode.textContent =
+        "👁";
+      toggleDeviceCode.setAttribute(
+        "aria-label",
+        "Show device code"
+      );
+    }
+  }
+);
+/* =====================================================
+   GOOGLE APPS SCRIPT JSONP
+   ===================================================== */
+function jsonpRequest(url) {
+  return new Promise(
+    function (
+      resolve,
+      reject
+    ) {
+      const callbackName =
+        "senhsCallback_" +
+        Date.now() +
+        "_" +
+        Math.floor(
+          Math.random() * 100000
+        );
+      const script =
+        document.createElement(
+          "script"
+        );
+      let finished =
+        false;
+      const timeout =
+        setTimeout(
+          function () {
+            if (finished) {
+              return;
+            }
+            finished =
+              true;
+            cleanup();
+            reject(
+              new Error(
+                "Unable to connect to server."
+              )
+            );
+          },
+          20000
+        );
+      function cleanup() {
+        clearTimeout(
+          timeout
+        );
+        if (
+          script.parentNode
+        ) {
+          script.parentNode.removeChild(
+            script
+          );
+        }
+        try {
+          delete window[
+            callbackName
+          ];
+        } catch (error) {
+          window[
+            callbackName
+          ] = undefined;
+        }
+      }
+      window[
+        callbackName
+      ] =
+        function (data) {
+          if (finished) {
+            return;
+          }
+          finished =
+            true;
+          cleanup();
+          resolve(data);
+        };
+      script.onerror =
+        function () {
+          if (finished) {
+            return;
+          }
+          finished =
+            true;
+          cleanup();
+          reject(
+            new Error(
+              "Unable to connect to server."
+            )
+          );
+        };
+      const separator =
+        url.indexOf("?") !== -1
+          ? "&"
+          : "?";
+      script.src =
+        url +
+        separator +
+        "callback=" +
+        encodeURIComponent(
+          callbackName
+        ) +
+        "&_=" +
+        Date.now();
+      script.async =
+        true;
+      document.body.appendChild(
+        script
+      );
+    }
+  );
+}
+/* =====================================================
+   DEVICE MESSAGE
+   ===================================================== */
+function showDeviceMessage(
+  message,
+  type
+) {
+  deviceMessage.textContent =
+    message;
+  deviceMessage.className =
+    type || "";
+}
+
+
+
+/* =====================================================
+   VERIFY ACCESS - DEVICE / ADVISER / ADMIN
+   ===================================================== */
+async function verifyDevice() {
+
+  // LOAD SAVED DEVICE CODE SAFELY
+  let savedDeviceCode = "";
+
+  try {
+    savedDeviceCode =
+      window.localStorage.getItem("SENHS_SAVED_DEVICE_CODE") || "";
+  } catch (error) {
+    console.warn(
+      "Unable to read saved Device Code:",
+      error
+    );
+  }
+
+  if (
+    !String(deviceCode.value || "").trim() &&
+    savedDeviceCode
+  ) {
+    deviceCode.value = savedDeviceCode;
+  }
+
+  const key = String(deviceCode.value || "").trim();
+
+  if (!key) {
+    showDeviceMessage(
+      "Please enter the Device Code or Access Code.",
+      "error"
+    );
+    return;
+  }
+
+  continueBtn.disabled = true;
+  continueBtn.textContent = "CHECKING...";
+  showDeviceMessage("Checking access...", "");
+
+  function isAuthorized(result) {
+    return !!result &&
+      result.success === true &&
+      String(result.authorized).toLowerCase() === "true";
+  }
+
+  function buildUrl(params) {
+    const query = new URLSearchParams(params);
+
+    return APPS_SCRIPT_URL +
+      (APPS_SCRIPT_URL.includes("?") ? "&" : "?") +
+      query.toString();
+  }
+
+  function getServerMessage(result) {
+    if (!result || typeof result !== "object") {
+      return "";
+    }
+
+    return String(
+      result.message ||
+      result.error ||
+      result.details ||
+      ""
+    ).trim();
+  }
+
+  try {
+    console.log("VERIFY ACCESS STARTED");
+    console.log("PLATFORM:", platform);
+    
+    /* ================================================
+       1. DEVICE CODE CHECK
+       ================================================ */
+    let deviceResult = null;
+    let deviceError = null;
+
+    try {
+      const deviceRequestUrl = buildUrl({
+        device: key,
+        platform: String(platform || "")
+          .toLowerCase()
+          .trim(),
+        name: String(userName || "").trim()
+      });
+
+      deviceResult = await jsonpRequest(deviceRequestUrl);
+
+      console.log(
+        "DEVICE RESPONSE DETAILS:",
+        JSON.stringify(deviceResult, null, 2)
+      );
+
+      if (isAuthorized(deviceResult)) {
+        const receivedSession = String(
+          deviceResult.session || ""
+        ).trim();
+
+        if (!receivedSession) {
+          throw new Error(
+            "Device authorized, but no session token was returned. Check the Apps Script response."
+          );
+        }
+
+        deviceKey = key;
+        localStorage.setItem("SENHS_SAVED_DEVICE_CODE", key);
+        sessionToken = receivedSession;
+        sessionActive = true;
+        releaseSent = false;
+
+        showDeviceMessage(
+          "Device authorized. Opening Gate Scanner...",
+          "success"
+        );
+
+        setTimeout(function () {
+          openScannerPage();
+        }, 300);
+
+        return;
+      }
+    } catch (error) {
+      deviceError = error;
+      console.error("DEVICE CHECK ERROR:", error);
+    }
+
+    /* ================================================
+       2. ADVISER / ADMIN ACCESS CHECK
+       ================================================ */
+    showDeviceMessage(
+      "Checking Adviser/Admin access...",
+      ""
+    );
+
+    let pmResult = null;
+    let pmError = null;
+
+    try {
+      const pmRequestUrl = buildUrl({
+        pmAccess: key
+      });
+
+      pmResult = await jsonpRequest(pmRequestUrl);
+
+      console.log(
+        "ADVISER / ADMIN RESPONSE DETAILS:",
+        JSON.stringify(pmResult, null, 2)
+      );
+
+      if (isAuthorized(pmResult)) {
+        const role = String(
+          pmResult.role || ""
+        ).trim().toUpperCase();
+
+        const section = String(
+          pmResult.section || ""
+        ).trim();
+
+        if (role !== "ADMIN" && role !== "ADVISER") {
+          throw new Error(
+            "Access granted, but the returned role is invalid: " +
+            (role || "EMPTY")
+          );
+        }
+
+        if (role === "ADVISER" && !section) {
+          throw new Error(
+            "Adviser access was granted, but no section was returned."
+          );
+        }
+
+        attendanceAccessCode = key;
+        attendanceRole = role;
+        attendanceSection = section;
+
+        showDeviceMessage(
+          role === "ADMIN"
+            ? "Admin authorized. Opening Attendance..."
+            : "Adviser authorized. Opening Attendance...",
+          "success"
+        );
+
+        setTimeout(function () {
+          openAttendancePage();
+        }, 300);
+
+        return;
+      }
+    } catch (error) {
+      pmError = error;
+      console.error(
+        "ADVISER / ADMIN CHECK ERROR:",
+        error
+      );
+    }
+
+    /* ================================================
+       3. BOTH CHECKS FAILED
+       ================================================ */
+    console.error(
+      "DEVICE RESPONSE:",
+      deviceResult
+    );
+    console.error(
+      "DEVICE ERROR:",
+      deviceError
+    );
+    console.error(
+      "PM RESPONSE:",
+      pmResult
+    );
+    console.error(
+      "PM ERROR:",
+      pmError
+    );
+
+    if (deviceError && pmError) {
+      showDeviceMessage(
+        "Unable to connect to Google Apps Script. Check the Web App URL, deployment access, and JSONP response.",
+        "error"
+      );
+    } else {
+      const serverMessage =
+        getServerMessage(pmResult) ||
+        getServerMessage(deviceResult);
+
+      showDeviceMessage(
+        serverMessage ||
+          "Code not accepted. Check the access code and Apps Script verification rules.",
+        "error"
+      );
+    }
+
+  } catch (error) {
+    console.error(
+      "VERIFY ACCESS ERROR:",
+      error
+    );
+
+    showDeviceMessage(
+      error && error.message
+        ? error.message
+        : "Unable to verify access. Please try again.",
+      "error"
+    );
+
+  } finally {
+    continueBtn.disabled = false;
+    continueBtn.textContent = "CONTINUE";
+  }
+}
+  
+/* =====================================================
+   OPEN SCANNER PAGE
+   ===================================================== */
+async function openScannerPage() {
+  releaseSent =
+    false;
+  devicePage.style.display =
+    "none";
+  attendancePage.style.display =
+    "none";
+  scannerPage.style.display =
+    "block";
+  readyBar.textContent =
+    "● STARTING CAMERA...";
+  readyBar.style.color =
+    "#1267a5";
+  try {
+    await startCamera();
+    loadAttendanceSummary();
+    if (!attendanceTimer) {
+      attendanceTimer =
+        setInterval(
+          loadAttendanceSummary,
+          15000
+        );
+    }
+    startDeviceHeartbeat();
+  } catch (error) {
+    console.error(
+      "Open scanner error:",
+      error
+    );
+  }
+}
+/* =====================================================
+   OPEN ADVISER / ADMIN ATTENDANCE
+   ===================================================== */
+async function openAttendancePage() {
+  // Always start ADMIN / ADVISER sessions on DAILY ATT.
+  // Hide any report page left open by the previous session.
+  const mamReportPage = document.getElementById("mamPage");
+  const symsReportPage = document.getElementById("smsPage");
+  if (mamReportPage) mamReportPage.style.display = "none";
+  if (symsReportPage) symsReportPage.style.display = "none";
+
+  devicePage.style.display =
+    "none";
+  scannerPage.style.display =
+    "none";
+  attendancePage.style.display =
+    "block";
+  attendanceRoleTitle.textContent =
+    attendanceRole === "ADMIN"
+      ? "ADMIN ATTENDANCE"
+      : "ADVISER ATTENDANCE";
+  if (
+    attendanceRole ===
+    "ADMIN"
+  ) {
+    attendanceSectionWrapper.style.display =
+      "block";
+    attendanceSectionSelect.value =
+      "";
+    attendanceCurrentSection.textContent =
+      "Section: —";
+    attendanceTableBody.innerHTML =
+      "";
+    attendanceMessage.textContent =
+      "Select a section.";
+    proceedAttendanceBtn.disabled =
+      true;
+    return;
+  }
+  /* =================================================
+     ADVISER
+     ================================================= */
+  attendanceSectionWrapper.style.display =
+    "none";
+  proceedAttendanceBtn.disabled =
+    false;
+  attendanceCurrentSection.textContent =
+    "Section: " +
+    (
+      attendanceSection ||
+      "—"
+    );
+  attendanceMessage.textContent =
+    "Attendance data loading...";
+  await loadAdviserAttendance();
+}
+/* =====================================================
+   LOAD ADVISER / ADMIN ATTENDANCE
+   AUTO REFRESH SUPPORT
+   ===================================================== */
+let attendanceRefreshing = false;
+async function loadAdviserAttendance(
+  silentRefresh
+) {
+  try {
+    if (!attendanceSection) {
+      if (!silentRefresh) {
+        attendanceTableBody.innerHTML =
+          '<tr>' +
+          '<td colspan="3" style="text-align:center;">' +
+          'Please select a section.' +
+          '</td>' +
+          '</tr>';
+      }
+      return;
+    }
+    /*
+       Prevent overlapping requests.
+       Kahit may manual editing,
+       TULOY pa rin ang auto-refresh.
+    */
+    if (attendanceRefreshing) {
+      return;
+    }
+    attendanceRefreshing = true;
+    const requestUrl =
+      APPS_SCRIPT_URL +
+      "?action=getEditableTodayAttendance" +
+      "&accessCode=" +
+      encodeURIComponent(
+        attendanceAccessCode
+      ) +
+      "&requestedSection=" +
+      encodeURIComponent(
+        attendanceSection
+      );
+    const result =
+      await jsonpRequest(
+        requestUrl
+      );
+    if (
+      !result ||
+      !result.success
+    ) {
+      throw new Error(
+        result &&
+        result.message
+          ? result.message
+          : "Unable to load attendance."
+      );
+    }
+    /*
+       Fresh data galing sa Google Sheets
+    */
+    const freshStudents =
+      result.students || [];
+    /*
+       PRESERVE UNSAVED MANUAL EDITS
+       Kung may binago ang Adviser/Admin
+       pero hindi pa SAVE,
+       iyon ang gagamitin sa display.
+       Ang bagong QR scan naman na walang
+       pending manual edit ay manggagaling
+       diretso sa latest server data.
+    */
+    freshStudents.forEach(
+      function(student) {
+        const lrn =
+          String(
+            student.lrn || ""
+          ).trim();
+        if (!lrn) {
+          return;
+        }
+        const pending =
+          pendingAttendanceEdits[lrn];
+        if (!pending) {
+          return;
+        }
+        if (
+          pending.AM === "PRESENT" ||
+          pending.AM === "ABSENT"
+        ) {
+          student.AM =
+            pending.AM;
+        }
+        if (
+          pending.PM === "PRESENT" ||
+          pending.PM === "ABSENT"
+        ) {
+          student.PM =
+            pending.PM;
+        }
+      }
+    );
+    attendanceStudents =
+      freshStudents;
+    attendanceCurrentSection.textContent =
+      "Section: " +
+      (
+        result.section ||
+        attendanceSection ||
+        "—"
+      );
+    /*
+       Re-render table.
+       Dahil na-merge na natin ang
+       pending manual edits bago dito,
+       hindi mawawala ang unsaved changes.
+    */
+    renderAdviserAttendanceTable(
+      attendanceStudents
+    );
+    if (!silentRefresh) {
+      attendanceMessage.textContent =
+        attendanceStudents.length +
+        " student(s) loaded.";
+    }
+  } catch (error) {
+    console.error(
+      "Adviser attendance error:",
+      error
+    );
+    if (!silentRefresh) {
+      attendanceTableBody.innerHTML = "";
+      attendanceMessage.textContent =
+        error.message ||
+        "Unable to load attendance.";
+    }
+  } finally {
+    attendanceRefreshing = false;
+  }
+}
+ /* =====================================================
+   AUTOMATIC ATTENDANCE REFRESH
+   EVERY 5 SECONDS
+   ===================================================== */
+setInterval(
+  function () {
+    const attendancePage =
+      document.getElementById("attendancePage");
+    if (
+      !attendancePage ||
+      attendancePage.style.display === "none"
+    ) {
+      return;
+    }
+    if (
+      !attendanceSection
+    ) {
+      return;
+    }
+    console.log(
+      "AUTO REFRESH: Loading latest attendance..."
+    );
+    loadAdviserAttendance(true);
+  },
+  5000
+);
+  
+/* =====================================================
+   RENDER ADVISER / ADMIN ATTENDANCE
+   ===================================================== */
+function renderAdviserAttendanceTable(
+  students
+) {
+  attendanceTableBody.innerHTML = "";
+  if (
+    !students ||
+    students.length === 0
+  ) {
+    attendanceTableBody.innerHTML =
+      '<tr>' +
+      '<td colspan="3" style="text-align:center;">' +
+      'No students found.' +
+      '</td>' +
+      '</tr>';
+    return;
+  }
+  students.forEach(
+    function(student) {
+      const row =
+        document.createElement("tr");
+      const nameCell =
+        document.createElement("td");
+      nameCell.textContent =
+        student.name || "";
+      const amCell =
+        document.createElement("td");
+      const pmCell =
+        document.createElement("td");
+      /* =====================================
+         AM BUTTON
+         ===================================== */
+      const amButton =
+        document.createElement("button");
+      amButton.type =
+        "button";
+      amButton.textContent =
+        student.AM === "PRESENT"
+          ? "PRESENT"
+          : "ABSENT";
+      amButton.className =
+        student.AM === "PRESENT"
+          ? "attendance-btn present"
+          : "attendance-btn absent";
+      amButton.addEventListener(
+        "click",
+        function() {
+          student.AM =
+            student.AM === "PRESENT"
+              ? "ABSENT"
+              : "PRESENT";
+          amButton.textContent =
+            student.AM;
+          amButton.className =
+            student.AM === "PRESENT"
+              ? "attendance-btn present"
+              : "attendance-btn absent";
+          /*
+             SAVE THIS AS UNSAVED MANUAL EDIT
+          */
+          const lrn =
+            String(
+              student.lrn || ""
+            ).trim();
+          if (lrn) {
+            if (
+              !pendingAttendanceEdits[lrn]
+            ) {
+              pendingAttendanceEdits[lrn] =
+                {};
+            }
+            pendingAttendanceEdits[lrn].AM =
+              student.AM;
+          }
+          attendanceSaved =
+            false;
+          updateProceedButtonState();
+        }
+      );
+      /* =====================================
+         PM BUTTON
+         ===================================== */
+      const pmButton =
+        document.createElement("button");
+      pmButton.type =
+        "button";
+      pmButton.textContent =
+        student.PM === "PRESENT"
+          ? "PRESENT"
+          : "ABSENT";
+      pmButton.className =
+        student.PM === "PRESENT"
+          ? "attendance-btn present"
+          : "attendance-btn absent";
+      pmButton.addEventListener(
+        "click",
+        function() {
+          student.PM =
+            student.PM === "PRESENT"
+              ? "ABSENT"
+              : "PRESENT";
+          pmButton.textContent =
+            student.PM;
+          pmButton.className =
+            student.PM === "PRESENT"
+              ? "attendance-btn present"
+              : "attendance-btn absent";
+          /*
+             SAVE THIS AS UNSAVED MANUAL EDIT
+          */
+          const lrn =
+            String(
+              student.lrn || ""
+            ).trim();
+          if (lrn) {
+            if (
+              !pendingAttendanceEdits[lrn]
+            ) {
+              pendingAttendanceEdits[lrn] =
+                {};
+            }
+            pendingAttendanceEdits[lrn].PM =
+              student.PM;
+          }
+          attendanceSaved =
+            false;
+          updateProceedButtonState();
+        }
+      );
+      amCell.appendChild(
+        amButton
+      );
+      pmCell.appendChild(
+        pmButton
+      );
+      row.appendChild(
+        nameCell
+      );
+      row.appendChild(
+        amCell
+      );
+      row.appendChild(
+        pmCell
+      );
+      attendanceTableBody.appendChild(
+        row
+      );
+    }
+  );
+}
+  
+/* =====================================================
+   ADMIN SECTION CHANGE
+   ===================================================== */
+attendanceSectionSelect.addEventListener(
+  "change",
+  async function () {
+    const selectedSection =
+      String(
+        attendanceSectionSelect.value || ""
+      ).trim();
+    attendanceSection =
+      selectedSection;
+    if (!selectedSection) {
+      attendanceCurrentSection.textContent =
+        "Section: —";
+      attendanceTableBody.innerHTML =
+        "";
+      attendanceMessage.textContent =
+        "Select a section.";
+      proceedAttendanceBtn.disabled =
+        true;
+      return;
+    }
+    proceedAttendanceBtn.disabled =
+      false;
+    attendanceCurrentSection.textContent =
+      "Section: " +
+      selectedSection;
+    attendanceMessage.textContent =
+      "Loading attendance...";
+    await loadAdviserAttendance();
+  }
+);
+  
+/* =====================================================
+   SAVE ATTENDANCE
+   ===================================================== */
+saveAttendanceBtn.addEventListener(
+  "click",
+  async function () {
+    if (
+      !attendanceAccessCode ||
+      !attendanceSection
+    ) {
+      attendanceMessage.textContent =
+        "Please select a section.";
+      return;
+    }
+    if (
+      !attendanceStudents ||
+      attendanceStudents.length === 0
+    ) {
+      attendanceMessage.textContent =
+        "No attendance data to save.";
+      return;
+    }
+    attendanceMessage.textContent =
+      "Saving attendance...";
+    saveAttendanceBtn.disabled =
+      true;
+    try {
+      const attendanceData =
+        JSON.stringify(
+          attendanceStudents
+        );
+      const requestUrl =
+        APPS_SCRIPT_URL +
+        "?action=saveAttendance" +
+        "&accessCode=" +
+        encodeURIComponent(
+          attendanceAccessCode
+        ) +
+        "&requestedSection=" +
+        encodeURIComponent(
+          attendanceSection
+        ) +
+        "&attendanceData=" +
+        encodeURIComponent(
+          attendanceData
+        );
+      const result =
+        await jsonpRequest(
+          requestUrl
+        );
+      if (
+        !result ||
+        !result.success
+      ) {
+        throw new Error(
+          result &&
+          result.message
+            ? result.message
+            : "Unable to save attendance."
+        );
+      }
+      attendanceMessage.textContent =
+        "Attendance saved successfully.";
+    attendanceSaved = true;
+/*
+   Wala nang unsaved manual changes
+   dahil successful na ang SAVE.
+*/
+pendingAttendanceEdits = {};
+proceedAttendanceBtn.disabled = false;
+    } catch (error) {
+      console.error(
+        "Save attendance error:",
+        error
+      );
+      attendanceMessage.textContent =
+        error.message ||
+        "Unable to save attendance.";
+    }
+    saveAttendanceBtn.disabled =
+      false;
+  }
+);
+  
+/* =====================================================
+   PROCEED ATTENDANCE
+   ===================================================== */
+proceedAttendanceBtn.addEventListener(
+  "click",
+  async function () {
+if (!attendanceSaved) {
+  attendanceMessage.textContent =
+    "Please SAVE the attendance first.";
+  return;
+}
+    
+    if (
+      !attendanceAccessCode ||
+      !attendanceSection
+    ) {
+      attendanceMessage.textContent =
+        "Please select a section.";
+      return;
+    }
+    attendanceMessage.textContent =
+      "Saving attendance...";
+    proceedAttendanceBtn.disabled =
+      true;
+    try {
+      const requestUrl =
+        APPS_SCRIPT_URL +
+        "?action=proceedAttendance" +
+        "&accessCode=" +
+        encodeURIComponent(
+          attendanceAccessCode
+        ) +
+        "&requestedSection=" +
+        encodeURIComponent(
+          attendanceSection
+        ) +
+        "&proceededBy=" +
+        encodeURIComponent(
+          userName
+        );
+      const result =
+        await jsonpRequest(
+          requestUrl
+        );
+      if (
+        !result ||
+        !result.success
+      ) {
+        throw new Error(
+          result &&
+          result.message
+            ? result.message
+            : "Unable to proceed attendance."
+        );
+      }
+      attendanceMessage.textContent =
+        "Attendance proceeded successfully.";
+    } catch (error) {
+      console.error(
+        "Proceed attendance error:",
+        error
+      );
+      attendanceMessage.textContent =
+        error.message ||
+        "Unable to proceed attendance.";
+      proceedAttendanceBtn.disabled =
+        false;
+      return;
+    }
+    proceedAttendanceBtn.disabled =
+      false;
+  }
+);
+/* =====================================================
+   PM DISPLAY
+   ===================================================== */
+function isPMDisplayTime() {
+  const now =
+    new Date();
+  const currentMinutes =
+    now.getHours() * 60 +
+    now.getMinutes();
+  return (
+    currentMinutes >= 725
+  );
+}
+function updateSchoolSummaryPMDisplay() {
+  const showPM =
+    isPMDisplayTime();
+  const pmCards = [
+    "jhsPmPresentCard",
+    "jhsPmAbsentCard",
+    "jhsPmLateCard",
+    "shsPmPresentCard",
+    "shsPmAbsentCard",
+    "shsPmLateCard"
+  ];
+  pmCards.forEach(
+    function (id) {
+      const card =
+        document.getElementById(
+          id
+        );
+      if (!card) {
+        return;
+      }
+      card.style.display =
+        showPM
+          ? ""
+          : "none";
+    }
+  );
+}
+/* =====================================================
+   EMPTY SUMMARY
+   ===================================================== */
+function createEmptySummary() {
+  return {
+    total: 0,
+    amPresent: 0,
+    amAbsent: 0,
+    amLate: 0,
+    pmPresent: 0,
+    pmAbsent: 0,
+    pmLate: 0
+  };
+}
+/* =====================================================
+   JHS / SHS SUMMARY
+   ===================================================== */
+function getJhsShsSummary(
+  sections
+) {
+  const jhs =
+    createEmptySummary();
+  const shs =
+    createEmptySummary();
+  (
+    sections || []
+  ).forEach(
+    function (section) {
+      const sectionName =
+        String(
+          section.section || ""
+        ).trim();
+      const grade =
+        getGradeNumber(
+          sectionName
+        );
+      let target =
+        null;
+      if (
+        grade >= 7 &&
+        grade <= 10
+      ) {
+        target =
+          jhs;
+      } else if (
+        grade >= 11 &&
+        grade <= 12
+      ) {
+        target =
+          shs;
+      }
+      if (!target) {
+        return;
+      }
+      target.total +=
+        Number(
+          section.total || 0
+        );
+      target.amPresent +=
+        Number(
+          section.amPresent || 0
+        );
+      target.amAbsent +=
+        Number(
+          section.amAbsent || 0
+        );
+      target.amLate +=
+        Number(
+          section.amLate || 0
+        );
+      target.pmPresent +=
+        Number(
+          section.pmPresent || 0
+        );
+      target.pmAbsent +=
+        Number(
+          section.pmAbsent || 0
+        );
+      target.pmLate +=
+        Number(
+          section.pmLate || 0
+        );
+    }
+  );
+  return {
+    jhs:
+      jhs,
+    shs:
+      shs
+  };
+}
+/* =====================================================
+   DISPLAY SUMMARY
+   ===================================================== */
+function displayGroupSummary(
+  prefix,
+  data
+) {
+  const values = {
+    Total:
+      Number(
+        data.total || 0
+      ),
+    AmPresent:
+      Number(
+        data.amPresent || 0
+      ),
+    AmAbsent:
+      Number(
+        data.amAbsent || 0
+      ),
+    AmLate:
+      Number(
+        data.amLate || 0
+      ),
+    PmPresent:
+      Number(
+        data.pmPresent || 0
+      ),
+    PmAbsent:
+      Number(
+        data.pmAbsent || 0
+      ),
+    PmLate:
+      Number(
+        data.pmLate || 0
+      )
+  };
+  Object.keys(
+    values
+  ).forEach(
+    function (suffix) {
+      const element =
+        document.getElementById(
+          prefix + suffix
+        );
+      if (element) {
+        element.textContent =
+          values[suffix];
+      }
+    }
+  );
+}
+/* =====================================================
+   LOAD ATTENDANCE SUMMARY
+   ===================================================== */
+async function loadAttendanceSummary() {
+  try {
+    const requestUrl =
+      APPS_SCRIPT_URL +
+      "?summary=today";
+    const result =
+      await jsonpRequest(
+        requestUrl
+      );
+    if (
+      !result ||
+      !result.success
+    ) {
+      throw new Error(
+        "Unable to load attendance."
+      );
+    }
+    const grouped =
+      getJhsShsSummary(
+        result.sections || []
+      );
+    displayGroupSummary(
+      "jhs",
+      grouped.jhs
+    );
+    displayGroupSummary(
+      "shs",
+      grouped.shs
+    );
+    updateSchoolSummaryPMDisplay();
+    renderSectionAttendance(
+      result.sections || []
+    );
+    attendanceUpdated.textContent =
+      "Updated " +
+      new Date().toLocaleTimeString(
+        [],
+        {
+          hour:
+            "2-digit",
+          minute:
+            "2-digit",
+          second:
+            "2-digit"
+        }
+      );
+  } catch (error) {
+    console.error(
+      "Attendance update error:",
+      error
+    );
+    attendanceUpdated.textContent =
+      "Unable to update attendance.";
+  }
+}
+/* =====================================================
+   GRADE
+   ===================================================== */
+function getGradeNumber(
+  sectionName
+) {
+  const match =
+    String(
+      sectionName || ""
+    ).match(
+      /\b(7|8|9|10|11|12)\b/
+    );
+  if (!match) {
+    return 99;
+  }
+  return Number(
+    match[1]
+  );
+}
+/* =====================================================
+   SORT SECTIONS
+   ===================================================== */
+function sortSections(
+  sections
+) {
+  return (
+    sections || []
+  )
+    .slice()
+    .sort(
+      function (
+        a,
+        b
+      ) {
+        const nameA =
+          String(
+            a.section || ""
+          );
+        const nameB =
+          String(
+            b.section || ""
+          );
+        const gradeA =
+          getGradeNumber(
+            nameA
+          );
+        const gradeB =
+          getGradeNumber(
+            nameB
+          );
+        if (
+          gradeA !== gradeB
+        ) {
+          return (
+            gradeA -
+            gradeB
+          );
+        }
+        return nameA.localeCompare(
+          nameB,
+          undefined,
+          {
+            numeric:
+              true,
+            sensitivity:
+              "base"
+          }
+        );
+      }
+    );
+}
+/* =====================================================
+   SECTION TABLE
+   ===================================================== */
+function renderSectionAttendance(
+  sections
+) {
+  const sorted =
+    sortSections(
+      sections
+    );
+  if (
+    sorted.length === 0
+  ) {
+    sectionAttendance.innerHTML =
+      '<div style="color:#ffffff;text-align:center;padding:15px;">No section data available.</div>';
+    return;
+  }
+  const showPM =
+    isPMDisplayTime();
+  let html =
+    '<div class="section-table-wrap">' +
+    '<table class="section-table">' +
+    '<thead>' +
+    '<tr>' +
+    '<th class="section-head">SECTION</th>' +
+    '<th class="total-head">TOTAL</th>' +
+    '<th class="am-present-head">AM<br>P</th>' +
+    '<th class="am-absent-head">AM<br>A</th>' +
+    '<th class="am-late-head">AM<br>L</th>';
+  if (showPM) {
+    html +=
+      '<th class="pm-present-head">PM<br>P</th>' +
+      '<th class="pm-absent-head">PM<br>A</th>' +
+      '<th class="pm-late-head">PM<br>L</th>';
+  }
+  html +=
+    '</tr>' +
+    '</thead>' +
+    '<tbody>';
+  sorted.forEach(
+    function (section) {
+      html +=
+        '<tr>' +
+        '<td class="section-table-name">' +
+        escapeHtml(
+          section.section || ""
+        ) +
+        '</td>' +
+        '<td class="total-cell">' +
+        Number(
+          section.total || 0
+        ) +
+        '</td>' +
+        '<td class="am-present-cell">' +
+        Number(
+          section.amPresent || 0
+        ) +
+        '</td>' +
+        '<td class="am-absent-cell">' +
+        Number(
+          section.amAbsent || 0
+        ) +
+        '</td>' +
+        '<td class="am-late-cell">' +
+        Number(
+          section.amLate || 0
+        ) +
+        '</td>';
+      if (showPM) {
+        html +=
+          '<td class="pm-present-cell">' +
+          Number(
+            section.pmPresent || 0
+          ) +
+          '</td>' +
+          '<td class="pm-absent-cell">' +
+          Number(
+            section.pmAbsent || 0
+          ) +
+          '</td>' +
+          '<td class="pm-late-cell">' +
+          Number(
+            section.pmLate || 0
+          ) +
+          '</td>';
+      }
+      html +=
+        '</tr>';
+    }
+  );
+  html +=
+    '</tbody>' +
+    '</table>' +
+    '</div>';
+  sectionAttendance.innerHTML =
+    html;
+}
+/* =====================================================
+   DEVICE HEARTBEAT
+   ===================================================== */
+function startDeviceHeartbeat() {
+  if (heartbeatTimer) {
+    clearInterval(
+      heartbeatTimer
+    );
+  }
+  heartbeatTimer =
+    setInterval(
+      async function () {
+        if (
+          !deviceKey ||
+          !sessionToken
+        ) {
+          return;
+        }
+        try {
+          const requestUrl =
+            APPS_SCRIPT_URL +
+            "?heartbeat=1" +
+            "&device=" +
+            encodeURIComponent(
+              deviceKey
+            ) +
+            "&session=" +
+            encodeURIComponent(
+              sessionToken
+            ) +
+            "&platform=" +
+            encodeURIComponent(
+              platform
+            );
+          await jsonpRequest(
+            requestUrl
+          );
+        } catch (error) {
+          console.log(
+            "Heartbeat error:",
+            error
+          );
+        }
+      },
+      20000
+    );
+}
+/* =====================================================
+   RELEASE DEVICE SESSION
+   ===================================================== */
+function releaseDeviceSession() {
+  return new Promise(
+    function (resolve) {
+      if (
+        !deviceKey ||
+        !sessionToken
+      ) {
+        console.log(
+          "Release skipped: no device session."
+        );
+        resolve(
+          false
+        );
+        return;
+      }
+      const currentDevice =
+        String(
+          deviceKey
+        );
+      const currentSession =
+        String(
+          sessionToken
+        );
+      const currentPlatform =
+        String(
+          platform || ""
+        )
+          .toLowerCase()
+          .trim();
+      const requestUrl =
+        APPS_SCRIPT_URL +
+        "?release=1" +
+        "&device=" +
+        encodeURIComponent(
+          currentDevice
+        ) +
+        "&session=" +
+        encodeURIComponent(
+          currentSession
+        ) +
+        "&platform=" +
+        encodeURIComponent(
+          currentPlatform
+        ) +
+        "&_=" +
+        Date.now();
+      console.log(
+        "RELEASING DEVICE:",
+        currentDevice,
+        currentPlatform
+      );
+      const image =
+        new Image();
+      let completed =
+        false;
+      const finish =
+        function () {
+          if (completed) {
+            return;
+          }
+          completed =
+            true;
+          if (heartbeatTimer) {
+            clearInterval(
+              heartbeatTimer
+            );
+            heartbeatTimer =
+              null;
+          }
+          resolve(
+            true
+          );
+        };
+      image.onload =
+        finish;
+      image.onerror =
+        finish;
+      try {
+        image.src =
+          requestUrl;
+        console.log(
+          "RELEASE REQUEST SENT"
+        );
+      } catch (error) {
+        console.log(
+          "Release error:",
+          error
+        );
+        finish();
+      }
+      /* Safety timeout */
+      setTimeout(
+        finish,
+        5000
+      );
+    }
+  );
+}
+/* =====================================================
+   MANUAL EXIT / LOGOUT
+   ===================================================== */
+async function exitScanner() {
+  console.log(
+    "LOGOUT / EXIT SCANNER STARTED"
+  );
+  /* =================================================
+     STOP SCANNER
+     ================================================= */
+  if (
+    scannerRunning &&
+    html5QrCode
+  ) {
+    try {
+      await html5QrCode.stop();
+    } catch (error) {
+      console.log(
+        "Scanner stop on exit:",
+        error
+      );
+    }
+    scannerRunning =
+      false;
+  }
+  /* =================================================
+     RELEASE DEVICE SESSION
+     ================================================= */
+  if (
+    deviceKey &&
+    sessionToken
+  ) {
+    await releaseDeviceSession();
+  }
+  /* =================================================
+     CLEAR LOCAL SESSION
+     ================================================= */
+  sessionActive =
+    false;
+  deviceKey =
+    "";
+  sessionToken =
+    "";
+  releaseSent =
+    false;
+  /* =================================================
+     STOP HEARTBEAT
+     ================================================= */
+  if (heartbeatTimer) {
+    clearInterval(
+      heartbeatTimer
+    );
+    heartbeatTimer =
+      null;
+  }
+  /* =================================================
+     STOP ATTENDANCE TIMER
+     ================================================= */
+  if (attendanceTimer) {
+    clearInterval(
+      attendanceTimer
+    );
+    attendanceTimer =
+      null;
+  }
+  /* =================================================
+     RESET SCANNER OBJECT
+     ================================================= */
+  html5QrCode =
+    null;
+  cameras =
+    [];
+  currentCameraIndex =
+    0;
+  processing =
+    false;
+/* =================================================
+   RETURN TO USER / NAME PAGE
+   ================================================= */
+scannerPage.style.display =
+  "none";
+attendancePage.style.display =
+  "none";
+devicePage.style.display =
+  "none";
+userPage.style.display =
+  "block";
+/* RESET NAME */
+userName = "";
+userNameInput.value =
+  "";
+userMessage.textContent =
+  "";
+userMessage.className =
+  "";
+/* RESET DEVICE PAGE */
+deviceCode.value =
+  "";
+deviceMessage.textContent =
+  "";
+deviceMessage.className =
+  "";
+readyBar.textContent =
+  "● READY TO SCAN";
+readyBar.style.color =
+  "#16803c";
+continueBtn.disabled =
+  false;
+continueBtn.textContent =
+  "CONTINUE";
+/* FOCUS NAME */
+userNameInput.focus();
+}
+  
+/* =====================================================
+   VISIBILITY CHANGE
+   DO NOT RELEASE SESSION
+   ===================================================== */
+document.addEventListener(
+  "visibilitychange",
+  function () {
+    if (
+      document.visibilityState ===
+      "visible"
+    ) {
+      if (
+        deviceKey &&
+        sessionToken &&
+        !heartbeatTimer
+      ) {
+        startDeviceHeartbeat();
+      }
+    }
+  }
+);
+/* =====================================================
+   START CAMERA
+   ===================================================== */
+async function startCamera() {
+  try {
+    if (
+      navigator.permissions &&
+      navigator.permissions.query
+    ) {
+      try {
+        const permission =
+          await navigator.permissions.query({
+            name:
+              "camera"
+          });
+        console.log(
+          "Camera permission:",
+          permission.state
+        );
+      } catch (permissionError) {
+        console.log(
+          "Camera permission check skipped:",
+          permissionError
+        );
+      }
+    }
+    cameras =
+      await Html5Qrcode.getCameras();
+    if (
+      !cameras ||
+      cameras.length === 0
+    ) {
+      showOverlay(
+        "CAMERA ERROR",
+        "No camera was found on this device.",
+        true
+      );
+      return;
+    }
+    const backIndex =
+      cameras.findIndex(
+        function (camera) {
+          return /back|rear|environment/i.test(
+            camera.label || ""
+          );
+        }
+      );
+    currentCameraIndex =
+      backIndex >= 0
+        ? backIndex
+        : 0;
+    html5QrCode =
+      new Html5Qrcode(
+        "reader"
+      );
+    await startSelectedCamera();
+  } catch (error) {
+    console.error(
+      "Start camera error:",
+      error
+    );
+    showOverlay(
+      "CAMERA ERROR",
+      "Please allow camera permission and try again.",
+      true
+    );
+    throw error;
+  }
+}
+/* =====================================================
+   START SELECTED CAMERA
+   ===================================================== */
+async function startSelectedCamera() {
+  if (!html5QrCode) {
+    return;
+  }
+  if (!cameras.length) {
+    return;
+  }
+  const camera =
+    cameras[
+      currentCameraIndex
+    ];
+  if (!camera) {
+    return;
+  }
+  if (scannerRunning) {
+    return;
+  }
+  try {
+    await html5QrCode.start(
+      camera.id,
+      {
+        fps:
+          15,
+        qrbox:
+          function (
+            viewfinderWidth,
+            viewfinderHeight
+          ) {
+            const size =
+              Math.min(
+                viewfinderWidth,
+                viewfinderHeight
+              ) *
+              0.80;
+            return {
+              width:
+                size,
+              height:
+                size
+            };
+          },
+        aspectRatio:
+          1.0
+      },
+      onQrDetected,
+      function () {
+        /* Normal scanning errors */
+      }
+    );
+    scannerRunning =
+      true;
+    processing =
+      false;
+    hideOverlay();
+    readyBar.textContent =
+      "● READY TO SCAN";
+    readyBar.style.color =
+      "#16803c";
+  } catch (error) {
+    scannerRunning =
+      false;
+    throw error;
+  }
+}
+  
+/* =====================================================
+   QR SCAN BEEP
+   ===================================================== */
+let audioContext = null;
+function unlockAudio() {
+  try {
+    if (!audioContext) {
+      audioContext =
+        new (window.AudioContext ||
+          window.webkitAudioContext)();
+    }
+    if (
+      audioContext.state ===
+      "suspended"
+    ) {
+      audioContext.resume();
+    }
+  } catch (error) {
+    console.log(
+      "Audio unlock error:",
+      error
+    );
+  }
+}
+function beep(
+  frequency = 1000,
+  duration = 130
+) {
+  try {
+    unlockAudio();
+    if (!audioContext) {
+      return;
+    }
+    const oscillator =
+      audioContext.createOscillator();
+    const gainNode =
+      audioContext.createGain();
+    oscillator.type =
+      "sine";
+    oscillator.frequency.value =
+      frequency;
+    gainNode.gain.value =
+      0.15;
+    oscillator.connect(
+      gainNode
+    );
+    gainNode.connect(
+      audioContext.destination
+    );
+    oscillator.start();
+    oscillator.stop(
+      audioContext.currentTime +
+      duration / 1000
+    );
+  } catch (error) {
+    console.log(
+      "Beep error:",
+      error
+    );
+  }
+}
+/* =====================================================
+   QR DETECTED
+   ===================================================== */
+async function onQrDetected(
+  decodedText
+) {
+  if (processing) return;
+  if (!deviceKey || !sessionToken) {
+    console.log("QR ignored: no active device session.");
+    return;
+  }
+
+  processing = true;
+  window.qrProcessingStart = performance.now();
+  beep(1000, 130);
+
+  try {
+    if (html5QrCode && scannerRunning) {
+      await html5QrCode.pause(true);
+    }
+  } catch (error) {
+    console.log("Pause error:", error);
+  }
+
+  readyBar.textContent = "PROCESSING...";
+  readyBar.style.color = "#1267a5";
+  showProcessing();
+
+  // Accept both the current section|LRN QR and the legacy SENHS|QR|LRN QR.
+  // For section|LRN, pass the complete payload to Apps Script so it can
+  // validate the section against STUDENTS column C.
+  const qrText = String(decodedText || "").trim();
+  const qrParts = qrText.split("|");
+  let payloadForServer = "";
+
+  if (qrParts.length === 2 && /^\d+\s*[-–]\s*.+$/.test(qrParts[0].trim())) {
+    const section = qrParts[0].trim();
+    const lrn = qrParts[1].trim();
+    if (section && /^\d{12}$/.test(lrn)) payloadForServer = section + "|" + lrn;
+  } else if (
+    qrParts.length === 3 &&
+    qrParts[0].trim().toUpperCase() === "SENHS" &&
+    qrParts[1].trim().toUpperCase() === "QR" &&
+    /^\d{12}$/.test(qrParts[2].trim())
+  ) {
+    // Legacy QR remains supported; the Apps Script receives the LRN only.
+    payloadForServer = qrParts[2].trim();
+  } else if (/^\d{12}$/.test(qrText)) {
+    // Also accept a plain 12-digit LRN for existing QR cards.
+    payloadForServer = qrText;
+  }
+
+  if (!payloadForServer) {
+    showResult({
+      success: false,
+      message: "INVALID QR. Expected 7-Banaba|12-digit-LRN or SENHS|QR|12-digit-LRN."
+    });
+    return;
+  }
+
+  try {
+    const requestUrl =
+      APPS_SCRIPT_URL +
+      "?lrn=" + encodeURIComponent(payloadForServer) +
+      "&device=" + encodeURIComponent(deviceKey) +
+      "&session=" + encodeURIComponent(sessionToken) +
+      "&platform=" + encodeURIComponent(platform);
+
+    const result = await jsonpRequest(requestUrl);
+    showResult(result);
+
+    if (result && result.success) {
+      beep(1400, 180);
+      // Summary refresh runs on its normal background polling interval.
+      // Do not add a second request to the scan's critical path.
+    }
+  } catch (error) {
+    console.error("QR server error:", error);
+    showResult({ success: false, message: "Unable to connect to server." });
+  }
+}
+
+
+/* =====================================================
+   PROCESSING - RESPONSIVE
+   ===================================================== */
+function showProcessing() {
+  scanOverlay.style.display = "flex";
+  scanOverlay.style.position = "fixed";
+  scanOverlay.style.inset = "0";
+  scanOverlay.style.zIndex = "9999";
+  scanOverlay.style.alignItems = "center";
+  scanOverlay.style.justifyContent = "center";
+  scanOverlay.style.boxSizing = "border-box";
+  scanOverlay.style.padding = "16px";
+  scanOverlay.style.background = "rgba(0,0,0,0.72)";
+
+  overlayContent.innerHTML =
+    '<div style="' +
+    'width:100%;' +
+    'max-width:700px;' +
+    'max-height:85vh;' +
+    'overflow-y:auto;' +
+    'padding:clamp(20px,4vw,30px);' +
+    'text-align:center;' +
+    'background:#0d47a1;' +
+    'border:3px solid #ffffff;' +
+    'border-radius:20px;' +
+    'box-sizing:border-box;' +
+    'color:#ffffff;' +
+    'font-family:Arial,sans-serif;' +
+    '">' +
+    '<div class="processing-title">' +
+    'PROCESSING...' +
+    '</div>' +
+    '<div class="processing-text">' +
+    'Please wait while the attendance is being recorded.' +
+    '</div>' +
+    '</div>';
+}
+
+/* =====================================================
+   ERROR / NOTICE OVERLAY - RESPONSIVE
+   ===================================================== */
+function showOverlay(title, message, isError) {
+  scanOverlay.style.display = "flex";
+  scanOverlay.style.position = "fixed";
+  scanOverlay.style.inset = "0";
+  scanOverlay.style.zIndex = "9999";
+  scanOverlay.style.alignItems = "center";
+  scanOverlay.style.justifyContent = "center";
+  scanOverlay.style.boxSizing = "border-box";
+  scanOverlay.style.padding = "16px";
+  scanOverlay.style.background = isError
+    ? "#b71c1c"
+    : "rgba(0,0,0,0.72)";
+
+  overlayContent.innerHTML =
+    '<div style="' +
+    'width:100%;' +
+    'max-width:700px;' +
+    'max-height:85vh;' +
+    'overflow-y:auto;' +
+    'padding:clamp(20px,4vw,30px);' +
+    'text-align:center;' +
+    'background:' + (isError ? "#7f0000" : "#0d47a1") + ';' +
+    'border:3px solid #ffffff;' +
+    'border-radius:20px;' +
+    'box-sizing:border-box;' +
+    'color:#ffffff;' +
+    'font-family:Arial,sans-serif;' +
+    '">' +
+    '<div style="' +
+    'font-size:clamp(23px,4vw,30px);' +
+    'font-weight:900;' +
+    'line-height:1.2;' +
+    'overflow-wrap:anywhere;' +
+    'margin-bottom:18px;' +
+    '">' +
+    escapeHtml(title || "NOTICE") +
+    '</div>' +
+    '<div style="' +
+    'font-size:clamp(16px,3vw,20px);' +
+    'font-weight:700;' +
+    'line-height:1.4;' +
+    'overflow-wrap:anywhere;' +
+    '">' +
+    escapeHtml(message || "") +
+    '</div>' +
+    '</div>';
+}
+
+/* =====================================================
+   RESULT - RESPONSIVE
+   ===================================================== */
+function showResult(result) {
+  if (showResult.timer) {
+    clearTimeout(showResult.timer);
+  }
+
+  scanOverlay.style.display = "flex";
+  scanOverlay.style.position = "fixed";
+  scanOverlay.style.inset = "0";
+  scanOverlay.style.zIndex = "9999";
+  scanOverlay.style.alignItems = "center";
+  scanOverlay.style.justifyContent = "center";
+  scanOverlay.style.boxSizing = "border-box";
+  scanOverlay.style.padding = "16px";
+
+  const isSuccess = !!(result && result.success);
+  const isLate = isSuccess && result.status === "LATE";
+
+  scanOverlay.style.background =
+    isLate || !isSuccess ? "#b71c1c" : "rgba(0,0,0,0.72)";
+
+  if (isSuccess) {
+    const name = result.name || "STUDENT";
+    const section = result.section || "";
+    const event = result.event || "";
+
+    let html =
+      '<div style="' +
+      'width:100%;' +
+      'max-width:850px;' +
+      'max-height:85vh;' +
+      'overflow-y:auto;' +
+      'margin:auto;' +
+      'padding:clamp(18px,4vw,28px) 16px;' +
+      'text-align:center;' +
+      'background:#0d47a1;' +
+      'border:3px solid #ffffff;' +
+      'border-radius:20px;' +
+      'box-sizing:border-box;' +
+      'color:#ffffff;' +
+      'font-family:Arial,sans-serif;' +
+      '">' +
+      '<div style="' +
+      'font-size:clamp(22px,5vw,34px);' +
+      'font-weight:900;' +
+      'line-height:1.2;' +
+      'overflow-wrap:anywhere;' +
+      'margin:12px 0;' +
+      '">' +
+      escapeHtml(name) +
+      '</div>' +
+      '<div style="' +
+      'font-size:clamp(16px,3.5vw,22px);' +
+      'font-weight:700;' +
+      'line-height:1.3;' +
+      'overflow-wrap:anywhere;' +
+      'margin-bottom:20px;' +
+      '">' +
+      escapeHtml(section) +
+      '</div>' +
+      '<div style="' +
+      'display:inline-block;' +
+      'max-width:100%;' +
+      'padding:10px 20px;' +
+      'font-size:clamp(20px,4.5vw,28px);' +
+      'font-weight:900;' +
+      'line-height:1.2;' +
+      'overflow-wrap:anywhere;' +
+      'color:#ffffff;' +
+      'background:#1565c0;' +
+      'border:2px solid #ffffff;' +
+      'border-radius:12px;' +
+      'box-sizing:border-box;' +
+      '">' +
+      escapeHtml(event) +
+      '</div>';
+
+    if (isLate) {
+      html +=
+        '<div style="' +
+        'margin:16px auto 0;' +
+        'max-width:100%;' +
+        'font-size:clamp(22px,4.5vw,30px);' +
+        'font-weight:900;' +
+        'color:#ffffff;' +
+        'background:#8b0000;' +
+        'border:2px solid #ffffff;' +
+        'border-radius:12px;' +
+        'padding:8px 20px;' +
+        'display:table;' +
+        'box-sizing:border-box;' +
+        '">' +
+        'LATE' +
+        '</div>';
+    }
+
+    html += '</div>';
+    overlayContent.innerHTML = html;
+
+  } else {
+    const message =
+      result && result.message
+        ? result.message
+        : "SCAN FAILED";
+
+    overlayContent.innerHTML =
+      '<div style="' +
+      'width:100%;' +
+      'max-width:700px;' +
+      'max-height:85vh;' +
+      'overflow-y:auto;' +
+      'margin:auto;' +
+      'padding:clamp(20px,4vw,30px) 16px;' +
+      'text-align:center;' +
+      'background:#7f0000;' +
+      'border:3px solid #ffffff;' +
+      'border-radius:20px;' +
+      'box-sizing:border-box;' +
+      'color:#ffffff;' +
+      'font-family:Arial,sans-serif;' +
+      '">' +
+      '<div style="' +
+      'font-size:clamp(23px,4vw,30px);' +
+      'font-weight:900;' +
+      'line-height:1.2;' +
+      'overflow-wrap:anywhere;' +
+      'margin-bottom:18px;' +
+      '">' +
+      'SCAN NOT RECORDED' +
+      '</div>' +
+      '<div style="' +
+      'font-size:clamp(16px,3vw,20px);' +
+      'font-weight:700;' +
+      'line-height:1.4;' +
+      'overflow-wrap:anywhere;' +
+      '">' +
+      escapeHtml(message) +
+      '</div>' +
+      '</div>';
+
+    beep(600, 180);
+  }
+
+  const processingTime = window.qrProcessingStart
+    ? (
+        (performance.now() - window.qrProcessingStart) / 1000
+      ).toFixed(2)
+    : "0.00";
+
+  console.log(
+    "QR PROCESSING TIME: " + processingTime + " seconds"
+  );
+
+  /* Keep the result visible long enough to read. */
+  showResult.timer = setTimeout(function () {
+    resumeScanner();
+  }, 2000);
+}
+
+  
+/* =====================================================
+   RESUME SCANNER
+   ===================================================== */
+async function resumeScanner() {
+  hideOverlay();
+  processing =
+    false;
+  readyBar.textContent =
+    "● READY TO SCAN";
+  readyBar.style.color =
+    "#16803c";
+  try {
+    if (
+      html5QrCode &&
+      scannerRunning
+    ) {
+      try {
+        await html5QrCode.resume();
+        console.log(
+          "Scanner resumed successfully."
+        );
+        return;
+      } catch (resumeError) {
+        console.log(
+          "Resume failed. Restarting scanner...",
+          resumeError
+        );
+      }
+    }
+    if (
+      html5QrCode &&
+      scannerRunning
+    ) {
+      try {
+        await html5QrCode.stop();
+      } catch (stopError) {
+        console.log(
+          "Scanner stop error:",
+          stopError
+        );
+      }
+    }
+    scannerRunning =
+      false;
+    await startSelectedCamera();
+    console.log(
+      "Scanner restarted successfully."
+    );
+  } catch (error) {
+    console.error(
+      "Scanner recovery error:",
+      error
+    );
+    scannerRunning =
+      false;
+    readyBar.textContent =
+      "CAMERA ERROR";
+    readyBar.style.color =
+      "#b71c1c";
+  }
+}
+/* =====================================================
+   HIDE OVERLAY
+   ===================================================== */
+function hideOverlay() {
+  scanOverlay.style.display =
+    "none";
+}
+/* =====================================================
+   SWITCH CAMERA
+   ===================================================== */
+switchCameraBtn.addEventListener(
+  "click",
+  async function () {
+    if (
+      processing ||
+      cameras.length < 2 ||
+      !html5QrCode
+    ) {
+      return;
+    }
+    processing =
+      true;
+    switchCameraBtn.disabled =
+      true;
+    readyBar.textContent =
+      "SWITCHING CAMERA...";
+    readyBar.style.color =
+      "#1267a5";
+    const previousIndex =
+      currentCameraIndex;
+    try {
+      if (scannerRunning) {
+        try {
+          await html5QrCode.stop();
+        } catch (error) {
+          console.log(
+            "Camera stop:",
+            error
+          );
+        }
+        scannerRunning =
+          false;
+      }
+      currentCameraIndex =
+        (
+          currentCameraIndex +
+          1
+        ) %
+        cameras.length;
+      await startSelectedCamera();
+    } catch (error) {
+      console.error(
+        "Camera switch error:",
+        error
+      );
+      currentCameraIndex =
+        previousIndex;
+      scannerRunning =
+        false;
+      try {
+        await startSelectedCamera();
+      } catch (recoverError) {
+        console.error(
+          "Camera recovery error:",
+          recoverError
+        );
+      }
+    } finally {
+      processing =
+        false;
+      switchCameraBtn.disabled =
+        false;
+      readyBar.textContent =
+        "● READY TO SCAN";
+      readyBar.style.color =
+        "#16803c";
+    }
+  }
+);
+ /* =====================================================
+   ADVISER / ADMIN LOGOUT
+   ===================================================== */
+attendanceLogoutBtn.addEventListener(
+  "click",
+  function () {
+    console.log(
+      "ADVISER / ADMIN LOGOUT STARTED"
+    );
+    /* ================================
+       CLEAR ATTENDANCE SESSION
+       ================================ */
+    attendanceAccessCode =
+      "";
+    attendanceRole =
+      "";
+    attendanceSection =
+      "";
+    attendanceStudents =
+      [];
+    /* ================================
+       RESET ATTENDANCE PAGE
+       ================================ */
+    attendanceRoleTitle.textContent =
+      "Adviser / Admin Attendance";
+    attendanceSectionSelect.value =
+      "";
+    attendanceCurrentSection.textContent =
+      "Section: —";
+    attendanceTableBody.innerHTML =
+      "";
+    attendanceMessage.textContent =
+      "";
+    attendanceSectionWrapper.style.display =
+      "none";
+    proceedAttendanceBtn.disabled =
+      true;
+    /* ================================
+       RETURN TO USER / NAME PAGE
+       ================================ */
+    attendancePage.style.display =
+      "none";
+    scannerPage.style.display =
+      "none";
+    devicePage.style.display =
+      "none";
+    userPage.style.display =
+      "block";
+    /* ================================
+       RESET NAME
+       ================================ */
+    userName =
+      "";
+    userNameInput.value =
+      "";
+    userMessage.textContent =
+      "";
+    userMessage.className =
+      "";
+    /* ================================
+       RESET DEVICE ACCESS UI
+       ================================ */
+    deviceCode.value =
+      "";
+    deviceMessage.textContent =
+      "";
+    deviceMessage.className =
+      "";
+    continueBtn.disabled =
+      false;
+    continueBtn.textContent =
+      "CONTINUE";
+    /* ================================
+       FOCUS NAME INPUT
+       ================================ */
+    userNameInput.focus();
+    console.log(
+      "ADVISER / ADMIN LOGOUT COMPLETED"
+    );
+  }
+);
+/* =====================================================
+   REPORT PAGE NAVIGATION
+   Navigation buttons must NOT log the user out.
+   ===================================================== */
+function senhsOpenDailyAttendance() {
+  senhsShowReportPage("attendancePage");
+}
+
+[
+  "goDailyFromMAMBtn",
+  "goDailyFromSYMSBtn"
+].forEach(function(id) {
+  const button = document.getElementById(id);
+  if (button) button.addEventListener("click", senhsOpenDailyAttendance);
+});
+
+const senhsGoSYMSFromMAM = document.getElementById("goSYMSFromMAMBtn");
+if (senhsGoSYMSFromMAM) {
+  senhsGoSYMSFromMAM.addEventListener("click", function() {
+    senhsShowReportPage("smsPage");
+    loadSYSummary();
+  });
+}
+
+const senhsGoMAMFromSYMS = document.getElementById("goMAMFromSYMSBtn");
+if (senhsGoMAMFromSYMS) {
+  senhsGoMAMFromSYMS.addEventListener("click", function() {
+    senhsShowReportPage("mamPage");
+    loadMonthlyAttendance();
+  });
+}
+
+/* =====================================================
+   BUTTON EVENTS
+   ===================================================== */
+continueBtn.addEventListener(
+  "click",
+  verifyDevice
+);
+exitScannerBtn.addEventListener(
+  "click",
+  exitScanner
+);
+/* =====================================================
+   ENTER KEY
+   ===================================================== */
+deviceCode.addEventListener(
+  "keydown",
+  function (event) {
+    if (
+      event.key ===
+      "Enter"
+    ) {
+      event.preventDefault();
+      verifyDevice();
+    }
+  }
+);
+/* =====================================================
+   HTML ESCAPE
+   ===================================================== */
+function escapeHtml(
+  value
+) {
+  return String(
+    value
+  )
+    .replace(
+      /&/g,
+      "&amp;"
+    )
+    .replace(
+      /</g,
+      "&lt;"
+    )
+    .replace(
+      />/g,
+      "&gt;"
+    )
+    .replace(
+      /"/g,
+      "&quot;"
+    )
+    .replace(
+      /'/g,
+      "&#039;"
+    );
+}
+/* =====================================================
+   PHILIPPINE STANDARD TIME
+   ===================================================== */
+function updatePSTClock() {
+  const now =
+    new Date();
+  const time =
+    new Intl.DateTimeFormat(
+      "en-US",
+      {
+        timeZone:
+          "Asia/Manila",
+        hour:
+          "2-digit",
+        minute:
+          "2-digit",
+        second:
+          "2-digit",
+        hour12:
+          true
+      }
+    ).format(
+      now
+    );
+  const date =
+    new Intl.DateTimeFormat(
+      "en-US",
+      {
+        timeZone:
+          "Asia/Manila",
+        weekday:
+          "long",
+        month:
+          "long",
+        day:
+          "numeric",
+        year:
+          "numeric"
+      }
+    ).format(
+      now
+    );
+  const timeElement =
+    document.getElementById(
+      "pstTime"
+    );
+  const dateElement =
+    document.getElementById(
+      "pstDate"
+    );
+  if (timeElement) {
+    timeElement.textContent =
+      time;
+  }
+  if (dateElement) {
+    dateElement.textContent =
+      date;
+  }
+  const attendanceTimeElement =
+  document.getElementById(
+    "attendancePstTime"
+  );
+const attendanceDateElement =
+  document.getElementById(
+    "attendancePstDate"
+  );
+if (attendanceTimeElement) {
+  attendanceTimeElement.textContent =
+    time;
+}
+if (attendanceDateElement) {
+  attendanceDateElement.textContent =
+    date;
+}
+  
+}
+setInterval(
+  updatePSTClock,
+  1000
+);
+updatePSTClock();
+/* =====================================================
+   INITIAL STATE
+   ===================================================== */
+userPage.style.display =
+  "block";
+devicePage.style.display =
+  "none";
+scannerPage.style.display =
+  "none";
+attendancePage.style.display =
+  "none";
+continueBtn.disabled =
+  false;
+continueBtn.textContent =
+  "CONTINUE";
+proceedAttendanceBtn.disabled =
+  true;
+console.log(
+  "SENHS GATE SCANNER READY"
+);
+console.log(
+  "PLATFORM =",
+  platform
+);
+
+  
+
+/* =====================================================
+   SENHS — MAM AND SCHOOL YEAR MONTHLY SUMMARY
+   ===================================================== */
+
+const SENHS_SY_MONTHS = [
+  "2026-06", "2026-07", "2026-08", "2026-09",
+  "2026-10", "2026-11", "2026-12",
+  "2027-01", "2027-02", "2027-03",
+  "2027-04", "2027-05"
+];
+
+const SENHS_SY_MONTH_LABELS = {
+  "2026-06": "June 2026",
+  "2026-07": "July 2026",
+  "2026-08": "August 2026",
+  "2026-09": "September 2026",
+  "2026-10": "October 2026",
+  "2026-11": "November 2026",
+  "2026-12": "December 2026",
+  "2027-01": "January 2027",
+  "2027-02": "February 2027",
+  "2027-03": "March 2027",
+  "2027-04": "April 2027",
+  "2027-05": "May 2027"
+};
+
+let senhsMonthlyCache = {};
+let senhsSummaryCache = [];
+let senhsSummaryLoading = false;
+
+function senhsMonthlyHistorical(month) {
+  return /^\d{4}-(06|07|08|09)$/.test(month);
+}
+
+function senhsGetSelectedSection() {
+  if (
+    typeof attendanceRole !== "undefined" &&
+    attendanceRole === "ADMIN"
+  ) {
+    const selector = document.getElementById(
+      "attendanceSectionSelect"
+    );
+    return String(selector ? selector.value : "").trim();
+  }
+
+  return String(
+    typeof attendanceSection !== "undefined"
+      ? attendanceSection
+      : ""
+  ).trim();
+}
+
+function senhsShowReportPage(pageName) {
+  const attendance = document.getElementById("attendancePage");
+  const mam = document.getElementById("mamPage");
+  const sms = document.getElementById("smsPage");
+
+  if (attendance) attendance.style.display = "none";
+  if (mam) mam.style.display = "none";
+  if (sms) sms.style.display = "none";
+
+  const target = document.getElementById(pageName);
+  if (target) target.style.display = "block";
+}
+
+function senhsReturnToAttendance() {
+  // Navigation only: preserve the adviser/admin session and attendance state.
+  senhsShowReportPage("attendancePage");
+}
+
+/* =====================================================
+   MAM — MONTHLY ATTENDANCE MATRIX
+   Weekends are hidden in this matrix.
+   ===================================================== */
+
+async function loadMonthlyAttendance() {
+  const monthSelect = document.getElementById(
+    "monthlyAttendanceMonth"
+  );
+  const loadButton = document.getElementById(
+    "loadMonthlyAttendanceBtn"
+  );
+  const message = document.getElementById(
+    "monthlyAttendanceMessage"
+  );
+  const matrixHead = document.getElementById(
+    "monthlyAttendanceTableHead"
+  );
+  const matrixBody = document.getElementById(
+    "monthlyAttendanceTableBody"
+  );
+
+  if (
+    !monthSelect ||
+    !loadButton ||
+    !message ||
+    !matrixHead ||
+    !matrixBody
+  ) {
+    console.error("MAM HTML elements are missing.");
+    return;
+  }
+
+  const month = monthSelect.value;
+  const section = senhsGetSelectedSection();
+
+  if (!attendanceAccessCode || !section) {
+    message.textContent = "Please select a section first.";
+    return;
+  }
+
+  loadButton.disabled = true;
+  message.textContent = "Loading monthly attendance...";
+  matrixHead.innerHTML = "";
+  matrixBody.innerHTML = "";
+
+  try {
+    const result = await senhsFetchMonth(month, section);
+    senhsMonthlyCache[section + "|" + month] = result;
+
+    const days = (result.days || []).filter(function(day) {
+      const dateParts = String(day.date || "").split("-");
+      const date = new Date(
+        Number(dateParts[0]),
+        Number(dateParts[1]) - 1,
+        Number(dateParts[2])
+      );
+
+      return date.getDay() !== 0 && date.getDay() !== 6;
+    });
+
+    const headerRow = document.createElement("tr");
+    const nameHeader = document.createElement("th");
+    nameHeader.textContent = "STUDENT NAME";
+    headerRow.appendChild(nameHeader);
+
+    days.forEach(function(day) {
+      const th = document.createElement("th");
+      th.textContent = day.day;
+      th.title = day.date;
+      headerRow.appendChild(th);
+    });
+
+    matrixHead.appendChild(headerRow);
+
+    (result.students || []).forEach(function(student) {
+      const row = document.createElement("tr");
+      const nameCell = document.createElement("td");
+      nameCell.textContent = student.name || "";
+      row.appendChild(nameCell);
+
+      const dailyByDate = {};
+      (student.daily || []).forEach(function(day) {
+        dailyByDate[day.date] = day;
+      });
+
+      days.forEach(function(day) {
+        const cell = document.createElement("td");
+        const daily = dailyByDate[day.date] || {};
+        const code = daily.code || "—";
+
+        cell.textContent = code;
+        cell.title = day.date || "";
+
+        if (code === "P/P") {
+          cell.className = "status-pp";
+        } else if (code === "P/A" || code === "A/P") {
+          cell.className = "status-half";
+        } else if (code === "A/A") {
+          cell.className = "status-aa";
+        } else {
+          cell.className = "status-none";
+        }
+
+        row.appendChild(cell);
+      });
+
+      matrixBody.appendChild(row);
+    });
+
+    message.textContent =
+      result.section + " — " +
+      (SENHS_SY_MONTH_LABELS[month] || month) +
+      ": " + (result.students || []).length +
+      " student(s) loaded. Weekends hidden.";
+
+  } catch (error) {
+    console.error("MAM loading error:", error);
+    message.textContent =
+      error.message || "Unable to load monthly attendance.";
+  } finally {
+    loadButton.disabled = false;
+  }
+}
+
+
+/* =====================================================
+   SMS — SCHOOL YEAR MONTHLY SUMMARY
+   FORCE FRESH DATA + FRIENDLIER STATUS
+   ===================================================== */
+
+async function senhsFetchMonth(month, section) {
+  // Unique value prevents the browser from reusing a cached response.
+  const refreshKey =
+    Date.now().toString() +
+    Math.random().toString(36).slice(2);
+
+  const requestUrl =
+    APPS_SCRIPT_URL +
+    "?action=getMonthlyAttendance" +
+    "&accessCode=" +
+    encodeURIComponent(attendanceAccessCode) +
+    "&requestedSection=" +
+    encodeURIComponent(section) +
+    "&month=" +
+    encodeURIComponent(month) +
+    "&_refresh=" +
+    encodeURIComponent(refreshKey);
+
+  const result = await jsonpRequest(requestUrl);
+
+  if (!result || !result.success) {
+    throw new Error(
+      result && result.message
+        ? result.message
+        : "Unable to load " + month
+    );
+  }
+
+  return result;
+}
+
+
+/* =====================================================
+   LOAD / REFRESH SCHOOL YEAR MONTHLY SUMMARY
+   ===================================================== */
+
+async function loadSYSummary() {
+  const message = document.getElementById("sySummaryMessage");
+  const head = document.getElementById("sySummaryTableHead");
+  const body = document.getElementById("sySummaryTableBody");
+
+  if (!message || !head || !body) {
+    console.error("School year summary HTML elements are missing.");
+    return;
+  }
+
+  const section = senhsGetSelectedSection();
+
+  if (!attendanceAccessCode || !section) {
+    message.textContent = "Please select a section first.";
+    return;
+  }
+
+  if (senhsSummaryLoading) {
+    message.textContent =
+      "Summary is still loading. Please wait a moment.";
+    return;
+  }
+
+  senhsSummaryLoading = true;
+  message.textContent =
+    "Refreshing Section " + section + " monthly attendance...";
+
+  head.innerHTML = "";
+  body.innerHTML = "";
+
+  try {
+    // Request fresh data for all 12 months.
+    const results = await Promise.all(
+      SENHS_SY_MONTHS.map(function(month) {
+        return senhsFetchMonth(month, section);
+      })
+    );
+
+    // Replace old cached results with the latest server responses.
+    const freshSummary = results.map(function(result, index) {
+      return {
+        month: SENHS_SY_MONTHS[index],
+        result: result,
+        students: Array.isArray(result.students)
+          ? result.students
+          : []
+      };
+    });
+
+    senhsMonthlyCache = senhsMonthlyCache || {};
+
+    freshSummary.forEach(function(item) {
+      senhsMonthlyCache[section + "|" + item.month] = item.result;
+    });
+
+    senhsSummaryCache = freshSummary;
+
+    // Build a consolidated list of students across all months.
+    const studentMap = Object.create(null);
+
+    senhsSummaryCache.forEach(function(item) {
+      item.students.forEach(function(student) {
+        if (student.lrn === undefined || student.lrn === null) {
+          return;
+        }
+
+        const lrn = String(student.lrn).trim();
+
+        if (!lrn) {
+          return;
+        }
+
+        if (!studentMap[lrn]) {
+          studentMap[lrn] = {
+            lrn: lrn,
+            name: student.name || "",
+            months: {}
+          };
+        } else if (
+          student.name &&
+          (!studentMap[lrn].name ||
+            studentMap[lrn].name.length < String(student.name).length)
+        ) {
+          studentMap[lrn].name = student.name;
+        }
+
+        // Store the latest values returned by Apps Script.
+        studentMap[lrn].months[item.month] = {
+          present: Number(student.present) || 0,
+          absent: Number(student.absent) || 0
+        };
+      });
+    });
+
+    const allStudents = Object.values(studentMap).sort(
+      function(a, b) {
+        return String(a.name).localeCompare(String(b.name));
+      }
+    );
+
+    const activeMonths = senhsSummaryCache;
+
+    // -----------------------------
+    // TABLE HEADER
+    // -----------------------------
+    const headerRow = document.createElement("tr");
+
+    const nameHeader = document.createElement("th");
+    nameHeader.textContent = "STUDENT NAME";
+    headerRow.appendChild(nameHeader);
+
+    activeMonths.forEach(function(item) {
+      const th = document.createElement("th");
+      th.textContent =
+        SENHS_SY_MONTH_LABELS[item.month] || item.month;
+      th.colSpan = 2;
+      headerRow.appendChild(th);
+    });
+
+    const absentTotalHeader = document.createElement("th");
+    absentTotalHeader.textContent = "SY ABSENT";
+    headerRow.appendChild(absentTotalHeader);
+
+    const presentTotalHeader = document.createElement("th");
+    presentTotalHeader.textContent = "SY PRESENT";
+    headerRow.appendChild(presentTotalHeader);
+
+    head.appendChild(headerRow);
+
+    const subHeader = document.createElement("tr");
+
+    const blankName = document.createElement("th");
+    blankName.textContent = "";
+    subHeader.appendChild(blankName);
+
+    activeMonths.forEach(function() {
+      ["Present", "Absent"].forEach(function(label) {
+        const th = document.createElement("th");
+        th.textContent = label;
+        subHeader.appendChild(th);
+      });
+    });
+
+    const blankAbsent = document.createElement("th");
+    blankAbsent.textContent = "";
+    subHeader.appendChild(blankAbsent);
+
+    const blankPresent = document.createElement("th");
+    blankPresent.textContent = "";
+    subHeader.appendChild(blankPresent);
+
+    head.appendChild(subHeader);
+
+    // -----------------------------
+    // TABLE BODY
+    // -----------------------------
+    if (allStudents.length === 0) {
+      const emptyRow = document.createElement("tr");
+      const emptyCell = document.createElement("td");
+
+      emptyCell.colSpan = 1 + (activeMonths.length * 2) + 2;
+      emptyCell.textContent =
+        "No student attendance records were returned for this section.";
+
+      emptyRow.appendChild(emptyCell);
+      body.appendChild(emptyRow);
+    } else {
+      allStudents.forEach(function(student) {
+        const row = document.createElement("tr");
+
+        const nameCell = document.createElement("td");
+        nameCell.textContent = student.name || "Unnamed student";
+        row.appendChild(nameCell);
+
+        let totalPresent = 0;
+        let totalAbsent = 0;
+
+        activeMonths.forEach(function(item) {
+          const totals = student.months[item.month] || {
+            present: 0,
+            absent: 0
+          };
+
+          totalPresent += totals.present;
+          totalAbsent += totals.absent;
+
+          const presentCell = document.createElement("td");
+          presentCell.textContent = totals.present;
+          row.appendChild(presentCell);
+
+          const absentCell = document.createElement("td");
+          absentCell.textContent = totals.absent;
+          row.appendChild(absentCell);
+        });
+
+        const totalAbsentCell = document.createElement("td");
+        totalAbsentCell.textContent = totalAbsent;
+        row.appendChild(totalAbsentCell);
+
+        const totalPresentCell = document.createElement("td");
+        totalPresentCell.textContent = totalPresent;
+        row.appendChild(totalPresentCell);
+
+        body.appendChild(row);
+      });
+    }
+
+    // Rebuild the editable monthly totals using the refreshed data.
+    if (typeof senhsBuildHistoricalEditor === "function") {
+      senhsBuildHistoricalEditor(allStudents);
+    }
+
+    const now = new Date();
+    const refreshedAt = now.toLocaleTimeString("en-PH", {
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      hour12: true
+    });
+
+    message.textContent =
+      "School Year 2026–2027 | Section " + section +
+      " | " + allStudents.length + " student(s)" +
+      " | Last refreshed: " + refreshedAt;
+
+  } catch (error) {
+    console.error("School year summary error:", error);
+
+    message.textContent =
+      "Unable to refresh the summary. Please try again. " +
+      (error && error.message ? error.message : "");
+
+  } finally {
+    senhsSummaryLoading = false;
+  }
+}
+
+
+/* =====================================================
+   UPDATE — EDITABLE MONTHLY TOTALS
+   SCHOOL YEAR 2026-2027: JUNE TO MAY
+   TABLE FORMAT: ONE ROW PER STUDENT
+   SAVE ONLY CHANGED MONTHS
+   ===================================================== */
+
+function senhsBuildHistoricalEditor(students) {
+  const container = document.getElementById("syHistoricalInputs");
+  if (!container) return;
+
+  container.innerHTML = "";
+  container.style.overflowX = "auto";
+  container.style.maxWidth = "100%";
+
+  const editableMonths = SENHS_SY_MONTHS.slice();
+
+  if (!students || !students.length) {
+    container.textContent = "No students found for this section.";
+    return;
+  }
+
+  // TABLE
+  const table = document.createElement("table");
+  table.style.borderCollapse = "collapse";
+  table.style.width = "max-content";
+  table.style.minWidth = "100%";
+  table.style.fontSize = "12px";
+
+  // TABLE HEADER
+  const thead = document.createElement("thead");
+  const headerRow1 = document.createElement("tr");
+  const headerRow2 = document.createElement("tr");
+
+  const nameHeader = document.createElement("th");
+  nameHeader.textContent = "STUDENT NAME";
+  nameHeader.rowSpan = 2;
+  nameHeader.style.cssText =
+    "border:1px solid #bbb;padding:8px;min-width:200px;" +
+    "background:#e8eef7;text-align:left;position:sticky;left:0;";
+  headerRow1.appendChild(nameHeader);
+
+  editableMonths.forEach(function(month) {
+    const monthHeader = document.createElement("th");
+    monthHeader.textContent = SENHS_SY_MONTH_LABELS[month] || month;
+    monthHeader.colSpan = 2;
+    monthHeader.style.cssText =
+      "border:1px solid #bbb;padding:8px;min-width:130px;" +
+      "background:#dce8f8;text-align:center;";
+    headerRow1.appendChild(monthHeader);
+
+    ["PRESENT", "ABSENT"].forEach(function(field) {
+      const subHeader = document.createElement("th");
+      subHeader.textContent = field;
+      subHeader.style.cssText =
+        "border:1px solid #bbb;padding:6px;min-width:70px;" +
+        "background:#f0f4fa;text-align:center;";
+      headerRow2.appendChild(subHeader);
+    });
+  });
+
+  thead.appendChild(headerRow1);
+  thead.appendChild(headerRow2);
+  table.appendChild(thead);
+
+  // TABLE BODY
+  const tbody = document.createElement("tbody");
+  const section = senhsGetSelectedSection();
+
+  students.forEach(function(student) {
+    const row = document.createElement("tr");
+
+    const nameCell = document.createElement("td");
+    nameCell.textContent = student.name || "";
+    nameCell.style.cssText =
+      "border:1px solid #bbb;padding:7px;min-width:200px;" +
+      "background:#fff;position:sticky;left:0;z-index:1;";
+    row.appendChild(nameCell);
+
+    editableMonths.forEach(function(month) {
+      const cached = senhsMonthlyCache[section + "|" + month];
+
+      const sourceStudent = cached &&
+        (cached.students || []).find(function(item) {
+          return String(item.lrn) === String(student.lrn);
+        });
+
+      const totals =
+        student.months && student.months[month]
+          ? student.months[month]
+          : { present: 0, absent: 0 };
+
+      ["present", "absent"].forEach(function(field) {
+        const cell = document.createElement("td");
+        cell.style.cssText =
+          "border:1px solid #bbb;padding:4px;text-align:center;";
+
+        const rawValue =
+          sourceStudent && sourceStudent[field] !== undefined
+            ? sourceStudent[field]
+            : totals[field];
+
+        const numericValue = Number(rawValue);
+        const value = Number.isFinite(numericValue) ? numericValue : 0;
+
+        const input = document.createElement("input");
+        input.type = "number";
+        input.min = "0";
+        input.step = "0.5";
+        input.value = value;
+        input.dataset.originalValue = String(value);
+        input.dataset.lrn = student.lrn;
+        input.dataset.month = month;
+        input.dataset.field = field;
+        input.dataset.name = student.name || "";
+
+        input.setAttribute(
+          "aria-label",
+          (student.name || "") + " " +
+          (SENHS_SY_MONTH_LABELS[month] || month) + " " + field
+        );
+
+        input.style.cssText =
+          "width:66px;max-width:100%;box-sizing:border-box;" +
+          "padding:6px 3px;text-align:center;";
+
+        cell.appendChild(input);
+        row.appendChild(cell);
+      });
+    });
+
+    tbody.appendChild(row);
+  });
+
+  table.appendChild(tbody);
+  container.appendChild(table);
+}
+
+
+/* =====================================================
+   SAVE MONTHLY TOTALS
+   SAVE CHANGED MONTHS ONLY
+   REFRESH SYMS AND HIDE EDITOR AFTER SUCCESS
+   ===================================================== */
+
+async function saveSYSummaryUpdate() {
+  const message = document.getElementById("sySummaryMessage");
+  const button = document.getElementById("saveSYSummaryBtn");
+  const section = senhsGetSelectedSection();
+
+  function setMessage(text) {
+    if (message) message.textContent = text;
+  }
+
+  if (!attendanceAccessCode || !section) {
+    setMessage("Please select a section first.");
+    return;
+  }
+
+  const inputs = document.querySelectorAll(
+    "#syHistoricalInputs input[data-lrn]"
+  );
+
+  const grouped = {};
+
+  inputs.forEach(function(input) {
+    const key = input.dataset.lrn + "|" + input.dataset.month;
+
+    if (!grouped[key]) {
+      grouped[key] = {
+        lrn: input.dataset.lrn,
+        month: input.dataset.month,
+        name: input.dataset.name,
+        present: NaN,
+        absent: NaN,
+        originalPresent: NaN,
+        originalAbsent: NaN
+      };
+    }
+
+    const entry = grouped[key];
+    const field = input.dataset.field;
+    const currentValue =
+      input.value.trim() === "" ? NaN : Number(input.value);
+    const originalValue = Number(input.dataset.originalValue);
+
+    entry[field] = currentValue;
+
+    entry[
+      field === "present" ? "originalPresent" : "originalAbsent"
+    ] = originalValue;
+  });
+
+  // ONLY SAVE STUDENT-MONTH RECORDS THAT CHANGED
+  const changedEntries = Object.values(grouped).filter(function(entry) {
+    return (
+      entry.present !== entry.originalPresent ||
+      entry.absent !== entry.originalAbsent
+    );
+  });
+
+  if (!changedEntries.length) {
+    setMessage("No changes detected. Nothing to save.");
+    return;
+  }
+
+  const invalid = changedEntries.some(function(entry) {
+    return (
+      !Number.isFinite(entry.present) ||
+      !Number.isFinite(entry.absent) ||
+      entry.present < 0 ||
+      entry.absent < 0
+    );
+  });
+
+  if (invalid) {
+    setMessage(
+      "Check the Present and Absent values. Use non-negative numbers."
+    );
+    return;
+  }
+
+  // DATA SENT TO APPS SCRIPT
+  const entries = changedEntries.map(function(entry) {
+    return {
+      lrn: entry.lrn,
+      month: entry.month,
+      name: entry.name,
+      present: entry.present,
+      absent: entry.absent
+    };
+  });
+
+  if (button) button.disabled = true;
+  setMessage("Saving changed monthly totals...");
+
+  try {
+    const requestUrl =
+      APPS_SCRIPT_URL +
+      "?action=saveHistoricalMonthlySummary" +
+      "&accessCode=" +
+      encodeURIComponent(attendanceAccessCode) +
+      "&requestedSection=" +
+      encodeURIComponent(section) +
+      "&summaryData=" +
+      encodeURIComponent(JSON.stringify(entries));
+
+    const result = await jsonpRequest(requestUrl);
+
+    if (!result || !result.success) {
+      throw new Error(
+        result && result.message
+          ? result.message
+          : "Unable to save monthly totals."
+      );
+    }
+
+    setMessage("Saved successfully. Refreshing SYMS...");
+
+    // REFRESH THE SYMS USING THE LATEST SERVER DATA
+    await loadSYSummary();
+
+    // HIDE EDITOR AFTER SAVE AND REFRESH
+    const panel = document.getElementById("sySummaryUpdatePanel");
+    if (panel) panel.style.display = "none";
+
+    setMessage(
+      "Monthly totals updated successfully (" +
+      (result.saved || entries.length) +
+      " record(s))."
+    );
+
+  } catch (error) {
+    console.error("Save school year summary error:", error);
+
+    setMessage(
+      error.message || "Unable to save monthly totals."
+    );
+  } finally {
+    if (button) button.disabled = false;
+  }
+}
+
+
+/* =====================================================
+   BUTTON EVENTS
+   ===================================================== */
+
+// OPEN MAM PAGE
+const senhsOpenMAMButton = document.getElementById("openMAMPageBtn");
+
+if (senhsOpenMAMButton) {
+  senhsOpenMAMButton.addEventListener("click", function() {
+    if (!senhsGetSelectedSection()) {
+      const message = document.getElementById("attendanceMessage");
+
+      if (message) {
+        message.textContent = "Please select a section first.";
+      }
+
+      return;
+    }
+
+    senhsShowReportPage("mamPage");
+    loadMonthlyAttendance();
+  });
+}
+
+
+// OPEN SYMS PAGE
+const senhsOpenSMSButton = document.getElementById("openSMSPageBtn");
+
+if (senhsOpenSMSButton) {
+  senhsOpenSMSButton.addEventListener("click", function() {
+    if (!senhsGetSelectedSection()) {
+      const message = document.getElementById("attendanceMessage");
+
+      if (message) {
+        message.textContent = "Please select a section first.";
+      }
+
+      return;
+    }
+
+    senhsShowReportPage("smsPage");
+    loadSYSummary();
+  });
+}
+
+
+// LOAD MONTHLY ATTENDANCE
+const senhsLoadMonthButton = document.getElementById(
+  "loadMonthlyAttendanceBtn"
+);
+
+if (senhsLoadMonthButton) {
+  senhsLoadMonthButton.addEventListener(
+    "click",
+    loadMonthlyAttendance
+  );
+}
+
+
+// OPEN / HIDE SYMS UPDATE PANEL
+const senhsUpdateButton = document.getElementById(
+  "updateSYSummaryBtn"
+);
+
+if (senhsUpdateButton) {
+  senhsUpdateButton.addEventListener("click", function() {
+    const panel = document.getElementById("sySummaryUpdatePanel");
+
+    if (!panel) {
+      console.error("SYMS update panel was not found.");
+      return;
+    }
+
+    const isHidden =
+      window.getComputedStyle(panel).display === "none";
+
+    if (isHidden) {
+      panel.style.display = "block";
+
+      panel.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+      });
+    } else {
+      panel.style.display = "none";
+    }
+  });
+}
+
+
+// SAVE SYMS UPDATE
+const senhsSaveUpdateButton = document.getElementById(
+  "saveSYSummaryBtn"
+);
+
+if (senhsSaveUpdateButton) {
+  senhsSaveUpdateButton.addEventListener("click", async function() {
+    await saveSYSummaryUpdate();
+  });
+}
+
+
+// CANCEL SYMS UPDATE
+const senhsCancelUpdateButton = document.getElementById(
+  "cancelSYSummaryUpdateBtn"
+);
+
+if (senhsCancelUpdateButton) {
+  senhsCancelUpdateButton.addEventListener("click", function() {
+    const panel = document.getElementById("sySummaryUpdatePanel");
+
+    if (panel) {
+      panel.style.display = "none";
+    }
+
+    // Do not save anything when CANCEL is clicked.
+    // Reload the displayed summary to discard unsaved edits.
+    loadSYSummary();
+  });
+}
+
+
+// MAM LOGOUT
+const senhsMAMLogoutButton = document.getElementById("mamLogoutBtn");
+
+if (senhsMAMLogoutButton) {
+  senhsMAMLogoutButton.addEventListener("click", function() {
+    const logout = document.getElementById("attendanceLogoutBtn");
+
+    if (logout) {
+      logout.click();
+    }
+  });
+}
+
+
+// SYMS LOGOUT
+const senhsSMSLogoutButton = document.getElementById("smsLogoutBtn");
+
+if (senhsSMSLogoutButton) {
+  senhsSMSLogoutButton.addEventListener("click", function() {
+    const logout = document.getElementById("attendanceLogoutBtn");
+
+    if (logout) {
+      logout.click();
+    }
+  });
+}
+
+  
+</script>
+</body>
+</html>
