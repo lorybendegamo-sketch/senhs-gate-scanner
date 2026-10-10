@@ -5176,7 +5176,9 @@ async function loadSYSummary() {
 }
 
 /* =====================================================
-   UPDATE — JUNE TO SEPTEMBER HISTORICAL TOTALS
+   UPDATE — EDITABLE MONTHLY TOTALS
+   SCHOOL YEAR 2026-2027: JUNE TO MAY
+   SAVE ONLY CHANGED MONTHS
    ===================================================== */
 
 function senhsBuildHistoricalEditor(students) {
@@ -5185,12 +5187,15 @@ function senhsBuildHistoricalEditor(students) {
 
   container.innerHTML = "";
 
-  const historicalMonths = [
-    "2026-06", "2026-07", "2026-08", "2026-09"
-  ];
+  const editableMonths = SENHS_SY_MONTHS.slice();
+
+  if (!students || !students.length) {
+    container.textContent = "No students found for this section.";
+    return;
+  }
 
   students.forEach(function(student) {
-    historicalMonths.forEach(function(month) {
+    editableMonths.forEach(function(month) {
       const cached = senhsMonthlyCache[
         senhsGetSelectedSection() + "|" + month
       ];
@@ -5223,11 +5228,17 @@ function senhsBuildHistoricalEditor(students) {
         input.type = "number";
         input.min = "0";
         input.step = "0.5";
-        input.value = Number(
+
+        const rawValue =
           sourceStudent && sourceStudent[field] !== undefined
             ? sourceStudent[field]
-            : totals[field]
-        );
+            : totals[field];
+
+        const value = Number(rawValue);
+        input.value = Number.isFinite(value) ? value : 0;
+
+        // Baseline: para malaman kung binago talaga ang value.
+        input.dataset.originalValue = input.value;
 
         input.dataset.lrn = student.lrn;
         input.dataset.month = month;
@@ -5250,6 +5261,7 @@ function senhsBuildHistoricalEditor(students) {
     });
   });
 }
+
 
 async function saveSYSummaryUpdate() {
   const message = document.getElementById("sySummaryMessage");
@@ -5274,23 +5286,39 @@ async function saveSYSummaryUpdate() {
       grouped[key] = {
         lrn: input.dataset.lrn,
         month: input.dataset.month,
+        name: input.dataset.name,
         present: NaN,
-        absent: NaN
+        absent: NaN,
+        originalPresent: NaN,
+        originalAbsent: NaN
       };
     }
 
-    grouped[key][input.dataset.field] =
+    const entry = grouped[key];
+    const field = input.dataset.field;
+    const currentValue =
       input.value.trim() === "" ? NaN : Number(input.value);
+    const originalValue = Number(input.dataset.originalValue);
+
+    entry[field] = currentValue;
+    entry[field === "present" ? "originalPresent" : "originalAbsent"] =
+      originalValue;
   });
 
-  const entries = Object.values(grouped);
+  // Only save months whose Present or Absent value was changed.
+  const changedEntries = Object.values(grouped).filter(function(entry) {
+    return (
+      entry.present !== entry.originalPresent ||
+      entry.absent !== entry.originalAbsent
+    );
+  });
 
-  if (!entries.length) {
-    message.textContent = "No historical totals to save.";
+  if (!changedEntries.length) {
+    message.textContent = "No changes detected. Nothing to save.";
     return;
   }
 
-  const invalid = entries.some(function(entry) {
+  const invalid = changedEntries.some(function(entry) {
     return (
       !Number.isFinite(entry.present) ||
       !Number.isFinite(entry.absent) ||
@@ -5305,8 +5333,19 @@ async function saveSYSummaryUpdate() {
     return;
   }
 
+  // Send only the fields expected by Apps Script.
+  const entries = changedEntries.map(function(entry) {
+    return {
+      lrn: entry.lrn,
+      month: entry.month,
+      name: entry.name,
+      present: entry.present,
+      absent: entry.absent
+    };
+  });
+
   if (button) button.disabled = true;
-  message.textContent = "Saving historical totals...";
+  message.textContent = "Saving changed monthly totals...";
 
   try {
     const requestUrl =
@@ -5325,12 +5364,12 @@ async function saveSYSummaryUpdate() {
       throw new Error(
         result && result.message
           ? result.message
-          : "Unable to save historical totals."
+          : "Unable to save monthly totals."
       );
     }
 
     message.textContent =
-      "Historical totals saved successfully (" +
+      "Monthly totals saved (" +
       (result.saved || entries.length) +
       " record(s)). Reloading summary...";
 
@@ -5339,7 +5378,7 @@ async function saveSYSummaryUpdate() {
   } catch (error) {
     console.error("Save school year summary error:", error);
     message.textContent =
-      error.message || "Unable to save historical totals.";
+      error.message || "Unable to save monthly totals.";
   } finally {
     if (button) button.disabled = false;
   }
