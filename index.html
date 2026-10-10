@@ -5184,9 +5184,11 @@ async function loadSYSummary() {
   }
 }
 
+
 /* =====================================================
    UPDATE — EDITABLE MONTHLY TOTALS
    SCHOOL YEAR 2026-2027: JUNE TO MAY
+   TABLE FORMAT: ONE ROW PER STUDENT
    SAVE ONLY CHANGED MONTHS
    ===================================================== */
 
@@ -5195,6 +5197,8 @@ function senhsBuildHistoricalEditor(students) {
   if (!container) return;
 
   container.innerHTML = "";
+  container.style.overflowX = "auto";
+  container.style.maxWidth = "100%";
 
   const editableMonths = SENHS_SY_MONTHS.slice();
 
@@ -5203,82 +5207,140 @@ function senhsBuildHistoricalEditor(students) {
     return;
   }
 
+  // TABLE
+  const table = document.createElement("table");
+  table.style.borderCollapse = "collapse";
+  table.style.width = "max-content";
+  table.style.minWidth = "100%";
+  table.style.fontSize = "12px";
+
+  // TABLE HEADER
+  const thead = document.createElement("thead");
+  const headerRow1 = document.createElement("tr");
+  const headerRow2 = document.createElement("tr");
+
+  const nameHeader = document.createElement("th");
+  nameHeader.textContent = "STUDENT NAME";
+  nameHeader.rowSpan = 2;
+  nameHeader.style.cssText =
+    "border:1px solid #bbb;padding:8px;min-width:200px;" +
+    "background:#e8eef7;text-align:left;position:sticky;left:0;";
+  headerRow1.appendChild(nameHeader);
+
+  editableMonths.forEach(function(month) {
+    const monthHeader = document.createElement("th");
+    monthHeader.textContent = SENHS_SY_MONTH_LABELS[month] || month;
+    monthHeader.colSpan = 2;
+    monthHeader.style.cssText =
+      "border:1px solid #bbb;padding:8px;min-width:130px;" +
+      "background:#dce8f8;text-align:center;";
+    headerRow1.appendChild(monthHeader);
+
+    ["PRESENT", "ABSENT"].forEach(function(field) {
+      const subHeader = document.createElement("th");
+      subHeader.textContent = field;
+      subHeader.style.cssText =
+        "border:1px solid #bbb;padding:6px;min-width:70px;" +
+        "background:#f0f4fa;text-align:center;";
+      headerRow2.appendChild(subHeader);
+    });
+  });
+
+  thead.appendChild(headerRow1);
+  thead.appendChild(headerRow2);
+  table.appendChild(thead);
+
+  // TABLE BODY
+  const tbody = document.createElement("tbody");
+  const section = senhsGetSelectedSection();
+
   students.forEach(function(student) {
+    const row = document.createElement("tr");
+
+    const nameCell = document.createElement("td");
+    nameCell.textContent = student.name || "";
+    nameCell.style.cssText =
+      "border:1px solid #bbb;padding:7px;min-width:200px;" +
+      "background:#fff;position:sticky;left:0;z-index:1;";
+    row.appendChild(nameCell);
+
     editableMonths.forEach(function(month) {
-      const cached = senhsMonthlyCache[
-        senhsGetSelectedSection() + "|" + month
-      ];
+      const cached = senhsMonthlyCache[section + "|" + month];
 
       const sourceStudent = cached &&
         (cached.students || []).find(function(item) {
           return String(item.lrn) === String(student.lrn);
         });
 
-      const totals = student.months[month] || {
-        present: 0,
-        absent: 0
-      };
-
-      const line = document.createElement("div");
-      line.style.display = "grid";
-      line.style.gridTemplateColumns =
-        "minmax(140px, 1fr) minmax(110px, 1fr) minmax(110px, 1fr)";
-      line.style.gap = "8px";
-      line.style.marginBottom = "8px";
-      line.style.alignItems = "center";
-
-      const label = document.createElement("label");
-      label.textContent =
-        student.name + " — " + SENHS_SY_MONTH_LABELS[month];
-      line.appendChild(label);
+      const totals =
+        student.months && student.months[month]
+          ? student.months[month]
+          : { present: 0, absent: 0 };
 
       ["present", "absent"].forEach(function(field) {
-        const input = document.createElement("input");
-        input.type = "number";
-        input.min = "0";
-        input.step = "0.5";
+        const cell = document.createElement("td");
+        cell.style.cssText =
+          "border:1px solid #bbb;padding:4px;text-align:center;";
 
         const rawValue =
           sourceStudent && sourceStudent[field] !== undefined
             ? sourceStudent[field]
             : totals[field];
 
-        const value = Number(rawValue);
-        input.value = Number.isFinite(value) ? value : 0;
+        const numericValue = Number(rawValue);
+        const value = Number.isFinite(numericValue) ? numericValue : 0;
 
-        // Baseline: para malaman kung binago talaga ang value.
-        input.dataset.originalValue = input.value;
-
+        const input = document.createElement("input");
+        input.type = "number";
+        input.min = "0";
+        input.step = "0.5";
+        input.value = value;
+        input.dataset.originalValue = String(value);
         input.dataset.lrn = student.lrn;
         input.dataset.month = month;
         input.dataset.field = field;
-        input.dataset.name = student.name;
+        input.dataset.name = student.name || "";
 
         input.setAttribute(
           "aria-label",
-          student.name + " " +
-          SENHS_SY_MONTH_LABELS[month] + " " + field
+          (student.name || "") + " " +
+          (SENHS_SY_MONTH_LABELS[month] || month) + " " + field
         );
 
-        input.placeholder =
-          field === "present" ? "Present" : "Absent";
+        input.style.cssText =
+          "width:66px;max-width:100%;box-sizing:border-box;" +
+          "padding:6px 3px;text-align:center;";
 
-        line.appendChild(input);
+        cell.appendChild(input);
+        row.appendChild(cell);
       });
-
-      container.appendChild(line);
     });
+
+    tbody.appendChild(row);
   });
+
+  table.appendChild(tbody);
+  container.appendChild(table);
 }
 
+
+/* =====================================================
+   SAVE MONTHLY TOTALS
+   SAVE CHANGED MONTHS ONLY
+   REFRESH SYMS AND HIDE EDITOR AFTER SUCCESS
+   ===================================================== */
 
 async function saveSYSummaryUpdate() {
   const message = document.getElementById("sySummaryMessage");
   const button = document.getElementById("saveSYSummaryBtn");
   const section = senhsGetSelectedSection();
 
+  function setMessage(text) {
+    if (message) message.textContent = text;
+  }
+
   if (!attendanceAccessCode || !section) {
-    message.textContent = "Please select a section first.";
+    setMessage("Please select a section first.");
     return;
   }
 
@@ -5310,11 +5372,13 @@ async function saveSYSummaryUpdate() {
     const originalValue = Number(input.dataset.originalValue);
 
     entry[field] = currentValue;
-    entry[field === "present" ? "originalPresent" : "originalAbsent"] =
-      originalValue;
+
+    entry[
+      field === "present" ? "originalPresent" : "originalAbsent"
+    ] = originalValue;
   });
 
-  // Only save months whose Present or Absent value was changed.
+  // ONLY SAVE STUDENT-MONTH RECORDS THAT CHANGED
   const changedEntries = Object.values(grouped).filter(function(entry) {
     return (
       entry.present !== entry.originalPresent ||
@@ -5323,7 +5387,7 @@ async function saveSYSummaryUpdate() {
   });
 
   if (!changedEntries.length) {
-    message.textContent = "No changes detected. Nothing to save.";
+    setMessage("No changes detected. Nothing to save.");
     return;
   }
 
@@ -5337,12 +5401,13 @@ async function saveSYSummaryUpdate() {
   });
 
   if (invalid) {
-    message.textContent =
-      "Check the Present and Absent values. Use non-negative numbers.";
+    setMessage(
+      "Check the Present and Absent values. Use non-negative numbers."
+    );
     return;
   }
 
-  // Send only the fields expected by Apps Script.
+  // DATA SENT TO APPS SCRIPT
   const entries = changedEntries.map(function(entry) {
     return {
       lrn: entry.lrn,
@@ -5354,7 +5419,7 @@ async function saveSYSummaryUpdate() {
   });
 
   if (button) button.disabled = true;
-  message.textContent = "Saving changed monthly totals...";
+  setMessage("Saving changed monthly totals...");
 
   try {
     const requestUrl =
@@ -5377,17 +5442,27 @@ async function saveSYSummaryUpdate() {
       );
     }
 
-    message.textContent =
-      "Monthly totals saved (" +
-      (result.saved || entries.length) +
-      " record(s)). Reloading summary...";
+    setMessage("Saved successfully. Refreshing SYMS...");
 
+    // REFRESH THE SYMS USING THE LATEST SERVER DATA
     await loadSYSummary();
+
+    // HIDE EDITOR AFTER SAVE AND REFRESH
+    const panel = document.getElementById("sySummaryUpdatePanel");
+    if (panel) panel.style.display = "none";
+
+    setMessage(
+      "Monthly totals updated successfully (" +
+      (result.saved || entries.length) +
+      " record(s))."
+    );
 
   } catch (error) {
     console.error("Save school year summary error:", error);
-    message.textContent =
-      error.message || "Unable to save monthly totals.";
+
+    setMessage(
+      error.message || "Unable to save monthly totals."
+    );
   } finally {
     if (button) button.disabled = false;
   }
