@@ -5125,13 +5125,37 @@ async function loadSYSummary() {
       });
     });
 
-    const allStudents = Object.values(studentMap).sort(
-      function(a, b) {
-        return String(a.name).localeCompare(String(b.name));
-      }
-    );
+    
 
-    const activeMonths = senhsSummaryCache;
+const allStudents = Object.values(studentMap);
+
+const dailyOrderIndex = new Map(
+  attendanceStudents.map(function(student, index) {
+    return [
+      String(student.lrn || "").trim(),
+      index
+    ];
+  })
+);
+
+allStudents.sort(function(a, b) {
+  const aLrn = String(a.lrn || "").trim();
+  const bLrn = String(b.lrn || "").trim();
+
+  const aIndex = dailyOrderIndex.has(aLrn)
+    ? dailyOrderIndex.get(aLrn)
+    : Number.MAX_SAFE_INTEGER;
+
+  const bIndex = dailyOrderIndex.has(bLrn)
+    ? dailyOrderIndex.get(bLrn)
+    : Number.MAX_SAFE_INTEGER;
+
+  return aIndex - bIndex;
+});
+
+
+const activeMonths = senhsSummaryCache;
+
 
     // -----------------------------
     // TABLE HEADER
