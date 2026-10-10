@@ -4864,30 +4864,6 @@ function senhsReturnToAttendance() {
   senhsShowReportPage("attendancePage");
 }
 
-async function senhsFetchMonth(month, section) {
-  const requestUrl =
-    APPS_SCRIPT_URL +
-    "?action=getMonthlyAttendance" +
-    "&accessCode=" +
-    encodeURIComponent(attendanceAccessCode) +
-    "&requestedSection=" +
-    encodeURIComponent(section) +
-    "&month=" +
-    encodeURIComponent(month);
-
-  const result = await jsonpRequest(requestUrl);
-
-  if (!result || !result.success) {
-    throw new Error(
-      result && result.message
-        ? result.message
-        : "Unable to load " + month
-    );
-  }
-
-  return result;
-}
-
 /* =====================================================
    MAM — MONTHLY ATTENDANCE MATRIX
    Weekends are hidden in this matrix.
@@ -5013,8 +4989,46 @@ async function loadMonthlyAttendance() {
   }
 }
 
+
 /* =====================================================
    SMS — SCHOOL YEAR MONTHLY SUMMARY
+   FORCE FRESH DATA + FRIENDLIER STATUS
+   ===================================================== */
+
+async function senhsFetchMonth(month, section) {
+  // Unique value prevents the browser from reusing a cached response.
+  const refreshKey =
+    Date.now().toString() +
+    Math.random().toString(36).slice(2);
+
+  const requestUrl =
+    APPS_SCRIPT_URL +
+    "?action=getMonthlyAttendance" +
+    "&accessCode=" +
+    encodeURIComponent(attendanceAccessCode) +
+    "&requestedSection=" +
+    encodeURIComponent(section) +
+    "&month=" +
+    encodeURIComponent(month) +
+    "&_refresh=" +
+    encodeURIComponent(refreshKey);
+
+  const result = await jsonpRequest(requestUrl);
+
+  if (!result || !result.success) {
+    throw new Error(
+      result && result.message
+        ? result.message
+        : "Unable to load " + month
+    );
+  }
+
+  return result;
+}
+
+
+/* =====================================================
+   LOAD / REFRESH SCHOOL YEAR MONTHLY SUMMARY
    ===================================================== */
 
 async function loadSYSummary() {
@@ -5034,56 +5048,94 @@ async function loadSYSummary() {
     return;
   }
 
-  if (senhsSummaryLoading) return;
+  if (senhsSummaryLoading) {
+    message.textContent =
+      "Summary is still loading. Please wait a moment.";
+    return;
+  }
 
   senhsSummaryLoading = true;
-  message.textContent = "Loading school year summary...";
+  message.textContent =
+    "Refreshing Section " + section + " monthly attendance...";
+
   head.innerHTML = "";
   body.innerHTML = "";
 
   try {
+    // Request fresh data for all 12 months.
     const results = await Promise.all(
       SENHS_SY_MONTHS.map(function(month) {
         return senhsFetchMonth(month, section);
       })
     );
 
-    senhsSummaryCache = results.map(function(result, index) {
-      const month = SENHS_SY_MONTHS[index];
-      senhsMonthlyCache[section + "|" + month] = result;
-
+    // Replace old cached results with the latest server responses.
+    const freshSummary = results.map(function(result, index) {
       return {
-        month: month,
+        month: SENHS_SY_MONTHS[index],
         result: result,
-        students: result.students || []
+        students: Array.isArray(result.students)
+          ? result.students
+          : []
       };
     });
 
-    const studentMap = {};
+    senhsMonthlyCache = senhsMonthlyCache || {};
+
+    freshSummary.forEach(function(item) {
+      senhsMonthlyCache[section + "|" + item.month] = item.result;
+    });
+
+    senhsSummaryCache = freshSummary;
+
+    // Build a consolidated list of students across all months.
+    const studentMap = Object.create(null);
 
     senhsSummaryCache.forEach(function(item) {
       item.students.forEach(function(student) {
-        if (!studentMap[student.lrn]) {
-          studentMap[student.lrn] = {
-            lrn: student.lrn,
+        if (student.lrn === undefined || student.lrn === null) {
+          return;
+        }
+
+        const lrn = String(student.lrn).trim();
+
+        if (!lrn) {
+          return;
+        }
+
+        if (!studentMap[lrn]) {
+          studentMap[lrn] = {
+            lrn: lrn,
             name: student.name || "",
             months: {}
           };
+        } else if (
+          student.name &&
+          (!studentMap[lrn].name ||
+            studentMap[lrn].name.length < String(student.name).length)
+        ) {
+          studentMap[lrn].name = student.name;
         }
 
-        studentMap[student.lrn].months[item.month] = {
+        // Store the latest values returned by Apps Script.
+        studentMap[lrn].months[item.month] = {
           present: Number(student.present) || 0,
           absent: Number(student.absent) || 0
         };
       });
     });
 
-    const allStudents = Object.values(studentMap);
+    const allStudents = Object.values(studentMap).sort(
+      function(a, b) {
+        return String(a.name).localeCompare(String(b.name));
+      }
+    );
 
-    // Keep every school-year month visible, even when the month has no records yet.
-    // This preserves a consistent monthly Present/Absent table for every section.
     const activeMonths = senhsSummaryCache;
 
+    // -----------------------------
+    // TABLE HEADER
+    // -----------------------------
     const headerRow = document.createElement("tr");
 
     const nameHeader = document.createElement("th");
@@ -5092,7 +5144,8 @@ async function loadSYSummary() {
 
     activeMonths.forEach(function(item) {
       const th = document.createElement("th");
-      th.textContent = SENHS_SY_MONTH_LABELS[item.month];
+      th.textContent =
+        SENHS_SY_MONTH_LABELS[item.month] || item.month;
       th.colSpan = 2;
       headerRow.appendChild(th);
     });
@@ -5108,6 +5161,7 @@ async function loadSYSummary() {
     head.appendChild(headerRow);
 
     const subHeader = document.createElement("tr");
+
     const blankName = document.createElement("th");
     blankName.textContent = "";
     subHeader.appendChild(blankName);
@@ -5130,55 +5184,85 @@ async function loadSYSummary() {
 
     head.appendChild(subHeader);
 
-    allStudents.forEach(function(student) {
-      const row = document.createElement("tr");
-      const nameCell = document.createElement("td");
-      nameCell.textContent = student.name;
-      row.appendChild(nameCell);
+    // -----------------------------
+    // TABLE BODY
+    // -----------------------------
+    if (allStudents.length === 0) {
+      const emptyRow = document.createElement("tr");
+      const emptyCell = document.createElement("td");
 
-      let totalPresent = 0;
-      let totalAbsent = 0;
+      emptyCell.colSpan = 1 + (activeMonths.length * 2) + 2;
+      emptyCell.textContent =
+        "No student attendance records were returned for this section.";
 
-      activeMonths.forEach(function(item) {
-        const totals = student.months[item.month] || {
-          present: 0,
-          absent: 0
-        };
+      emptyRow.appendChild(emptyCell);
+      body.appendChild(emptyRow);
+    } else {
+      allStudents.forEach(function(student) {
+        const row = document.createElement("tr");
 
-        totalPresent += totals.present;
-        totalAbsent += totals.absent;
+        const nameCell = document.createElement("td");
+        nameCell.textContent = student.name || "Unnamed student";
+        row.appendChild(nameCell);
 
-        const presentCell = document.createElement("td");
-        presentCell.textContent = totals.present;
-        row.appendChild(presentCell);
+        let totalPresent = 0;
+        let totalAbsent = 0;
 
-        const absentCell = document.createElement("td");
-        absentCell.textContent = totals.absent;
-        row.appendChild(absentCell);
+        activeMonths.forEach(function(item) {
+          const totals = student.months[item.month] || {
+            present: 0,
+            absent: 0
+          };
+
+          totalPresent += totals.present;
+          totalAbsent += totals.absent;
+
+          const presentCell = document.createElement("td");
+          presentCell.textContent = totals.present;
+          row.appendChild(presentCell);
+
+          const absentCell = document.createElement("td");
+          absentCell.textContent = totals.absent;
+          row.appendChild(absentCell);
+        });
+
+        const totalAbsentCell = document.createElement("td");
+        totalAbsentCell.textContent = totalAbsent;
+        row.appendChild(totalAbsentCell);
+
+        const totalPresentCell = document.createElement("td");
+        totalPresentCell.textContent = totalPresent;
+        row.appendChild(totalPresentCell);
+
+        body.appendChild(row);
       });
+    }
 
-      const totalAbsentCell = document.createElement("td");
-      totalAbsentCell.textContent = totalAbsent;
-      row.appendChild(totalAbsentCell);
+    // Rebuild the editable monthly totals using the refreshed data.
+    if (typeof senhsBuildHistoricalEditor === "function") {
+      senhsBuildHistoricalEditor(allStudents);
+    }
 
-      const totalPresentCell = document.createElement("td");
-      totalPresentCell.textContent = totalPresent;
-      row.appendChild(totalPresentCell);
-
-      body.appendChild(row);
+    const now = new Date();
+    const refreshedAt = now.toLocaleTimeString("en-PH", {
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      hour12: true
     });
 
     message.textContent =
-      "School Year 2026–2027 — Section " + section +
-      ". " + allStudents.length + " student(s).";
-
-    senhsBuildHistoricalEditor(allStudents);
+      "School Year 2026–2027 | Section " + section +
+      " | " + allStudents.length + " student(s)" +
+      " | Last refreshed: " + refreshedAt;
 
   } catch (error) {
     console.error("School year summary error:", error);
+
     message.textContent =
-      "Unable to load summary: " +
-      (error.message || "Unknown error.");
+      "Unable to refresh the summary. Please try again. " +
+      (error && error.message ? error.message : "");
+
   } finally {
     senhsSummaryLoading = false;
   }
