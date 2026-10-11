@@ -1641,6 +1641,138 @@ font-size: 22px !important;
       }
     }
 
+
+    /* =========================================
+       TABLET LANDSCAPE + SCANNER VIEW FIX
+       Keeps school heading visible and camera usable
+       ========================================= */
+    #scannerPage,
+    #scannerPage .scanner-container {
+      box-sizing: border-box;
+      max-width: 100%;
+    }
+
+    #scannerPage .scanner-school {
+      max-width: 100%;
+      overflow-wrap: anywhere;
+      text-wrap: balance;
+    }
+
+    #scannerPage .scanner-header {
+      padding-left: clamp(10px, 2vw, 24px);
+      padding-right: clamp(10px, 2vw, 24px);
+    }
+
+    #scannerPage #reader video,
+    #scannerPage #reader canvas {
+      max-width: 100% !important;
+    }
+
+    @media screen and (orientation: landscape) and (min-width: 650px) and (max-height: 900px) {
+      #scannerPage .scanner-container {
+        min-height: 100vh;
+        min-height: 100dvh;
+        border-radius: 12px;
+        overflow-x: hidden;
+        overflow-y: auto;
+      }
+
+      #scannerPage .scanner-header {
+        padding: 10px 112px 10px 16px;
+      }
+
+      #scannerPage .scanner-school {
+        font-size: clamp(17px, 2.4vw, 25px);
+        line-height: 1.15;
+        max-width: 100%;
+      }
+
+      #scannerPage .scanner-title {
+        margin-top: 3px;
+        font-size: clamp(16px, 2vw, 21px);
+      }
+
+      #scannerPage .pst-label {
+        margin-top: 5px;
+        font-size: 11px;
+        letter-spacing: .6px;
+      }
+
+      #scannerPage .pst-time {
+        margin-top: 0;
+        font-size: clamp(24px, 3.2vw, 34px);
+        line-height: 1.05;
+      }
+
+      #scannerPage .pst-date {
+        margin-top: 2px;
+        font-size: 12px;
+      }
+
+      #scannerPage #exitScannerBtn {
+        top: 12px;
+        right: 12px;
+        padding: 9px 12px;
+        font-size: 13px;
+      }
+
+      #scannerPage .camera-area {
+        min-height: 220px;
+        height: auto;
+        max-height: none;
+      }
+
+      #scannerPage #reader {
+        width: 100% !important;
+        min-height: 220px;
+        max-width: 100%;
+      }
+
+      #scannerPage #reader video {
+        width: 100% !important;
+        height: auto !important;
+        max-height: 52dvh;
+        object-fit: contain !important;
+      }
+
+      #scannerPage .scanner-watermark {
+        top: 55%;
+        font-size: clamp(70px, 10vw, 130px);
+      }
+
+      #scannerPage #switchCameraBtn {
+        top: 10px;
+        right: 10px;
+        width: 44px;
+        height: 44px;
+        font-size: 23px;
+      }
+    }
+
+    @media screen and (orientation: landscape) and (min-width: 650px) and (max-height: 500px) {
+      #scannerPage .scanner-header {
+        padding-top: 6px;
+        padding-bottom: 6px;
+      }
+
+      #scannerPage .pst-label {
+        margin-top: 2px;
+      }
+
+      #scannerPage .pst-date {
+        font-size: 11px;
+      }
+
+      #scannerPage .camera-area,
+      #scannerPage #reader {
+        min-height: 180px;
+      }
+
+      #scannerPage #reader video {
+        max-height: 45dvh;
+      }
+    }
+
   </style>
 </head>
 <body>
