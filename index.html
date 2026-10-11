@@ -1975,8 +1975,8 @@ let platform =
       )
       ? "mobile"
       : "laptop";
-   console.log("DEVICE USER AGENT:", navigator.userAgent);
-console.log("DETECTED PLATFORM:", platform);
+   // console.log("DEVICE USER AGENT:", navigator.userAgent);
+// console.log("DETECTED PLATFORM:", platform);
   
 let sessionActive = false;
 let heartbeatTimer = null;
@@ -5483,7 +5483,7 @@ async function saveSYSummaryUpdate() {
 
   const grouped = {};
 
-  inputs.forEach(function(input) {
+  inputs.forEach(function (input) {
     const key = input.dataset.lrn + "|" + input.dataset.month;
 
     if (!grouped[key]) {
@@ -5505,17 +5505,16 @@ async function saveSYSummaryUpdate() {
     const originalValue = Number(input.dataset.originalValue);
 
     entry[field] = currentValue;
-
     entry[
       field === "present" ? "originalPresent" : "originalAbsent"
     ] = originalValue;
   });
 
   // ONLY SAVE STUDENT-MONTH RECORDS THAT CHANGED
-  const changedEntries = Object.values(grouped).filter(function(entry) {
+  const changedEntries = Object.values(grouped).filter(function (entry) {
     return (
-      entry.present !== entry.originalPresent ||
-      entry.absent !== entry.originalAbsent
+      Number(entry.present) !== Number(entry.originalPresent) ||
+      Number(entry.absent) !== Number(entry.originalAbsent)
     );
   });
 
@@ -5524,7 +5523,7 @@ async function saveSYSummaryUpdate() {
     return;
   }
 
-  const invalid = changedEntries.some(function(entry) {
+  const invalid = changedEntries.some(function (entry) {
     return (
       !Number.isFinite(entry.present) ||
       !Number.isFinite(entry.absent) ||
@@ -5540,14 +5539,13 @@ async function saveSYSummaryUpdate() {
     return;
   }
 
-  // DATA SENT TO APPS SCRIPT
-  const entries = changedEntries.map(function(entry) {
+  const entries = changedEntries.map(function (entry) {
     return {
-      lrn: entry.lrn,
-      month: entry.month,
-      name: entry.name,
-      present: entry.present,
-      absent: entry.absent
+      lrn: String(entry.lrn),
+      month: String(entry.month),
+      name: String(entry.name || ""),
+      present: Number(entry.present),
+      absent: Number(entry.absent)
     };
   });
 
@@ -5555,47 +5553,56 @@ async function saveSYSummaryUpdate() {
   setMessage("Saving changed monthly totals...");
 
   try {
-    const requestUrl =
-      APPS_SCRIPT_URL +
-      "?action=saveHistoricalMonthlySummary" +
-      "&accessCode=" +
-      encodeURIComponent(attendanceAccessCode) +
-      "&requestedSection=" +
-      encodeURIComponent(section) +
-      "&summaryData=" +
-      encodeURIComponent(JSON.stringify(entries));
+    // Batch saves to avoid JSONP/GET URL length limits
+    const BATCH_SIZE = 25;
+    let totalSaved = 0;
 
-    const result = await jsonpRequest(requestUrl);
+    for (let i = 0; i < entries.length; i += BATCH_SIZE) {
+      const batch = entries.slice(i, i + BATCH_SIZE);
+      const batchNo = Math.floor(i / BATCH_SIZE) + 1;
+      const batchTotal = Math.ceil(entries.length / BATCH_SIZE);
 
-    if (!result || !result.success) {
-      throw new Error(
-        result && result.message
-          ? result.message
-          : "Unable to save monthly totals."
+      setMessage(
+        "Saving batch " + batchNo + " of " + batchTotal +
+        " (" + batch.length + " record(s))..."
       );
+
+      const requestUrl =
+        APPS_SCRIPT_URL +
+        "?action=saveHistoricalMonthlySummary" +
+        "&accessCode=" +
+        encodeURIComponent(attendanceAccessCode) +
+        "&requestedSection=" +
+        encodeURIComponent(section) +
+        "&summaryData=" +
+        encodeURIComponent(JSON.stringify(batch));
+
+      const result = await jsonpRequest(requestUrl);
+
+      if (!result || !result.success) {
+        throw new Error(
+          result && result.message
+            ? result.message
+            : "Unable to save monthly totals (batch " + batchNo + ")."
+        );
+      }
+
+      totalSaved += Number(result.saved) || batch.length;
     }
 
     setMessage("Saved successfully. Refreshing SYMS...");
 
-    // REFRESH THE SYMS USING THE LATEST SERVER DATA
     await loadSYSummary();
 
-    // HIDE EDITOR AFTER SAVE AND REFRESH
     const panel = document.getElementById("sySummaryUpdatePanel");
     if (panel) panel.style.display = "none";
 
     setMessage(
-      "Monthly totals updated successfully (" +
-      (result.saved || entries.length) +
-      " record(s))."
+      "Monthly totals updated successfully (" + totalSaved + " record(s))."
     );
-
   } catch (error) {
     console.error("Save school year summary error:", error);
-
-    setMessage(
-      error.message || "Unable to save monthly totals."
-    );
+    setMessage(error.message || "Unable to save monthly totals.");
   } finally {
     if (button) button.disabled = false;
   }
