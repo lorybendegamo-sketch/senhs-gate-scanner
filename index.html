@@ -5918,7 +5918,8 @@ async function saveSYSummaryUpdate() {
     } catch (scrollErr) {}
 
     setMessage(
-      "Monthly totals updated successfully (" + totalSaved + " record(s)). Top summary refreshed."
+      "Monthly totals updated (" + totalSaved +
+      " record(s)). Page view + SYMS Excel sheet refreshed. You can DOWNLOAD EXCEL anytime."
     );
   } catch (error) {
     console.error("Save school year summary error:", error);
