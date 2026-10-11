@@ -60,15 +60,20 @@
       padding: 20px;
     }
     .container {
-      width: 100%;
-      max-width: 620px;
+      width: min(100%, 640px);
+      max-width: 640px;
+      min-width: 0;
+      flex: 0 0 auto;
       position: relative;
+      box-sizing: border-box;
     }
     /* =========================
        PAGE 1
        ========================= */
     #userPage {
       position: relative;
+      width: 100%;
+      box-sizing: border-box;
       min-height: calc(100vh - 40px);
       display: block;
       background-image:
@@ -92,6 +97,8 @@
     #devicePage {
       display: none;
       position: relative;
+      width: 100%;
+      box-sizing: border-box;
       min-height: calc(100vh - 40px);
       background-image:
         linear-gradient(
@@ -1453,6 +1460,161 @@ font-size: 22px !important;
       #mamPage th, #mamPage td, #smsPage th, #smsPage td { padding: 6px 5px; }
     }
 
+
+    /* =========================================
+       LAPTOP / DESKTOP — AUTO LARGER VIEW
+       Forces a readable card width (no zoom needed)
+       ========================================= */
+    @media screen and (min-width: 900px) {
+      .page {
+        padding: 20px 28px;
+        align-items: center;
+        justify-content: center;
+      }
+      /* Fixed readable width — will not collapse to a thin strip */
+      .container {
+        width: 720px;
+        max-width: 720px;
+        flex: 0 0 720px;
+      }
+      #userPage,
+      #devicePage {
+        width: 100%;
+        max-width: none;
+        margin: 0 auto;
+        padding: 48px 40px;
+      }
+      .school-name {
+        font-size: 32px;
+      }
+      .gate-title {
+        font-size: 26px;
+      }
+      .subtitle {
+        font-size: 16px;
+      }
+      #userNameInput,
+      #userNextBtn {
+        width: 100%;
+        max-width: 520px;
+        font-size: 20px;
+      }
+      #userNameInput {
+        padding: 18px 16px;
+      }
+      #userNextBtn {
+        padding: 16px 18px;
+      }
+      #deviceCode {
+        font-size: 19px;
+        padding: 18px;
+      }
+      #continueBtn {
+        font-size: 19px;
+        padding: 18px;
+      }
+      #scannerPage,
+      #scannerPage .scanner-container {
+        width: 100%;
+        max-width: 100%;
+      }
+      .scanner-school {
+        font-size: 26px;
+      }
+      .scanner-title {
+        font-size: 22px;
+      }
+      .pst-time {
+        font-size: 42px;
+      }
+      .pst-date {
+        font-size: 17px;
+      }
+      .camera-area,
+      #reader {
+        min-height: 460px;
+      }
+      .ready-bar {
+        font-size: 18px;
+        padding: 15px;
+      }
+      .attendance-title {
+        font-size: 22px;
+      }
+      .summary-number {
+        font-size: 30px;
+      }
+      .section-table {
+        font-size: 14px;
+      }
+      #attendancePage .device-content {
+        max-width: 100%;
+        padding: 28px 24px;
+      }
+      #attendanceTable th {
+        font-size: 15px;
+        padding: 12px 8px;
+      }
+      #attendanceTable td {
+        font-size: 14px;
+        padding: 10px 8px;
+      }
+      .attendance-btn {
+        font-size: 13px;
+        padding: 9px 6px;
+      }
+      #mamPage .device-content,
+      #smsPage .device-content {
+        max-width: 100%;
+        padding: 28px;
+      }
+      #mamPage h2,
+      #smsPage h2 {
+        font-size: 28px;
+      }
+      .report-navigation button,
+      #attendanceReportNavigation button {
+        min-height: 52px;
+        font-size: 16px;
+      }
+    }
+
+    /* Extra-wide monitors: slightly larger login card + room for tables */
+    @media screen and (min-width: 1200px) {
+      .container {
+        width: 860px;
+        max-width: 860px;
+        flex: 0 0 860px;
+      }
+      #userPage,
+      #devicePage {
+        padding: 52px 48px;
+      }
+      .school-name {
+        font-size: 34px;
+      }
+      .camera-area,
+      #reader {
+        min-height: 500px;
+      }
+      .pst-time {
+        font-size: 46px;
+      }
+    }
+
+    /* When attendance / report pages are open, use more horizontal space */
+    @media screen and (min-width: 900px) {
+      body:has(#attendancePage[style*="block"]) .container,
+      body:has(#mamPage[style*="block"]) .container,
+      body:has(#smsPage[style*="block"]) .container,
+      body:has(#scannerPage[style*="display: block"]) .container,
+      body:has(#scannerPage[style*="display:block"]) .container {
+        width: min(1200px, 96vw);
+        max-width: min(1200px, 96vw);
+        flex: 0 1 auto;
+      }
+    }
+
   </style>
 </head>
 <body>
@@ -2591,34 +2753,29 @@ async function verifyDevice() {
    OPEN SCANNER PAGE
    ===================================================== */
 async function openScannerPage() {
-  releaseSent =
-    false;
-  devicePage.style.display =
-    "none";
-  attendancePage.style.display =
-    "none";
-  scannerPage.style.display =
-    "block";
-  readyBar.textContent =
-    "● STARTING CAMERA...";
-  readyBar.style.color =
-    "#1267a5";
+  releaseSent = false;
+
+  // Hide every other page so only the scanner is visible
+  if (userPage) userPage.style.display = "none";
+  if (devicePage) devicePage.style.display = "none";
+  if (attendancePage) attendancePage.style.display = "none";
+  var mamEl = document.getElementById("mamPage");
+  var smsEl = document.getElementById("smsPage");
+  if (mamEl) mamEl.style.display = "none";
+  if (smsEl) smsEl.style.display = "none";
+
+  scannerPage.style.display = "block";
+  readyBar.textContent = "● STARTING CAMERA...";
+  readyBar.style.color = "#1267a5";
   try {
     await startCamera();
     loadAttendanceSummary();
     if (!attendanceTimer) {
-      attendanceTimer =
-        setInterval(
-          loadAttendanceSummary,
-          15000
-        );
+      attendanceTimer = setInterval(loadAttendanceSummary, 15000);
     }
     startDeviceHeartbeat();
   } catch (error) {
-    console.error(
-      "Open scanner error:",
-      error
-    );
+    console.error("Open scanner error:", error);
   }
 }
 /* =====================================================
@@ -2626,18 +2783,15 @@ async function openScannerPage() {
    ===================================================== */
 async function openAttendancePage() {
   // Always start ADMIN / ADVISER sessions on DAILY ATT.
-  // Hide any report page left open by the previous session.
+  // Hide every other page so only Daily Attendance is visible.
   const mamReportPage = document.getElementById("mamPage");
   const symsReportPage = document.getElementById("smsPage");
   if (mamReportPage) mamReportPage.style.display = "none";
   if (symsReportPage) symsReportPage.style.display = "none";
-
-  devicePage.style.display =
-    "none";
-  scannerPage.style.display =
-    "none";
-  attendancePage.style.display =
-    "block";
+  if (userPage) userPage.style.display = "none";
+  if (devicePage) devicePage.style.display = "none";
+  if (scannerPage) scannerPage.style.display = "none";
+  attendancePage.style.display = "block";
   attendanceRoleTitle.textContent =
     attendanceRole === "ADMIN"
       ? "ADMIN ATTENDANCE"
@@ -5592,13 +5746,36 @@ async function saveSYSummaryUpdate() {
 
     setMessage("Saved successfully. Refreshing SYMS...");
 
+    // Clear caches so the TOP summary table reloads fresh server data
+    try {
+      const sectionKey = senhsGetSelectedSection();
+      if (sectionKey && typeof senhsMonthlyCache === "object") {
+        Object.keys(senhsMonthlyCache).forEach(function (k) {
+          if (k.indexOf(sectionKey + "|") === 0) {
+            delete senhsMonthlyCache[k];
+          }
+        });
+      }
+      senhsSummaryCache = [];
+    } catch (cacheErr) {
+      console.warn("Cache clear:", cacheErr);
+    }
+
     await loadSYSummary();
 
     const panel = document.getElementById("sySummaryUpdatePanel");
     if (panel) panel.style.display = "none";
 
+    // Scroll to the TOP summary table so the update is visible
+    try {
+      const topTable = document.getElementById("sySummaryTable");
+      if (topTable) {
+        topTable.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    } catch (scrollErr) {}
+
     setMessage(
-      "Monthly totals updated successfully (" + totalSaved + " record(s))."
+      "Monthly totals updated successfully (" + totalSaved + " record(s)). Top summary refreshed."
     );
   } catch (error) {
     console.error("Save school year summary error:", error);
