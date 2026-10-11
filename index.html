@@ -4546,10 +4546,10 @@ function showResult(result) {
     "QR PROCESSING TIME: " + processingTime + " seconds"
   );
 
-  /* Keep the result visible long enough to read. */
+  /* Keep result brief so total scan+overlay is about ~2 seconds. */
   showResult.timer = setTimeout(function () {
     resumeScanner();
-  }, 2000);
+  }, 1100);
 }
 
   
