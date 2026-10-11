@@ -791,7 +791,11 @@
     .attendance-btn:hover {
       transform: translateY(-1px);
     }
-    .attendance-btn.present {
+    .attendance-row-inactive td:first-child {
+  color: #6d4c41;
+  font-style: italic;
+}
+.attendance-btn.present {
       background: #d9f7df;
       border-color: #238636;
       color: #176b2c;
@@ -3115,8 +3119,10 @@ function renderAdviserAttendanceTable(
         document.createElement("tr");
       const nameCell =
         document.createElement("td");
-      nameCell.textContent =
-        student.name || "";
+      nameCell.textContent = student.name;
+      if (/T\/O since|DROPPED since/i.test(String(student.name || ""))) {
+        row.classList.add("attendance-row-inactive");
+      } || "";
       const amCell =
         document.createElement("td");
       const pmCell =
