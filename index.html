@@ -3972,14 +3972,14 @@ async function exitScanner() {
 /* =================================================
    RETURN TO USER / NAME PAGE
    ================================================= */
-scannerPage.style.display =
-  "none";
-attendancePage.style.display =
-  "none";
-devicePage.style.display =
-  "none";
-userPage.style.display =
-  "block";
+scannerPage.style.display = "none";
+attendancePage.style.display = "none";
+devicePage.style.display = "none";
+var mamExit = document.getElementById("mamPage");
+var smsExit = document.getElementById("smsPage");
+if (mamExit) mamExit.style.display = "none";
+if (smsExit) smsExit.style.display = "none";
+userPage.style.display = "block";
 /* RESET NAME */
 userName = "";
 userNameInput.value =
@@ -4732,15 +4732,35 @@ attendanceLogoutBtn.addEventListener(
       true;
     /* ================================
        RETURN TO USER / NAME PAGE
+       Hide EVERY page including MAM / SYMS
        ================================ */
-    attendancePage.style.display =
-      "none";
-    scannerPage.style.display =
-      "none";
-    devicePage.style.display =
-      "none";
-    userPage.style.display =
-      "block";
+    attendancePage.style.display = "none";
+    scannerPage.style.display = "none";
+    devicePage.style.display = "none";
+    var mamLogoutPage = document.getElementById("mamPage");
+    var smsLogoutPage = document.getElementById("smsPage");
+    if (mamLogoutPage) mamLogoutPage.style.display = "none";
+    if (smsLogoutPage) smsLogoutPage.style.display = "none";
+    // Clear MAM / SYMS table content so nothing flashes on next login
+    try {
+      var mamHead = document.getElementById("monthlyAttendanceTableHead");
+      var mamBody = document.getElementById("monthlyAttendanceTableBody");
+      var mamMsg = document.getElementById("monthlyAttendanceMessage");
+      if (mamHead) mamHead.innerHTML = "";
+      if (mamBody) mamBody.innerHTML = "";
+      if (mamMsg) mamMsg.textContent = "Select a month, then click LOAD MONTH.";
+      var syHead = document.getElementById("sySummaryTableHead");
+      var syBody = document.getElementById("sySummaryTableBody");
+      var syMsg = document.getElementById("sySummaryMessage");
+      var syPanel = document.getElementById("sySummaryUpdatePanel");
+      var syInputs = document.getElementById("syHistoricalInputs");
+      if (syHead) syHead.innerHTML = "";
+      if (syBody) syBody.innerHTML = "";
+      if (syMsg) syMsg.textContent = "School Year 2026–2027";
+      if (syPanel) syPanel.style.display = "none";
+      if (syInputs) syInputs.innerHTML = "";
+    } catch (clearErr) {}
+    userPage.style.display = "block";
     /* ================================
        RESET NAME
        ================================ */
