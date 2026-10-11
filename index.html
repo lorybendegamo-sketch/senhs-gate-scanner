@@ -1372,6 +1372,19 @@ font-size: 22px !important;
   box-shadow:0 3px 8px rgba(0,0,0,.14); margin:8px 5px;
 }
 #loadMonthlyAttendanceBtn { background:#1976d2; }
+#downloadDailyAttBtn, #downloadMAMBtn, #downloadSYMSBtn {
+  min-height:48px; padding:12px 20px; border:0; border-radius:10px;
+  color:#fff; font-weight:900; font-size:15px; cursor:pointer;
+  box-shadow:0 3px 8px rgba(0,0,0,.14); margin:8px 5px;
+  background: linear-gradient(135deg,#2e7d32,#66bb6a);
+}
+#downloadDailyAttBtn:hover, #downloadMAMBtn:hover, #downloadSYMSBtn:hover {
+  filter: brightness(1.08);
+}
+#attendanceReportNavigation #downloadDailyAttBtn {
+  background: linear-gradient(135deg,#2e7d32,#66bb6a);
+}
+
 #updateSYSummaryBtn { background:#ef6c00; }
 #saveSYSummaryBtn { background:#238636; }
 #cancelSYSummaryUpdateBtn { background:#616161; }
@@ -1754,6 +1767,7 @@ font-size: 22px !important;
 <div id="attendanceReportNavigation">
   <button id="openMAMPageBtn" type="button">MAM</button>
   <button id="openSMSPageBtn" type="button">SYMS</button>
+  <button id="downloadDailyAttBtn" type="button">DOWNLOAD EXCEL</button>
 </div>
 <!-- END REPORT NAVIGATION BUTTONS -->
 
@@ -1788,10 +1802,18 @@ font-size: 22px !important;
       <option value="2026-10" selected>October 2026</option>
       <option value="2026-11">November 2026</option>
       <option value="2026-12">December 2026</option>
+      <option value="2027-01">January 2027</option>
+      <option value="2027-02">February 2027</option>
+      <option value="2027-03">March 2027</option>
+      <option value="2027-04">April 2027</option>
+      <option value="2027-05">May 2027</option>
     </select>
 
     <button id="loadMonthlyAttendanceBtn" type="button">
       LOAD MONTH
+    </button>
+    <button id="downloadMAMBtn" type="button">
+      DOWNLOAD EXCEL
     </button>
 
     <div id="monthlyAttendanceMessage">
@@ -1833,6 +1855,9 @@ font-size: 22px !important;
       </table>
     </div>
 
+    <button id="downloadSYMSBtn" type="button">
+      DOWNLOAD EXCEL
+    </button>
     <button id="updateSYSummaryBtn" type="button">
       NEED UPDATE
     </button>
@@ -5908,6 +5933,156 @@ if (senhsSMSLogoutButton) {
 }
 
   
+
+/* =====================================================
+   DOWNLOAD TABLES AS EXCEL (CSV)
+   Opens correctly in Microsoft Excel / Google Sheets
+   ===================================================== */
+function senhsEscapeCsvCell(value) {
+  const text = String(value == null ? "" : value).replace(/\r\n/g, "\n").replace(/\r/g, "\n");
+  if (/[",\n]/.test(text)) {
+    return '"' + text.replace(/"/g, '""') + '"';
+  }
+  return text;
+}
+
+function senhsTableToCsv(table) {
+  if (!table) return "";
+  const rows = [];
+  const trList = table.querySelectorAll("tr");
+  trList.forEach(function (tr) {
+    const cells = tr.querySelectorAll("th, td");
+    if (!cells.length) return;
+    const line = [];
+    cells.forEach(function (cell) {
+      // Prefer button labels (Daily ATT PRESENT/ABSENT), else cell text
+      const btn = cell.querySelector("button");
+      let text = btn ? (btn.textContent || "") : (cell.innerText || cell.textContent || "");
+      text = String(text).replace(/\s+/g, " ").trim();
+      // colspan support: repeat value for merged header cells
+      const span = Number(cell.getAttribute("colspan") || 1);
+      line.push(senhsEscapeCsvCell(text));
+      for (let i = 1; i < span; i++) {
+        line.push("");
+      }
+    });
+    rows.push(line.join(","));
+  });
+  return rows.join("\r\n");
+}
+
+function senhsDownloadCsv(filename, csvText) {
+  // BOM helps Excel recognize UTF-8 (for Ñ, etc.)
+  const blob = new Blob(["\uFEFF" + csvText], {
+    type: "text/csv;charset=utf-8;"
+  });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  setTimeout(function () {
+    URL.revokeObjectURL(url);
+  }, 1500);
+}
+
+function senhsSafeFilenamePart(value) {
+  return String(value || "ALL")
+    .trim()
+    .replace(/[\\/:*?"<>|]+/g, "-")
+    .replace(/\s+/g, "_")
+    .substring(0, 60) || "ALL";
+}
+
+function senhsTodayStamp() {
+  try {
+    return new Intl.DateTimeFormat("en-CA", {
+      timeZone: "Asia/Manila",
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit"
+    }).format(new Date());
+  } catch (e) {
+    const d = new Date();
+    return d.getFullYear() + "-" +
+      String(d.getMonth() + 1).padStart(2, "0") + "-" +
+      String(d.getDate()).padStart(2, "0");
+  }
+}
+
+function downloadDailyAttendanceExcel() {
+  const table = document.getElementById("attendanceTable");
+  const section = senhsGetSelectedSection() || attendanceSection || "Section";
+  if (!table || !table.querySelector("tbody tr")) {
+    const message = document.getElementById("attendanceMessage");
+    if (message) message.textContent = "No daily attendance rows to download.";
+    return;
+  }
+  const csv = senhsTableToCsv(table);
+  const filename =
+    "SENHS_DailyAtt_" +
+    senhsSafeFilenamePart(section) + "_" +
+    senhsTodayStamp() + ".csv";
+  senhsDownloadCsv(filename, csv);
+  const message = document.getElementById("attendanceMessage");
+  if (message) message.textContent = "Downloaded: " + filename;
+}
+
+function downloadMAMExcel() {
+  const table = document.getElementById("monthlyAttendanceTable");
+  const section = senhsGetSelectedSection() || attendanceSection || "Section";
+  const monthSelect = document.getElementById("monthlyAttendanceMonth");
+  const month = monthSelect ? monthSelect.value : "month";
+  if (!table || !table.querySelector("tbody tr")) {
+    const message = document.getElementById("monthlyAttendanceMessage");
+    if (message) message.textContent = "Load a month first, then download.";
+    return;
+  }
+  const csv = senhsTableToCsv(table);
+  const filename =
+    "SENHS_MAM_" +
+    senhsSafeFilenamePart(section) + "_" +
+    senhsSafeFilenamePart(month) + ".csv";
+  senhsDownloadCsv(filename, csv);
+  const message = document.getElementById("monthlyAttendanceMessage");
+  if (message) {
+    message.textContent = "Downloaded: " + filename;
+  }
+}
+
+function downloadSYMSExcel() {
+  const table = document.getElementById("sySummaryTable");
+  const section = senhsGetSelectedSection() || attendanceSection || "Section";
+  if (!table || !table.querySelector("tbody tr")) {
+    const message = document.getElementById("sySummaryMessage");
+    if (message) message.textContent = "Load SYMS first, then download.";
+    return;
+  }
+  const csv = senhsTableToCsv(table);
+  const filename =
+    "SENHS_SYMS_" +
+    senhsSafeFilenamePart(section) + "_SY2026-2027.csv";
+  senhsDownloadCsv(filename, csv);
+  const message = document.getElementById("sySummaryMessage");
+  if (message) {
+    message.textContent =
+      (message.textContent || "School Year 2026–2027") +
+      " | Downloaded: " + filename;
+  }
+}
+
+// Wire download buttons
+(function senhsBindDownloadButtons() {
+  const dailyBtn = document.getElementById("downloadDailyAttBtn");
+  if (dailyBtn) dailyBtn.addEventListener("click", downloadDailyAttendanceExcel);
+  const mamBtn = document.getElementById("downloadMAMBtn");
+  if (mamBtn) mamBtn.addEventListener("click", downloadMAMExcel);
+  const symsBtn = document.getElementById("downloadSYMSBtn");
+  if (symsBtn) symsBtn.addEventListener("click", downloadSYMSExcel);
+})();
+
 </script>
 </body>
 </html>
