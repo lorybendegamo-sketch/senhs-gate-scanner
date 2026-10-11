@@ -3122,7 +3122,7 @@ function renderAdviserAttendanceTable(
       nameCell.textContent = student.name;
       if (/T\/O since|DROPPED since/i.test(String(student.name || ""))) {
         row.classList.add("attendance-row-inactive");
-      } || "";
+      }
       const amCell =
         document.createElement("td");
       const pmCell =
