@@ -63,7 +63,7 @@
     }
     .container {
       width: 100%;
-      max-width: 720px;
+      max-width: 900px;
       margin: 0 auto;
       position: relative;
       box-sizing: border-box;
@@ -91,7 +91,7 @@
       background-position: center;
       background-repeat: no-repeat;
       border-radius: 24px;
-      padding: 36px 28px 32px;
+      padding: 40px 32px 36px;
       box-shadow: 0 10px 35px rgba(0,0,0,0.12);
       text-align: center;
       overflow: visible;
@@ -130,12 +130,12 @@
        ========================= */
     #userNameInput {
       width: 100%;
-      max-width: 520px;
-      padding: 20px 18px;
-      margin: 18px auto 20px;
+      max-width: 640px;
+      padding: 22px 20px;
+      margin: 22px auto 22px;
       border: 2px solid #ccc;
       border-radius: 16px;
-      font-size: 20px;
+      font-size: 22px;
       font-family: inherit;
       text-align: center;
       outline: none;
@@ -149,14 +149,14 @@
     }
     #userNextBtn {
       width: 100%;
-      max-width: 520px;
-      padding: 18px 20px;
+      max-width: 640px;
+      padding: 20px 22px;
       margin: 0 auto 18px;
       border: none;
       border-radius: 16px;
       background: #1a73e8;
       color: white;
-      font-size: 20px;
+      font-size: 22px;
       font-weight: bold;
       font-family: inherit;
       cursor: pointer;
@@ -199,22 +199,22 @@
       z-index: 1;
     }
     .school-name {
-      font-size: 30px;
+      font-size: 28px;
       font-weight: 900;
       letter-spacing: 0.5px;
-      line-height: 1.2;
+      line-height: 1.25;
       color: #124b7c;
     }
     .gate-title {
-      margin-top: 6px;
-      font-size: 24px;
+      margin-top: 8px;
+      font-size: 26px;
       font-weight: 800;
       color: #123;
     }
     .subtitle {
-      margin-top: 8px;
+      margin-top: 10px;
       color: #667;
-      font-size: 15px;
+      font-size: 16px;
     }
     .device-label {
       display: block;
@@ -1476,12 +1476,12 @@ font-size: 22px !important;
        ========================================= */
     @media screen and (min-width: 768px) {
       .page {
-        padding: 48px 24px 56px;
-        display: block; /* keep block so card stays content-height */
+        padding: 56px 28px 64px;
+        display: block;
       }
       .container {
         width: 100%;
-        max-width: 680px;
+        max-width: 920px;
         margin: 0 auto;
         height: auto;
       }
@@ -1490,48 +1490,68 @@ font-size: 22px !important;
         width: 100%;
         height: auto;
         min-height: 0;
-        padding: 44px 40px 40px;
+        padding: 56px 56px 48px;
       }
       .device-watermark {
-        font-size: 110px;
+        font-size: 120px;
       }
       .school-name {
-        font-size: 30px;
+        font-size: 40px;
       }
       .gate-title {
-        font-size: 24px;
+        font-size: 32px;
       }
       .subtitle {
-        font-size: 16px;
+        font-size: 18px;
       }
       #userNameInput,
       #userNextBtn {
         max-width: 100%;
-        font-size: 20px;
+        font-size: 24px;
+      }
+      #userNameInput {
+        padding: 24px 22px;
+        margin: 28px auto 24px;
+      }
+      #userNextBtn {
+        padding: 22px 24px;
       }
       #deviceCode {
-        font-size: 19px;
-        padding: 18px;
+        font-size: 22px;
+        padding: 22px;
       }
       #continueBtn {
-        font-size: 19px;
-        padding: 18px;
+        font-size: 22px;
+        padding: 22px;
       }
     }
 
-    @media screen and (min-width: 1100px) {
+    @media screen and (min-width: 1200px) {
       .container {
-        max-width: 740px;
+        max-width: 1000px;
       }
       #userPage,
       #devicePage {
-        padding: 48px 48px 44px;
+        padding: 64px 72px 56px;
       }
       .school-name {
-        font-size: 32px;
+        font-size: 44px;
       }
       .gate-title {
+        font-size: 34px;
+      }
+      .subtitle {
+        font-size: 20px;
+      }
+      #userNameInput,
+      #userNextBtn {
         font-size: 26px;
+      }
+      #userNameInput {
+        padding: 26px 24px;
+      }
+      #userNextBtn {
+        padding: 24px 26px;
       }
     }
 
