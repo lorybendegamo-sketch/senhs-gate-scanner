@@ -1380,6 +1380,35 @@ font-size: 22px !important;
   box-shadow:0 3px 8px rgba(0,0,0,.14); margin:8px 5px;
 }
 #loadMonthlyAttendanceBtn { background:#1976d2; }
+
+#autoSmsToggleBtn {
+  display: none;
+  min-height: 48px;
+  padding: 12px 18px;
+  border: 0;
+  border-radius: 10px;
+  color: #fff;
+  font-weight: 900;
+  font-size: 15px;
+  cursor: pointer;
+  box-shadow: 0 3px 8px rgba(0,0,0,.14);
+  margin: 8px 5px;
+}
+#autoSmsToggleBtn.sms-on {
+  background: linear-gradient(135deg, #2e7d32, #66bb6a);
+}
+#autoSmsToggleBtn.sms-off {
+  background: linear-gradient(135deg, #c62828, #ef5350);
+}
+#autoSmsStatusText {
+  display: none;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 700;
+  margin: 6px auto 10px;
+  color: #333;
+}
+
 #downloadDailyAttBtn, #downloadMAMBtn, #downloadSYMSBtn {
   min-height:48px; padding:12px 20px; border:0; border-radius:10px;
   color:#fff; font-weight:900; font-size:15px; cursor:pointer;
@@ -1776,7 +1805,9 @@ font-size: 22px !important;
   <button id="openMAMPageBtn" type="button">MAM</button>
   <button id="openSMSPageBtn" type="button">SYMS</button>
   <button id="downloadDailyAttBtn" type="button">DOWNLOAD EXCEL</button>
+  <button id="autoSmsToggleBtn" type="button" class="sms-on">AUTO SMS: ON</button>
 </div>
+<div id="autoSmsStatusText"></div>
 <!-- END REPORT NAVIGATION BUTTONS -->
 
 <div id="attendanceMessage"></div>
@@ -2857,6 +2888,9 @@ async function openAttendancePage() {
     attendanceRole === "ADMIN"
       ? "ADMIN ATTENDANCE"
       : "ADVISER ATTENDANCE";
+  // Admin-only Auto SMS toggle
+  updateAutoSmsButtonUI();
+  loadAutoSmsStatus();
   if (
     attendanceRole ===
     "ADMIN"
@@ -6046,6 +6080,110 @@ if (senhsSMSLogoutButton) {
 
   
 
+
+/* =====================================================
+   ADMIN — AUTO SMS ON/OFF (AM Absent 8:00 AM)
+   Mon–Fri only; weekends never send (server-side)
+   ===================================================== */
+let autoSmsEnabled = true;
+
+function updateAutoSmsButtonUI() {
+  const btn = document.getElementById("autoSmsToggleBtn");
+  const text = document.getElementById("autoSmsStatusText");
+  if (!btn) return;
+
+  if (String(attendanceRole || "").toUpperCase() !== "ADMIN") {
+    btn.style.display = "none";
+    if (text) text.style.display = "none";
+    return;
+  }
+
+  btn.style.display = "inline-block";
+  if (text) text.style.display = "block";
+
+  if (autoSmsEnabled) {
+    btn.textContent = "AUTO SMS: ON";
+    btn.className = "sms-on";
+    if (text) {
+      text.textContent =
+        "AM Absent auto-text at 8:00 AM is ON (Mon–Fri only). Sat/Sun never send.";
+      text.style.color = "#2e7d32";
+    }
+  } else {
+    btn.textContent = "AUTO SMS: OFF";
+    btn.className = "sms-off";
+    if (text) {
+      text.textContent =
+        "AM Absent auto-text at 8:00 AM is OFF. No absent SMS will be sent.";
+      text.style.color = "#c62828";
+    }
+  }
+}
+
+async function loadAutoSmsStatus() {
+  if (String(attendanceRole || "").toUpperCase() !== "ADMIN") {
+    updateAutoSmsButtonUI();
+    return;
+  }
+  if (!attendanceAccessCode) return;
+
+  try {
+    const url =
+      APPS_SCRIPT_URL +
+      "?action=getAutoSmsStatus" +
+      "&accessCode=" + encodeURIComponent(attendanceAccessCode);
+    const result = await jsonpRequest(url);
+    if (result && result.success) {
+      autoSmsEnabled = !!result.enabled;
+    }
+  } catch (error) {
+    console.warn("loadAutoSmsStatus:", error);
+  }
+  updateAutoSmsButtonUI();
+}
+
+async function toggleAutoSmsStatus() {
+  if (String(attendanceRole || "").toUpperCase() !== "ADMIN") {
+    return;
+  }
+  if (!attendanceAccessCode) return;
+
+  const btn = document.getElementById("autoSmsToggleBtn");
+  if (btn) {
+    btn.disabled = true;
+    btn.textContent = "SAVING...";
+  }
+
+  const next = !autoSmsEnabled;
+  try {
+    const url =
+      APPS_SCRIPT_URL +
+      "?action=setAutoSmsStatus" +
+      "&accessCode=" + encodeURIComponent(attendanceAccessCode) +
+      "&enabled=" + encodeURIComponent(next ? "ON" : "OFF");
+    const result = await jsonpRequest(url);
+    if (!result || !result.success) {
+      throw new Error(
+        (result && result.message) || "Unable to update Auto SMS."
+      );
+    }
+    autoSmsEnabled = !!result.enabled;
+    const message = document.getElementById("attendanceMessage");
+    if (message) {
+      message.textContent = result.message || ("Auto SMS is now " + (autoSmsEnabled ? "ON" : "OFF"));
+    }
+  } catch (error) {
+    console.error("toggleAutoSmsStatus:", error);
+    const message = document.getElementById("attendanceMessage");
+    if (message) {
+      message.textContent = error.message || "Unable to update Auto SMS.";
+    }
+  } finally {
+    if (btn) btn.disabled = false;
+    updateAutoSmsButtonUI();
+  }
+}
+
 /* =====================================================
    DOWNLOAD TABLES AS EXCEL (CSV)
    Opens correctly in Microsoft Excel / Google Sheets
@@ -6193,6 +6331,8 @@ function downloadSYMSExcel() {
   if (mamBtn) mamBtn.addEventListener("click", downloadMAMExcel);
   const symsBtn = document.getElementById("downloadSYMSBtn");
   if (symsBtn) symsBtn.addEventListener("click", downloadSYMSExcel);
+  const autoSmsBtn = document.getElementById("autoSmsToggleBtn");
+  if (autoSmsBtn) autoSmsBtn.addEventListener("click", toggleAutoSmsStatus);
 })();
 
 </script>
