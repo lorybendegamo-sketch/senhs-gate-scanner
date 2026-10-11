@@ -299,7 +299,10 @@
        SCANNER PAGE
        ========================= */
     #scannerPage {
-      display: none;
+      display: none !important;
+    }
+    #scannerPage.is-visible {
+      display: block !important;
     }
     .scanner-container {
       position: relative;
@@ -679,9 +682,13 @@
        ========================= */
     #attendancePage {
       width: 100%;
-      min-height: 100vh;
-      display: none;
+      min-height: 0;
+      display: none !important;
       position: relative;
+    }
+    #attendancePage.is-visible {
+      display: block !important;
+      min-height: 100vh;
     }
     #attendancePage .device-content {
       width: 100%;
@@ -1286,8 +1293,9 @@ font-size: 22px !important;
 
 /* ===== REPORT PAGE DESIGN + NAVIGATION ===== */
 #mamPage, #smsPage {
+  display: none;
   width: 100%;
-  min-height: 100vh;
+  min-height: 0;
   padding: 18px;
   box-sizing: border-box;
 }
@@ -2332,15 +2340,18 @@ userNextBtn.addEventListener(
       userNameInput.focus();
       return;
     }
-    userName =
-      name;
-    userMessage.textContent =
-      "";
-    userPage.style.display =
-      "none";
-    devicePage.style.display =
-      "block";
-    deviceCode.focus();
+    userName = name;
+    userMessage.textContent = "";
+    userPage.style.setProperty("display", "none", "important");
+    devicePage.style.setProperty("display", "block", "important");
+    // Tablet: auto-fill last successful device code (still editable)
+    applySavedDeviceCodeForTablet();
+    if (String(deviceCode.value || "").trim()) {
+      // Code already filled — focus CONTINUE path via code field end
+      deviceCode.focus();
+    } else {
+      deviceCode.focus();
+    }
   }
 );
 /* =====================================================
@@ -2496,6 +2507,49 @@ function showDeviceMessage(
 
 
 /* =====================================================
+   SAVED DEVICE CODE (TABLET)
+   - Auto-fill saved device code on tablet
+   - Name must still be entered every time
+   - Device code remains editable
+   ===================================================== */
+function getSavedDeviceCode() {
+  try {
+    return String(
+      window.localStorage.getItem("SENHS_SAVED_DEVICE_CODE") || ""
+    ).trim();
+  } catch (error) {
+    console.warn("Unable to read saved Device Code:", error);
+    return "";
+  }
+}
+
+function setSavedDeviceCode(code) {
+  try {
+    const clean = String(code || "").trim();
+    if (clean) {
+      window.localStorage.setItem("SENHS_SAVED_DEVICE_CODE", clean);
+    }
+  } catch (error) {
+    console.warn("Unable to save Device Code:", error);
+  }
+}
+
+function isTabletDevice() {
+  return String(platform || "").toLowerCase() === "tablet";
+}
+
+/** Prefill device code on tablet from localStorage; field stays editable. */
+function applySavedDeviceCodeForTablet() {
+  if (!deviceCode) return;
+  if (!isTabletDevice()) return;
+
+  const saved = getSavedDeviceCode();
+  if (saved) {
+    deviceCode.value = saved;
+  }
+}
+
+/* =====================================================
    VERIFY ACCESS - DEVICE / ADVISER / ADMIN
    ===================================================== */
 async function verifyDevice() {
@@ -2599,7 +2653,7 @@ async function verifyDevice() {
         }
 
         deviceKey = key;
-        localStorage.setItem("SENHS_SAVED_DEVICE_CODE", key);
+        setSavedDeviceCode(key);
         sessionToken = receivedSession;
         sessionActive = true;
         releaseSent = false;
@@ -2753,15 +2807,19 @@ async function openScannerPage() {
   releaseSent = false;
 
   // Hide every other page so only the scanner is visible
-  if (userPage) userPage.style.display = "none";
-  if (devicePage) devicePage.style.display = "none";
-  if (attendancePage) attendancePage.style.display = "none";
+  if (userPage) userPage.style.setProperty("display", "none", "important");
+  if (devicePage) devicePage.style.setProperty("display", "none", "important");
+  if (attendancePage) {
+    attendancePage.style.setProperty("display", "none", "important");
+    attendancePage.classList.remove("is-visible");
+  }
   var mamEl = document.getElementById("mamPage");
   var smsEl = document.getElementById("smsPage");
-  if (mamEl) mamEl.style.display = "none";
-  if (smsEl) smsEl.style.display = "none";
+  if (mamEl) mamEl.style.setProperty("display", "none", "important");
+  if (smsEl) smsEl.style.setProperty("display", "none", "important");
 
-  scannerPage.style.display = "block";
+  scannerPage.style.setProperty("display", "block", "important");
+  scannerPage.classList.add("is-visible");
   readyBar.textContent = "● STARTING CAMERA...";
   readyBar.style.color = "#1267a5";
   try {
@@ -2785,10 +2843,16 @@ async function openAttendancePage() {
   const symsReportPage = document.getElementById("smsPage");
   if (mamReportPage) mamReportPage.style.display = "none";
   if (symsReportPage) symsReportPage.style.display = "none";
-  if (userPage) userPage.style.display = "none";
-  if (devicePage) devicePage.style.display = "none";
-  if (scannerPage) scannerPage.style.display = "none";
-  attendancePage.style.display = "block";
+  if (userPage) userPage.style.setProperty("display", "none", "important");
+  if (devicePage) devicePage.style.setProperty("display", "none", "important");
+  if (scannerPage) {
+    scannerPage.style.setProperty("display", "none", "important");
+    scannerPage.classList.remove("is-visible");
+  }
+  if (mamReportPage) mamReportPage.style.setProperty("display", "none", "important");
+  if (symsReportPage) symsReportPage.style.setProperty("display", "none", "important");
+  attendancePage.style.setProperty("display", "block", "important");
+  attendancePage.classList.add("is-visible");
   attendanceRoleTitle.textContent =
     attendanceRole === "ADMIN"
       ? "ADMIN ATTENDANCE"
@@ -3972,14 +4036,8 @@ async function exitScanner() {
 /* =================================================
    RETURN TO USER / NAME PAGE
    ================================================= */
-scannerPage.style.display = "none";
-attendancePage.style.display = "none";
-devicePage.style.display = "none";
-var mamExit = document.getElementById("mamPage");
-var smsExit = document.getElementById("smsPage");
-if (mamExit) mamExit.style.display = "none";
-if (smsExit) smsExit.style.display = "none";
-userPage.style.display = "block";
+senhsShowPage1Only();
+
 /* RESET NAME */
 userName = "";
 userNameInput.value =
@@ -3989,20 +4047,15 @@ userMessage.textContent =
 userMessage.className =
   "";
 /* RESET DEVICE PAGE */
-deviceCode.value =
-  "";
-deviceMessage.textContent =
-  "";
-deviceMessage.className =
-  "";
-readyBar.textContent =
-  "● READY TO SCAN";
-readyBar.style.color =
-  "#16803c";
-continueBtn.disabled =
-  false;
-continueBtn.textContent =
-  "CONTINUE";
+deviceCode.value = "";
+deviceMessage.textContent = "";
+deviceMessage.className = "";
+readyBar.textContent = "● READY TO SCAN";
+readyBar.style.color = "#16803c";
+continueBtn.disabled = false;
+continueBtn.textContent = "CONTINUE";
+// Tablet keeps last device code for next login (editable)
+applySavedDeviceCodeForTablet();
 /* FOCUS NAME */
 userNameInput.focus();
 }
@@ -4693,6 +4746,62 @@ switchCameraBtn.addEventListener(
     }
   }
 );
+
+/* =====================================================
+   SHOW PAGE 1 ONLY (after logout / exit)
+   ===================================================== */
+function senhsShowPage1Only() {
+  const ids = [
+    "devicePage",
+    "attendancePage",
+    "scannerPage",
+    "mamPage",
+    "smsPage"
+  ];
+  ids.forEach(function (id) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.style.setProperty("display", "none", "important");
+    el.classList.remove("is-visible");
+  });
+
+  // Clear report tables so leftover content cannot appear
+  try {
+    const mamHead = document.getElementById("monthlyAttendanceTableHead");
+    const mamBody = document.getElementById("monthlyAttendanceTableBody");
+    const mamMsg = document.getElementById("monthlyAttendanceMessage");
+    if (mamHead) mamHead.innerHTML = "";
+    if (mamBody) mamBody.innerHTML = "";
+    if (mamMsg) mamMsg.textContent = "Select a month, then click LOAD MONTH.";
+
+    const syHead = document.getElementById("sySummaryTableHead");
+    const syBody = document.getElementById("sySummaryTableBody");
+    const syMsg = document.getElementById("sySummaryMessage");
+    const syPanel = document.getElementById("sySummaryUpdatePanel");
+    const syInputs = document.getElementById("syHistoricalInputs");
+    if (syHead) syHead.innerHTML = "";
+    if (syBody) syBody.innerHTML = "";
+    if (syMsg) syMsg.textContent = "School Year 2026–2027";
+    if (syPanel) syPanel.style.display = "none";
+    if (syInputs) syInputs.innerHTML = "";
+
+    if (typeof attendanceTableBody !== "undefined" && attendanceTableBody) {
+      attendanceTableBody.innerHTML = "";
+    }
+    const attMsg = document.getElementById("attendanceMessage");
+    if (attMsg) attMsg.textContent = "";
+    const attSection = document.getElementById("attendanceCurrentSection");
+    if (attSection) attSection.textContent = "Section: —";
+  } catch (e) {}
+
+  if (userPage) {
+    userPage.style.setProperty("display", "block", "important");
+  }
+  if (typeof userNameInput !== "undefined" && userNameInput) {
+    try { userNameInput.focus(); } catch (e) {}
+  }
+}
+
  /* =====================================================
    ADVISER / ADMIN LOGOUT
    ===================================================== */
@@ -4734,33 +4843,8 @@ attendanceLogoutBtn.addEventListener(
        RETURN TO USER / NAME PAGE
        Hide EVERY page including MAM / SYMS
        ================================ */
-    attendancePage.style.display = "none";
-    scannerPage.style.display = "none";
-    devicePage.style.display = "none";
-    var mamLogoutPage = document.getElementById("mamPage");
-    var smsLogoutPage = document.getElementById("smsPage");
-    if (mamLogoutPage) mamLogoutPage.style.display = "none";
-    if (smsLogoutPage) smsLogoutPage.style.display = "none";
-    // Clear MAM / SYMS table content so nothing flashes on next login
-    try {
-      var mamHead = document.getElementById("monthlyAttendanceTableHead");
-      var mamBody = document.getElementById("monthlyAttendanceTableBody");
-      var mamMsg = document.getElementById("monthlyAttendanceMessage");
-      if (mamHead) mamHead.innerHTML = "";
-      if (mamBody) mamBody.innerHTML = "";
-      if (mamMsg) mamMsg.textContent = "Select a month, then click LOAD MONTH.";
-      var syHead = document.getElementById("sySummaryTableHead");
-      var syBody = document.getElementById("sySummaryTableBody");
-      var syMsg = document.getElementById("sySummaryMessage");
-      var syPanel = document.getElementById("sySummaryUpdatePanel");
-      var syInputs = document.getElementById("syHistoricalInputs");
-      if (syHead) syHead.innerHTML = "";
-      if (syBody) syBody.innerHTML = "";
-      if (syMsg) syMsg.textContent = "School Year 2026–2027";
-      if (syPanel) syPanel.style.display = "none";
-      if (syInputs) syInputs.innerHTML = "";
-    } catch (clearErr) {}
-    userPage.style.display = "block";
+    senhsShowPage1Only();
+
     /* ================================
        RESET NAME
        ================================ */
@@ -4774,17 +4858,15 @@ attendanceLogoutBtn.addEventListener(
       "";
     /* ================================
        RESET DEVICE ACCESS UI
+       Keep saved tablet device code in localStorage.
        ================================ */
-    deviceCode.value =
-      "";
-    deviceMessage.textContent =
-      "";
-    deviceMessage.className =
-      "";
-    continueBtn.disabled =
-      false;
-    continueBtn.textContent =
-      "CONTINUE";
+    deviceCode.value = "";
+    deviceMessage.textContent = "";
+    deviceMessage.className = "";
+    continueBtn.disabled = false;
+    continueBtn.textContent = "CONTINUE";
+    // Prefill for tablet so gate staff only enter Name next time
+    applySavedDeviceCodeForTablet();
     /* ================================
        FOCUS NAME INPUT
        ================================ */
@@ -4966,14 +5048,18 @@ updatePSTClock();
 /* =====================================================
    INITIAL STATE
    ===================================================== */
-userPage.style.display =
-  "block";
-devicePage.style.display =
-  "none";
-scannerPage.style.display =
-  "none";
-attendancePage.style.display =
-  "none";
+if (typeof senhsShowPage1Only === "function") {
+  senhsShowPage1Only();
+} else {
+  userPage.style.display = "block";
+  devicePage.style.display = "none";
+  scannerPage.style.display = "none";
+  attendancePage.style.display = "none";
+  var m0 = document.getElementById("mamPage");
+  var s0 = document.getElementById("smsPage");
+  if (m0) m0.style.display = "none";
+  if (s0) s0.style.display = "none";
+}
 continueBtn.disabled =
   false;
 continueBtn.textContent =
@@ -5047,12 +5133,18 @@ function senhsShowReportPage(pageName) {
   const mam = document.getElementById("mamPage");
   const sms = document.getElementById("smsPage");
 
-  if (attendance) attendance.style.display = "none";
-  if (mam) mam.style.display = "none";
-  if (sms) sms.style.display = "none";
+  if (attendance) {
+    attendance.style.setProperty("display", "none", "important");
+    attendance.classList.remove("is-visible");
+  }
+  if (mam) mam.style.setProperty("display", "none", "important");
+  if (sms) sms.style.setProperty("display", "none", "important");
 
   const target = document.getElementById(pageName);
-  if (target) target.style.display = "block";
+  if (target) {
+    target.style.setProperty("display", "block", "important");
+    if (pageName === "attendancePage") target.classList.add("is-visible");
+  }
 }
 
 function senhsReturnToAttendance() {
