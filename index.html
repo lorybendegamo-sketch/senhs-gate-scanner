@@ -54,18 +54,20 @@
     }
     .page {
       min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 20px;
+      height: auto;
+      display: block;
+      padding: 28px 16px 40px;
+      box-sizing: border-box;
+      overflow-x: hidden;
+      overflow-y: auto;
     }
     .container {
-      width: min(100%, 640px);
-      max-width: 640px;
-      min-width: 0;
-      flex: 0 0 auto;
+      width: 100%;
+      max-width: 720px;
+      margin: 0 auto;
       position: relative;
       box-sizing: border-box;
+      height: auto;
     }
     /* =========================
        PAGE 1
@@ -73,23 +75,27 @@
     #userPage {
       position: relative;
       width: 100%;
+      max-width: 100%;
       box-sizing: border-box;
-      min-height: calc(100vh - 40px);
+      height: auto;
+      min-height: 0;
+      max-height: none;
       display: block;
       background-image:
         linear-gradient(
-          rgba(255,255,255,0.78),
-          rgba(255,255,255,0.78)
+          rgba(255,255,255,0.90),
+          rgba(255,255,255,0.90)
         ),
         url("./logo.png");
       background-size: cover;
       background-position: center;
       background-repeat: no-repeat;
       border-radius: 24px;
-      padding: 35px 25px;
+      padding: 36px 28px 32px;
       box-shadow: 0 10px 35px rgba(0,0,0,0.12);
       text-align: center;
-      overflow: hidden;
+      overflow: visible;
+      margin: 0 auto;
     }
     /* =========================
        PAGE 2 — DEVICE CODE
@@ -98,29 +104,33 @@
       display: none;
       position: relative;
       width: 100%;
+      max-width: 100%;
       box-sizing: border-box;
-      min-height: calc(100vh - 40px);
+      height: auto;
+      min-height: 0;
+      max-height: none;
       background-image:
         linear-gradient(
-          rgba(255,255,255,0.78),
-          rgba(255,255,255,0.78)
+          rgba(255,255,255,0.90),
+          rgba(255,255,255,0.90)
         ),
         url("./logo.png");
       background-size: cover;
       background-position: center;
       background-repeat: no-repeat;
       border-radius: 24px;
-      padding: 35px 25px;
+      padding: 36px 28px 32px;
       box-shadow: 0 10px 35px rgba(0,0,0,0.12);
       text-align: center;
-      overflow: hidden;
+      overflow: visible;
+      margin: 0 auto;
     }
     /* =========================
        USER INFORMATION INPUTS
        ========================= */
     #userNameInput {
-      width: 90%;
-      max-width: 420px;
+      width: 100%;
+      max-width: 520px;
       padding: 20px 18px;
       margin: 18px auto 20px;
       border: 2px solid #ccc;
@@ -138,8 +148,8 @@
       box-shadow: 0 0 0 4px rgba(26, 115, 232, 0.12);
     }
     #userNextBtn {
-      width: 90%;
-      max-width: 420px;
+      width: 100%;
+      max-width: 520px;
       padding: 18px 20px;
       margin: 0 auto 18px;
       border: none;
@@ -177,7 +187,7 @@
       left: 50%;
       top: 50%;
       transform: translate(-50%, -50%);
-      font-size: 170px;
+      font-size: 96px;
       font-weight: 900;
       color: rgba(0,70,140,0.045);
       pointer-events: none;
@@ -1462,48 +1472,42 @@ font-size: 22px !important;
 
 
     /* =========================================
-       LAPTOP / DESKTOP — AUTO LARGER VIEW
-       Forces a readable card width (no zoom needed)
+       LAPTOP / DESKTOP — WIDE READABLE CARD
        ========================================= */
-    @media screen and (min-width: 900px) {
+    @media screen and (min-width: 768px) {
       .page {
-        padding: 20px 28px;
-        align-items: center;
-        justify-content: center;
+        padding: 48px 24px 56px;
+        display: block; /* keep block so card stays content-height */
       }
-      /* Fixed readable width — will not collapse to a thin strip */
       .container {
-        width: 720px;
-        max-width: 720px;
-        flex: 0 0 720px;
+        width: 100%;
+        max-width: 680px;
+        margin: 0 auto;
+        height: auto;
       }
       #userPage,
       #devicePage {
         width: 100%;
-        max-width: none;
-        margin: 0 auto;
-        padding: 48px 40px;
+        height: auto;
+        min-height: 0;
+        padding: 44px 40px 40px;
+      }
+      .device-watermark {
+        font-size: 110px;
       }
       .school-name {
-        font-size: 32px;
+        font-size: 30px;
       }
       .gate-title {
-        font-size: 26px;
+        font-size: 24px;
       }
       .subtitle {
         font-size: 16px;
       }
       #userNameInput,
       #userNextBtn {
-        width: 100%;
-        max-width: 520px;
+        max-width: 100%;
         font-size: 20px;
-      }
-      #userNameInput {
-        padding: 18px 16px;
-      }
-      #userNextBtn {
-        padding: 16px 18px;
       }
       #deviceCode {
         font-size: 19px;
@@ -1513,105 +1517,53 @@ font-size: 22px !important;
         font-size: 19px;
         padding: 18px;
       }
-      #scannerPage,
+    }
+
+    @media screen and (min-width: 1100px) {
+      .container {
+        max-width: 740px;
+      }
+      #userPage,
+      #devicePage {
+        padding: 48px 48px 44px;
+      }
+      .school-name {
+        font-size: 32px;
+      }
+      .gate-title {
+        font-size: 26px;
+      }
+    }
+
+    /* Scanner / attendance / reports can use more width */
+    @media screen and (min-width: 900px) {
       #scannerPage .scanner-container {
         width: 100%;
         max-width: 100%;
-      }
-      .scanner-school {
-        font-size: 26px;
-      }
-      .scanner-title {
-        font-size: 22px;
-      }
-      .pst-time {
-        font-size: 42px;
-      }
-      .pst-date {
-        font-size: 17px;
       }
       .camera-area,
       #reader {
         min-height: 460px;
       }
-      .ready-bar {
-        font-size: 18px;
-        padding: 15px;
+      .pst-time {
+        font-size: 42px;
       }
-      .attendance-title {
-        font-size: 22px;
-      }
-      .summary-number {
-        font-size: 30px;
-      }
-      .section-table {
-        font-size: 14px;
-      }
-      #attendancePage .device-content {
-        max-width: 100%;
-        padding: 28px 24px;
-      }
-      #attendanceTable th {
-        font-size: 15px;
-        padding: 12px 8px;
-      }
-      #attendanceTable td {
-        font-size: 14px;
-        padding: 10px 8px;
-      }
-      .attendance-btn {
-        font-size: 13px;
-        padding: 9px 6px;
-      }
+      #attendancePage .device-content,
       #mamPage .device-content,
       #smsPage .device-content {
         max-width: 100%;
-        padding: 28px;
-      }
-      #mamPage h2,
-      #smsPage h2 {
-        font-size: 28px;
-      }
-      .report-navigation button,
-      #attendanceReportNavigation button {
-        min-height: 52px;
-        font-size: 16px;
       }
     }
 
-    /* Extra-wide monitors: slightly larger login card + room for tables */
-    @media screen and (min-width: 1200px) {
-      .container {
-        width: 860px;
-        max-width: 860px;
-        flex: 0 0 860px;
-      }
-      #userPage,
-      #devicePage {
-        padding: 52px 48px;
-      }
-      .school-name {
-        font-size: 34px;
-      }
-      .camera-area,
-      #reader {
-        min-height: 500px;
-      }
-      .pst-time {
-        font-size: 46px;
-      }
-    }
-
-    /* When attendance / report pages are open, use more horizontal space */
+    /* When report/scanner pages are active, widen the shell */
     @media screen and (min-width: 900px) {
       body:has(#attendancePage[style*="block"]) .container,
       body:has(#mamPage[style*="block"]) .container,
       body:has(#smsPage[style*="block"]) .container,
       body:has(#scannerPage[style*="display: block"]) .container,
       body:has(#scannerPage[style*="display:block"]) .container {
-        width: min(1200px, 96vw);
         max-width: min(1200px, 96vw);
-        flex: 0 1 auto;
+        width: 100%;
       }
     }
 
