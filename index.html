@@ -2320,18 +2320,21 @@ let clientId =
     .toString(36)
     .substring(2, 10);
 let sessionToken = "";
-let platform =
-  /iPad|Tablet|Android(?!.*Mobile)/i.test(
-    navigator.userAgent
-  )
-    ? "tablet"
-    : /Android|iPhone|iPod/i.test(
-        navigator.userAgent
-      )
-      ? "mobile"
-      : "laptop";
-   // console.log("DEVICE USER AGENT:", navigator.userAgent);
-// console.log("DETECTED PLATFORM:", platform);
+function detectPlatform() {
+  const ua = String(navigator.userAgent || "");
+  const touch = (navigator.maxTouchPoints || 0) > 1;
+  // iPadOS 13+ reports as Mac; treat touch Macs as tablet.
+  if (/iPad|Tablet|Android(?!.*Mobile)/i.test(ua) || (/Macintosh/i.test(ua) && touch)) {
+    return "tablet";
+  }
+  if (/Android|iPhone|iPod/i.test(ua)) {
+    return "mobile";
+  }
+  return "laptop";
+}
+let platform = detectPlatform();
+console.log("DEVICE USER AGENT:", navigator.userAgent);
+console.log("DETECTED PLATFORM:", platform);
   
 let sessionActive = false;
 let heartbeatTimer = null;
@@ -2575,7 +2578,7 @@ toggleDeviceCode.addEventListener(
 /* =====================================================
    GOOGLE APPS SCRIPT JSONP
    ===================================================== */
-function jsonpRequest(url) {
+function jsonpRequest(url, timeoutMs) {
   return new Promise(
     function (
       resolve,
@@ -2594,8 +2597,9 @@ function jsonpRequest(url) {
         );
       let finished =
         false;
+      const waitMs = Number(timeoutMs) > 0 ? Number(timeoutMs) : 60000;
       // Attendance may already be saved even if Apps Script responds slowly.
-      // Allow more time before showing a connection timeout.
+      // Scans can pass a shorter timeoutMs (e.g. 20000).
       const timeout =
         setTimeout(
           function () {
@@ -2607,11 +2611,12 @@ function jsonpRequest(url) {
             cleanup();
             reject(
               new Error(
-                "Server response timed out after 60 seconds. Check Apps Script Executions before scanning this student again."
+                "Server response timed out after " + Math.round(waitMs / 1000) +
+                " seconds. Check Apps Script Executions before scanning this student again."
               )
             );
           },
-          60000
+          waitMs
         );
       function cleanup() {
         clearTimeout(
@@ -2783,9 +2788,9 @@ async function verifyDevice() {
   showDeviceMessage("Checking access...", "");
 
   function isAuthorized(result) {
-    return !!result &&
-      result.success === true &&
-      String(result.authorized).toLowerCase() === "true";
+    if (!result || result.success !== true) return false;
+    const a = result.authorized;
+    return a === true || String(a).toLowerCase() === "true" || a === 1 || a === "1";
   }
 
   function buildUrl(params) {
@@ -4387,10 +4392,13 @@ async function startSelectedCamera() {
     // camera resolution where the device supports it. These are ideal
     // constraints, so devices that cannot provide them may use their default.
     const scanConfig = {
-      fps: 15,
+      fps: 20,
+      // Full-frame decode (no qrbox) helps laptop/tablet webcams.
+      experimentalFeatures: { useBarCodeDetectorIfSupported: true },
       videoConstraints: {
-        width: { ideal: 1920 },
-        height: { ideal: 1080 }
+        width: { ideal: 1280 },
+        height: { ideal: 720 },
+        facingMode: platform === "mobile" ? { ideal: "environment" } : undefined
       },
       rememberLastUsedCamera: true
     };
@@ -4536,24 +4544,26 @@ async function onQrDetected(
   readyBar.style.color = "#1267a5";
   showProcessing();
 
-  // ACCEPT ONLY: Grade-Section|12-digit-LRN (example: 7-Banaba|123456789012).
-  // Do not normalize alternate separators or accept legacy/plain-LRN formats.
+  // Accept NEW: SECTION|LRN|NAME  and LEGACY: SECTION|LRN
   const qrText = String(decodedText || "").trim();
-  const qrParts = qrText.split("|");
+  const qrParts = qrText.split("|").map(function (p) { return String(p || "").trim(); });
   let payloadForServer = "";
 
-  if (
+  if (qrParts.length >= 3 && /^\d{12}$/.test(qrParts[1])) {
+    // SECTION|LRN|NAME (name may contain extra |)
+    payloadForServer = qrParts[0] + "|" + qrParts[1] + "|" + qrParts.slice(2).join("|");
+  } else if (
     qrParts.length === 2 &&
-    /^\d+\s*-\s*[A-Za-z0-9][A-Za-z0-9 .'-]*$/.test(qrParts[0].trim()) &&
-    /^\d{12}$/.test(qrParts[1].trim())
+    /^\d+\s*-\s*[A-Za-z0-9][A-Za-z0-9 .'-]*$/.test(qrParts[0]) &&
+    /^\d{12}$/.test(qrParts[1])
   ) {
-    payloadForServer = qrParts[0].trim() + "|" + qrParts[1].trim();
+    payloadForServer = qrParts[0] + "|" + qrParts[1];
   }
 
   if (!payloadForServer) {
     showResult({
       success: false,
-      message: "INVALID QR. Only accepted format: 7-Banaba|123456789012 (section name|12-digit LRN)."
+      message: "INVALID QR. Use SECTION|LRN|NAME (example: 7-Banaba|123456789012|JUAN DELA CRUZ)."
     });
     return;
   }
@@ -4566,13 +4576,12 @@ async function onQrDetected(
       "&session=" + encodeURIComponent(sessionToken) +
       "&platform=" + encodeURIComponent(platform);
 
-    const result = await jsonpRequest(requestUrl);
+    // Scan path should be fast; use a shorter timeout than attendance saves.
+    const result = await jsonpRequest(requestUrl, 20000);
     showResult(result);
 
     if (result && result.success) {
       beep(1400, 180);
-      // Summary refresh runs on its normal background polling interval.
-      // Do not add a second request to the scan's critical path.
     }
   } catch (error) {
     console.error("QR server error:", error);
@@ -4711,8 +4720,11 @@ function showResult(result) {
 
   if (isSuccess) {
     const name = result.name || "STUDENT";
+    const lrn = result.lrn || "";
     const section = result.section || "";
-    const event = result.event || "";
+    const recordedLabel = (result.message === "RECORDED" || result.recorded)
+      ? "RECORDED"
+      : (result.event || "RECORDED");
 
     let html =
       '<div style="' +
@@ -4740,6 +4752,16 @@ function showResult(result) {
       escapeHtml(name) +
       '</div>' +
       '<div style="' +
+      'font-size:clamp(15px,3.2vw,20px);' +
+      'font-weight:700;' +
+      'line-height:1.3;' +
+      'overflow-wrap:anywhere;' +
+      'margin-bottom:8px;' +
+      'opacity:0.95;' +
+      '">' +
+      'LRN: ' + escapeHtml(lrn) +
+      '</div>' +
+      '<div style="' +
       'font-size:clamp(16px,3.5vw,22px);' +
       'font-weight:700;' +
       'line-height:1.3;' +
@@ -4751,18 +4773,19 @@ function showResult(result) {
       '<div style="' +
       'display:inline-block;' +
       'max-width:100%;' +
-      'padding:10px 20px;' +
-      'font-size:clamp(20px,4.5vw,28px);' +
+      'padding:12px 24px;' +
+      'font-size:clamp(22px,4.5vw,30px);' +
       'font-weight:900;' +
       'line-height:1.2;' +
       'overflow-wrap:anywhere;' +
       'color:#ffffff;' +
-      'background:#1565c0;' +
+      'background:#2e7d32;' +
       'border:2px solid #ffffff;' +
       'border-radius:12px;' +
       'box-sizing:border-box;' +
+      'letter-spacing:1px;' +
       '">' +
-      escapeHtml(event) +
+      escapeHtml(recordedLabel) +
       '</div>';
 
     if (isLate) {
@@ -4841,10 +4864,10 @@ function showResult(result) {
     "QR PROCESSING TIME: " + processingTime + " seconds"
   );
 
-  /* Keep result brief so total scan+overlay is about ~2 seconds. */
+  /* ~1.5s result overlay, then resume scanning (total ~2s with fast server). */
   showResult.timer = setTimeout(function () {
     resumeScanner();
-  }, 1100);
+  }, 1500);
 }
 
   
