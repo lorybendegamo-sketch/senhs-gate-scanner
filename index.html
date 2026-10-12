@@ -4378,18 +4378,12 @@ async function startSelectedCamera() {
     return;
   }
   try {
-    // Laptop/tablet tuning: scan a large centered square, at a higher FPS.
-    // Keep the box responsive to portrait/landscape screens instead of using
-    // a fixed-size box that may be too small on tablets.
+    // Laptop/tablet compatibility: scan the ENTIRE camera frame.
+    // Some laptop/tablet camera aspect ratios and low-resolution previews
+    // crop a responsive qrbox incorrectly, preventing QR decoding.
+    // Omitting qrbox lets html5-qrcode search the complete video frame.
     const scanConfig = {
-      fps: 15,
-      qrbox: function (viewfinderWidth, viewfinderHeight) {
-        const side = Math.max(
-          120,
-          Math.floor(Math.min(viewfinderWidth, viewfinderHeight) * 0.85)
-        );
-        return { width: side, height: side };
-      },
+      fps: 10,
       rememberLastUsedCamera: true
     };
     try {
