@@ -4523,7 +4523,7 @@ async function onQrDetected(
 
 
 /* =====================================================
-   PROCESSING - RESPONSIVE
+   SIMPLE QR PROCESSING OVERLAY
    ===================================================== */
 function showProcessing() {
   scanOverlay.style.display = "flex";
@@ -4533,31 +4533,44 @@ function showProcessing() {
   scanOverlay.style.alignItems = "center";
   scanOverlay.style.justifyContent = "center";
   scanOverlay.style.boxSizing = "border-box";
-  scanOverlay.style.padding = "16px";
-  scanOverlay.style.background = "rgba(0,0,0,0.72)";
+  scanOverlay.style.padding = "12px";
+  scanOverlay.style.background = "rgba(0,0,0,0.45)";
 
   overlayContent.innerHTML =
     '<div style="' +
-    'width:100%;' +
-    'max-width:700px;' +
-    'max-height:85vh;' +
-    'overflow-y:auto;' +
-    'padding:clamp(20px,4vw,30px);' +
-    'text-align:center;' +
-    'background:#0d47a1;' +
-    'border:3px solid #ffffff;' +
-    'border-radius:20px;' +
-    'box-sizing:border-box;' +
-    'color:#ffffff;' +
+    'display:inline-flex;' +
+    'align-items:center;' +
+    'justify-content:center;' +
+    'gap:12px;' +
+    'max-width:calc(100vw - 24px);' +
+    'padding:18px 24px;' +
+    'background:#ffffff;' +
+    'color:#123b65;' +
+    'border-radius:12px;' +
+    'box-shadow:0 8px 28px rgba(0,0,0,0.22);' +
     'font-family:Arial,sans-serif;' +
+    'font-size:clamp(18px,4vw,24px);' +
+    'font-weight:700;' +
+    'text-align:center;' +
+    'box-sizing:border-box;' +
     '">' +
-    '<div class="processing-title">' +
-    'QR DETECTED — SAVING...' +
-    '</div>' +
-    '<div class="processing-text">' +
-    'QR received. Please wait while attendance is saved to Google Sheets. The confirmed result will appear after the save completes.' +
-    '</div>' +
+    '<span style="' +
+    'display:inline-block;' +
+    'width:18px;height:18px;flex:0 0 18px;' +
+    'border:3px solid #d7e4f0;' +
+    'border-top-color:#1674c5;' +
+    'border-radius:50%;' +
+    'animation:qrProcessingSpin 0.8s linear infinite;' +
+    '"></span>' +
+    '<span>QR PROCESSING</span>' +
     '</div>';
+
+  if (!document.getElementById("qrProcessingStyle")) {
+    const style = document.createElement("style");
+    style.id = "qrProcessingStyle";
+    style.textContent = "@keyframes qrProcessingSpin{to{transform:rotate(360deg)}}";
+    document.head.appendChild(style);
+  }
 }
 
 /* =====================================================
