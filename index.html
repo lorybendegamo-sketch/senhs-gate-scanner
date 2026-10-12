@@ -2573,6 +2573,8 @@ function jsonpRequest(url) {
         );
       let finished =
         false;
+      // Attendance may already be saved even if Apps Script responds slowly.
+      // Allow more time before showing a connection timeout.
       const timeout =
         setTimeout(
           function () {
@@ -2584,11 +2586,11 @@ function jsonpRequest(url) {
             cleanup();
             reject(
               new Error(
-                "Unable to connect to server."
+                "Server response timed out after 60 seconds. Check Apps Script Executions before scanning this student again."
               )
             );
           },
-          20000
+          60000
         );
       function cleanup() {
         clearTimeout(
@@ -4512,7 +4514,10 @@ async function onQrDetected(
     }
   } catch (error) {
     console.error("QR server error:", error);
-    showResult({ success: false, message: "Unable to connect to server." });
+    showResult({
+      success: false,
+      message: String(error && error.message ? error.message : "Unable to connect to server.")
+    });
   }
 }
 
