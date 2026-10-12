@@ -8,9 +8,9 @@
   >
   <title>SENHS Gate Scanner</title>
   <script
-    src="https://unpkg.com/html5-qrcode"
+    src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"
     type="text/javascript"
-    onerror="(function(){var s=document.createElement('script');s.src='https://cdn.jsdelivr.net/npm/html5-qrcode';s.onerror=function(){console.error('QR scanner library failed to load from both CDNs.');};document.head.appendChild(s);})()"
+    onerror="(function(){var s=document.createElement('script');s.src='https://cdn.jsdelivr.net/npm/html5-qrcode@2.3.8/html5-qrcode.min.js';s.onerror=function(){console.error('QR scanner library failed to load from both CDNs.');};document.head.appendChild(s);})()"
   ></script>
   <style>
     
@@ -4357,16 +4357,41 @@ async function startSelectedCamera() {
     return;
   }
   try {
+    // Laptop/tablet tuning: scan a large centered square, at a higher FPS.
+    // Keep the box responsive to portrait/landscape screens instead of using
+    // a fixed-size box that may be too small on tablets.
     const scanConfig = {
-      // Scan the full camera frame. A fixed qrbox can crop QR codes on tablets.
-      fps: 10,
+      fps: 15,
+      qrbox: function (viewfinderWidth, viewfinderHeight) {
+        const side = Math.max(
+          120,
+          Math.floor(Math.min(viewfinderWidth, viewfinderHeight) * 0.85)
+        );
+        return { width: side, height: side };
+      },
       rememberLastUsedCamera: true
     };
     try {
-      await html5QrCode.start(camera.id, scanConfig, onQrDetected, function () {});
+      await html5QrCode.start(
+        camera.id,
+        scanConfig,
+        onQrDetected,
+        function (decodeErrorMessage) {
+          // Normal while the camera is looking for a QR. Keep quiet to avoid
+          // flooding the console; html5-qrcode retries automatically.
+        }
+      );
     } catch (cameraIdError) {
-      console.warn("Camera ID startup failed; trying rear-camera constraints.", cameraIdError);
-      await html5QrCode.start({ facingMode: "environment" }, scanConfig, onQrDetected, function () {});
+      console.warn(
+        "Camera ID startup failed; trying rear-camera constraints.",
+        cameraIdError
+      );
+      await html5QrCode.start(
+        { facingMode: "environment" },
+        scanConfig,
+        onQrDetected,
+        function (decodeErrorMessage) {}
+      );
     }
     scannerRunning =
       true;
@@ -4374,7 +4399,7 @@ async function startSelectedCamera() {
       false;
     hideOverlay();
     readyBar.textContent =
-      "● READY TO SCAN — ILAPIT ANG QR SA CAMERA";
+      "● READY TO SCAN — ITUTOK AT I-CENTER ANG QR SA BOX";
     readyBar.style.color =
       "#16803c";
   } catch (error) {
