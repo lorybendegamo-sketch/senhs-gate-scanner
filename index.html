@@ -382,6 +382,27 @@
       width: 100%;
       min-height: 400px;
     }
+    /* Visible aiming guide for laptop and tablet cameras.
+       This is a visual guide only; html5-qrcode still decodes the camera feed. */
+    #scannerPage .camera-area::after {
+      content: "";
+      position: absolute;
+      z-index: 10;
+      pointer-events: none;
+      width: min(72vw, 320px);
+      aspect-ratio: 1 / 1;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      border: 3px solid #39ff88;
+      border-radius: 18px;
+      box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.10);
+    }
+    @media (max-width: 600px) {
+      #scannerPage .camera-area::after {
+        width: min(72vw, 280px);
+      }
+    }
     #reader video {
       width: 100% !important;
       height: auto !important;
