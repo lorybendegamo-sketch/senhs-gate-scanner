@@ -4316,7 +4316,11 @@ async function startCamera() {
         : 0;
     html5QrCode =
       new Html5Qrcode(
-        "reader"
+        "reader",
+        {
+          formatsToSupport: [Html5QrcodeSupportedFormats.QR_CODE],
+          verbose: false
+        }
       );
     await startSelectedCamera();
   } catch (error) {
@@ -4354,13 +4358,8 @@ async function startSelectedCamera() {
   }
   try {
     const scanConfig = {
-      fps: 12,
-      qrbox: function (viewfinderWidth, viewfinderHeight) {
-        // Use an integer square that fits even on narrow phone screens.
-        const size = Math.max(180, Math.floor(Math.min(viewfinderWidth, viewfinderHeight) * 0.72));
-        return { width: Math.min(size, viewfinderWidth), height: Math.min(size, viewfinderHeight) };
-      },
-      aspectRatio: 1.0,
+      // Scan the full camera frame. A fixed qrbox can crop QR codes on tablets.
+      fps: 10,
       rememberLastUsedCamera: true
     };
     try {
@@ -4375,7 +4374,7 @@ async function startSelectedCamera() {
       false;
     hideOverlay();
     readyBar.textContent =
-      "● READY TO SCAN";
+      "● READY TO SCAN — ILAPIT ANG QR SA CAMERA";
     readyBar.style.color =
       "#16803c";
   } catch (error) {
@@ -4454,7 +4453,14 @@ async function onQrDetected(
 ) {
   if (processing) return;
   if (!deviceKey || !sessionToken) {
-    console.log("QR ignored: no active device session.");
+    console.warn("QR was detected, but there is no active device session.");
+    showOverlay(
+      "DEVICE SESSION NOT ACTIVE",
+      "Na-detect ang QR pero wala nang active device session. Bumalik sa device login, mag-login ulit, at buksan muli ang scanner.",
+      true
+    );
+    readyBar.textContent = "DEVICE LOGIN REQUIRED";
+    readyBar.style.color = "#b71c1c";
     return;
   }
 
