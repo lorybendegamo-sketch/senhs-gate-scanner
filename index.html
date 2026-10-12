@@ -2376,6 +2376,7 @@ let heartbeatTimer = null;
 let html5QrCode = null;
 let cameras = [];
 let currentCameraIndex = 0;
+let preferredFacingMode = "environment";
 let scannerRunning = false;
 let torchOn = false;
 let torchSupported = false;
@@ -4343,35 +4344,20 @@ function senhsSortCameras_(list) {
 }
 
 function senhsBuildScanConfig_() {
-  // Fast decode + works in dark OR bright light + ~12 inches distance:
-  // - continuous auto-exposure / focus / white-balance
-  // - higher resolution for low-light detail
-  // - large qrbox + native BarcodeDetector
+  // Conservative settings for phones, tablets and laptops.
+  // Avoid the experimental native BarcodeDetector path because it can
+  // fail silently on some browser/device combinations.
   return {
-    fps: 30,
+    fps: 12,
     qrbox: function (viewfinderWidth, viewfinderHeight) {
       const minEdge = Math.min(viewfinderWidth, viewfinderHeight);
-      const size = Math.floor(minEdge * 0.88);
-      return { width: size, height: size };
+      const size = Math.max(180, Math.floor(minEdge * 0.72));
+      return {
+        width: Math.min(size, viewfinderWidth),
+        height: Math.min(size, viewfinderHeight)
+      };
     },
-    aspectRatio: 1.333,
-    disableFlip: false,
-    experimentalFeatures: {
-      useBarCodeDetectorIfSupported: true
-    },
-    videoConstraints: {
-      width: { ideal: 1920 },
-      height: { ideal: 1080 },
-      // Prefer auto modes so the camera adapts to dark gates or bright sun.
-      advanced: [
-        {
-          focusMode: "continuous",
-          exposureMode: "continuous",
-          whiteBalanceMode: "continuous"
-        }
-      ]
-    },
-    rememberLastUsedCamera: true
+    disableFlip: false
   };
 }
 
@@ -4511,36 +4497,44 @@ async function startCamera() {
       );
       throw new Error("Html5Qrcode library is not loaded.");
     }
-    if (navigator.permissions && navigator.permissions.query) {
-      try {
-        const permission = await navigator.permissions.query({ name: "camera" });
-        console.log("Camera permission:", permission.state);
-      } catch (permissionError) {
-        console.log("Camera permission check skipped:", permissionError);
-      }
-    }
 
     await senhsSafeStopScanner_();
-
-    cameras = senhsSortCameras_(await Html5Qrcode.getCameras());
-    if (!cameras || cameras.length === 0) {
-      showOverlay("CAMERA ERROR", "No camera was found on this device.", true);
-      return;
+    try {
+      cameras = senhsSortCameras_(await Html5Qrcode.getCameras());
+    } catch (enumerationError) {
+      console.warn("Camera enumeration unavailable; trying facingMode:", enumerationError);
+      cameras = [];
     }
 
-    // Default to back camera when available.
     const backIndex = cameras.findIndex(function (camera) {
-      return /back|rear|environment|world/i.test(camera.label || "");
+      return /back|rear|environment|world|traseira|trasera/i.test(camera.label || "");
     });
-    currentCameraIndex = backIndex >= 0 ? backIndex : 0;
+    preferredFacingMode = "environment";
+    if (backIndex >= 0) currentCameraIndex = backIndex;
+    else if (cameras.length) currentCameraIndex = 0;
 
-    html5QrCode = senhsCreateScannerInstance_();
     await startSelectedCamera();
+
+    // Camera labels/device IDs are often hidden until permission is granted.
+    try {
+      const refreshed = senhsSortCameras_(await Html5Qrcode.getCameras());
+      if (refreshed && refreshed.length) {
+        cameras = refreshed;
+        const track = senhsGetCameraTrack_();
+        const activeId = track && track.getSettings ? track.getSettings().deviceId : "";
+        const activeIndex = cameras.findIndex(function (camera) {
+          return camera.id === activeId;
+        });
+        if (activeIndex >= 0) currentCameraIndex = activeIndex;
+      }
+    } catch (refreshError) {
+      console.warn("Post-permission camera refresh skipped:", refreshError);
+    }
   } catch (error) {
     console.error("Start camera error:", error);
     showOverlay(
       "CAMERA ERROR",
-      "Please allow camera permission and try again.",
+      "Hindi masimulan ang camera. Payagan ang camera permission, siguraduhing walang ibang app na gumagamit nito, at subukan muli.",
       true
     );
     throw error;
@@ -4548,75 +4542,82 @@ async function startCamera() {
 }
 
 /* =====================================================
-   START SELECTED CAMERA
+   START SELECTED CAMERA — facingMode first, device ID fallback
    ===================================================== */
 async function startSelectedCamera() {
-  if (!cameras.length) return;
-  const camera = cameras[currentCameraIndex];
-  if (!camera) return;
-
-  // Always ensure a clean instance before start (fixes flaky switch).
-  if (scannerRunning) {
-    await senhsSafeStopScanner_();
-  }
-  if (!html5QrCode) {
-    html5QrCode = senhsCreateScannerInstance_();
-  }
-
-  const scanConfig = senhsBuildScanConfig_();
   const onDecodeFailure = function () { /* normal between frames */ };
+  let lastError = null;
 
+  // Ask the browser for the requested lens first; camera list order differs by device.
   try {
-    try {
-      await html5QrCode.start(
-        camera.id,
-        scanConfig,
-        onQrDetected,
-        onDecodeFailure
-      );
-    } catch (cameraIdError) {
-      console.warn("Camera ID start failed, trying facingMode fallback:", cameraIdError);
-      const label = String(camera.label || "").toLowerCase();
-      const preferFront = /front|user|face|selfie/i.test(label);
-      const facing = preferFront ? "user" : "environment";
-      // Recreate instance after a failed start (library can leave a bad state).
-      await senhsSafeStopScanner_();
-      html5QrCode = senhsCreateScannerInstance_();
-      await html5QrCode.start(
-        { facingMode: facing },
-        {
-          fps: 30,
-          qrbox: function (w, h) {
-            const minEdge = Math.min(w, h);
-            const size = Math.floor(minEdge * 0.88);
-            return { width: size, height: size };
-          },
-          experimentalFeatures: { useBarCodeDetectorIfSupported: true }
-        },
-        onQrDetected,
-        onDecodeFailure
-      );
-    }
-
+    await senhsSafeStopScanner_();
+    html5QrCode = senhsCreateScannerInstance_();
+    await html5QrCode.start(
+      { facingMode: preferredFacingMode },
+      senhsBuildScanConfig_(),
+      onQrDetected,
+      onDecodeFailure
+    );
     scannerRunning = true;
     processing = false;
     hideOverlay();
-    const camLabel = String(camera.label || "").trim() || ("Camera " + (currentCameraIndex + 1));
-    readyBar.textContent = "● READY TO SCAN — " + camLabel;
+    readyBar.textContent = "● READY TO SCAN — " +
+      (preferredFacingMode === "user" ? "FRONT CAMERA" : "BACK CAMERA / AUTO");
     readyBar.style.color = "#16803c";
-
-    // Auto-exposure / focus + show torch button when available (helps dark areas).
-    try {
-      await senhsApplyLowLightBoost_();
-    } catch (boostErr) {
+    try { await senhsApplyLowLightBoost_(); } catch (boostErr) {
       console.warn("Lighting boost:", boostErr);
     }
-  } catch (error) {
-    scannerRunning = false;
-    throw error;
+    return;
+  } catch (facingError) {
+    lastError = facingError;
+    console.warn("Facing-mode start failed; trying camera IDs:", facingError);
   }
+
+  const ordered = (cameras || []).slice().sort(function (a, b) {
+    function score(camera) {
+      const label = String(camera && camera.label || "").toLowerCase();
+      if (preferredFacingMode === "user") {
+        return /front|user|face|selfie|facetime|frontal/i.test(label) ? 0 : 1;
+      }
+      return /back|rear|environment|world|traseira|trasera/i.test(label) ? 0 : 1;
+    }
+    return score(a) - score(b);
+  });
+
+  for (let i = 0; i < ordered.length; i++) {
+    try {
+      await senhsSafeStopScanner_();
+      html5QrCode = senhsCreateScannerInstance_();
+      await html5QrCode.start(
+        ordered[i].id,
+        senhsBuildScanConfig_(),
+        onQrDetected,
+        onDecodeFailure
+      );
+      const foundIndex = cameras.findIndex(function (camera) {
+        return camera.id === ordered[i].id;
+      });
+      if (foundIndex >= 0) currentCameraIndex = foundIndex;
+      scannerRunning = true;
+      processing = false;
+      hideOverlay();
+      readyBar.textContent = "● READY TO SCAN — " +
+        (String(ordered[i].label || "").trim() || ("CAMERA " + (currentCameraIndex + 1)));
+      readyBar.style.color = "#16803c";
+      try { await senhsApplyLowLightBoost_(); } catch (boostErr) {
+        console.warn("Lighting boost:", boostErr);
+      }
+      return;
+    } catch (idError) {
+      lastError = idError;
+      console.warn("Unable to start camera ID:", ordered[i].label || ordered[i].id, idError);
+    }
+  }
+
+  scannerRunning = false;
+  throw lastError || new Error("No usable camera could be started.");
 }
-  
+
 /* =====================================================
    QR SCAN BEEP
    ===================================================== */
@@ -5148,69 +5149,57 @@ if (torchBtn) {
   });
 }
 
-switchCameraBtn.addEventListener(
-  "click",
-  async function () {
-    if (processing) return;
+switchCameraBtn.addEventListener("click", async function () {
+  if (processing || switchCameraBtn.disabled) return;
 
-    // Refresh device list in case labels were empty on first load (common on Android).
+  processing = true;
+  switchCameraBtn.disabled = true;
+  readyBar.textContent = "SWITCHING CAMERA…";
+  readyBar.style.color = "#1267a5";
+
+  const previousFacing = preferredFacingMode;
+  const previousIndex = currentCameraIndex;
+
+  try {
+    preferredFacingMode = preferredFacingMode === "environment" ? "user" : "environment";
+
     try {
       const refreshed = senhsSortCameras_(await Html5Qrcode.getCameras());
-      if (refreshed && refreshed.length) {
-        cameras = refreshed;
-      }
+      if (refreshed && refreshed.length) cameras = refreshed;
     } catch (refreshErr) {
       console.warn("Camera list refresh:", refreshErr);
     }
 
-    if (!cameras || cameras.length < 2) {
-      readyBar.textContent = "Only one camera available on this device";
-      readyBar.style.color = "#b71c1c";
-      setTimeout(function () {
-        if (!processing) {
-          readyBar.textContent = "● READY TO SCAN";
-          readyBar.style.color = "#16803c";
-        }
-      }, 1800);
-      return;
-    }
-
-    processing = true;
-    switchCameraBtn.disabled = true;
-    readyBar.textContent = "SWITCHING CAMERA…";
-    readyBar.style.color = "#1267a5";
-
-    const previousIndex = currentCameraIndex;
+    await senhsSafeStopScanner_();
+    html5QrCode = senhsCreateScannerInstance_();
+    await startSelectedCamera();
+    console.info("Camera switch completed. Requested facing mode:", preferredFacingMode);
+  } catch (error) {
+    console.error("Camera switch error:", error);
+    preferredFacingMode = previousFacing;
+    currentCameraIndex = previousIndex;
     try {
       await senhsSafeStopScanner_();
-      // Fresh instance after stop — most reliable across CP / tablet / laptop.
       html5QrCode = senhsCreateScannerInstance_();
-      currentCameraIndex = (currentCameraIndex + 1) % cameras.length;
       await startSelectedCamera();
-    } catch (error) {
-      console.error("Camera switch error:", error);
-      currentCameraIndex = previousIndex;
-      try {
-        await senhsSafeStopScanner_();
-        html5QrCode = senhsCreateScannerInstance_();
-        await startSelectedCamera();
-      } catch (recoverError) {
-        console.error("Camera recovery error:", recoverError);
-        readyBar.textContent = "CAMERA SWITCH FAILED — try EXIT then reopen";
-        readyBar.style.color = "#b71c1c";
-      }
-    } finally {
-      processing = false;
-      switchCameraBtn.disabled = false;
-      if (scannerRunning) {
-        const cam = cameras[currentCameraIndex];
-        const camLabel = cam && cam.label ? String(cam.label).trim() : ("Camera " + (currentCameraIndex + 1));
-        readyBar.textContent = "● READY TO SCAN — " + camLabel;
-        readyBar.style.color = "#16803c";
-      }
+      readyBar.textContent = "CAMERA SWITCH FAILED — returned to previous camera";
+      readyBar.style.color = "#b71c1c";
+    } catch (recoverError) {
+      console.error("Camera recovery error:", recoverError);
+      scannerRunning = false;
+      readyBar.textContent = "CAMERA ERROR — tap EXIT and reopen scanner";
+      readyBar.style.color = "#b71c1c";
+      showOverlay(
+        "CAMERA SWITCH FAILED",
+        "Hindi makalipat ng camera. I-exit ang scanner, payagan ang camera permission, at buksan muli.",
+        true
+      );
     }
+  } finally {
+    processing = false;
+    switchCameraBtn.disabled = false;
   }
-);
+});
 
 /* =====================================================
    SHOW PAGE 1 ONLY (after logout / exit)
