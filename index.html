@@ -1893,6 +1893,8 @@ max-height: 45dvh;
 .late-section-card h3 { margin:0 0 10px; color:#124b7c; }
 .late-record-row { display:grid; grid-template-columns:minmax(80px,1fr) minmax(120px,2fr) minmax(80px,1fr) minmax(150px,1.5fr); gap:8px; padding:8px; border-bottom:1px solid #e0e8f0; font-size:13px; }
 .late-record-row.header { font-weight:900; background:#eaf2fb; }
+#sectionAttendance .senhs-detail-cell { cursor:pointer; font-weight:900; text-decoration:underline; text-underline-offset:3px; }
+#sectionAttendance .senhs-detail-cell:focus { outline:3px solid #ffca28; outline-offset:-3px; }
 #attendanceDetailsModal { display:none; position:fixed; inset:0; z-index:100000; padding:16px; background:rgba(0,0,0,.62); overflow:auto; }
 #attendanceDetailsModal .detail-card { margin:5vh auto; max-height:88vh; overflow:auto; }
 #attendanceDetailsModal h2 { color:#124b7c; text-align:center; }
@@ -4146,15 +4148,11 @@ Number(
 section.amPresent || 0
 ) +
 '</td>' +
-'<td class="am-absent-cell">' +
-Number(
-section.amAbsent || 0
-) +
+'<td class="am-absent-cell senhs-detail-cell" role="button" tabindex="0" data-section="' + escapeHtml(section.section || "") + '" data-period="AM" data-category="ABSENT" title="View AM absent students">' +
+Number(section.amAbsent || 0) +
 '</td>' +
-'<td class="am-late-cell">' +
-Number(
-section.amLate || 0
-) +
+'<td class="am-late-cell senhs-detail-cell" role="button" tabindex="0" data-section="' + escapeHtml(section.section || "") + '" data-period="AM" data-category="LATE" title="View AM late students">' +
+Number(section.amLate || 0) +
 '</td>';
 if (showPM) {
 html +=
@@ -4163,15 +4161,11 @@ Number(
 section.pmPresent || 0
 ) +
 '</td>' +
-'<td class="pm-absent-cell">' +
-Number(
-section.pmAbsent || 0
-) +
+'<td class="pm-absent-cell senhs-detail-cell" role="button" tabindex="0" data-section="' + escapeHtml(section.section || "") + '" data-period="PM" data-category="ABSENT" title="View PM absent students">' +
+Number(section.pmAbsent || 0) +
 '</td>' +
-'<td class="pm-late-cell">' +
-Number(
-section.pmLate || 0
-) +
+'<td class="pm-late-cell senhs-detail-cell" role="button" tabindex="0" data-section="' + escapeHtml(section.section || "") + '" data-period="PM" data-category="LATE" title="View PM late students">' +
+Number(section.pmLate || 0) +
 '</td>';
 }
 html +=
@@ -6844,19 +6838,19 @@ if (lateSYMSBtn) lateSYMSBtn.addEventListener("click", function(){senhsShowRepor
 const lateLogoutBtn = document.getElementById("lateLogoutBtn");
 if (lateLogoutBtn) lateLogoutBtn.addEventListener("click", function(){const btn=document.getElementById("attendanceLogoutBtn");if(btn)btn.click();});
 
-function senhsShowAttendanceDetails_(level, period, category) {
+function senhsShowAttendanceDetails_(level, period, category, sectionName) {
   const modal = document.getElementById("attendanceDetailsModal");
   const title = document.getElementById("attendanceDetailsTitle");
   const message = document.getElementById("attendanceDetailsMessage");
   const results = document.getElementById("attendanceDetailsResults");
   if (!modal || !results) return;
   const dateKey = new Intl.DateTimeFormat("en-CA", {timeZone:"Asia/Manila",year:"numeric",month:"2-digit",day:"2-digit"}).format(new Date());
-  title.textContent = level + " — " + period + " " + category;
+  title.textContent = (sectionName || level) + " — " + period + " " + category;
   message.textContent = "Loading " + dateKey + "…";
   results.innerHTML = "";
   modal.style.display = "block";
   const url = APPS_SCRIPT_URL + "?action=getAttendanceDetails&date=" + encodeURIComponent(dateKey) +
-    "&level=" + encodeURIComponent(level) + "&period=" + encodeURIComponent(period) + "&category=" + encodeURIComponent(category);
+    "&level=" + encodeURIComponent(level) + "&section=" + encodeURIComponent(sectionName || "") + "&period=" + encodeURIComponent(period) + "&category=" + encodeURIComponent(category);
   jsonpRequest(url).then(function(result) {
     if (!result || !result.success) throw new Error(result && result.message || "Unable to load attendance details.");
     message.textContent = dateKey + " — " + result.count + " student(s)";
@@ -6884,21 +6878,26 @@ const detailsCloseBtn = document.getElementById("attendanceDetailsClose");
 if (detailsCloseBtn) detailsCloseBtn.addEventListener("click", function(){document.getElementById("attendanceDetailsModal").style.display="none";});
 const detailsModal = document.getElementById("attendanceDetailsModal");
 if (detailsModal) detailsModal.addEventListener("click", function(event){if(event.target===detailsModal)detailsModal.style.display="none";});
-document.querySelectorAll("#attendanceMonitor .school-group").forEach(function(group) {
-  const level = group.classList.contains("jhs") ? "JHS" : "SHS";
-  group.querySelectorAll(".summary-card").forEach(function(card) {
-    if (card.classList.contains("total")) return;
-    const label = card.querySelector(".summary-label");
-    if (!label) return;
-    const match = label.textContent.trim().toUpperCase().match(/^(AM|PM)\\s+(PRESENT|ABSENT|LATE)$/);
-    if (!match) return;
-    card.setAttribute("role","button"); card.setAttribute("tabindex","0");
-    card.setAttribute("aria-label","View "+level+" "+match[1]+" "+match[2]+" details");
-    const open = function(){senhsShowAttendanceDetails_(level,match[1],match[2]);};
-    card.addEventListener("click",open);
-    card.addEventListener("keydown",function(event){if(event.key==="Enter"||event.key===" "){event.preventDefault();open();}});
+// Click AM/PM ABSENT or LATE counts in the individual SECTION ATTENDANCE table.
+// Do not open details from the JHS/SHS school summary cards.
+function senhsBindSectionDetailCells_() {
+  const table = document.getElementById("sectionAttendance");
+  if (!table || table.dataset.detailsBound === "1") return;
+  table.dataset.detailsBound = "1";
+  const handle = function(event) {
+    const cell = event.target.closest(".senhs-detail-cell");
+    if (!cell || !table.contains(cell)) return;
+    event.preventDefault();
+    senhsShowAttendanceDetails_("SECTION", cell.dataset.period, cell.dataset.category, cell.dataset.section);
+  };
+  table.addEventListener("click", handle);
+  table.addEventListener("keydown", function(event) {
+    if ((event.key === "Enter" || event.key === " ") && event.target.closest(".senhs-detail-cell")) {
+      event.preventDefault(); handle(event);
+    }
   });
-});
+}
+senhsBindSectionDetailCells_();
 
 // OPEN MAM PAGE
 const senhsOpenMAMButton = document.getElementById("openMAMPageBtn");
