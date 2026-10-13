@@ -6862,12 +6862,14 @@ function senhsShowAttendanceDetails_(level, period, category, sectionName) {
     result.sections.forEach(function(section) {
       const card=document.createElement("div");card.className="late-section-card";
       const h=document.createElement("h3");h.textContent=section.section+" — "+section.students.length;card.appendChild(h);
+      const showTime = category === "LATE";
       const header=document.createElement("div");header.className="late-record-row header";
-      ["LRN","STUDENT NAME","STATUS"].forEach(function(t){const c=document.createElement("div");c.textContent=t;header.appendChild(c);});
+      (showTime ? ["LRN","STUDENT NAME","STATUS","TIME RECORDED"] : ["LRN","STUDENT NAME","STATUS"]).forEach(function(t){const c=document.createElement("div");c.textContent=t;header.appendChild(c);});
       card.appendChild(header);
       section.students.forEach(function(st){
         const row=document.createElement("div");row.className="late-record-row";
-        [st.lrn,st.name,st.status].forEach(function(v){const c=document.createElement("div");c.textContent=v;row.appendChild(c);});
+        const values = showTime ? [st.lrn,st.name,st.status,st.time || "—"] : [st.lrn,st.name,st.status];
+        values.forEach(function(v){const c=document.createElement("div");c.textContent=v;row.appendChild(c);});
         card.appendChild(row);
       });
       results.appendChild(card);
