@@ -1866,6 +1866,46 @@ max-height: 45dvh;
   }
 }
 
+
+/* SENHS LATE RECORDS + ATTENDANCE DETAIL */
+#lateRecordsPage { display:none; width:100%; min-height:0; padding:18px; box-sizing:border-box; }
+#lateRecordsPage .device-content, #attendanceDetailsModal .detail-card {
+  width:100%; max-width:1200px; margin:0 auto; padding:22px; border-radius:18px;
+  background:rgba(255,255,255,.98); box-shadow:0 8px 28px rgba(0,0,0,.16); box-sizing:border-box;
+}
+#lateRecordsPage h2 { text-align:center; color:#124b7c; margin:6px 0 16px; }
+#lateRecordsNav, #lateRecordsControls { display:flex; flex-wrap:wrap; justify-content:center; gap:10px; margin:12px auto 18px; }
+#lateRecordsNav button, #lateRecordsControls button, #lateRecordsControls select {
+  min-height:46px; padding:10px 14px; border:0; border-radius:10px; font-weight:800; font-size:14px;
+}
+#lateRecordsNav button { color:white; background:linear-gradient(135deg,#1565c0,#2196f3); cursor:pointer; }
+#lateRecordsNav .logout { background:linear-gradient(135deg,#b71c1c,#ef5350); }
+#lateRecordsControls select { border:2px solid #c8d8e8; background:white; min-width:190px; }
+#lateRecordsControls button { background:#00897b; color:white; cursor:pointer; }
+#lateCalendar { display:grid; grid-template-columns:repeat(7,minmax(0,1fr)); gap:6px; margin:12px 0 22px; }
+.late-calendar-heading { text-align:center; padding:8px 2px; font-size:12px; font-weight:900; color:#124b7c; }
+.late-calendar-day { min-height:48px; border:1px solid #d8e3ef; border-radius:9px; background:#f6f9fc; font-weight:800; color:#233; cursor:pointer; }
+.late-calendar-day.has-late { background:#fff0cf; border:2px solid #f57c00; color:#8a3b00; }
+.late-calendar-day.selected { outline:3px solid #1565c0; }
+.late-calendar-day:disabled { cursor:default; opacity:.3; }
+#lateRecordsResults, #attendanceDetailsResults { margin-top:14px; }
+.late-section-card { margin:12px 0; padding:14px; border:1px solid #d9e5ef; border-radius:12px; background:#f8fbff; }
+.late-section-card h3 { margin:0 0 10px; color:#124b7c; }
+.late-record-row { display:grid; grid-template-columns:minmax(80px,1fr) minmax(120px,2fr) minmax(80px,1fr) minmax(150px,1.5fr); gap:8px; padding:8px; border-bottom:1px solid #e0e8f0; font-size:13px; }
+.late-record-row.header { font-weight:900; background:#eaf2fb; }
+#attendanceDetailsModal { display:none; position:fixed; inset:0; z-index:100000; padding:16px; background:rgba(0,0,0,.62); overflow:auto; }
+#attendanceDetailsModal .detail-card { margin:5vh auto; max-height:88vh; overflow:auto; }
+#attendanceDetailsModal h2 { color:#124b7c; text-align:center; }
+#attendanceDetailsClose { display:block; margin:0 auto 12px; border:0; border-radius:9px; padding:11px 20px; background:#b71c1c; color:white; font-weight:900; cursor:pointer; }
+.summary-card { cursor:pointer; }
+.summary-card.total { cursor:default; }
+@media(max-width:600px) {
+ #lateRecordsPage { padding:8px; } #lateRecordsPage .device-content { padding:12px; }
+ #lateCalendar { gap:3px; } .late-calendar-day { min-height:39px; font-size:12px; }
+ .late-record-row { grid-template-columns:1fr 1.5fr; }
+ .late-record-row.header { display:none; }
+}
+
 </style>
 </head>
 <body>
@@ -2033,6 +2073,7 @@ PROCEED
 <div id="attendanceReportNavigation">
 <button id="openMAMPageBtn" type="button">MAM</button>
 <button id="openSMSPageBtn" type="button">SYMS</button>
+<button id="openLateRecordsBtn" type="button">LATE RECORD/S</button>
 <button id="downloadDailyAttBtn" type="button">DOWNLOAD EXCEL</button>
 <button id="autoSmsToggleBtn" type="button" class="sms-on">AUTO SMS: ON</button>
 </div>
@@ -2056,6 +2097,7 @@ PAGE — MONTHLY ATTENDANCE MATRIX (MAM)
 <div class="report-navigation" aria-label="MAM navigation">
 <button id="goDailyFromMAMBtn" type="button">DAILY ATT</button>
 <button id="goSYMSFromMAMBtn" type="button">SYMS</button>
+<button id="goLateFromMAMBtn" type="button">LATE RECORD/S</button>
 </div>
 
 <label for="monthlyAttendanceMonth">
@@ -2109,6 +2151,7 @@ PAGE — SCHOOL YEAR MONTHLY SUMMARY (SYMS)
 <div class="report-navigation" aria-label="SYMS navigation">
 <button id="goDailyFromSYMSBtn" type="button">DAILY ATT</button>
 <button id="goMAMFromSYMSBtn" type="button">MAM</button>
+<button id="goLateFromSYMSBtn" type="button">LATE RECORD/S</button>
 </div>
 
 <p id="sySummaryMessage">
@@ -2377,6 +2420,39 @@ Updating...
 </div>
 </div>
 </div>
+
+<!-- PAGE 5 — LATE RECORDS -->
+<div id="lateRecordsPage">
+  <div class="device-content">
+    <div class="school-name">SAN ESTEBAN NATIONAL HIGH SCHOOL</div>
+    <h2>📅 LATE RECORD/S</h2>
+    <div id="lateRecordsNav" aria-label="Late records navigation">
+      <button id="lateGoDailyBtn" type="button">DAILY ATT</button>
+      <button id="lateGoMAMBtn" type="button">MAM</button>
+      <button id="lateGoSYMSBtn" type="button">SYMS</button>
+      <button id="lateLogoutBtn" class="logout" type="button">LOG OUT</button>
+    </div>
+    <div id="lateRecordsControls">
+      <label for="lateRecordsMonth" style="align-self:center;font-weight:900;">SELECT MONTH:</label>
+      <select id="lateRecordsMonth" aria-label="Select month"></select>
+      <button id="loadLateCalendarBtn" type="button">LOAD CALENDAR</button>
+    </div>
+    <p id="lateRecordsMessage" role="status" style="text-align:center;font-weight:800;">Choose a month and load the calendar.</p>
+    <div id="lateCalendar" aria-label="Monthly late records calendar"></div>
+    <h3 id="lateSelectedDateTitle" style="text-align:center;color:#124b7c;">Select a date</h3>
+    <div id="lateRecordsResults"><p style="text-align:center;">Select a date to view late records.</p></div>
+  </div>
+</div>
+
+<div id="attendanceDetailsModal" role="dialog" aria-modal="true" aria-labelledby="attendanceDetailsTitle">
+  <div class="detail-card">
+    <button id="attendanceDetailsClose" type="button">CLOSE</button>
+    <h2 id="attendanceDetailsTitle">ATTENDANCE DETAILS</h2>
+    <p id="attendanceDetailsMessage" style="text-align:center;font-weight:800;"></p>
+    <div id="attendanceDetailsResults"></div>
+  </div>
+</div>
+
 <script>
 /* =====================================================
 CONFIGURATION
@@ -5493,7 +5569,8 @@ const ids = [
 "attendancePage",
 "scannerPage",
 "mamPage",
-"smsPage"
+"smsPage",
+"lateRecordsPage"
 ];
 ids.forEach(function (id) {
 const el = document.getElementById(id);
@@ -5869,6 +5946,7 @@ function senhsShowReportPage(pageName) {
 const attendance = document.getElementById("attendancePage");
 const mam = document.getElementById("mamPage");
 const sms = document.getElementById("smsPage");
+const late = document.getElementById("lateRecordsPage");
 
 if (attendance) {
 attendance.style.setProperty("display", "none", "important");
@@ -5876,6 +5954,7 @@ attendance.classList.remove("is-visible");
 }
 if (mam) mam.style.setProperty("display", "none", "important");
 if (sms) sms.style.setProperty("display", "none", "important");
+if (late) late.style.setProperty("display", "none", "important");
 
 const target = document.getElementById(pageName);
 if (target) {
@@ -6636,6 +6715,190 @@ if (button) button.disabled = false;
 /* =====================================================
 BUTTON EVENTS
 ===================================================== */
+
+
+/* =====================================================
+LATE RECORDS PAGE 5 + CALENDAR
+===================================================== */
+function senhsPopulateLateMonthOptions_() {
+  const select = document.getElementById("lateRecordsMonth");
+  if (!select || select.options.length) return;
+  const now = new Date();
+  const startYear = Math.min(2026, now.getFullYear());
+  const startMonth = startYear === 2026 ? 5 : 0;
+  for (let y = startYear; y <= now.getFullYear() + 1; y++) {
+    const m0 = y === startYear ? startMonth : 0;
+    const maxM = y === now.getFullYear() + 1 ? 4 : 11;
+    for (let m = m0; m <= maxM; m++) {
+      const value = y + "-" + String(m + 1).padStart(2, "0");
+      const option = document.createElement("option");
+      option.value = value;
+      option.textContent = new Date(y, m, 1).toLocaleDateString("en-US", {month:"long",year:"numeric"});
+      if (y === now.getFullYear() && m === now.getMonth()) option.selected = true;
+      select.appendChild(option);
+    }
+  }
+}
+let senhsLateMonthDates_ = [];
+let senhsLateSelectedDate_ = "";
+async function senhsLoadLateCalendar_() {
+  const select = document.getElementById("lateRecordsMonth");
+  const calendar = document.getElementById("lateCalendar");
+  const message = document.getElementById("lateRecordsMessage");
+  if (!select || !calendar || !message) return;
+  calendar.innerHTML = "";
+  message.textContent = "Loading calendar…";
+  try {
+    const url = APPS_SCRIPT_URL + "?action=getLateRecordsMonth&accessCode=" + encodeURIComponent(attendanceAccessCode) +
+      "&month=" + encodeURIComponent(select.value);
+    const result = await jsonpRequest(url);
+    if (!result || !result.success) throw new Error(result && result.message || "Unable to load late calendar.");
+    senhsLateMonthDates_ = result.dates || [];
+    const parts = select.value.split("-").map(Number);
+    const year = parts[0], month = parts[1] - 1;
+    ["SUN","MON","TUE","WED","THU","FRI","SAT"].forEach(function(day) {
+      const h = document.createElement("div"); h.className = "late-calendar-heading"; h.textContent = day; calendar.appendChild(h);
+    });
+    const firstDay = new Date(year, month, 1).getDay();
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    for (let i = 0; i < firstDay; i++) {
+      const blank = document.createElement("div"); blank.setAttribute("aria-hidden","true"); calendar.appendChild(blank);
+    }
+    for (let day = 1; day <= daysInMonth; day++) {
+      const dateKey = year + "-" + String(month + 1).padStart(2,"0") + "-" + String(day).padStart(2,"0");
+      const btn = document.createElement("button");
+      btn.type = "button"; btn.className = "late-calendar-day"; btn.textContent = String(day);
+      btn.setAttribute("aria-label", dateKey + (senhsLateMonthDates_.includes(dateKey) ? ", has late records" : ""));
+      if (senhsLateMonthDates_.includes(dateKey)) { btn.classList.add("has-late"); btn.title = "Late records available"; }
+      btn.addEventListener("click", function() {
+        document.querySelectorAll(".late-calendar-day.selected").forEach(function(el){el.classList.remove("selected");});
+        btn.classList.add("selected");
+        senhsLateSelectedDate_ = dateKey;
+        senhsLoadLateDate_(dateKey);
+      });
+      calendar.appendChild(btn);
+    }
+    message.textContent = senhsLateMonthDates_.length
+      ? "Orange dates have late records. Select any date to check its records."
+      : "No late records found for this month. You can still select a date to check.";
+    const results = document.getElementById("lateRecordsResults");
+    if (results) results.innerHTML = '<p style="text-align:center;">Select a date to view late records.</p>';
+    const title = document.getElementById("lateSelectedDateTitle");
+    if (title) title.textContent = "Select a date";
+  } catch (error) {
+    message.textContent = error.message || "Unable to load calendar.";
+  }
+}
+async function senhsLoadLateDate_(dateKey) {
+  const results = document.getElementById("lateRecordsResults");
+  const title = document.getElementById("lateSelectedDateTitle");
+  const message = document.getElementById("lateRecordsMessage");
+  if (title) title.textContent = "LATE RECORDS — " + dateKey;
+  if (results) results.innerHTML = '<p style="text-align:center;">Loading records…</p>';
+  try {
+    const url = APPS_SCRIPT_URL + "?action=getLateRecordsDate&accessCode=" + encodeURIComponent(attendanceAccessCode) +
+      "&date=" + encodeURIComponent(dateKey);
+    const result = await jsonpRequest(url);
+    if (!result || !result.success) throw new Error(result && result.message || "Unable to load late records.");
+    if (!result.sections || !result.sections.length) {
+      results.innerHTML = '<div class="late-section-card" style="text-align:center;font-weight:900;">NO STUDENT/S LATE RECORD FOUND</div>';
+      return;
+    }
+    results.innerHTML = "";
+    result.sections.forEach(function(section) {
+      const card = document.createElement("div"); card.className = "late-section-card";
+      const heading = document.createElement("h3"); heading.textContent = section.section + " — " + section.students.length + " late"; card.appendChild(heading);
+      const header = document.createElement("div"); header.className = "late-record-row header";
+      ["LRN","STUDENT NAME","STATUS","DATE / TIME"].forEach(function(label){const cell=document.createElement("div");cell.textContent=label;header.appendChild(cell);});
+      card.appendChild(header);
+      section.students.forEach(function(st) {
+        const row = document.createElement("div"); row.className = "late-record-row";
+        [st.lrn, st.name, st.status, st.timestamp].forEach(function(value){const cell=document.createElement("div");cell.textContent=value || "—";row.appendChild(cell);});
+        card.appendChild(row);
+      });
+      results.appendChild(card);
+    });
+  } catch (error) {
+    if (results) results.innerHTML = '<div class="late-section-card" style="text-align:center;color:#b71c1c;font-weight:800;">' + escapeHtml(error.message || "Unable to load records.") + '</div>';
+  }
+}
+function senhsOpenLateRecordsPage_() {
+  senhsPopulateLateMonthOptions_();
+  senhsShowReportPage("lateRecordsPage");
+  senhsLoadLateCalendar_();
+}
+[
+  "openLateRecordsBtn", "goLateFromMAMBtn", "goLateFromSYMSBtn"
+].forEach(function(id) {
+  const btn = document.getElementById(id);
+  if (btn) btn.addEventListener("click", senhsOpenLateRecordsPage_);
+});
+const lateCalendarLoadBtn = document.getElementById("loadLateCalendarBtn");
+if (lateCalendarLoadBtn) lateCalendarLoadBtn.addEventListener("click", senhsLoadLateCalendar_);
+const lateDailyBtn = document.getElementById("lateGoDailyBtn");
+if (lateDailyBtn) lateDailyBtn.addEventListener("click", senhsOpenDailyAttendance);
+const lateMAMBtn = document.getElementById("lateGoMAMBtn");
+if (lateMAMBtn) lateMAMBtn.addEventListener("click", function(){senhsShowReportPage("mamPage");loadMonthlyAttendance();});
+const lateSYMSBtn = document.getElementById("lateGoSYMSBtn");
+if (lateSYMSBtn) lateSYMSBtn.addEventListener("click", function(){senhsShowReportPage("smsPage");loadSYSummary();});
+const lateLogoutBtn = document.getElementById("lateLogoutBtn");
+if (lateLogoutBtn) lateLogoutBtn.addEventListener("click", function(){const btn=document.getElementById("attendanceLogoutBtn");if(btn)btn.click();});
+
+function senhsShowAttendanceDetails_(level, period, category) {
+  const modal = document.getElementById("attendanceDetailsModal");
+  const title = document.getElementById("attendanceDetailsTitle");
+  const message = document.getElementById("attendanceDetailsMessage");
+  const results = document.getElementById("attendanceDetailsResults");
+  if (!modal || !results) return;
+  const dateKey = new Intl.DateTimeFormat("en-CA", {timeZone:"Asia/Manila",year:"numeric",month:"2-digit",day:"2-digit"}).format(new Date());
+  title.textContent = level + " — " + period + " " + category;
+  message.textContent = "Loading " + dateKey + "…";
+  results.innerHTML = "";
+  modal.style.display = "block";
+  const url = APPS_SCRIPT_URL + "?action=getAttendanceDetails&date=" + encodeURIComponent(dateKey) +
+    "&level=" + encodeURIComponent(level) + "&period=" + encodeURIComponent(period) + "&category=" + encodeURIComponent(category);
+  jsonpRequest(url).then(function(result) {
+    if (!result || !result.success) throw new Error(result && result.message || "Unable to load attendance details.");
+    message.textContent = dateKey + " — " + result.count + " student(s)";
+    if (!result.sections || !result.sections.length) {
+      results.innerHTML = '<div class="late-section-card" style="text-align:center;font-weight:900;">NO RECORD FOUND</div>';
+      return;
+    }
+    results.innerHTML = "";
+    result.sections.forEach(function(section) {
+      const card=document.createElement("div");card.className="late-section-card";
+      const h=document.createElement("h3");h.textContent=section.section+" — "+section.students.length;card.appendChild(h);
+      const header=document.createElement("div");header.className="late-record-row header";
+      ["LRN","STUDENT NAME","STATUS"].forEach(function(t){const c=document.createElement("div");c.textContent=t;header.appendChild(c);});
+      card.appendChild(header);
+      section.students.forEach(function(st){
+        const row=document.createElement("div");row.className="late-record-row";
+        [st.lrn,st.name,st.status].forEach(function(v){const c=document.createElement("div");c.textContent=v;row.appendChild(c);});
+        card.appendChild(row);
+      });
+      results.appendChild(card);
+    });
+  }).catch(function(error){message.textContent=error.message||"Unable to load details.";results.innerHTML='<div class="late-section-card">NO RECORD FOUND</div>';});
+}
+const detailsCloseBtn = document.getElementById("attendanceDetailsClose");
+if (detailsCloseBtn) detailsCloseBtn.addEventListener("click", function(){document.getElementById("attendanceDetailsModal").style.display="none";});
+const detailsModal = document.getElementById("attendanceDetailsModal");
+if (detailsModal) detailsModal.addEventListener("click", function(event){if(event.target===detailsModal)detailsModal.style.display="none";});
+document.querySelectorAll("#attendanceMonitor .school-group").forEach(function(group) {
+  const level = group.classList.contains("jhs") ? "JHS" : "SHS";
+  group.querySelectorAll(".summary-card").forEach(function(card) {
+    if (card.classList.contains("total")) return;
+    const label = card.querySelector(".summary-label");
+    if (!label) return;
+    const match = label.textContent.trim().toUpperCase().match(/^(AM|PM)\\s+(PRESENT|ABSENT|LATE)$/);
+    if (!match) return;
+    card.setAttribute("role","button"); card.setAttribute("tabindex","0");
+    card.setAttribute("aria-label","View "+level+" "+match[1]+" "+match[2]+" details");
+    const open = function(){senhsShowAttendanceDetails_(level,match[1],match[2]);};
+    card.addEventListener("click",open);
+    card.addEventListener("keydown",function(event){if(event.key==="Enter"||event.key===" "){event.preventDefault();open();}});
+  });
+});
 
 // OPEN MAM PAGE
 const senhsOpenMAMButton = document.getElementById("openMAMPageBtn");
