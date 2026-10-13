@@ -4826,7 +4826,12 @@ QR DETECTED
 async function onQrDetected(
 decodedText
 ) {
+// LOCK IMMEDIATELY: the primary scanner and fallback decoder can report
+// the same QR nearly simultaneously. Set the lock before any UI/audio work
+// or await, so only the first callback can process this scan.
 if (processing) return;
+processing = true;
+window.senhsQrProcessingLock = true;
 
 // Show proof of decoding immediately. This is intentionally before the
 // session check, so a missing/expired login cannot look like a dead scanner.
@@ -4847,8 +4852,11 @@ readyBar.style.color = "#b71c1c";
 return;
 }
 
-processing = true;
 window.qrProcessingStart = performance.now();
+
+// Stop the secondary frame decoder while the QR is being processed.
+// Any decoder callback already in flight will be rejected by the lock above.
+senhsStopQrFallback_();
 
 try {
 if (html5QrCode && scannerRunning) {
@@ -5208,8 +5216,8 @@ RESUME SCANNER
 ===================================================== */
 async function resumeScanner() {
 hideOverlay();
-processing =
-false;
+processing = false;
+window.senhsQrProcessingLock = false;
 readyBar.textContent =
 "● READY TO SCAN";
 readyBar.style.color =
@@ -5221,6 +5229,9 @@ scannerRunning
 ) {
 try {
 await html5QrCode.resume();
+// Restart the secondary decoder after processing so the scanner keeps
+// working on devices that rely on the fallback QR decoder.
+senhsStartQrFallback_();
 console.log(
 "Scanner resumed successfully."
 );
