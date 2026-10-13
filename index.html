@@ -1821,6 +1821,51 @@ max-height: 45dvh;
 }
 }
 
+
+/* =========================================================
+   CONSISTENT CAMERA WINDOW + FRONT CAMERA MIRROR
+   Keeps the school name, time, and READY TO SCAN bar visible
+   across different tablet screen sizes.
+========================================================= */
+#scannerPage .scanner-container {
+  min-height: 0 !important;
+}
+#scannerPage .camera-area {
+  position: relative !important;
+  display: block !important;
+  width: 100% !important;
+  height: clamp(280px, 52vh, 500px) !important;
+  min-height: 280px !important;
+  max-height: 500px !important;
+  overflow: hidden !important;
+  background: #000 !important;
+}
+#scannerPage #reader {
+  position: relative !important;
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 0 !important;
+  max-height: 100% !important;
+  overflow: hidden !important;
+}
+#scannerPage #reader > div {
+  max-width: 100% !important;
+}
+#scannerPage #reader video {
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+  max-height: 100% !important;
+  object-fit: cover !important;
+}
+@media (max-width: 600px) {
+  #scannerPage .camera-area {
+    height: clamp(260px, 48vh, 420px) !important;
+    min-height: 260px !important;
+    max-height: 420px !important;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -4355,6 +4400,29 @@ return null;
 }
 }
 
+/* Mirror only the FRONT-camera preview, like a normal selfie preview.
+   This is CSS-only: it does not mirror the actual frames used by QR decoding. */
+function senhsApplyPreviewMirror_() {
+  try {
+    const video = document.querySelector("#reader video");
+    if (!video) return;
+    const track = senhsGetCameraTrack_();
+    const settings = track && track.getSettings ? track.getSettings() : {};
+    const facing = String(settings.facingMode || "").toLowerCase();
+    const activeCamera = cameras && cameras[currentCameraIndex]
+      ? String(cameras[currentCameraIndex].label || "")
+      : "";
+    const frontLabel = /front|user|face|selfie|facetime|frontal/i.test(activeCamera);
+    const rearLabel = /back|rear|environment|world|traseira|trasera/i.test(activeCamera);
+    const isFront = facing === "user" || frontLabel ||
+      (!rearLabel && preferredFacingMode === "user");
+    video.style.transform = isFront ? "scaleX(-1)" : "none";
+    video.style.transformOrigin = "center center";
+  } catch (mirrorError) {
+    console.warn("Could not set camera preview mirror:", mirrorError);
+  }
+}
+
 async function senhsApplyLowLightBoost_() {
 // After stream starts, push continuous AE/AF and detect torch support.
 const track = senhsGetCameraTrack_();
@@ -4656,6 +4724,7 @@ function () { /* Normal frame-by-frame decode misses are expected. */ }
 );
 preferredFacingMode = facingModes[i];
 scannerRunning = true;
+senhsApplyPreviewMirror_();
 senhsStartQrFallback_();
   
   await senhsApplyLowLightBoost_();
@@ -4736,6 +4805,7 @@ function () {
 // decoding on some older laptops/tablets and is not needed for QR scanning.
 
 scannerRunning = true;
+senhsApplyPreviewMirror_();
 senhsStartQrFallback_();
 
 try {
@@ -5358,6 +5428,7 @@ preferredFacingMode = "environment";
 }
 
 scannerRunning = true;
+senhsApplyPreviewMirror_();
 senhsStartQrFallback_();
 hideOverlay();
 readyBar.textContent = "● READY TO SCAN — " + label;
@@ -5391,6 +5462,7 @@ function () { /* normal between frames */ }
 );
 }
 scannerRunning = true;
+senhsApplyPreviewMirror_();
 senhsStartQrFallback_();
 hideOverlay();
 readyBar.textContent = "CAMERA SWITCH FAILED — RETURNED TO PREVIOUS CAMERA";
