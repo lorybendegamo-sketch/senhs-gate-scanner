@@ -389,7 +389,7 @@ content: "";
 position: absolute;
 z-index: 10;
 pointer-events: none;
-width: min(72vw, 320px);
+width: min(90vw, 500px);
 aspect-ratio: 1 / 1;
 left: 50%;
 top: 50%;
@@ -400,7 +400,7 @@ box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.10);
 }
 @media (max-width: 600px) {
 #scannerPage .camera-area::after {
-width: min(72vw, 280px);
+width: min(90vw, 350px);
 }
 }
 #reader video {
@@ -4321,14 +4321,17 @@ return rank(a) - rank(b);
 }
 
 function senhsBuildScanConfig_() {
-// IMPORTANT: Do not crop the scan area with qrbox.
-// Laptop/tablet previews can show a QR code outside a centered qrbox,
-// which leaves the UI at READY TO SCAN even though the camera is working.
-// Omitting qrbox makes html5-qrcode analyze the full video frame.
-return {
-fps: 10,
-disableFlip: false
-};
+  return {
+    fps: 30,
+
+    disableFlip: false,
+
+    experimentalFeatures: {
+      useBarCodeDetectorIfSupported: true
+    },
+
+    rememberLastUsedCamera: true
+  };
 }
 
 function senhsGetCameraTrack_() {
@@ -4361,6 +4364,18 @@ const constraints = {};
 
 if (caps.focusMode && caps.focusMode.indexOf("continuous") !== -1) {
 constraints.focusMode = "continuous";
+  constraints.focusDistance = 0;
+  if (caps.brightness) {
+  constraints.brightness = caps.brightness.max;
+}
+
+if (caps.contrast) {
+  constraints.contrast = caps.contrast.max;
+}
+
+if (caps.sharpness) {
+  constraints.sharpness = caps.sharpness.max;
+}
 }
 if (caps.exposureMode && caps.exposureMode.indexOf("continuous") !== -1) {
 constraints.exposureMode = "continuous";
@@ -4480,7 +4495,13 @@ html5QrCode = senhsCreateScannerInstance_();
 scannerRunning = false;
 
 try {
-cameras = senhsSortCameras_(await Html5Qrcode.getCameras());
+await navigator.mediaDevices.getUserMedia({
+  video: true
+});
+
+cameras = senhsSortCameras_(
+  await Html5Qrcode.getCameras()
+);
 } catch (enumerationError) {
 console.warn("Camera enumeration unavailable; trying facingMode:", enumerationError);
 cameras = [];
@@ -4511,7 +4532,10 @@ function () { /* Normal frame-by-frame decode misses are expected. */ }
 );
 preferredFacingMode = facingModes[i];
 scannerRunning = true;
-processing = false;
+  
+  await senhsApplyLowLightBoost_();
+  
+  processing = false;
 started = true;
 } catch (facingError) {
 lastCameraError = facingError;
@@ -4589,9 +4613,10 @@ typeof html5QrCode.applyVideoConstraints === "function"
 ) {
 try {
 await html5QrCode.applyVideoConstraints({
-width: { ideal: 1920 },
-height: { ideal: 1080 }
+  width: { ideal: 2560 },
+  height: { ideal: 1440 }
 });
+``
 } catch (resolutionError) {
 console.log(
 "Using device-supported camera resolution."
@@ -4600,6 +4625,13 @@ console.log(
 }
 
 scannerRunning = true;
+
+try {
+  await senhsApplyLowLightBoost_();
+} catch (error) {
+  console.warn(error);
+}
+
 processing = false;
 
 hideOverlay();
