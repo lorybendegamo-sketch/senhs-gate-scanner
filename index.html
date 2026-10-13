@@ -4322,14 +4322,18 @@ return rank(a) - rank(b);
 
 function senhsBuildScanConfig_() {
   return {
-    fps: 30,
-
+    // 20 FPS is a good balance for older tablets/laptops and fast QR detection.
+    fps: 20,
+    qrbox: function (viewfinderWidth, viewfinderHeight) {
+      var side = Math.floor(Math.min(viewfinderWidth, viewfinderHeight) * 0.82);
+      side = Math.max(100, Math.min(side, 520));
+      return { width: side, height: side };
+    },
+    aspectRatio: 1.0,
     disableFlip: false,
-
     experimentalFeatures: {
       useBarCodeDetectorIfSupported: true
     },
-
     rememberLastUsedCamera: true
   };
 }
@@ -4495,16 +4499,25 @@ html5QrCode = senhsCreateScannerInstance_();
 scannerRunning = false;
 
 try {
-await navigator.mediaDevices.getUserMedia({
-  video: true
-});
+  // Request permission only long enough to unlock camera labels.
+  // IMPORTANT: stop this temporary stream before html5-qrcode opens its stream.
+  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+    throw new Error("This browser does not support camera access.");
+  }
+  const permissionStream = await navigator.mediaDevices.getUserMedia({
+    video: { facingMode: { ideal: "environment" } },
+    audio: false
+  });
+  permissionStream.getTracks().forEach(function (track) {
+    try { track.stop(); } catch (stopError) {}
+  });
 
-cameras = senhsSortCameras_(
-  await Html5Qrcode.getCameras()
-);
+  // Let the browser release the temporary camera before opening the scanner.
+  await new Promise(function (resolve) { setTimeout(resolve, 250); });
+  cameras = senhsSortCameras_(await Html5Qrcode.getCameras());
 } catch (enumerationError) {
-console.warn("Camera enumeration unavailable; trying facingMode:", enumerationError);
-cameras = [];
+  console.warn("Camera enumeration unavailable; trying facingMode:", enumerationError);
+  cameras = [];
 }
 
 preferredFacingMode = "environment";
@@ -4613,10 +4626,9 @@ typeof html5QrCode.applyVideoConstraints === "function"
 ) {
 try {
 await html5QrCode.applyVideoConstraints({
-  width: { ideal: 2560 },
-  height: { ideal: 1440 }
+  width: { ideal: 1920 },
+  height: { ideal: 1080 }
 });
-``
 } catch (resolutionError) {
 console.log(
 "Using device-supported camera resolution."
