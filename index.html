@@ -4479,12 +4479,16 @@ async function senhsSafeStopScanner_() {
   await new Promise(function (r) { setTimeout(r, 180); });
 }
 
+
 function senhsCreateScannerInstance_() {
   return new Html5Qrcode("reader", {
-    formatsToSupport: [Html5QrcodeSupportedFormats.QR_CODE],
+    formatsToSupport: [
+      Html5QrcodeSupportedFormats.QR_CODE
+    ],
     verbose: false
   });
 }
+
 
 async function startCamera() {
   try {
@@ -4540,87 +4544,82 @@ async function startCamera() {
   }
 }
 
-/* =====================================================
-   START SELECTED CAMERA — facingMode first, device ID fallback
-   ===================================================== */
-async function startSelectedCamera() {
-  const onDecodeFailure = function () { /* normal between frames */ };
-  let lastError = null;
 
-  // Ask the browser for the requested lens first; camera list order differs by device.
+/* =====================================================
+   START SELECTED CAMERA — FAST QR SCANNING
+   ===================================================== */
+
+async function startSelectedCamera() {
+  if (!html5QrCode || !cameras.length) {
+    return;
+  }
+
+  const camera = cameras[currentCameraIndex];
+
+  if (!camera || scannerRunning) {
+    return;
+  }
+
   try {
-    await senhsSafeStopScanner_();
-    html5QrCode = senhsCreateScannerInstance_();
     await html5QrCode.start(
-      { facingMode: preferredFacingMode },
-      senhsBuildScanConfig_(),
+      camera.id,
+      {
+        fps: 20,
+        qrbox: function (viewfinderWidth, viewfinderHeight) {
+          const size = Math.floor(
+            Math.min(viewfinderWidth, viewfinderHeight) * 0.90
+          );
+
+          return {
+            width: size,
+            height: size
+          };
+        },
+        aspectRatio: 1.0
+      },
       onQrDetected,
-      onDecodeFailure
+      function () {
+        // Normal scanning errors; keep scanning.
+      }
     );
+
+    // Request higher resolution when supported.
+    if (
+      typeof html5QrCode.applyVideoConstraints === "function"
+    ) {
+      try {
+        await html5QrCode.applyVideoConstraints({
+          width: { ideal: 1920 },
+          height: { ideal: 1080 }
+        });
+      } catch (resolutionError) {
+        console.log(
+          "Using device-supported camera resolution."
+        );
+      }
+    }
+
     scannerRunning = true;
     processing = false;
+
     hideOverlay();
-    readyBar.textContent = "● READY TO SCAN — " +
-      (preferredFacingMode === "user" ? "FRONT CAMERA" : "BACK CAMERA / AUTO");
+
+    readyBar.textContent = "● READY TO SCAN";
     readyBar.style.color = "#16803c";
-    try { await senhsApplyLowLightBoost_(); } catch (boostErr) {
-      console.warn("Lighting boost:", boostErr);
-    }
-    return;
-  } catch (facingError) {
-    lastError = facingError;
-    console.warn("Facing-mode start failed; trying camera IDs:", facingError);
+
+  } catch (error) {
+    scannerRunning = false;
+    console.error("Scanner start error:", error);
+    throw error;
   }
-
-  const ordered = (cameras || []).slice().sort(function (a, b) {
-    function score(camera) {
-      const label = String(camera && camera.label || "").toLowerCase();
-      if (preferredFacingMode === "user") {
-        return /front|user|face|selfie|facetime|frontal/i.test(label) ? 0 : 1;
-      }
-      return /back|rear|environment|world|traseira|trasera/i.test(label) ? 0 : 1;
-    }
-    return score(a) - score(b);
-  });
-
-  for (let i = 0; i < ordered.length; i++) {
-    try {
-      await senhsSafeStopScanner_();
-      html5QrCode = senhsCreateScannerInstance_();
-      await html5QrCode.start(
-        ordered[i].id,
-        senhsBuildScanConfig_(),
-        onQrDetected,
-        onDecodeFailure
-      );
-      const foundIndex = cameras.findIndex(function (camera) {
-        return camera.id === ordered[i].id;
-      });
-      if (foundIndex >= 0) currentCameraIndex = foundIndex;
-      scannerRunning = true;
-      processing = false;
-      hideOverlay();
-      readyBar.textContent = "● READY TO SCAN — " +
-        (String(ordered[i].label || "").trim() || ("CAMERA " + (currentCameraIndex + 1)));
-      readyBar.style.color = "#16803c";
-      try { await senhsApplyLowLightBoost_(); } catch (boostErr) {
-        console.warn("Lighting boost:", boostErr);
-      }
-      return;
-    } catch (idError) {
-      lastError = idError;
-      console.warn("Unable to start camera ID:", ordered[i].label || ordered[i].id, idError);
-    }
-  }
-
-  scannerRunning = false;
-  throw lastError || new Error("No usable camera could be started.");
 }
+
 
 /* =====================================================
    QR SCAN BEEP
    ===================================================== */
 let audioContext = null;
+
 function unlockAudio() {
   try {
     if (!audioContext) {
