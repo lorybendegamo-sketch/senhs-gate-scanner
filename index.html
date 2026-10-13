@@ -6,7 +6,7 @@
 name="viewport"
 content="width=device-width, initial-scale=1.0"
 >
-<title>SENHS Gate Scanner</title> <link rel="icon" href="data:,">
+<title>SENHS Gate Scanner</title>
 <script
 src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"
 type="text/javascript"
@@ -4321,18 +4321,12 @@ return rank(a) - rank(b);
 }
 
 function senhsBuildScanConfig_() {
-// Wider scan window and faster decoding for laptop/tablet webcams.
-// Keep the QR box within the actual video frame on every screen size.
+// IMPORTANT: Do not crop the scan area with qrbox.
+// Laptop/tablet previews can show a QR code outside a centered qrbox,
+// which leaves the UI at READY TO SCAN even though the camera is working.
+// Omitting qrbox makes html5-qrcode analyze the full video frame.
 return {
-fps: 18,
-qrbox: function (viewfinderWidth, viewfinderHeight) {
-const minEdge = Math.min(viewfinderWidth, viewfinderHeight);
-const size = Math.max(160, Math.min(440, Math.floor(minEdge * 0.88)));
-return {
-width: Math.min(size, viewfinderWidth),
-height: Math.min(size, viewfinderHeight)
-};
-},
+fps: 10,
 disableFlip: false
 };
 }
@@ -4582,23 +4576,10 @@ return;
 try {
 await html5QrCode.start(
 camera.id,
-{
-fps: 20,
-qrbox: function (viewfinderWidth, viewfinderHeight) {
-const size = Math.floor(
-Math.min(viewfinderWidth, viewfinderHeight) * 0.90
-);
-
-return {
-width: size,
-height: size
-};
-},
-aspectRatio: 1.0
-},
+senhsBuildScanConfig_(),
 onQrDetected,
 function () {
-// Normal scanning errors; keep scanning.
+// Normal frame-by-frame decode misses are expected; keep scanning.
 }
 );
 
