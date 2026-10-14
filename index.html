@@ -1908,6 +1908,15 @@ max-height: 45dvh;
  .late-record-row.header { display:none; }
 }
 
+
+/* Teacher page compact top layout */
+#teacherPage .device-content { padding: 8px 12px 20px !important; max-width: 1200px; margin: 0 auto; }
+#teacherPage .school-name { margin: 0 0 4px !important; }
+#teacherPage h2 { margin: 4px 0 6px !important; }
+#teacherPage p { margin: 4px 0 8px !important; }
+#teacherAttendanceMessage { padding: 4px 8px !important; margin: 0 0 6px !important; }
+#teacherSectionAttendance { margin-top: 0 !important; }
+@media (max-width: 600px) { #teacherPage .device-content { padding: 5px 4px 14px !important; } #teacherPage h2 { font-size: 20px; } }
 </style>
 </head>
 <body>
@@ -3199,25 +3208,32 @@ continueBtn.textContent = "CONTINUE";
 /* =====================================================
 TEACHER PAGE — read-only section table only
 ===================================================== */
+let senhsTeacherRefreshTimer_ = null;
+let senhsTeacherRefreshBusy_ = false;
 async function openTeacherPage() {
-  // Hide every scanner, adviser/admin, and report page. Teachers only get Page 6.
   ["userPage", "devicePage", "scannerPage", "attendancePage", "mamPage", "smsPage", "lateRecordsPage"].forEach(function(id) {
     const el = document.getElementById(id);
     if (el) { el.style.setProperty("display", "none", "important"); el.classList.remove("is-visible"); }
   });
   const page = document.getElementById("teacherPage");
   if (page) page.style.setProperty("display", "block", "important");
+  await refreshTeacherAttendance_();
+  if (senhsTeacherRefreshTimer_) clearInterval(senhsTeacherRefreshTimer_);
+  senhsTeacherRefreshTimer_ = setInterval(refreshTeacherAttendance_, 5000);
+}
+async function refreshTeacherAttendance_() {
+  if (senhsTeacherRefreshBusy_ || attendanceRole !== "TEACHER") return;
+  senhsTeacherRefreshBusy_ = true;
   const message = document.getElementById("teacherAttendanceMessage");
   const target = document.getElementById("teacherSectionAttendance");
-  if (message) message.textContent = "Loading section attendance…";
-  if (target) target.innerHTML = "";
   try {
     await loadAttendanceSummary();
-    if (target) target.innerHTML = sectionAttendance.innerHTML;
-    if (message) message.textContent = "Updated " + new Date().toLocaleTimeString([], {hour:"2-digit", minute:"2-digit", second:"2-digit"}) + " • Read-only";
-    senhsBindTeacherDetailCells_();
+    if (target && sectionAttendance) target.innerHTML = sectionAttendance.innerHTML;
+    if (message) message.textContent = "Updated " + new Date().toLocaleTimeString([], {hour:"2-digit", minute:"2-digit", second:"2-digit"}) + " • Auto-update every 5 seconds • Read-only";
   } catch (error) {
     if (message) message.textContent = error.message || "Unable to load section attendance.";
+  } finally {
+    senhsTeacherRefreshBusy_ = false;
   }
 }
 function senhsBindTeacherDetailCells_() {
@@ -3240,6 +3256,7 @@ function senhsBindTeacherDetailCells_() {
 }
 const teacherLogoutBtn = document.getElementById("teacherLogoutBtn");
 if (teacherLogoutBtn) teacherLogoutBtn.addEventListener("click", function() {
+  if (senhsTeacherRefreshTimer_) { clearInterval(senhsTeacherRefreshTimer_); senhsTeacherRefreshTimer_ = null; }
   attendanceAccessCode = "";
   attendanceRole = "";
   attendanceSection = "";
@@ -3278,7 +3295,7 @@ try {
 await startCamera();
 loadAttendanceSummary();
 if (!attendanceTimer) {
-attendanceTimer = setInterval(loadAttendanceSummary, 15000);
+attendanceTimer = setInterval(loadAttendanceSummary, 5000);
 }
 startDeviceHeartbeat();
 } catch (error) {
@@ -4043,7 +4060,10 @@ values[suffix];
 /* =====================================================
 LOAD ATTENDANCE SUMMARY
 ===================================================== */
+let senhsSummaryLoading_ = false;
 async function loadAttendanceSummary() {
+if (senhsSummaryLoading_) return;
+senhsSummaryLoading_ = true;
 try {
 const requestUrl =
 APPS_SCRIPT_URL +
@@ -4096,6 +4116,8 @@ error
 );
 attendanceUpdated.textContent =
 "Unable to update attendance.";
+} finally {
+senhsSummaryLoading_ = false;
 }
 }
 /* =====================================================
