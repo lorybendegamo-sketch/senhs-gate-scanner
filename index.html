@@ -2446,6 +2446,20 @@ Updating...
   </div>
 </div>
 
+<!-- PAGE 6 — TEACHER READ-ONLY SECTION ATTENDANCE -->
+<div id="teacherPage" style="display:none;width:100%;min-height:100vh;padding:18px;box-sizing:border-box;background:linear-gradient(135deg,#e8f7ff,#f4fff5);">
+  <div class="device-content" style="max-width:1500px;margin:0 auto;background:#fff;border-radius:18px;padding:18px;box-shadow:0 8px 28px rgba(0,0,0,.12);">
+    <div class="school-name">SAN ESTEBAN NATIONAL HIGH SCHOOL</div>
+    <h2 style="text-align:center;color:#124b7c;margin:8px 0 6px;">TEACHER — SECTION ATTENDANCE</h2>
+    <p style="text-align:center;font-weight:700;color:#425466;margin:0 0 14px;">View-only access • Pindutin ang AM/PM ABSENT o LATE number para makita ang mga pangalan.</p>
+    <div id="teacherAttendanceMessage" role="status" style="text-align:center;padding:12px;font-weight:800;">Loading section attendance…</div>
+    <div id="teacherSectionAttendance"></div>
+    <div style="display:flex;justify-content:center;margin-top:18px;">
+      <button id="teacherLogoutBtn" type="button" style="border:0;border-radius:10px;padding:12px 28px;background:#b42318;color:#fff;font-weight:900;font-size:16px;cursor:pointer;">LOG OUT</button>
+    </div>
+  </div>
+</div>
+
 <div id="attendanceDetailsModal" role="dialog" aria-modal="true" aria-labelledby="attendanceDetailsTitle">
   <div class="detail-card">
     <button id="attendanceDetailsClose" type="button">CLOSE</button>
@@ -3079,6 +3093,15 @@ const section = String(
 pmResult.section || ""
 ).trim();
 
+if (role === "TEACHER") {
+attendanceAccessCode = key;
+attendanceRole = "TEACHER";
+attendanceSection = "ALL";
+showDeviceMessage("Teacher authorized. Opening view-only section attendance…", "success");
+setTimeout(function () { openTeacherPage(); }, 250);
+return;
+}
+
 if (role !== "ADMIN" && role !== "ADVISER") {
 throw new Error(
 "Access granted, but the returned role is invalid: " +
@@ -3172,6 +3195,62 @@ continueBtn.disabled = false;
 continueBtn.textContent = "CONTINUE";
 }
 }
+
+/* =====================================================
+TEACHER PAGE — read-only section table only
+===================================================== */
+async function openTeacherPage() {
+  // Hide every scanner, adviser/admin, and report page. Teachers only get Page 6.
+  ["userPage", "devicePage", "scannerPage", "attendancePage", "mamPage", "smsPage", "lateRecordsPage"].forEach(function(id) {
+    const el = document.getElementById(id);
+    if (el) { el.style.setProperty("display", "none", "important"); el.classList.remove("is-visible"); }
+  });
+  const page = document.getElementById("teacherPage");
+  if (page) page.style.setProperty("display", "block", "important");
+  const message = document.getElementById("teacherAttendanceMessage");
+  const target = document.getElementById("teacherSectionAttendance");
+  if (message) message.textContent = "Loading section attendance…";
+  if (target) target.innerHTML = "";
+  try {
+    await loadAttendanceSummary();
+    if (target) target.innerHTML = sectionAttendance.innerHTML;
+    if (message) message.textContent = "Updated " + new Date().toLocaleTimeString([], {hour:"2-digit", minute:"2-digit", second:"2-digit"}) + " • Read-only";
+    senhsBindTeacherDetailCells_();
+  } catch (error) {
+    if (message) message.textContent = error.message || "Unable to load section attendance.";
+  }
+}
+function senhsBindTeacherDetailCells_() {
+  const table = document.getElementById("teacherSectionAttendance");
+  if (!table || table.dataset.detailsBound === "1") return;
+  table.dataset.detailsBound = "1";
+  table.addEventListener("click", function(event) {
+    const cell = event.target.closest(".senhs-detail-cell");
+    if (!cell || !table.contains(cell)) return;
+    event.preventDefault();
+    senhsShowAttendanceDetails_("SECTION", cell.dataset.period, cell.dataset.category, cell.dataset.section);
+  });
+  table.addEventListener("keydown", function(event) {
+    if (event.key !== "Enter" && event.key !== " ") return;
+    const cell = event.target.closest(".senhs-detail-cell");
+    if (!cell || !table.contains(cell)) return;
+    event.preventDefault();
+    senhsShowAttendanceDetails_("SECTION", cell.dataset.period, cell.dataset.category, cell.dataset.section);
+  });
+}
+const teacherLogoutBtn = document.getElementById("teacherLogoutBtn");
+if (teacherLogoutBtn) teacherLogoutBtn.addEventListener("click", function() {
+  attendanceAccessCode = "";
+  attendanceRole = "";
+  attendanceSection = "";
+  const page = document.getElementById("teacherPage");
+  if (page) page.style.setProperty("display", "none", "important");
+  if (userPage) userPage.style.setProperty("display", "block", "important");
+  if (devicePage) devicePage.style.setProperty("display", "block", "important");
+  const codeInput = document.getElementById("deviceCode");
+  if (codeInput) codeInput.value = "";
+  showDeviceMessage("Logged out.", "success");
+});
 
 /* =====================================================
 OPEN SCANNER PAGE
@@ -5941,7 +6020,9 @@ const attendance = document.getElementById("attendancePage");
 const mam = document.getElementById("mamPage");
 const sms = document.getElementById("smsPage");
 const late = document.getElementById("lateRecordsPage");
+const teacher = document.getElementById("teacherPage");
 
+if (teacher) teacher.style.setProperty("display", "none", "important");
 if (attendance) {
 attendance.style.setProperty("display", "none", "important");
 attendance.classList.remove("is-visible");
@@ -6849,8 +6930,8 @@ function senhsShowAttendanceDetails_(level, period, category, sectionName) {
   message.textContent = "Loading " + dateKey + "…";
   results.innerHTML = "";
   modal.style.display = "block";
-  const url = APPS_SCRIPT_URL + "?action=getAttendanceDetails&date=" + encodeURIComponent(dateKey) +
-    "&level=" + encodeURIComponent(level) + "&section=" + encodeURIComponent(sectionName || "") + "&period=" + encodeURIComponent(period) + "&category=" + encodeURIComponent(category);
+  const url = APPS_SCRIPT_URL + "?action=getAttendanceDetails&accessCode=" + encodeURIComponent(attendanceAccessCode) +
+    "&date=" + encodeURIComponent(dateKey) + "&level=" + encodeURIComponent(level) + "&section=" + encodeURIComponent(sectionName || "") + "&period=" + encodeURIComponent(period) + "&category=" + encodeURIComponent(category);
   jsonpRequest(url).then(function(result) {
     if (!result || !result.success) throw new Error(result && result.message || "Unable to load attendance details.");
     message.textContent = dateKey + " — " + result.count + " student(s)";
