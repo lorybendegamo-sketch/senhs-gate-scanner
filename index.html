@@ -1996,105 +1996,94 @@ CONTINUE
 PAGE 3 — ADVISER / ADMIN ATTENDANCE
 ===================================================== -->
 <div id="attendancePage">
-<div class="device-watermark">SENHS</div>
-<div class="device-content">
-<div class="school-name">
-SAN ESTEBAN NATIONAL HIGH SCHOOL
-</div>
-<div class="gate-title">
-ATTENDANCE
-</div>
-<div
-class="subtitle"
-id="attendanceRoleTitle"
->
-Adviser / Admin Attendance
-</div>
-<!-- PHILIPPINE STANDARD TIME -->
-<div class="pst-clock">
-<div class="pst-label">
-Philippine Standard Time
-</div>
-<div id="attendancePstTime">
-12:25:18 AM
-</div>
-<div id="attendancePstDate">
-Tuesday, October 6, 2026
-</div>
-</div>
+  <div class="device-watermark">SENHS</div>
+  <div class="device-content">
+    <div class="school-name">
+      SAN ESTEBAN NATIONAL HIGH SCHOOL
+    </div>
+    <div class="gate-title">
+      ATTENDANCE
+    </div>
+    <div class="subtitle" id="attendanceRoleTitle">
+      Adviser / Admin Attendance
+    </div>
 
-<!-- ADMIN SECTION SELECTOR -->
-<div
-id="attendanceSectionWrapper"
-style="display:none;"
->
-<select id="attendanceSectionSelect">
-<option value="">
-Select Section
-</option>
-<option value="7-Acacia">7-Acacia</option>
-<option value="7-Banaba">7-Banaba</option>
-<option value="7-Mahogany">7-Mahogany</option>
-<option value="8-Camia">8-Camia</option>
-<option value="8-Sampaguita">8-Sampaguita</option>
-<option value="8-Rose">8-Rose</option>
-<option value="9-Bonifacio">9-Bonifacio</option>
-<option value="9-Quezon">9-Quezon</option>
-<option value="9-Rizal">9-Rizal</option>
-<option value="10-Diamond">10-Diamond</option>
-<option value="10-Jade">10-Jade</option>
-<option value="10-Ruby">10-Ruby</option>
-<option value="11-Durkheim">11-Durkheim</option>
-<option value="11-Einstein">11-Einstein</option>
-<option value="11-Ramsay">11-Ramsay</option>
-<option value="12-Comte">12-Comte</option>
-<option value="12-Keller">12-Keller</option>
-<option value="12-Newton">12-Newton</option>
-</select>
-</div>
-<div id="attendanceCurrentSection">
-Section: —
-</div>
-<div id="attendanceTableWrapper">
-<table id="attendanceTable">
-<thead>
-<tr>
-<th>STUDENT NAME</th>
-<th>AM</th>
-<th>PM</th>
-</tr>
-</thead>
-<tbody id="attendanceTableBody">
-</tbody>
-</table>
-</div>
-<button
-id="saveAttendanceBtn"
-type="button"
->
-SAVE
-</button>
-<button
-id="proceedAttendanceBtn"
-type="button"
->
-PROCEED
-</button>
-<!-- REPORT NAVIGATION BUTTONS -->
-<div id="attendanceReportNavigation">
-<button id="openMAMPageBtn" type="button">MAM</button>
-<button id="openSMSPageBtn" type="button">SYMS</button>
-<button id="openLateRecordsBtn" type="button">LATE RECORD/S</button>
-<button id="downloadDailyAttBtn" type="button">DOWNLOAD EXCEL</button>
-<button id="autoSmsToggleBtn" type="button" class="sms-on">AUTO SMS: ON</button>
-</div>
-<div id="autoSmsStatusText"></div>
-<!-- END REPORT NAVIGATION BUTTONS -->
+    <!-- PHILIPPINE STANDARD TIME -->
+    <div class="pst-clock">
+      <div class="pst-label">Philippine Standard Time</div>
+      <div id="attendancePstTime">12:25:18 AM</div>
+      <div id="attendancePstDate">Tuesday, October 6, 2026</div>
+    </div>
 
-<div id="attendanceMessage"></div>
+    <!-- ADMIN SECTION SELECTOR -->
+    <div id="attendanceSectionWrapper" style="display:none;">
+      <select id="attendanceSectionSelect">
+        <option value="">Select Section</option>
+        <option value="7-Acacia">7-Acacia</option>
+        <option value="7-Banaba">7-Banaba</option>
+        <option value="7-Mahogany">7-Mahogany</option>
+        <option value="8-Camia">8-Camia</option>
+        <option value="8-Sampaguita">8-Sampaguita</option>
+        <option value="8-Rose">8-Rose</option>
+        <option value="9-Bonifacio">9-Bonifacio</option>
+        <option value="9-Quezon">9-Quezon</option>
+        <option value="9-Rizal">9-Rizal</option>
+        <option value="10-Diamond">10-Diamond</option>
+        <option value="10-Jade">10-Jade</option>
+        <option value="10-Ruby">10-Ruby</option>
+        <option value="11-Durkheim">11-Durkheim</option>
+        <option value="11-Einstein">11-Einstein</option>
+        <option value="11-Ramsay">11-Ramsay</option>
+        <option value="12-Comte">12-Comte</option>
+        <option value="12-Keller">12-Keller</option>
+        <option value="12-Newton">12-Newton</option>
+      </select>
+    </div>
 
-<button id="attendanceLogoutBtn" type="button">LOG OUT</button>
-</div>
+    <div id="attendanceCurrentSection">Section: —</div>
+
+    <!-- Scan QR Button -->
+    <button id="scanQrNowBtn" type="button">SCAN QR NOW</button>
+
+    <!-- Section Attendance Quick Buttons -->
+    <div id="sectionButtons">
+      <button onclick="showSectionDetails('7-Acacia','AM A')">AM Absent</button>
+      <button onclick="showSectionDetails('7-Acacia','AM L')">AM Late</button>
+      <button onclick="showSectionDetails('7-Acacia','PM A')">PM Absent</button>
+      <button onclick="showSectionDetails('7-Acacia','PM L')">PM Late</button>
+    </div>
+
+    <div id="attendanceTableWrapper">
+      <table id="attendanceTable">
+        <thead>
+          <tr>
+            <th>STUDENT NAME</th>
+            <th>AM</th>
+            <th>PM</th>
+          </tr>
+        </thead>
+        <tbody id="attendanceTableBody"></tbody>
+      </table>
+    </div>
+
+    <button id="saveAttendanceBtn" type="button">SAVE</button>
+    <button id="proceedAttendanceBtn" type="button">PROCEED</button>
+
+    <!-- REPORT NAVIGATION BUTTONS -->
+    <div id="attendanceReportNavigation">
+      <button id="openMAMPageBtn" type="button">MAM</button>
+      <button id="openSMSPageBtn" type="button">SYMS</button>
+      <button id="openLateRecordsBtn" type="button">LATE RECORD/S</button>
+      <button id="downloadDailyAttBtn" type="button">DOWNLOAD EXCEL</button>
+      <button id="autoSmsToggleBtn" type="button" class="sms-on">AUTO SMS: ON</button>
+    </div>
+    <div id="autoSmsStatusText"></div>
+    <!-- END REPORT NAVIGATION BUTTONS -->
+
+    <div id="attendanceMessage"></div>
+
+    <button id="attendanceLogoutBtn" type="button">LOG OUT</button>
+  </div>
 </div>
 
 
