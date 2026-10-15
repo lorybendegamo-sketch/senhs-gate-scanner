@@ -1,0 +1,26 @@
+.page {
+  display: none;
+  padding: 20px;
+  text-align: center;
+}
+.page.is-visible {
+  display: block;
+}
+button {
+  margin: 10px;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+}
+#attendanceTable {
+  width: 100%;
+  border-collapse: collapse;
+}
+#attendanceTable th, #attendanceTable td {
+  border: 1px solid #ccc;
+  padding: 8px;
+}
+.late-record {
+  background-color: #fff9c4; /* light yellow */
+}
