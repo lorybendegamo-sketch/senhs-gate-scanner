@@ -2042,16 +2042,15 @@ PAGE 3 — ADVISER / ADMIN ATTENDANCE
 
     <div id="attendanceCurrentSection">Section: —</div>
 
-    <!-- Scan QR Button -->
-    <button id="scanQrNowBtn" type="button">SCAN QR NOW</button>
+  <!-- Scan QR Button -->
+<button id="scanQrNowBtn" type="button" class="scan-btn">✨ SCAN QR NOW ✨</button>
 
-    <!-- Section Attendance Quick Buttons -->
-    <div id="sectionButtons">
-      <button onclick="showSectionDetails('7-Acacia','AM A')">AM Absent</button>
-      <button onclick="showSectionDetails('7-Acacia','AM L')">AM Late</button>
-      <button onclick="showSectionDetails('7-Acacia','PM A')">PM Absent</button>
-      <button onclick="showSectionDetails('7-Acacia','PM L')">PM Late</button>
-    </div>
+<!-- Section Attendance Quick Buttons -->
+<div id="sectionButtons">
+  <button onclick="showSectionDetails('AM L')" class="late-btn">AM Late</button>
+  <button onclick="showSectionDetails('PM L')" class="late-btn">PM Late</button>
+</div>
+
 
     <div id="attendanceTableWrapper">
       <table id="attendanceTable">
