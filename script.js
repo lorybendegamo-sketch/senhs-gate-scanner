@@ -36,3 +36,9 @@ function showSectionDetails(section, type) {
 function loadAttendanceSummary() { console.log("Refreshing Attendance Summary..."); }
 function loadMonthlyAttendance() { console.log("Refreshing Monthly Attendance..."); }
 function loadSYMS() { console.log("Refreshing SYMS..."); }
+
+// SCAN QR NOW handler
+document.getElementById("scanQrNowBtn").onclick = function() {
+  document.getElementById("attendancePage").classList.remove("is-visible");
+  document.getElementById("scannerPage").classList.add("is-visible");
+};
