@@ -3302,7 +3302,7 @@ try {
 await startCamera();
 loadAttendanceSummary();
 if (!attendanceTimer) {
-attendanceTimer = setInterval(loadAttendanceSummary, 5000);
+attendanceTimer = setInterval(loadAttendanceSummary, 3000);
 }
 startDeviceHeartbeat();
 } catch (error) {
