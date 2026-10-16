@@ -185,3 +185,353 @@ document.getElementById("smsLogoutBtn").onclick = function() {
   document.getElementById("smsPage").style.display = "none";
   document.getElementById("loginPage").classList.add("is-visible");
 };
+
+
+
+/* =====================================================
+RENDER ADVISER / ADMIN ATTENDANCE
+===================================================== */
+function renderAdviserAttendanceTable(
+students
+) {
+attendanceTableBody.innerHTML = "";
+if (
+!students ||
+students.length === 0
+) {
+attendanceTableBody.innerHTML =
+'<tr>' +
+'<td colspan="3" style="text-align:center;">' +
+'No students found.' +
+'</td>' +
+'</tr>';
+return;
+}
+students.forEach(
+function(student) {
+const row =
+document.createElement("tr");
+const nameCell =
+document.createElement("td");
+nameCell.textContent = student.name;
+if (/T\/O since|DROPPED since/i.test(String(student.name || ""))) {
+row.classList.add("attendance-row-inactive");
+}
+const amCell =
+document.createElement("td");
+const pmCell =
+document.createElement("td");
+/* =====================================
+AM BUTTON
+===================================== */
+const amButton =
+document.createElement("button");
+amButton.type =
+"button";
+amButton.textContent =
+student.AM === "PRESENT"
+? "PRESENT"
+: "ABSENT";
+amButton.className =
+student.AM === "PRESENT"
+? "attendance-btn present"
+: "attendance-btn absent";
+amButton.addEventListener(
+"click",
+function() {
+student.AM =
+student.AM === "PRESENT"
+? "ABSENT"
+: "PRESENT";
+amButton.textContent =
+student.AM;
+amButton.className =
+student.AM === "PRESENT"
+? "attendance-btn present"
+: "attendance-btn absent";
+/*
+SAVE THIS AS UNSAVED MANUAL EDIT
+*/
+const lrn =
+String(
+student.lrn || ""
+).trim();
+if (lrn) {
+if (
+!pendingAttendanceEdits[lrn]
+) {
+pendingAttendanceEdits[lrn] =
+{};
+}
+pendingAttendanceEdits[lrn].AM =
+student.AM;
+}
+attendanceSaved =
+false;
+updateProceedButtonState();
+}
+);
+/* =====================================
+PM BUTTON
+===================================== */
+const pmButton =
+document.createElement("button");
+pmButton.type =
+"button";
+pmButton.textContent =
+student.PM === "PRESENT"
+? "PRESENT"
+: "ABSENT";
+pmButton.className =
+student.PM === "PRESENT"
+? "attendance-btn present"
+: "attendance-btn absent";
+pmButton.addEventListener(
+"click",
+function() {
+student.PM =
+student.PM === "PRESENT"
+? "ABSENT"
+: "PRESENT";
+pmButton.textContent =
+student.PM;
+pmButton.className =
+student.PM === "PRESENT"
+? "attendance-btn present"
+: "attendance-btn absent";
+/*
+SAVE THIS AS UNSAVED MANUAL EDIT
+*/
+const lrn =
+String(
+student.lrn || ""
+).trim();
+if (lrn) {
+if (
+!pendingAttendanceEdits[lrn]
+) {
+pendingAttendanceEdits[lrn] =
+{};
+}
+pendingAttendanceEdits[lrn].PM =
+student.PM;
+}
+attendanceSaved =
+false;
+updateProceedButtonState();
+}
+);
+amCell.appendChild(
+amButton
+);
+pmCell.appendChild(
+pmButton
+);
+row.appendChild(
+nameCell
+);
+row.appendChild(
+amCell
+);
+row.appendChild(
+pmCell
+);
+attendanceTableBody.appendChild(
+row
+);
+}
+);
+}
+
+/* =====================================================
+ADMIN SECTION CHANGE
+===================================================== */
+attendanceSectionSelect.addEventListener(
+"change",
+async function () {
+const selectedSection =
+String(
+attendanceSectionSelect.value || ""
+).trim();
+attendanceSection =
+selectedSection;
+if (!selectedSection) {
+attendanceCurrentSection.textContent =
+"Section: —";
+attendanceTableBody.innerHTML =
+"";
+attendanceMessage.textContent =
+"Select a section.";
+proceedAttendanceBtn.disabled =
+true;
+return;
+}
+proceedAttendanceBtn.disabled =
+false;
+attendanceCurrentSection.textContent =
+"Section: " +
+selectedSection;
+attendanceMessage.textContent =
+"Loading attendance...";
+await loadAdviserAttendance();
+}
+);
+
+/* =====================================================
+SAVE ATTENDANCE
+===================================================== */
+saveAttendanceBtn.addEventListener(
+"click",
+async function () {
+if (
+!attendanceAccessCode ||
+!attendanceSection
+) {
+attendanceMessage.textContent =
+"Please select a section.";
+return;
+}
+if (
+!attendanceStudents ||
+attendanceStudents.length === 0
+) {
+attendanceMessage.textContent =
+"No attendance data to save.";
+return;
+}
+attendanceMessage.textContent =
+"Saving attendance...";
+saveAttendanceBtn.disabled =
+true;
+try {
+const attendanceData =
+JSON.stringify(
+attendanceStudents
+);
+const requestUrl =
+APPS_SCRIPT_URL +
+"?action=saveAttendance" +
+"&accessCode=" +
+encodeURIComponent(
+attendanceAccessCode
+) +
+"&requestedSection=" +
+encodeURIComponent(
+attendanceSection
+) +
+"&attendanceData=" +
+encodeURIComponent(
+attendanceData
+);
+const result =
+await jsonpRequest(
+requestUrl
+);
+if (
+!result ||
+!result.success
+) {
+throw new Error(
+result &&
+result.message
+? result.message
+: "Unable to save attendance."
+);
+}
+attendanceMessage.textContent =
+"Attendance saved successfully.";
+attendanceSaved = true;
+/*
+Wala nang unsaved manual changes
+dahil successful na ang SAVE.
+*/
+pendingAttendanceEdits = {};
+proceedAttendanceBtn.disabled = false;
+} catch (error) {
+console.error(
+"Save attendance error:",
+error
+);
+attendanceMessage.textContent =
+error.message ||
+"Unable to save attendance.";
+}
+saveAttendanceBtn.disabled =
+false;
+}
+);
+
+/* =====================================================
+PROCEED ATTENDANCE
+===================================================== */
+proceedAttendanceBtn.addEventListener(
+"click",
+async function () {
+if (!attendanceSaved) {
+attendanceMessage.textContent =
+"Please SAVE the attendance first.";
+return;
+}
+
+if (
+!attendanceAccessCode ||
+!attendanceSection
+) {
+attendanceMessage.textContent =
+"Please select a section.";
+return;
+}
+attendanceMessage.textContent =
+"Saving attendance...";
+proceedAttendanceBtn.disabled =
+true;
+try {
+const requestUrl =
+APPS_SCRIPT_URL +
+"?action=proceedAttendance" +
+"&accessCode=" +
+encodeURIComponent(
+attendanceAccessCode
+) +
+"&requestedSection=" +
+encodeURIComponent(
+attendanceSection
+) +
+"&proceededBy=" +
+encodeURIComponent(
+userName
+);
+const result =
+await jsonpRequest(
+requestUrl
+);
+if (
+!result ||
+!result.success
+) {
+throw new Error(
+result &&
+result.message
+? result.message
+: "Unable to proceed attendance."
+);
+}
+attendanceMessage.textContent =
+"Attendance proceeded successfully.";
+} catch (error) {
+console.error(
+"Proceed attendance error:",
+error
+);
+attendanceMessage.textContent =
+error.message ||
+"Unable to proceed attendance.";
+proceedAttendanceBtn.disabled =
+false;
+return;
+}
+proceedAttendanceBtn.disabled =
+false;
+}
+);
+
