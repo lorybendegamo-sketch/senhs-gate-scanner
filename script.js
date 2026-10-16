@@ -132,3 +132,26 @@ document.getElementById("userNextBtn").onclick = function() {
   document.getElementById("userPage").style.display = "none";
   document.getElementById("devicePage").style.display = "block";
 };
+
+// ✅ Continue button (Device Page → Attendance Page)
+document.getElementById("continueBtn").onclick = function() {
+  const deviceCode = document.getElementById("deviceCode").value.trim();
+
+  if (!deviceCode) {
+    document.getElementById("deviceMessage").textContent = "Please enter device code.";
+    return;
+  }
+
+  // Optional: validate device code here
+  document.getElementById("deviceMessage").textContent = "";
+
+  // Hide Device Page, show Attendance Page
+  document.getElementById("devicePage").style.display = "none";
+  document.getElementById("attendancePage").classList.add("is-visible");
+};
+
+// ✅ Toggle show/hide device code
+document.getElementById("toggleDeviceCode").onclick = function() {
+  const input = document.getElementById("deviceCode");
+  input.type = input.type === "password" ? "text" : "password";
+};
