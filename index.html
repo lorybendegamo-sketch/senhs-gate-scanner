@@ -2081,10 +2081,12 @@ PAGE 3 — ADVISER / ADMIN ATTENDANCE
   <!-- Scan QR Button -->
 <button id="scanQrNowBtn" type="button" class="scan-btn">✨ SCAN QR NOW ✨</button>
 
-<!-- Section Attendance Quick Buttons -->
-<div id="sectionButtons">
-  <button onclick="showSectionDetails('AM L')" class="late-btn">AM Late</button>
-  <button onclick="showSectionDetails('PM L')" class="late-btn">PM Late</button>
+<!-- Section Attendance Quick Buttons — linked to ATT_<SECTION> -->
+<div id="sectionButtons" style="display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin:10px 0 14px;">
+  <button type="button" class="late-btn" data-period="AM" data-category="ABSENT">AM Absent</button>
+  <button type="button" class="late-btn" data-period="AM" data-category="LATE">AM Late</button>
+  <button type="button" class="late-btn" data-period="PM" data-category="ABSENT">PM Absent</button>
+  <button type="button" class="late-btn" data-period="PM" data-category="LATE">PM Late</button>
 </div>
 
 
@@ -2487,7 +2489,8 @@ Updating...
     <p style="text-align:center;font-weight:700;color:#425466;margin:0 0 14px;">View-only access • Pindutin ang AM/PM ABSENT o LATE number para makita ang mga pangalan.</p>
     <div id="teacherAttendanceMessage" role="status" style="text-align:center;padding:12px;font-weight:800;">Loading section attendance…</div>
     <div id="teacherSectionAttendance"></div>
-    <div style="display:flex;justify-content:center;margin-top:18px;">
+    <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:12px;margin-top:18px;">
+      <button id="teacherScanQrNowBtn" type="button" class="scan-btn" style="margin:0;">✨ SCAN QR NOW ✨</button>
       <button id="teacherLogoutBtn" type="button" style="border:0;border-radius:10px;padding:12px 28px;background:#b42318;color:#fff;font-weight:900;font-size:16px;cursor:pointer;">LOG OUT</button>
     </div>
   </div>
@@ -3279,18 +3282,38 @@ function senhsBindTeacherDetailCells_() {
   });
 }
 const teacherLogoutBtn = document.getElementById("teacherLogoutBtn");
-if (teacherLogoutBtn) teacherLogoutBtn.addEventListener("click", function() {
-  if (senhsTeacherRefreshTimer_) { clearInterval(senhsTeacherRefreshTimer_); senhsTeacherRefreshTimer_ = null; }
+if (teacherLogoutBtn) teacherLogoutBtn.addEventListener("click", async function() {
+  if (typeof senhsTeacherRefreshTimer_ !== "undefined" && senhsTeacherRefreshTimer_) {
+    clearInterval(senhsTeacherRefreshTimer_);
+    senhsTeacherRefreshTimer_ = null;
+  }
+  try {
+    if (typeof releaseDeviceSession === "function") await releaseDeviceSession();
+  } catch (e) { console.warn("teacher logout release:", e); }
+  sessionToken = "";
+  sessionActive = false;
+  releaseSent = true;
+  deviceKey = "";
   attendanceAccessCode = "";
   attendanceRole = "";
   attendanceSection = "";
-  const page = document.getElementById("teacherPage");
-  if (page) page.style.setProperty("display", "none", "important");
-  if (userPage) userPage.style.setProperty("display", "block", "important");
-  if (devicePage) devicePage.style.setProperty("display", "block", "important");
-  const codeInput = document.getElementById("deviceCode");
-  if (codeInput) codeInput.value = "";
-  showDeviceMessage("Logged out.", "success");
+  userName = "";
+  if (typeof userNameInput !== "undefined" && userNameInput) userNameInput.value = "";
+  if (typeof deviceCode !== "undefined" && deviceCode) deviceCode.value = "";
+  if (typeof deviceMessage !== "undefined" && deviceMessage) {
+    deviceMessage.textContent = "";
+    deviceMessage.className = "";
+  }
+  // Only Page 1 (user name) — never leave device/teacher residual visible
+  if (typeof senhsShowPage1Only === "function") {
+    senhsShowPage1Only();
+  } else {
+    const page = document.getElementById("teacherPage");
+    if (page) page.style.setProperty("display", "none", "important");
+    if (devicePage) devicePage.style.setProperty("display", "none", "important");
+    if (userPage) userPage.style.setProperty("display", "block", "important");
+  }
+  try { userNameInput && userNameInput.focus(); } catch (e) {}
 });
 
 /* =====================================================
@@ -3306,10 +3329,10 @@ if (attendancePage) {
 attendancePage.style.setProperty("display", "none", "important");
 attendancePage.classList.remove("is-visible");
 }
-var mamEl = document.getElementById("mamPage");
-var smsEl = document.getElementById("smsPage");
-if (mamEl) mamEl.style.setProperty("display", "none", "important");
-if (smsEl) smsEl.style.setProperty("display", "none", "important");
+["mamPage", "smsPage", "lateRecordsPage", "teacherPage"].forEach(function(id) {
+  var el = document.getElementById(id);
+  if (el) el.style.setProperty("display", "none", "important");
+});
 
 scannerPage.style.setProperty("display", "block", "important");
 scannerPage.classList.add("is-visible");
@@ -5692,7 +5715,8 @@ const ids = [
 "scannerPage",
 "mamPage",
 "smsPage",
-"lateRecordsPage"
+"lateRecordsPage",
+"teacherPage"
 ];
 ids.forEach(function (id) {
 const el = document.getElementById(id);
@@ -6874,12 +6898,17 @@ function senhsPopulateLateMonthOptions_() {
 }
 let senhsLateMonthDates_ = [];
 let senhsLateSelectedDate_ = "";
+let senhsLateCalendarLoading_ = false;
 async function senhsLoadLateCalendar_() {
   const select = document.getElementById("lateRecordsMonth");
   const calendar = document.getElementById("lateCalendar");
   const message = document.getElementById("lateRecordsMessage");
   if (!select || !calendar || !message) return;
+  if (senhsLateCalendarLoading_) return;
+  senhsLateCalendarLoading_ = true;
   calendar.innerHTML = "";
+  const resultsClear = document.getElementById("lateRecordsResults");
+  if (resultsClear) resultsClear.innerHTML = "";
   message.textContent = "Loading calendar…";
   try {
     const url = APPS_SCRIPT_URL + "?action=getLateRecordsMonth&accessCode=" + encodeURIComponent(attendanceAccessCode) +
@@ -6920,6 +6949,8 @@ async function senhsLoadLateCalendar_() {
     if (title) title.textContent = "Select a date";
   } catch (error) {
     message.textContent = error.message || "Unable to load calendar.";
+  } finally {
+    senhsLateCalendarLoading_ = false;
   }
 }
 async function senhsLoadLateDate_(dateKey) {
@@ -7441,6 +7472,62 @@ if (symsBtn) symsBtn.addEventListener("click", downloadSYMSExcel);
 const autoSmsBtn = document.getElementById("autoSmsToggleBtn");
 if (autoSmsBtn) autoSmsBtn.addEventListener("click", toggleAutoSmsStatus);
 })();
+
+
+// SCAN QR NOW — Admin / Adviser / Teacher authorized gate scan
+(function wireScanQrNowButtons() {
+  function goScan() {
+    if (typeof openScannerPage === "function") {
+      openScannerPage();
+    } else {
+      alert("Scanner is not ready. Please refresh the page.");
+    }
+  }
+  ["scanQrNowBtn", "teacherScanQrNowBtn", "attendanceScanQrBtn"].forEach(function(id) {
+    const btn = document.getElementById(id);
+    if (btn) btn.addEventListener("click", goScan);
+  });
+})();
+
+
+/* =====================================================
+SECTION DETAIL BUTTONS (AM/PM ABSENT/LATE) — Daily ATT + Teacher
+Uses same getAttendanceDetails API as scanner section cells.
+===================================================== */
+function showSectionDetails(code) {
+  // legacy: "AM L" / "PM L" / "AM A" / "PM A"
+  const raw = String(code || "").toUpperCase().replace(/\s+/g, " ").trim();
+  let period = "AM";
+  let category = "LATE";
+  if (raw.indexOf("PM") >= 0) period = "PM";
+  if (raw.indexOf("A") >= 0 && raw.indexOf("L") < 0) category = "ABSENT";
+  if (raw.indexOf("ABSENT") >= 0) category = "ABSENT";
+  if (raw.indexOf("LATE") >= 0 || raw.indexOf("L") >= 0) category = "LATE";
+  const section = (typeof senhsGetSelectedSection === "function" ? senhsGetSelectedSection() : "") || attendanceSection || "";
+  if (typeof senhsShowAttendanceDetails_ === "function") {
+    senhsShowAttendanceDetails_("SECTION", period, category, section);
+  }
+}
+
+(function bindSectionDetailButtons() {
+  const wrap = document.getElementById("sectionButtons");
+  if (!wrap || wrap.dataset.bound === "1") return;
+  wrap.dataset.bound = "1";
+  wrap.addEventListener("click", function(event) {
+    const btn = event.target.closest("button[data-period][data-category]");
+    if (!btn) return;
+    const section = (typeof senhsGetSelectedSection === "function" ? senhsGetSelectedSection() : "") || attendanceSection || "";
+    if (!section) {
+      const message = document.getElementById("attendanceMessage");
+      if (message) message.textContent = "Please select a section first.";
+      return;
+    }
+    if (typeof senhsShowAttendanceDetails_ === "function") {
+      senhsShowAttendanceDetails_("SECTION", btn.dataset.period, btn.dataset.category, section);
+    }
+  });
+})();
+
 
 </script>
 </body>
