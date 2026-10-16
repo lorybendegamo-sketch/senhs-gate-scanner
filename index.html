@@ -3243,39 +3243,20 @@ function senhsBindTeacherDetailCells_() {
   });
 }
 const teacherLogoutBtn = document.getElementById("teacherLogoutBtn");
-if (teacherLogoutBtn) {
-  teacherLogoutBtn.addEventListener("click", function () {
-    if (senhsTeacherRefreshTimer_) {
-      clearInterval(senhsTeacherRefreshTimer_);
-      senhsTeacherRefreshTimer_ = null;
-    }
-    attendanceAccessCode = "";
-    attendanceRole = "";
-    attendanceSection = "";
+if (teacherLogoutBtn) teacherLogoutBtn.addEventListener("click", function() {
+  if (senhsTeacherRefreshTimer_) { clearInterval(senhsTeacherRefreshTimer_); senhsTeacherRefreshTimer_ = null; }
+  attendanceAccessCode = "";
+  attendanceRole = "";
+  attendanceSection = "";
+  const page = document.getElementById("teacherPage");
+  if (page) page.style.setProperty("display", "none", "important");
+  if (userPage) userPage.style.setProperty("display", "block", "important");
+  if (devicePage) devicePage.style.setProperty("display", "block", "important");
+  const codeInput = document.getElementById("deviceCode");
+  if (codeInput) codeInput.value = "";
+  showDeviceMessage("Logged out.", "success");
+});
 
-    // Hide ALL pages
-    ["teacherPage", "devicePage", "attendancePage", "scannerPage", "mamPage", "smsPage", "lateRecordsPage"].forEach(function (id) {
-      const el = document.getElementById(id);
-      if (el) {
-        el.style.setProperty("display", "none", "important");
-        el.classList.remove("is-visible");
-      }
-    });
-
-    // Show ONLY Page 1 (userPage)
-    if (userPage) {
-      userPage.style.setProperty("display", "block", "important");
-    }
-
-    const codeInput = document.getElementById("deviceCode");
-    if (codeInput) codeInput.value = "";
-    if (userNameInput) {
-      userNameInput.value = "";
-      userNameInput.focus();
-    }
-    showDeviceMessage("Logged out.", "success");
-  });
-}
 /* =====================================================
 OPEN SCANNER PAGE
 ===================================================== */
@@ -3302,7 +3283,7 @@ try {
 await startCamera();
 loadAttendanceSummary();
 if (!attendanceTimer) {
-attendanceTimer = setInterval(loadAttendanceSummary, 3000);
+attendanceTimer = setInterval(loadAttendanceSummary, 5000);
 }
 startDeviceHeartbeat();
 } catch (error) {
@@ -3353,31 +3334,6 @@ attendanceMessage.textContent =
 proceedAttendanceBtn.disabled =
 true;
 return;
-}
-
-   let dailyAttRefreshTimer = null;
-
-function startDailyAttAutoRefresh() {
-  if (dailyAttRefreshTimer) return;
-  dailyAttRefreshTimer = setInterval(function () {
-    const page = document.getElementById("attendancePage");
-    if (!page) return;
-    const visible = page.classList.contains("is-visible") ||
-      window.getComputedStyle(page).display !== "none";
-    if (!visible) return;
-    if (typeof loadEditableTodayAttendance === "function") {
-      loadEditableTodayAttendance();
-    } else if (typeof refreshEditableAttendance === "function") {
-      refreshEditableAttendance();
-    }
-  }, 3000);
-}
-
-function stopDailyAttAutoRefresh() {
-  if (dailyAttRefreshTimer) {
-    clearInterval(dailyAttRefreshTimer);
-    dailyAttRefreshTimer = null;
-  }
 }
 /* =================================================
 ADVISER
@@ -3558,6 +3514,353 @@ console.log(
 loadAdviserAttendance(true);
 },
 5000
+);
+
+/* =====================================================
+RENDER ADVISER / ADMIN ATTENDANCE
+===================================================== */
+function renderAdviserAttendanceTable(
+students
+) {
+attendanceTableBody.innerHTML = "";
+if (
+!students ||
+students.length === 0
+) {
+attendanceTableBody.innerHTML =
+'<tr>' +
+'<td colspan="3" style="text-align:center;">' +
+'No students found.' +
+'</td>' +
+'</tr>';
+return;
+}
+students.forEach(
+function(student) {
+const row =
+document.createElement("tr");
+const nameCell =
+document.createElement("td");
+nameCell.textContent = student.name;
+if (/T\/O since|DROPPED since/i.test(String(student.name || ""))) {
+row.classList.add("attendance-row-inactive");
+}
+const amCell =
+document.createElement("td");
+const pmCell =
+document.createElement("td");
+/* =====================================
+AM BUTTON
+===================================== */
+const amButton =
+document.createElement("button");
+amButton.type =
+"button";
+amButton.textContent =
+student.AM === "PRESENT"
+? "PRESENT"
+: "ABSENT";
+amButton.className =
+student.AM === "PRESENT"
+? "attendance-btn present"
+: "attendance-btn absent";
+amButton.addEventListener(
+"click",
+function() {
+student.AM =
+student.AM === "PRESENT"
+? "ABSENT"
+: "PRESENT";
+amButton.textContent =
+student.AM;
+amButton.className =
+student.AM === "PRESENT"
+? "attendance-btn present"
+: "attendance-btn absent";
+/*
+SAVE THIS AS UNSAVED MANUAL EDIT
+*/
+const lrn =
+String(
+student.lrn || ""
+).trim();
+if (lrn) {
+if (
+!pendingAttendanceEdits[lrn]
+) {
+pendingAttendanceEdits[lrn] =
+{};
+}
+pendingAttendanceEdits[lrn].AM =
+student.AM;
+}
+attendanceSaved =
+false;
+updateProceedButtonState();
+}
+);
+/* =====================================
+PM BUTTON
+===================================== */
+const pmButton =
+document.createElement("button");
+pmButton.type =
+"button";
+pmButton.textContent =
+student.PM === "PRESENT"
+? "PRESENT"
+: "ABSENT";
+pmButton.className =
+student.PM === "PRESENT"
+? "attendance-btn present"
+: "attendance-btn absent";
+pmButton.addEventListener(
+"click",
+function() {
+student.PM =
+student.PM === "PRESENT"
+? "ABSENT"
+: "PRESENT";
+pmButton.textContent =
+student.PM;
+pmButton.className =
+student.PM === "PRESENT"
+? "attendance-btn present"
+: "attendance-btn absent";
+/*
+SAVE THIS AS UNSAVED MANUAL EDIT
+*/
+const lrn =
+String(
+student.lrn || ""
+).trim();
+if (lrn) {
+if (
+!pendingAttendanceEdits[lrn]
+) {
+pendingAttendanceEdits[lrn] =
+{};
+}
+pendingAttendanceEdits[lrn].PM =
+student.PM;
+}
+attendanceSaved =
+false;
+updateProceedButtonState();
+}
+);
+amCell.appendChild(
+amButton
+);
+pmCell.appendChild(
+pmButton
+);
+row.appendChild(
+nameCell
+);
+row.appendChild(
+amCell
+);
+row.appendChild(
+pmCell
+);
+attendanceTableBody.appendChild(
+row
+);
+}
+);
+}
+
+/* =====================================================
+ADMIN SECTION CHANGE
+===================================================== */
+attendanceSectionSelect.addEventListener(
+"change",
+async function () {
+const selectedSection =
+String(
+attendanceSectionSelect.value || ""
+).trim();
+attendanceSection =
+selectedSection;
+if (!selectedSection) {
+attendanceCurrentSection.textContent =
+"Section: —";
+attendanceTableBody.innerHTML =
+"";
+attendanceMessage.textContent =
+"Select a section.";
+proceedAttendanceBtn.disabled =
+true;
+return;
+}
+proceedAttendanceBtn.disabled =
+false;
+attendanceCurrentSection.textContent =
+"Section: " +
+selectedSection;
+attendanceMessage.textContent =
+"Loading attendance...";
+await loadAdviserAttendance();
+}
+);
+
+/* =====================================================
+SAVE ATTENDANCE
+===================================================== */
+saveAttendanceBtn.addEventListener(
+"click",
+async function () {
+if (
+!attendanceAccessCode ||
+!attendanceSection
+) {
+attendanceMessage.textContent =
+"Please select a section.";
+return;
+}
+if (
+!attendanceStudents ||
+attendanceStudents.length === 0
+) {
+attendanceMessage.textContent =
+"No attendance data to save.";
+return;
+}
+attendanceMessage.textContent =
+"Saving attendance...";
+saveAttendanceBtn.disabled =
+true;
+try {
+const attendanceData =
+JSON.stringify(
+attendanceStudents
+);
+const requestUrl =
+APPS_SCRIPT_URL +
+"?action=saveAttendance" +
+"&accessCode=" +
+encodeURIComponent(
+attendanceAccessCode
+) +
+"&requestedSection=" +
+encodeURIComponent(
+attendanceSection
+) +
+"&attendanceData=" +
+encodeURIComponent(
+attendanceData
+);
+const result =
+await jsonpRequest(
+requestUrl
+);
+if (
+!result ||
+!result.success
+) {
+throw new Error(
+result &&
+result.message
+? result.message
+: "Unable to save attendance."
+);
+}
+attendanceMessage.textContent =
+"Attendance saved successfully.";
+attendanceSaved = true;
+/*
+Wala nang unsaved manual changes
+dahil successful na ang SAVE.
+*/
+pendingAttendanceEdits = {};
+proceedAttendanceBtn.disabled = false;
+} catch (error) {
+console.error(
+"Save attendance error:",
+error
+);
+attendanceMessage.textContent =
+error.message ||
+"Unable to save attendance.";
+}
+saveAttendanceBtn.disabled =
+false;
+}
+);
+
+/* =====================================================
+PROCEED ATTENDANCE
+===================================================== */
+proceedAttendanceBtn.addEventListener(
+"click",
+async function () {
+if (!attendanceSaved) {
+attendanceMessage.textContent =
+"Please SAVE the attendance first.";
+return;
+}
+
+if (
+!attendanceAccessCode ||
+!attendanceSection
+) {
+attendanceMessage.textContent =
+"Please select a section.";
+return;
+}
+attendanceMessage.textContent =
+"Saving attendance...";
+proceedAttendanceBtn.disabled =
+true;
+try {
+const requestUrl =
+APPS_SCRIPT_URL +
+"?action=proceedAttendance" +
+"&accessCode=" +
+encodeURIComponent(
+attendanceAccessCode
+) +
+"&requestedSection=" +
+encodeURIComponent(
+attendanceSection
+) +
+"&proceededBy=" +
+encodeURIComponent(
+userName
+);
+const result =
+await jsonpRequest(
+requestUrl
+);
+if (
+!result ||
+!result.success
+) {
+throw new Error(
+result &&
+result.message
+? result.message
+: "Unable to proceed attendance."
+);
+}
+attendanceMessage.textContent =
+"Attendance proceeded successfully.";
+} catch (error) {
+console.error(
+"Proceed attendance error:",
+error
+);
+attendanceMessage.textContent =
+error.message ||
+"Unable to proceed attendance.";
+proceedAttendanceBtn.disabled =
+false;
+return;
+}
+proceedAttendanceBtn.disabled =
+false;
+}
 );
 /* =====================================================
 PM DISPLAY
@@ -5405,23 +5708,6 @@ function () {
 console.log(
 "ADVISER / ADMIN LOGOUT STARTED"
 );
-   const scanQrNowBtn = document.getElementById("scanQrNowBtn");
-if (scanQrNowBtn) {
-  scanQrNowBtn.addEventListener("click", async function () {
-    // Hide attendance / teacher / reports
-    ["attendancePage", "teacherPage", "mamPage", "smsPage", "lateRecordsPage"].forEach(function (id) {
-      const el = document.getElementById(id);
-      if (el) {
-        el.style.setProperty("display", "none", "important");
-        el.classList.remove("is-visible");
-      }
-    });
-
-    // Open scanner (re-use existing openScannerPage logic)
-    await openScannerPage();
-  });
-}
-   
 /* ================================
 CLEAR ATTENDANCE SESSION
 ================================ */
@@ -7107,7 +7393,7 @@ if (symsBtn) symsBtn.addEventListener("click", downloadSYMSExcel);
 const autoSmsBtn = document.getElementById("autoSmsToggleBtn");
 if (autoSmsBtn) autoSmsBtn.addEventListener("click", toggleAutoSmsStatus);
 })();
-   
 
+</script>
 </body>
 </html>
