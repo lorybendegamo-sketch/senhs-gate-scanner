@@ -5117,7 +5117,10 @@ decodedText
 // LOCK IMMEDIATELY: the primary scanner and fallback decoder can report
 // the same QR nearly simultaneously. Set the lock before any UI/audio work
 // or await, so only the first callback can process this scan.
-if (processing) return;
+// Block while previous scan is still processing OR overlay is still visible.
+if (processing || window.senhsQrProcessingLock) return;
+const overlayEl = document.getElementById("scanOverlay");
+if (overlayEl && overlayEl.style.display && overlayEl.style.display !== "none") return;
 processing = true;
 window.senhsQrProcessingLock = true;
 
@@ -5137,6 +5140,10 @@ true
 );
 readyBar.textContent = "DEVICE LOGIN REQUIRED";
 readyBar.style.color = "#b71c1c";
+// Keep processing locked until overlay is dismissed — then unlock.
+setTimeout(function () {
+  resumeScanner();
+}, 2500);
 return;
 }
 
@@ -5158,26 +5165,25 @@ readyBar.textContent = "PROCESSING...";
 readyBar.style.color = "#1267a5";
 showProcessing();
 
-// Accept NEW: SECTION|LRN|NAME and LEGACY: SECTION|LRN
+// STRICT ONLY: SECTION|LRN|NAME
+// example: 7-Banaba|123456789012|DEGAMO, LORYBEN JR D.
 const qrText = String(decodedText || "").trim();
 const qrParts = qrText.split("|").map(function (p) { return String(p || "").trim(); });
 let payloadForServer = "";
 
-if (qrParts.length >= 3 && /^\d{12}$/.test(qrParts[1])) {
-// SECTION|LRN|NAME (name may contain extra |)
-payloadForServer = qrParts[0] + "|" + qrParts[1] + "|" + qrParts.slice(2).join("|");
-} else if (
-qrParts.length === 2 &&
-/^\d+\s*-\s*[A-Za-z0-9][A-Za-z0-9 .'-]*$/.test(qrParts[0]) &&
-/^\d{12}$/.test(qrParts[1])
+if (
+  qrParts.length >= 3 &&
+  /^\d{1,2}\s*[-–]\s*.+/.test(qrParts[0]) &&
+  /^\d{12}$/.test(qrParts[1]) &&
+  String(qrParts.slice(2).join("|") || "").trim().length >= 2
 ) {
-payloadForServer = qrParts[0] + "|" + qrParts[1];
+  payloadForServer = qrParts[0] + "|" + qrParts[1] + "|" + qrParts.slice(2).join("|");
 }
 
 if (!payloadForServer) {
 showResult({
 success: false,
-message: "INVALID QR. Use SECTION|LRN|NAME (example: 7-Banaba|123456789012|JUAN DELA CRUZ)."
+message: "INVALID QR. Strict format only: SECTION|LRN|NAME (example: 7-Banaba|123456789012|DEGAMO, LORYBEN JR D.)."
 });
 return;
 }
@@ -5191,7 +5197,7 @@ APPS_SCRIPT_URL +
 "&platform=" + encodeURIComponent(platform);
 
 // Fast path: server writes LOGS + ATT only, then returns.
-const result = await jsonpRequest(requestUrl, 12000);
+const result = await jsonpRequest(requestUrl, 15000);
 showResult(result);
 
 if (result && result.success) {
@@ -5502,10 +5508,10 @@ console.log(
 "QR PROCESSING TIME: " + processingTime + " seconds"
 );
 
-/* ~1.5s result overlay, then resume scanning (total ~2s with fast server). */
+/* Result overlay stays visible; do NOT accept another QR until it clears. */
 showResult.timer = setTimeout(function () {
 resumeScanner();
-}, 1500);
+}, (result && result.success) ? 1200 : 2000);
 }
 
 
