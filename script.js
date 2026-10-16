@@ -115,3 +115,20 @@ function stopDailyAttAutoRefresh() {
 }
 
 
+// ✅ NEXT button handler (Page 1 → Page 2)
+document.getElementById("userNextBtn").onclick = function() {
+  const enteredName = document.getElementById("userNameInput").value.trim();
+
+  if (!enteredName) {
+    document.getElementById("userMessage").textContent = "Please enter your name.";
+    return;
+  }
+
+  // Save name (optional)
+  userName = enteredName;
+  document.getElementById("userMessage").textContent = "";
+
+  // Hide User Page, show Device Page
+  document.getElementById("userPage").style.display = "none";
+  document.getElementById("devicePage").style.display = "block";
+};
