@@ -1917,6 +1917,42 @@ max-height: 45dvh;
 #teacherAttendanceMessage { padding: 4px 8px !important; margin: 0 0 6px !important; }
 #teacherSectionAttendance { margin-top: 0 !important; }
 @media (max-width: 600px) { #teacherPage .device-content { padding: 5px 4px 14px !important; } #teacherPage h2 { font-size: 20px; } }
+
+/* Integrated page enhancements from the supplied page stylesheet */
+.scan-btn {
+  background: linear-gradient(135deg, #1565c0, #42a5f5);
+  color: #fff;
+  font-size: 20px;
+  font-weight: 900;
+  border: none;
+  border-radius: 12px;
+  padding: 14px 28px;
+  margin: 15px auto;
+  display: block;
+  cursor: pointer;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.25);
+  transition: transform 0.15s ease, filter 0.15s ease;
+}
+.scan-btn:hover { filter: brightness(1.1); transform: translateY(-2px); }
+.late-btn {
+  background: linear-gradient(135deg, #f57c00, #ffb74d);
+  color: #fff;
+  font-size: 15px;
+  font-weight: 800;
+  border: none;
+  border-radius: 10px;
+  padding: 10px 18px;
+  margin: 6px;
+  cursor: pointer;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+  transition: transform 0.15s ease, filter 0.15s ease;
+}
+.late-btn:hover { filter: brightness(1.1); transform: translateY(-2px); }
+.late-record, .late-record-row, .late-section-card,
+#lateRecordsResults .late-record-row {
+  background-color: #fff9c4 !important;
+}
+
 </style>
 </head>
 <body>
@@ -3207,7 +3243,7 @@ async function openTeacherPage() {
   if (page) page.style.setProperty("display", "block", "important");
   await refreshTeacherAttendance_();
   if (senhsTeacherRefreshTimer_) clearInterval(senhsTeacherRefreshTimer_);
-  senhsTeacherRefreshTimer_ = setInterval(refreshTeacherAttendance_, 5000);
+  senhsTeacherRefreshTimer_ = setInterval(refreshTeacherAttendance_, 2500);
 }
 async function refreshTeacherAttendance_() {
   if (senhsTeacherRefreshBusy_ || attendanceRole !== "TEACHER") return;
@@ -3243,39 +3279,20 @@ function senhsBindTeacherDetailCells_() {
   });
 }
 const teacherLogoutBtn = document.getElementById("teacherLogoutBtn");
-if (teacherLogoutBtn) {
-  teacherLogoutBtn.addEventListener("click", function () {
-    if (senhsTeacherRefreshTimer_) {
-      clearInterval(senhsTeacherRefreshTimer_);
-      senhsTeacherRefreshTimer_ = null;
-    }
-    attendanceAccessCode = "";
-    attendanceRole = "";
-    attendanceSection = "";
+if (teacherLogoutBtn) teacherLogoutBtn.addEventListener("click", function() {
+  if (senhsTeacherRefreshTimer_) { clearInterval(senhsTeacherRefreshTimer_); senhsTeacherRefreshTimer_ = null; }
+  attendanceAccessCode = "";
+  attendanceRole = "";
+  attendanceSection = "";
+  const page = document.getElementById("teacherPage");
+  if (page) page.style.setProperty("display", "none", "important");
+  if (userPage) userPage.style.setProperty("display", "block", "important");
+  if (devicePage) devicePage.style.setProperty("display", "block", "important");
+  const codeInput = document.getElementById("deviceCode");
+  if (codeInput) codeInput.value = "";
+  showDeviceMessage("Logged out.", "success");
+});
 
-    // Hide ALL pages
-    ["teacherPage", "devicePage", "attendancePage", "scannerPage", "mamPage", "smsPage", "lateRecordsPage"].forEach(function (id) {
-      const el = document.getElementById(id);
-      if (el) {
-        el.style.setProperty("display", "none", "important");
-        el.classList.remove("is-visible");
-      }
-    });
-
-    // Show ONLY Page 1 (userPage)
-    if (userPage) {
-      userPage.style.setProperty("display", "block", "important");
-    }
-
-    const codeInput = document.getElementById("deviceCode");
-    if (codeInput) codeInput.value = "";
-    if (userNameInput) {
-      userNameInput.value = "";
-      userNameInput.focus();
-    }
-    showDeviceMessage("Logged out.", "success");
-  });
-}
 /* =====================================================
 OPEN SCANNER PAGE
 ===================================================== */
@@ -3302,7 +3319,7 @@ try {
 await startCamera();
 loadAttendanceSummary();
 if (!attendanceTimer) {
-attendanceTimer = setInterval(loadAttendanceSummary, 3000);
+attendanceTimer = setInterval(loadAttendanceSummary, 2500);
 }
 startDeviceHeartbeat();
 } catch (error) {
@@ -3353,31 +3370,6 @@ attendanceMessage.textContent =
 proceedAttendanceBtn.disabled =
 true;
 return;
-}
-
-   let dailyAttRefreshTimer = null;
-
-function startDailyAttAutoRefresh() {
-  if (dailyAttRefreshTimer) return;
-  dailyAttRefreshTimer = setInterval(function () {
-    const page = document.getElementById("attendancePage");
-    if (!page) return;
-    const visible = page.classList.contains("is-visible") ||
-      window.getComputedStyle(page).display !== "none";
-    if (!visible) return;
-    if (typeof loadEditableTodayAttendance === "function") {
-      loadEditableTodayAttendance();
-    } else if (typeof refreshEditableAttendance === "function") {
-      refreshEditableAttendance();
-    }
-  }, 3000);
-}
-
-function stopDailyAttAutoRefresh() {
-  if (dailyAttRefreshTimer) {
-    clearInterval(dailyAttRefreshTimer);
-    dailyAttRefreshTimer = null;
-  }
 }
 /* =================================================
 ADVISER
@@ -3557,7 +3549,7 @@ console.log(
 );
 loadAdviserAttendance(true);
 },
-5000
+2500
 );
 
 /* =====================================================
@@ -5181,6 +5173,9 @@ showResult(result);
 
 if (result && result.success) {
 beep(1400, 180);
+// Update scanner counts immediately; Teacher and Daily ATT also poll the
+// same backend data on a short interval while their pages remain open.
+loadAttendanceSummary();
 }
 } catch (error) {
 console.error("QR server error:", error);
@@ -5748,27 +5743,19 @@ ADVISER / ADMIN LOGOUT
 ===================================================== */
 attendanceLogoutBtn.addEventListener(
 "click",
-function () {
+async function () {
 console.log(
 "ADVISER / ADMIN LOGOUT STARTED"
 );
-   const scanQrNowBtn = document.getElementById("scanQrNowBtn");
-if (scanQrNowBtn) {
-  scanQrNowBtn.addEventListener("click", async function () {
-    // Hide attendance / teacher / reports
-    ["attendancePage", "teacherPage", "mamPage", "smsPage", "lateRecordsPage"].forEach(function (id) {
-      const el = document.getElementById(id);
-      if (el) {
-        el.style.setProperty("display", "none", "important");
-        el.classList.remove("is-visible");
-      }
-    });
-
-    // Open scanner (re-use existing openScannerPage logic)
-    await openScannerPage();
-  });
+try {
+  await releaseDeviceSession();
+} catch (logoutReleaseError) {
+  console.warn("Device session release during logout failed:", logoutReleaseError);
 }
-   
+sessionToken = "";
+sessionActive = false;
+releaseSent = true;
+deviceKey = "";
 /* ================================
 CLEAR ATTENDANCE SESSION
 ================================ */
