@@ -41,3 +41,77 @@ function showSectionDetails(section, type) {
 function loadAttendanceSummary() { console.log("Refreshing Attendance Summary..."); }
 function loadMonthlyAttendance() { console.log("Refreshing Monthly Attendance..."); }
 function loadSYMS() { console.log("Refreshing SYMS..."); }
+
+
+/* =====================================================
+OPEN ADVISER / ADMIN ATTENDANCE
+====================================================== */
+async function openAttendancePage() {
+  // Hide other pages
+  const mamReportPage = document.getElementById("mamPage");
+  const symsReportPage = document.getElementById("smsPage");
+  if (mamReportPage) mamReportPage.style.display = "none";
+  if (symsReportPage) symsReportPage.style.display = "none";
+  if (userPage) userPage.style.setProperty("display", "none", "important");
+  if (devicePage) devicePage.style.setProperty("display", "none", "important");
+  if (scannerPage) {
+    scannerPage.style.setProperty("display", "none", "important");
+    scannerPage.classList.remove("is-visible");
+  }
+
+  attendancePage.style.setProperty("display", "block", "important");
+  attendancePage.classList.add("is-visible");
+
+  attendanceRoleTitle.textContent =
+    attendanceRole === "ADMIN" ? "ADMIN ATTENDANCE" : "ADVISER ATTENDANCE";
+
+  updateAutoSmsButtonUI();
+  loadAutoSmsStatus();
+
+  if (attendanceRole === "ADMIN") {
+    attendanceSectionWrapper.style.display = "block";
+    attendanceSectionSelect.value = "";
+    attendanceCurrentSection.textContent = "Section: —";
+    attendanceTableBody.innerHTML = "";
+    attendanceMessage.textContent = "Select a section.";
+    proceedAttendanceBtn.disabled = true;
+    return;
+  }
+
+  // Start auto-refresh when opening attendance page
+  startDailyAttAutoRefresh();
+}
+
+/* =====================================================
+AUTO REFRESH FUNCTIONS
+====================================================== */
+let dailyAttRefreshTimer = null;
+
+function startDailyAttAutoRefresh() {
+  if (dailyAttRefreshTimer) return;
+  dailyAttRefreshTimer = setInterval(function () {
+    const page = document.getElementById("attendancePage");
+    if (!page) return;
+
+    const visible =
+      page.classList.contains("is-visible") ||
+      window.getComputedStyle(page).display !== "none";
+
+    if (!visible) return;
+
+    if (typeof loadEditableTodayAttendance === "function") {
+      loadEditableTodayAttendance();
+    } else if (typeof refreshEditableAttendance === "function") {
+      refreshEditableAttendance();
+    }
+  }, 3000);
+}
+
+function stopDailyAttAutoRefresh() {
+  if (dailyAttRefreshTimer) {
+    clearInterval(dailyAttRefreshTimer);
+    dailyAttRefreshTimer = null;
+  }
+}
+
+
