@@ -10,6 +10,11 @@ document.getElementById("scanQrNowBtn").onclick = function() {
   document.getElementById("scannerPage").classList.add("is-visible");
 };
 
+// Immediate refresh after successful QR scan
+try {
+  loadAttendanceSummary();
+} catch (e) {}
+
 // ✅ Exit Scanner
 document.getElementById("exitScannerBtn").onclick = function() {
   document.getElementById("scannerPage").classList.remove("is-visible");
@@ -36,9 +41,3 @@ function showSectionDetails(section, type) {
 function loadAttendanceSummary() { console.log("Refreshing Attendance Summary..."); }
 function loadMonthlyAttendance() { console.log("Refreshing Monthly Attendance..."); }
 function loadSYMS() { console.log("Refreshing SYMS..."); }
-
-
-// Immediate refresh after successful QR scan
-try {
-  loadAttendanceSummary();
-} catch (e) {}
