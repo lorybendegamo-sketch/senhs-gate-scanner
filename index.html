@@ -3243,20 +3243,39 @@ function senhsBindTeacherDetailCells_() {
   });
 }
 const teacherLogoutBtn = document.getElementById("teacherLogoutBtn");
-if (teacherLogoutBtn) teacherLogoutBtn.addEventListener("click", function() {
-  if (senhsTeacherRefreshTimer_) { clearInterval(senhsTeacherRefreshTimer_); senhsTeacherRefreshTimer_ = null; }
-  attendanceAccessCode = "";
-  attendanceRole = "";
-  attendanceSection = "";
-  const page = document.getElementById("teacherPage");
-  if (page) page.style.setProperty("display", "none", "important");
-  if (userPage) userPage.style.setProperty("display", "block", "important");
-  if (devicePage) devicePage.style.setProperty("display", "block", "important");
-  const codeInput = document.getElementById("deviceCode");
-  if (codeInput) codeInput.value = "";
-  showDeviceMessage("Logged out.", "success");
-});
+if (teacherLogoutBtn) {
+  teacherLogoutBtn.addEventListener("click", function () {
+    if (senhsTeacherRefreshTimer_) {
+      clearInterval(senhsTeacherRefreshTimer_);
+      senhsTeacherRefreshTimer_ = null;
+    }
+    attendanceAccessCode = "";
+    attendanceRole = "";
+    attendanceSection = "";
 
+    // Hide ALL pages
+    ["teacherPage", "devicePage", "attendancePage", "scannerPage", "mamPage", "smsPage", "lateRecordsPage"].forEach(function (id) {
+      const el = document.getElementById(id);
+      if (el) {
+        el.style.setProperty("display", "none", "important");
+        el.classList.remove("is-visible");
+      }
+    });
+
+    // Show ONLY Page 1 (userPage)
+    if (userPage) {
+      userPage.style.setProperty("display", "block", "important");
+    }
+
+    const codeInput = document.getElementById("deviceCode");
+    if (codeInput) codeInput.value = "";
+    if (userNameInput) {
+      userNameInput.value = "";
+      userNameInput.focus();
+    }
+    showDeviceMessage("Logged out.", "success");
+  });
+}
 /* =====================================================
 OPEN SCANNER PAGE
 ===================================================== */
@@ -3283,7 +3302,7 @@ try {
 await startCamera();
 loadAttendanceSummary();
 if (!attendanceTimer) {
-attendanceTimer = setInterval(loadAttendanceSummary, 5000);
+attendanceTimer = setInterval(loadAttendanceSummary, 3000);
 }
 startDeviceHeartbeat();
 } catch (error) {
@@ -3334,6 +3353,31 @@ attendanceMessage.textContent =
 proceedAttendanceBtn.disabled =
 true;
 return;
+}
+
+   let dailyAttRefreshTimer = null;
+
+function startDailyAttAutoRefresh() {
+  if (dailyAttRefreshTimer) return;
+  dailyAttRefreshTimer = setInterval(function () {
+    const page = document.getElementById("attendancePage");
+    if (!page) return;
+    const visible = page.classList.contains("is-visible") ||
+      window.getComputedStyle(page).display !== "none";
+    if (!visible) return;
+    if (typeof loadEditableTodayAttendance === "function") {
+      loadEditableTodayAttendance();
+    } else if (typeof refreshEditableAttendance === "function") {
+      refreshEditableAttendance();
+    }
+  }, 3000);
+}
+
+function stopDailyAttAutoRefresh() {
+  if (dailyAttRefreshTimer) {
+    clearInterval(dailyAttRefreshTimer);
+    dailyAttRefreshTimer = null;
+  }
 }
 /* =================================================
 ADVISER
@@ -5708,6 +5752,23 @@ function () {
 console.log(
 "ADVISER / ADMIN LOGOUT STARTED"
 );
+   const scanQrNowBtn = document.getElementById("scanQrNowBtn");
+if (scanQrNowBtn) {
+  scanQrNowBtn.addEventListener("click", async function () {
+    // Hide attendance / teacher / reports
+    ["attendancePage", "teacherPage", "mamPage", "smsPage", "lateRecordsPage"].forEach(function (id) {
+      const el = document.getElementById(id);
+      if (el) {
+        el.style.setProperty("display", "none", "important");
+        el.classList.remove("is-visible");
+      }
+    });
+
+    // Open scanner (re-use existing openScannerPage logic)
+    await openScannerPage();
+  });
+}
+   
 /* ================================
 CLEAR ATTENDANCE SESSION
 ================================ */
