@@ -155,3 +155,37 @@ document.getElementById("toggleDeviceCode").onclick = function() {
   const input = document.getElementById("deviceCode");
   input.type = input.type === "password" ? "text" : "password";
 };
+
+// Device Page
+document.getElementById("continueBtn").onclick = function() {
+  document.getElementById("devicePage").style.display = "none";
+  document.getElementById("attendancePage").classList.add("is-visible");
+};
+
+document.getElementById("toggleDeviceCode").onclick = function() {
+  const input = document.getElementById("deviceCode");
+  input.type = input.type === "password" ? "text" : "password";
+};
+
+// MAM Page
+document.getElementById("openMAMPageBtn").onclick = function() {
+  document.getElementById("attendancePage").classList.remove("is-visible");
+  document.getElementById("mamPage").style.display = "block";
+};
+
+document.getElementById("mamLogoutBtn").onclick = function() {
+  document.getElementById("mamPage").style.display = "none";
+  document.getElementById("loginPage").classList.add("is-visible");
+};
+
+// SYMS Page
+document.getElementById("openSMSPageBtn").onclick = function() {
+  document.getElementById("attendancePage").classList.remove("is-visible");
+  document.getElementById("smsPage").style.display = "block";
+};
+
+document.getElementById("smsLogoutBtn").onclick = function() {
+  document.getElementById("smsPage").style.display = "none";
+  document.getElementById("loginPage").classList.add("is-visible");
+};
+
