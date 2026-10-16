@@ -42,3 +42,8 @@ document.getElementById("scanQrNowBtn").onclick = function() {
   document.getElementById("attendancePage").classList.remove("is-visible");
   document.getElementById("scannerPage").classList.add("is-visible");
 };
+
+// Immediate refresh after successful QR scan
+try {
+  loadAttendanceSummary();
+} catch (e) {}
