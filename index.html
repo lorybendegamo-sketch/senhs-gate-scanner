@@ -1953,6 +1953,23 @@ max-height: 45dvh;
   background-color: #fff9c4 !important;
 }
 
+
+/* LATE RECORD/S — orange (not white) */
+#openLateRecordsBtn,
+#goLateFromMAMBtn,
+#goLateFromSYMSBtn,
+#lateRecordsNav button:not(.logout) {
+  background: linear-gradient(135deg, #e65100, #ff9800) !important;
+  color: #ffffff !important;
+  border: none !important;
+  font-weight: 900 !important;
+}
+#openLateRecordsBtn:hover,
+#goLateFromMAMBtn:hover,
+#goLateFromSYMSBtn:hover {
+  filter: brightness(1.08);
+}
+
 </style>
 </head>
 <body>
@@ -2081,11 +2098,9 @@ PAGE 3 — ADVISER / ADMIN ATTENDANCE
   <!-- Scan QR Button -->
 <button id="scanQrNowBtn" type="button" class="scan-btn">✨ SCAN QR NOW ✨</button>
 
-<!-- Section Attendance Quick Buttons — linked to ATT_<SECTION> -->
+<!-- Late quick buttons only (Absent is visible on Daily ATT table) -->
 <div id="sectionButtons" style="display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin:10px 0 14px;">
-  <button type="button" class="late-btn" data-period="AM" data-category="ABSENT">AM Absent</button>
   <button type="button" class="late-btn" data-period="AM" data-category="LATE">AM Late</button>
-  <button type="button" class="late-btn" data-period="PM" data-category="ABSENT">PM Absent</button>
   <button type="button" class="late-btn" data-period="PM" data-category="LATE">PM Late</button>
 </div>
 
@@ -3319,8 +3334,22 @@ if (teacherLogoutBtn) teacherLogoutBtn.addEventListener("click", async function(
 /* =====================================================
 OPEN SCANNER PAGE
 ===================================================== */
+let senhsScannerReturnPage_ = ""; // attendancePage | teacherPage | ""
+
 async function openScannerPage() {
 releaseSent = false;
+
+// Remember where staff came from so BACK returns to Daily ATT / Teacher
+senhsScannerReturnPage_ = "";
+try {
+  const ap = document.getElementById("attendancePage");
+  const tp = document.getElementById("teacherPage");
+  if (ap && window.getComputedStyle(ap).display !== "none") senhsScannerReturnPage_ = "attendancePage";
+  else if (tp && window.getComputedStyle(tp).display !== "none") senhsScannerReturnPage_ = "teacherPage";
+  else if (attendanceAccessCode && /ADMIN|ADVISER|TEACHER/i.test(String(attendanceRole || ""))) {
+    senhsScannerReturnPage_ = String(attendanceRole || "").toUpperCase() === "TEACHER" ? "teacherPage" : "attendancePage";
+  }
+} catch (e) {}
 
 // Hide every other page so only the scanner is visible
 if (userPage) userPage.style.setProperty("display", "none", "important");
@@ -3333,6 +3362,34 @@ attendancePage.classList.remove("is-visible");
   var el = document.getElementById(id);
   if (el) el.style.setProperty("display", "none", "important");
 });
+
+// Friendly BACK for Admin / Adviser / Teacher
+try {
+  var backBtn = document.getElementById("scannerBackBtn");
+  if (!backBtn) {
+    backBtn = document.createElement("button");
+    backBtn.id = "scannerBackBtn";
+    backBtn.type = "button";
+    backBtn.innerHTML = "← BACK";
+    backBtn.setAttribute("aria-label", "Back to attendance");
+    backBtn.style.cssText = [
+      "position:absolute","z-index:30","left:12px","top:14px",
+      "min-height:46px","padding:10px 18px","border:0","border-radius:12px",
+      "background:linear-gradient(135deg,#1565c0,#42a5f5)","color:#fff",
+      "font-size:15px","font-weight:900","cursor:pointer",
+      "box-shadow:0 4px 12px rgba(0,0,0,.25)"
+    ].join(";");
+    var host = document.querySelector("#scannerPage .scanner-container") || document.getElementById("scannerPage");
+    if (host) {
+      if (window.getComputedStyle(host).position === "static") host.style.position = "relative";
+      host.appendChild(backBtn);
+    }
+    backBtn.addEventListener("click", function() {
+      senhsReturnFromScanner_();
+    });
+  }
+  backBtn.style.display = senhsScannerReturnPage_ ? "block" : "none";
+} catch (backErr) { console.warn(backErr); }
 
 scannerPage.style.setProperty("display", "block", "important");
 scannerPage.classList.add("is-visible");
@@ -5190,15 +5247,22 @@ APPS_SCRIPT_URL +
 "&session=" + encodeURIComponent(sessionToken) +
 "&platform=" + encodeURIComponent(platform);
 
-// Scan path should be fast; use a shorter timeout than attendance saves.
-const result = await jsonpRequest(requestUrl, 20000);
+// Fast path: server writes LOGS + ATT only, then returns.
+const result = await jsonpRequest(requestUrl, 12000);
 showResult(result);
 
 if (result && result.success) {
 beep(1400, 180);
-// Update scanner counts immediately; Teacher and Daily ATT also poll the
-// same backend data on a short interval while their pages remain open.
 loadAttendanceSummary();
+// Drain IO / section-log / SMS queue without blocking the next scan.
+try {
+  const drainUrl = APPS_SCRIPT_URL +
+    "?action=processScanQueue&_t=" + Date.now();
+  // Fire-and-forget (do not await) so the gate can scan again immediately.
+  jsonpRequest(drainUrl, 60000).catch(function() {});
+} catch (drainErr) {
+  console.warn("Queue drain kick:", drainErr);
+}
 }
 } catch (error) {
 console.error("QR server error:", error);
@@ -7019,8 +7083,20 @@ function senhsShowAttendanceDetails_(level, period, category, sectionName) {
   message.textContent = "Loading " + dateKey + "…";
   results.innerHTML = "";
   modal.style.display = "block";
-  const url = APPS_SCRIPT_URL + "?action=getAttendanceDetails&accessCode=" + encodeURIComponent(attendanceAccessCode) +
-    "&date=" + encodeURIComponent(dateKey) + "&level=" + encodeURIComponent(level) + "&section=" + encodeURIComponent(sectionName || "") + "&period=" + encodeURIComponent(period) + "&category=" + encodeURIComponent(category);
+  let url = APPS_SCRIPT_URL + "?action=getAttendanceDetails" +
+    "&date=" + encodeURIComponent(dateKey) +
+    "&level=" + encodeURIComponent(level) +
+    "&section=" + encodeURIComponent(sectionName || "") +
+    "&period=" + encodeURIComponent(period) +
+    "&category=" + encodeURIComponent(category);
+  if (attendanceAccessCode) {
+    url += "&accessCode=" + encodeURIComponent(attendanceAccessCode);
+  }
+  if (typeof deviceKey !== "undefined" && deviceKey && typeof sessionToken !== "undefined" && sessionToken) {
+    url += "&device=" + encodeURIComponent(deviceKey) +
+      "&session=" + encodeURIComponent(sessionToken) +
+      "&platform=" + encodeURIComponent(typeof platform !== "undefined" ? platform : "laptop");
+  }
   jsonpRequest(url).then(function(result) {
     if (!result || !result.success) throw new Error(result && result.message || "Unable to load attendance details.");
     message.textContent = dateKey + " — " + result.count + " student(s)";
@@ -7528,6 +7604,47 @@ function showSectionDetails(code) {
   });
 })();
 
+
+
+function senhsReturnFromScanner_() {
+  try {
+    if (typeof stopCamera === "function") stopCamera();
+    else if (typeof exitScanner === "function") { /* don't full logout */ }
+  } catch (e) {}
+  try {
+    if (html5QrCode && scannerRunning) {
+      html5QrCode.stop().catch(function(){});
+      scannerRunning = false;
+    }
+  } catch (e2) {}
+  if (attendanceTimer) {
+    clearInterval(attendanceTimer);
+    attendanceTimer = null;
+  }
+  const scanner = document.getElementById("scannerPage");
+  if (scanner) {
+    scanner.style.setProperty("display", "none", "important");
+    scanner.classList.remove("is-visible");
+  }
+  const target = senhsScannerReturnPage_ || "attendancePage";
+  senhsScannerReturnPage_ = "";
+  if (target === "teacherPage" && typeof openTeacherPage === "function") {
+    // fall through to show teacher page
+  }
+  if (typeof senhsShowReportPage === "function") {
+    senhsShowReportPage(target === "teacherPage" ? "teacherPage" : "attendancePage");
+  } else {
+    const el = document.getElementById(target === "teacherPage" ? "teacherPage" : "attendancePage");
+    if (el) el.style.setProperty("display", "block", "important");
+  }
+  // Teacher page is not always in senhsShowReportPage list — force show
+  if (target === "teacherPage") {
+    const tp = document.getElementById("teacherPage");
+    const ap = document.getElementById("attendancePage");
+    if (ap) { ap.style.setProperty("display", "none", "important"); ap.classList.remove("is-visible"); }
+    if (tp) tp.style.setProperty("display", "block", "important");
+  }
+}
 
 </script>
 </body>
