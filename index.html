@@ -3354,6 +3354,31 @@ proceedAttendanceBtn.disabled =
 true;
 return;
 }
+
+   let dailyAttRefreshTimer = null;
+
+function startDailyAttAutoRefresh() {
+  if (dailyAttRefreshTimer) return;
+  dailyAttRefreshTimer = setInterval(function () {
+    const page = document.getElementById("attendancePage");
+    if (!page) return;
+    const visible = page.classList.contains("is-visible") ||
+      window.getComputedStyle(page).display !== "none";
+    if (!visible) return;
+    if (typeof loadEditableTodayAttendance === "function") {
+      loadEditableTodayAttendance();
+    } else if (typeof refreshEditableAttendance === "function") {
+      refreshEditableAttendance();
+    }
+  }, 3000);
+}
+
+function stopDailyAttAutoRefresh() {
+  if (dailyAttRefreshTimer) {
+    clearInterval(dailyAttRefreshTimer);
+    dailyAttRefreshTimer = null;
+  }
+}
 /* =================================================
 ADVISER
 ================================================= */
