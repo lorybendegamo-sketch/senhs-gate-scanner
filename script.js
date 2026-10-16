@@ -4,16 +4,43 @@ document.getElementById("attendanceLogoutBtn").onclick = function() {
   document.getElementById("loginPage").classList.add("is-visible");
 };
 
+// ✅ NEXT button handler (Page 1 → Page 2)
+document.getElementById("userNextBtn").onclick = function() {
+  const enteredName = document.getElementById("userNameInput").value.trim();
+  if (!enteredName) {
+    document.getElementById("userMessage").textContent = "Please enter your name.";
+    return;
+  }
+  userName = enteredName;
+  document.getElementById("userMessage").textContent = "";
+  document.getElementById("userPage").style.display = "none";
+  document.getElementById("devicePage").style.display = "block";
+};
+
+// ✅ Continue button (Device Page → Attendance Page)
+document.getElementById("continueBtn").onclick = function() {
+  const deviceCode = document.getElementById("deviceCode").value.trim();
+  if (!deviceCode) {
+    document.getElementById("deviceMessage").textContent = "Please enter device code.";
+    return;
+  }
+  document.getElementById("deviceMessage").textContent = "";
+  document.getElementById("devicePage").style.display = "none";
+  document.getElementById("attendancePage").classList.add("is-visible");
+};
+
+// ✅ Toggle show/hide device code
+document.getElementById("toggleDeviceCode").onclick = function() {
+  const input = document.getElementById("deviceCode");
+  input.type = input.type === "password" ? "text" : "password";
+};
+
 // ✅ SCAN QR NOW handler
 document.getElementById("scanQrNowBtn").onclick = function() {
   document.getElementById("attendancePage").classList.remove("is-visible");
   document.getElementById("scannerPage").classList.add("is-visible");
+  startQrScanner();
 };
-
-// Immediate refresh after successful QR scan
-try {
-  loadAttendanceSummary();
-} catch (e) {}
 
 // ✅ Exit Scanner
 document.getElementById("exitScannerBtn").onclick = function() {
@@ -28,7 +55,7 @@ setInterval(() => {
   loadSYMS();
 }, 5000);
 
-// ✅ Section Attendance quick info (AM A, AM L, PM A, PM L)
+// ✅ Section Attendance quick info
 function showSectionDetails(section, type) {
   fetch(`/exec?action=getAttendanceDetails&section=${section}&type=${type}`)
     .then(res => res.json())
@@ -42,12 +69,26 @@ function loadAttendanceSummary() { console.log("Refreshing Attendance Summary...
 function loadMonthlyAttendance() { console.log("Refreshing Monthly Attendance..."); }
 function loadSYMS() { console.log("Refreshing SYMS..."); }
 
+// ✅ Attendance Page buttons
+document.getElementById("proceedAttendanceBtn").onclick = function() {
+  alert("Proceeding with attendance…");
+};
+document.getElementById("saveAttendanceBtn").onclick = function() {
+  alert("Attendance saved!");
+};
+
+// ✅ Downloads
+document.getElementById("downloadDailyAttBtn").onclick = downloadDailyAttendanceExcel;
+document.getElementById("downloadMAMBtn").onclick = downloadMAMExcel;
+document.getElementById("downloadSYMSBtn").onclick = downloadSYMSExcel;
+
+// ✅ Auto SMS toggle
+document.getElementById("autoSmsToggleBtn").onclick = toggleAutoSmsStatus;
 
 /* =====================================================
 OPEN ADVISER / ADMIN ATTENDANCE
 ====================================================== */
 async function openAttendancePage() {
-  // Hide other pages
   const mamReportPage = document.getElementById("mamPage");
   const symsReportPage = document.getElementById("smsPage");
   if (mamReportPage) mamReportPage.style.display = "none";
@@ -78,7 +119,6 @@ async function openAttendancePage() {
     return;
   }
 
-  // Start auto-refresh when opening attendance page
   startDailyAttAutoRefresh();
 }
 
@@ -86,19 +126,15 @@ async function openAttendancePage() {
 AUTO REFRESH FUNCTIONS
 ====================================================== */
 let dailyAttRefreshTimer = null;
-
 function startDailyAttAutoRefresh() {
   if (dailyAttRefreshTimer) return;
   dailyAttRefreshTimer = setInterval(function () {
     const page = document.getElementById("attendancePage");
     if (!page) return;
-
     const visible =
       page.classList.contains("is-visible") ||
       window.getComputedStyle(page).display !== "none";
-
     if (!visible) return;
-
     if (typeof loadEditableTodayAttendance === "function") {
       loadEditableTodayAttendance();
     } else if (typeof refreshEditableAttendance === "function") {
@@ -106,7 +142,6 @@ function startDailyAttAutoRefresh() {
     }
   }, 3000);
 }
-
 function stopDailyAttAutoRefresh() {
   if (dailyAttRefreshTimer) {
     clearInterval(dailyAttRefreshTimer);
@@ -114,78 +149,39 @@ function stopDailyAttAutoRefresh() {
   }
 }
 
+/* =====================================================
+QR SCANNER INITIALIZATION
+====================================================== */
+function startQrScanner() {
+  const html5QrCode = new Html5Qrcode("reader");
+  const qrConfig = { fps: 10, qrbox: 250 };
+  html5QrCode.start(
+    { facingMode: "environment" },
+    qrConfig,
+    qrCodeMessage => {
+      console.log("QR Code detected:", qrCodeMessage);
+      try { loadAttendanceSummary(); } catch (e) {}
+    },
+    errorMessage => { console.warn("QR scan error:", errorMessage); }
+  ).catch(err => { console.error("Unable to start QR scanner:", err); });
+}
 
-// ✅ NEXT button handler (Page 1 → Page 2)
-document.getElementById("userNextBtn").onclick = function() {
-  const enteredName = document.getElementById("userNameInput").value.trim();
-
-  if (!enteredName) {
-    document.getElementById("userMessage").textContent = "Please enter your name.";
-    return;
-  }
-
-  // Save name (optional)
-  userName = enteredName;
-  document.getElementById("userMessage").textContent = "";
-
-  // Hide User Page, show Device Page
-  document.getElementById("userPage").style.display = "none";
-  document.getElementById("devicePage").style.display = "block";
-};
-
-// ✅ Continue button (Device Page → Attendance Page)
-document.getElementById("continueBtn").onclick = function() {
-  const deviceCode = document.getElementById("deviceCode").value.trim();
-
-  if (!deviceCode) {
-    document.getElementById("deviceMessage").textContent = "Please enter device code.";
-    return;
-  }
-
-  // Optional: validate device code here
-  document.getElementById("deviceMessage").textContent = "";
-
-  // Hide Device Page, show Attendance Page
-  document.getElementById("devicePage").style.display = "none";
-  document.getElementById("attendancePage").classList.add("is-visible");
-};
-
-// ✅ Toggle show/hide device code
-document.getElementById("toggleDeviceCode").onclick = function() {
-  const input = document.getElementById("deviceCode");
-  input.type = input.type === "password" ? "text" : "password";
-};
-
-// Device Page
-document.getElementById("continueBtn").onclick = function() {
-  document.getElementById("devicePage").style.display = "none";
-  document.getElementById("attendancePage").classList.add("is-visible");
-};
-
-document.getElementById("toggleDeviceCode").onclick = function() {
-  const input = document.getElementById("deviceCode");
-  input.type = input.type === "password" ? "text" : "password";
-};
-
-// MAM Page
+// ✅ MAM Page
 document.getElementById("openMAMPageBtn").onclick = function() {
   document.getElementById("attendancePage").classList.remove("is-visible");
   document.getElementById("mamPage").style.display = "block";
 };
-
 document.getElementById("mamLogoutBtn").onclick = function() {
   document.getElementById("mamPage").style.display = "none";
   document.getElementById("loginPage").classList.add("is-visible");
 };
 
-// SYMS Page
+// ✅ SYMS Page
 document.getElementById("openSMSPageBtn").onclick = function() {
   document.getElementById("attendancePage").classList.remove("is-visible");
   document.getElementById("smsPage").style.display = "block";
 };
-
 document.getElementById("smsLogoutBtn").onclick = function() {
   document.getElementById("smsPage").style.display = "none";
   document.getElementById("loginPage").classList.add("is-visible");
 };
-
