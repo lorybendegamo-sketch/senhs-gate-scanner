@@ -4121,7 +4121,7 @@ senhsSummaryLoading_ = true;
 try {
 const requestUrl =
 APPS_SCRIPT_URL +
-"?summary=today";
+"?summary=today&_t=" + Date.now();
 const result =
 await jsonpRequest(
 requestUrl
@@ -4131,7 +4131,7 @@ if (
 !result.success
 ) {
 throw new Error(
-"Unable to load attendance."
+(result && result.message) ? String(result.message) : "Unable to load attendance."
 );
 }
 const grouped =
