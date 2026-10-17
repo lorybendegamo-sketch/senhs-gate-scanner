@@ -3784,29 +3784,40 @@ attendanceMessage.textContent =
 saveAttendanceBtn.disabled =
 true;
 try {
-const attendanceData =
-JSON.stringify(
-attendanceStudents
-);
+// Send only changed rows when possible (much faster + smaller URL).
+let payloadStudents = attendanceStudents;
+try {
+  const pendingKeys = Object.keys(pendingAttendanceEdits || {});
+  if (pendingKeys.length > 0) {
+    payloadStudents = attendanceStudents.filter(function(st) {
+      return pendingAttendanceEdits[String(st.lrn || "").trim()];
+    });
+    // Apply pending overrides onto payload
+    payloadStudents = payloadStudents.map(function(st) {
+      const lrn = String(st.lrn || "").trim();
+      const p = pendingAttendanceEdits[lrn] || {};
+      return {
+        lrn: st.lrn,
+        name: st.name,
+        section: st.section || attendanceSection,
+        AM: p.AM || st.AM,
+        PM: p.PM || st.PM
+      };
+    });
+  }
+} catch (e) {}
+const attendanceData = JSON.stringify(payloadStudents);
 const requestUrl =
 APPS_SCRIPT_URL +
 "?action=saveAttendance" +
 "&accessCode=" +
-encodeURIComponent(
-attendanceAccessCode
-) +
+encodeURIComponent(attendanceAccessCode) +
 "&requestedSection=" +
-encodeURIComponent(
-attendanceSection
-) +
+encodeURIComponent(attendanceSection) +
 "&attendanceData=" +
-encodeURIComponent(
-attendanceData
-);
-const result =
-await jsonpRequest(
-requestUrl
-);
+encodeURIComponent(attendanceData);
+// Save can touch many sheet cells — allow up to 45s (was default 60 and still timed out when too heavy).
+const result = await jsonpRequest(requestUrl, 45000);
 if (
 !result ||
 !result.success
@@ -5190,7 +5201,7 @@ APPS_SCRIPT_URL +
 "&platform=" + encodeURIComponent(platform);
 
 // Fast path: server writes LOGS + ATT only, then returns.
-const result = await jsonpRequest(requestUrl, 15000);
+const result = await jsonpRequest(requestUrl, 20000);
 showResult(result);
 
 if (result && result.success) {
