@@ -3246,7 +3246,7 @@ async function openTeacherPage() {
   if (page) page.style.setProperty("display", "block", "important");
   await refreshTeacherAttendance_();
   if (senhsTeacherRefreshTimer_) clearInterval(senhsTeacherRefreshTimer_);
-  senhsTeacherRefreshTimer_ = setInterval(refreshTeacherAttendance_, 2500);
+  senhsTeacherRefreshTimer_ = setInterval(refreshTeacherAttendance_, 5000);
 }
 async function refreshTeacherAttendance_() {
   if (senhsTeacherRefreshBusy_ || attendanceRole !== "TEACHER") return;
@@ -3342,7 +3342,7 @@ try {
 await startCamera();
 loadAttendanceSummary();
 if (!attendanceTimer) {
-attendanceTimer = setInterval(loadAttendanceSummary, 2500);
+attendanceTimer = setInterval(loadAttendanceSummary, 5000);
 }
 startDeviceHeartbeat();
 } catch (error) {
@@ -3556,23 +3556,16 @@ setInterval(
 function () {
 const attendancePage =
 document.getElementById("attendancePage");
-if (
-!attendancePage ||
-attendancePage.style.display === "none"
-) {
-return;
-}
-if (
-!attendanceSection
-) {
-return;
-}
-console.log(
-"AUTO REFRESH: Loading latest attendance..."
-);
+if (!attendancePage) return;
+// Visible when is-visible class is set OR inline display is block
+const visible =
+  attendancePage.classList.contains("is-visible") ||
+  (attendancePage.style.display && attendancePage.style.display !== "none");
+if (!visible) return;
+if (!attendanceSection) return;
 loadAdviserAttendance(true);
 },
-2500
+3000
 );
 
 /* =====================================================
