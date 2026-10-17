@@ -2563,6 +2563,9 @@ let scannerRunning = false;
 let torchOn = false;
 let torchSupported = false;
 let processing = false;
+// Ignore same student QR for 60s after a successful scan (stops IN/OUT spam).
+const senhsLrnCooldown_ = {};
+const SENHS_LRN_COOLDOWN_MS = 60000;
 let attendanceTimer = null;
 let releaseSent = false;
 
@@ -5192,6 +5195,20 @@ message: "INVALID QR. Strict format only: SECTION|LRN|NAME (example: 7-Banaba|12
 return;
 }
 
+// Client-side cooldown: same LRN within 60s → do not call server again
+const coolLrn = qrParts[1];
+const coolNow = Date.now();
+if (senhsLrnCooldown_[coolLrn] && (coolNow - senhsLrnCooldown_[coolLrn]) < SENHS_LRN_COOLDOWN_MS) {
+  const waitSec = Math.ceil((SENHS_LRN_COOLDOWN_MS - (coolNow - senhsLrnCooldown_[coolLrn])) / 1000);
+  showResult({
+    success: true,
+    recorded: false,
+    alreadyRecorded: true,
+    message: "ALREADY RECORDED — wait " + waitSec + "s (same student). Next student please."
+  });
+  return;
+}
+
 try {
 const requestUrl =
 APPS_SCRIPT_URL +
@@ -5200,12 +5217,15 @@ APPS_SCRIPT_URL +
 "&session=" + encodeURIComponent(sessionToken) +
 "&platform=" + encodeURIComponent(platform);
 
-// Fast path: server writes LOGS + ATT only, then returns.
-const result = await jsonpRequest(requestUrl, 20000);
+const result = await jsonpRequest(requestUrl, 18000);
 showResult(result);
 
 if (result && result.success) {
-beep(1400, 180);
+  // Start cooldown even for alreadyRecorded so the camera does not spam
+  senhsLrnCooldown_[coolLrn] = Date.now();
+  if (result.recorded !== false) {
+    beep(1400, 180);
+  }
 loadAttendanceSummary();
 // Drain IO / section-log / SMS queue without blocking the next scan.
 try {
@@ -5219,9 +5239,14 @@ try {
 }
 } catch (error) {
 console.error("QR server error:", error);
+var msg = String(error && error.message ? error.message : "Unable to connect to server.");
+// Timeout often means Apps Script finished late but ATT may already be written.
+if (/timed out/i.test(msg)) {
+  msg = "Server slow / timed out. Kung may RECORDED sa ATT o logs, huwag i-scan ulit ang parehong bata (wait 60s). Next student.";
+}
 showResult({
 success: false,
-message: String(error && error.message ? error.message : "Unable to connect to server.")
+message: msg
 });
 }
 }
@@ -5513,9 +5538,10 @@ console.log(
 );
 
 /* Result overlay stays visible; do NOT accept another QR until it clears. */
+// Longer pause after success so the same QR leaves the frame before resume.
 showResult.timer = setTimeout(function () {
 resumeScanner();
-}, (result && result.success) ? 900 : 1800);
+}, (result && result.success) ? 2000 : 1800);
 }
 
 
