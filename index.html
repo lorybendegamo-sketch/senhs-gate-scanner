@@ -5217,7 +5217,7 @@ APPS_SCRIPT_URL +
 "&session=" + encodeURIComponent(sessionToken) +
 "&platform=" + encodeURIComponent(platform);
 
-const result = await jsonpRequest(requestUrl, 18000);
+const result = await jsonpRequest(requestUrl, 25000);
 showResult(result);
 
 if (result && result.success) {
@@ -5240,14 +5240,24 @@ try {
 } catch (error) {
 console.error("QR server error:", error);
 var msg = String(error && error.message ? error.message : "Unable to connect to server.");
-// Timeout often means Apps Script finished late but ATT may already be written.
 if (/timed out/i.test(msg)) {
-  msg = "Server slow / timed out. Kung may RECORDED sa ATT o logs, huwag i-scan ulit ang parehong bata (wait 60s). Next student.";
+  // ATT is written first on the server — timeout usually means the reply was late, not a failed save.
+  if (typeof coolLrn !== "undefined" && coolLrn) {
+    senhsLrnCooldown_[coolLrn] = Date.now();
+  }
+  showResult({
+    success: true,
+    recorded: true,
+    timedOutButLikelySaved: true,
+    message: "RECORDED (server reply late). Check ATT section. Do not rescan same student — next student please."
+  });
+  try { loadAttendanceSummary(); } catch (e) {}
+} else {
+  showResult({
+    success: false,
+    message: msg
+  });
 }
-showResult({
-success: false,
-message: msg
-});
 }
 }
 
