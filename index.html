@@ -5504,7 +5504,7 @@ console.log(
 /* Result overlay stays visible; do NOT accept another QR until it clears. */
 showResult.timer = setTimeout(function () {
 resumeScanner();
-}, (result && result.success) ? 1200 : 2000);
+}, (result && result.success) ? 900 : 1800);
 }
 
 
