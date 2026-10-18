@@ -5202,29 +5202,36 @@ APPS_SCRIPT_URL +
 
 const result = await jsonpRequest(requestUrl, 25000);
 
+if (result && result.success && result.recorded !== false) {
+  beep(1400, 180);
+}
+
+// Show the scan result immediately after the main attendance request returns.
+// Do NOT wait for SMS, SECTION_LOG, master LOGS, or Daily IO here.
+showResult(result);
+
 if (result && result.success) {
-  if (result.recorded !== false) {
-    beep(1400, 180);
+  // Refresh the on-screen summary without blocking the scanner.
+  try { loadAttendanceSummary(); } catch (summaryErr) {
+    console.warn("Attendance summary refresh skipped:", summaryErr);
   }
 
-  // Wait for the server-side follow-up queue (including Section Logs) to finish
-  // before displaying the final result. showResult's normal timer then unlocks
-  // the scanner, so the next QR is accepted only after logging and result display.
+  // Kick the follow-up queue in the background. This promise is deliberately
+  // NOT awaited, so SMS and secondary logs cannot hold up the line.
   try {
     const drainUrl = APPS_SCRIPT_URL +
       "?action=processScanQueue&_t=" + Date.now();
-    const drainResult = await jsonpRequest(drainUrl, 60000);
-    if (!drainResult || drainResult.success !== true) {
-      console.warn("Scan queue did not confirm completion:", drainResult);
-    }
+    jsonpRequest(drainUrl, 60000).then(function (drainResult) {
+      if (!drainResult || drainResult.success !== true) {
+        console.warn("Background scan queue did not confirm completion:", drainResult);
+      }
+    }).catch(function (drainErr) {
+      console.warn("Background scan queue error:", drainErr);
+    });
   } catch (drainErr) {
-    console.warn("Scan queue processing error:", drainErr);
+    console.warn("Could not start background scan queue:", drainErr);
   }
-
-  loadAttendanceSummary();
 }
-
-showResult(result);
 } catch (error) {
 console.error("QR server error:", error);
 var msg = String(error && error.message ? error.message : "Unable to connect to server.");
