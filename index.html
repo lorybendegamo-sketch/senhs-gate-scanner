@@ -2563,9 +2563,6 @@ let scannerRunning = false;
 let torchOn = false;
 let torchSupported = false;
 let processing = false;
-// Ignore same student QR for 60s after a successful scan (stops IN/OUT spam).
-const senhsLrnCooldown_ = {};
-const SENHS_LRN_COOLDOWN_MS = 60000;
 let attendanceTimer = null;
 let releaseSent = false;
 
@@ -5115,201 +5112,139 @@ error
 );
 }
 }
-
 /* =====================================================
-   QR DETECTED
-   ===================================================== */
-async function onQrDetected(decodedText) {
-  // LOCK IMMEDIATELY: prevent duplicate decoder callbacks.
-  if (processing || window.senhsQrProcessingLock) return;
+QR DETECTED
+===================================================== */
+async function onQrDetected(
+decodedText
+) {
+// LOCK IMMEDIATELY: the primary scanner and fallback decoder can report
+// the same QR nearly simultaneously. Set the lock before any UI/audio work
+// or await, so only the first callback can process this scan.
+// Block while previous scan is still processing OR overlay is still visible.
+if (processing || window.senhsQrProcessingLock) return;
+const overlayEl = document.getElementById("scanOverlay");
+if (overlayEl && overlayEl.style.display && overlayEl.style.display !== "none") return;
+processing = true;
+window.senhsQrProcessingLock = true;
 
-  const overlayEl = document.getElementById("scanOverlay");
-  if (overlayEl && overlayEl.style.display && overlayEl.style.display !== "none") return;
+// Show proof of decoding immediately. This is intentionally before the
+// session check, so a missing/expired login cannot look like a dead scanner.
+console.info("SENHS QR DECODE SUCCESS. Payload length:", String(decodedText || "").length);
+readyBar.textContent = "QR DETECTED — PROCESSING...";
+readyBar.style.color = "#1267a5";
+beep(1000, 160);
 
-  processing = true;
-  window.senhsQrProcessingLock = true;
-
-  // Show QR detection immediately.
-  console.info(
-    "SENHS QR DECODE SUCCESS. Payload length:",
-    String(decodedText || "").length
-  );
-
-  readyBar.textContent = "QR DETECTED — PROCESSING...";
-  readyBar.style.color = "#1267a5";
-  beep(1000, 160);
-
-  if (!deviceKey || !sessionToken) {
-    console.warn("QR was decoded, but there is no active device session.");
-
-    showOverlay(
-      "QR DETECTED — LOGIN REQUIRED",
-      "Nabasa ng scanner ang QR code, pero walang active device session. Bumalik sa device login, mag-login ulit, at buksan muli ang scanner.",
-      true
-    );
-
-    readyBar.textContent = "DEVICE LOGIN REQUIRED";
-    readyBar.style.color = "#b71c1c";
-
-    // Keep processing locked until overlay is dismissed.
-    setTimeout(function () {
-      resumeScanner();
-    }, 2500);
-
-    return;
-  }
-
-  window.qrProcessingStart = performance.now();
-
-  // Stop secondary decoder while processing this QR.
-  senhsStopQrFallback_();
-
-  try {
-    if (html5QrCode && scannerRunning) {
-      await html5QrCode.pause(true);
-    }
-  } catch (error) {
-    console.log("Pause error:", error);
-  }
-
-  readyBar.textContent = "PROCESSING...";
-  readyBar.style.color = "#1267a5";
-  showProcessing();
-
-  // STRICT FORMAT ONLY: SECTION|LRN|NAME
-  // Example: 7-Banaba|123456789012|DEGAMO, LORYBEN JR D.
-  const qrText = String(decodedText || "").trim();
-
-  const qrParts = qrText.split("|").map(function (p) {
-    return String(p || "").trim();
-  });
-
-  let payloadForServer = "";
-
-  if (
-    qrParts.length >= 3 &&
-    /^\d{1,2}\s*[-–]\s*.+/.test(qrParts[0]) &&
-    /^\d{12}$/.test(qrParts[1]) &&
-    String(qrParts.slice(2).join("|") || "").trim().length >= 2
-  ) {
-    payloadForServer =
-      qrParts[0] + "|" +
-      qrParts[1] + "|" +
-      qrParts.slice(2).join("|");
-  }
-
-  if (!payloadForServer) {
-    showResult({
-      success: false,
-      message:
-        "INVALID QR. Strict format only: SECTION|LRN|NAME (example: 7-Banaba|123456789012|DEGAMO, LORYBEN JR D.)."
-    });
-    return;
-  }
-
-  // FIX: Save QR student details for the result overlay.
-  // This is used if the Apps Script response omits these fields.
-  window.senhsLastQrStudent = {
-    section: qrParts[0] || "",
-    lrn: qrParts[1] || "",
-    name: qrParts.slice(2).join("|").trim()
-  };
-
-  // Client-side cooldown: same LRN within 60 seconds.
-  const coolLrn = qrParts[1];
-  const coolNow = Date.now();
-
-  if (
-    senhsLrnCooldown_[coolLrn] &&
-    (coolNow - senhsLrnCooldown_[coolLrn]) < SENHS_LRN_COOLDOWN_MS
-  ) {
-    const waitSec = Math.ceil(
-      (SENHS_LRN_COOLDOWN_MS -
-        (coolNow - senhsLrnCooldown_[coolLrn])) / 1000
-    );
-
-    showResult({
-      success: true,
-      recorded: false,
-      alreadyRecorded: true,
-      message:
-        "ALREADY RECORDED — wait " +
-        waitSec +
-        "s (same student). Next student please."
-    });
-
-    return;
-  }
-
-  try {
-    const requestUrl =
-      APPS_SCRIPT_URL +
-      "?lrn=" + encodeURIComponent(payloadForServer) +
-      "&device=" + encodeURIComponent(deviceKey) +
-      "&session=" + encodeURIComponent(sessionToken) +
-      "&platform=" + encodeURIComponent(platform);
-
-    const result = await jsonpRequest(requestUrl, 25000);
-
-    showResult(result);
-
-    if (result && result.success) {
-      // Start cooldown even when already recorded.
-      senhsLrnCooldown_[coolLrn] = Date.now();
-
-      if (result.recorded !== false) {
-        beep(1400, 180);
-      }
-
-      loadAttendanceSummary();
-
-      // Drain IO / section-log / SMS queue without blocking scanning.
-      try {
-        const drainUrl =
-          APPS_SCRIPT_URL +
-          "?action=processScanQueue&_t=" + Date.now();
-
-        // Fire-and-forget.
-        jsonpRequest(drainUrl, 60000).catch(function () {});
-      } catch (drainErr) {
-        console.warn("Queue drain kick:", drainErr);
-      }
-    }
-  } catch (error) {
-    console.error("QR server error:", error);
-
-    const msg = String(
-      error && error.message
-        ? error.message
-        : "Unable to connect to server."
-    );
-
-    if (/timed out/i.test(msg)) {
-      // ATT may already have been written on the server.
-      if (typeof coolLrn !== "undefined" && coolLrn) {
-        senhsLrnCooldown_[coolLrn] = Date.now();
-      }
-
-      showResult({
-        success: true,
-        recorded: true,
-        timedOutButLikelySaved: true,
-        message:
-          "RECORDED (server reply late). Check ATT section. Do not rescan same student — next student please."
-      });
-
-      try {
-        loadAttendanceSummary();
-      } catch (e) {}
-    } else {
-      showResult({
-        success: false,
-        message: msg
-      });
-    }
-  }
+if (!deviceKey || !sessionToken) {
+console.warn("QR was decoded, but there is no active device session.");
+showOverlay(
+"QR DETECTED — LOGIN REQUIRED",
+"Nabasa ng scanner ang QR code, pero walang active device session. Bumalik sa device login, mag-login ulit, at buksan muli ang scanner.",
+true
+);
+readyBar.textContent = "DEVICE LOGIN REQUIRED";
+readyBar.style.color = "#b71c1c";
+// Keep processing locked until overlay is dismissed — then unlock.
+setTimeout(function () {
+  resumeScanner();
+}, 2500);
+return;
 }
 
+window.qrProcessingStart = performance.now();
+
+// Stop the secondary frame decoder while the QR is being processed.
+// Any decoder callback already in flight will be rejected by the lock above.
+senhsStopQrFallback_();
+
+try {
+if (html5QrCode && scannerRunning) {
+await html5QrCode.pause(true);
+}
+} catch (error) {
+console.log("Pause error:", error);
+}
+
+readyBar.textContent = "PROCESSING...";
+readyBar.style.color = "#1267a5";
+showProcessing();
+
+// STRICT ONLY: SECTION|LRN|NAME
+// example: 7-Banaba|123456789012|DEGAMO, LORYBEN JR D.
+const qrText = String(decodedText || "").trim();
+const qrParts = qrText.split("|").map(function (p) { return String(p || "").trim(); });
+let payloadForServer = "";
+
+if (
+  qrParts.length >= 3 &&
+  /^\d{1,2}\s*[-–]\s*.+/.test(qrParts[0]) &&
+  /^\d{12}$/.test(qrParts[1]) &&
+  String(qrParts.slice(2).join("|") || "").trim().length >= 2
+) {
+  payloadForServer = qrParts[0] + "|" + qrParts[1] + "|" + qrParts.slice(2).join("|");
+}
+
+if (!payloadForServer) {
+showResult({
+success: false,
+message: "INVALID QR. Strict format only: SECTION|LRN|NAME (example: 7-Banaba|123456789012|DEGAMO, LORYBEN JR D.)."
+});
+return;
+}
+
+try {
+const requestUrl =
+APPS_SCRIPT_URL +
+"?lrn=" + encodeURIComponent(payloadForServer) +
+"&device=" + encodeURIComponent(deviceKey) +
+"&session=" + encodeURIComponent(sessionToken) +
+"&platform=" + encodeURIComponent(platform);
+
+const result = await jsonpRequest(requestUrl, 25000);
+
+if (result && result.success) {
+  if (result.recorded !== false) {
+    beep(1400, 180);
+  }
+
+  // Wait for the server-side follow-up queue (including Section Logs) to finish
+  // before displaying the final result. showResult's normal timer then unlocks
+  // the scanner, so the next QR is accepted only after logging and result display.
+  try {
+    const drainUrl = APPS_SCRIPT_URL +
+      "?action=processScanQueue&_t=" + Date.now();
+    const drainResult = await jsonpRequest(drainUrl, 60000);
+    if (!drainResult || drainResult.success !== true) {
+      console.warn("Scan queue did not confirm completion:", drainResult);
+    }
+  } catch (drainErr) {
+    console.warn("Scan queue processing error:", drainErr);
+  }
+
+  loadAttendanceSummary();
+}
+
+showResult(result);
+} catch (error) {
+console.error("QR server error:", error);
+var msg = String(error && error.message ? error.message : "Unable to connect to server.");
+if (/timed out/i.test(msg)) {
+  // ATT is written first on the server — timeout usually means the reply was late, not a failed save.
+  showResult({
+    success: true,
+    recorded: true,
+    timedOutButLikelySaved: true,
+    message: "RECORDED (server reply late). Check ATT section. Do not rescan same student — next student please."
+  });
+  try { loadAttendanceSummary(); } catch (e) {}
+} else {
+  showResult({
+    success: false,
+    message: msg
+  });
+}
+}
+}
 
 
 /* =====================================================
@@ -5452,13 +5387,9 @@ scanOverlay.style.background =
 isLate || !isSuccess ? "#b71c1c" : "rgba(0,0,0,0.72)";
 
 if (isSuccess) {
-
-const qrStudent = window.senhsLastQrStudent || {};
-
-const name = result.name || qrStudent.name || "STUDENT";
-const lrn = result.lrn || qrStudent.lrn || "";
-const section = result.section || qrStudent.section || "";
-
+const name = result.name || "STUDENT";
+const lrn = result.lrn || "";
+const section = result.section || "";
 const recordedLabel = (result.message === "RECORDED" || result.recorded)
 ? "RECORDED"
 : (result.event || "RECORDED");
