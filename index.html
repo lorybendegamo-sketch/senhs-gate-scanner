@@ -321,13 +321,42 @@ background-position: center;
 background-repeat: no-repeat;
 box-shadow: 0 10px 35px rgba(0,0,0,0.20);
 }
-#scanModeBar {
-  display: flex;
+
+.scan-mode-label {
+  width: 100%;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 900;
+  color: #1b5e20;
+  letter-spacing: 0.5px;
+  margin-bottom: 2px;
+}
+.scan-mode-btn {
+  min-width: 120px;
+  min-height: 44px;
+}
+@media (max-width: 600px) {
+  .scan-mode-btn {
+    flex: 1 1 40%;
+    min-width: 0;
+    font-size: 12px !important;
+    padding: 10px 8px !important;
+  }
+}
+#scanModeBar,
+.scan-mode-bar {
+  display: flex !important;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 10px;
   justify-content: center;
-  padding: 10px;
-  background: rgba(255,255,255,0.96);
+  align-items: center;
+  padding: 12px 10px;
+  background: rgba(232, 245, 233, 0.98);
+  border-bottom: 3px solid #2e7d32;
+  position: relative;
+  z-index: 30;
+  visibility: visible !important;
+  opacity: 1 !important;
 }
 .scan-mode-btn {
   padding: 12px 16px;
@@ -2328,19 +2357,14 @@ class="scan-overlay"
 <div id="overlayContent"></div>
 </div>
 </div>
-<div
-id="readyBar"
-class="ready-bar"
->
-  <div id="scanModeBar">
+<div id="scanModeBar" class="scan-mode-bar" role="group" aria-label="Scan mode">
+  <div class="scan-mode-label">PILIIN ANG SCAN MODE:</div>
   <button type="button" class="scan-mode-btn" data-mode="AM_IN">AM TIME IN</button>
   <button type="button" class="scan-mode-btn" data-mode="AM_OUT">AM TIME OUT</button>
   <button type="button" class="scan-mode-btn" data-mode="PM_IN">PM TIME IN</button>
   <button type="button" class="scan-mode-btn" data-mode="PM_OUT">PM TIME OUT</button>
 </div>
-  
-● READY TO SCAN
-</div>
+<div id="readyBar" class="ready-bar">● READY TO SCAN</div>
 <!-- =================================================
 ATTENDANCE MONITOR
 ================================================= -->
@@ -3377,8 +3401,19 @@ attendancePage.classList.remove("is-visible");
 
 scannerPage.style.setProperty("display", "block", "important");
 scannerPage.classList.add("is-visible");
-readyBar.textContent = "● STARTING CAMERA...";
-readyBar.style.color = "#1267a5";
+var modeBar = document.getElementById("scanModeBar");
+if (modeBar) {
+  modeBar.style.setProperty("display", "flex", "important");
+  modeBar.style.setProperty("visibility", "visible", "important");
+  modeBar.style.setProperty("opacity", "1", "important");
+}
+if (readyBar) {
+  readyBar.textContent = "● STARTING CAMERA...";
+  readyBar.style.color = "#1267a5";
+}
+if (typeof senhsUpdateScanModeUI === "function") {
+  senhsUpdateScanModeUI();
+}
 try {
 await startCamera();
 loadAttendanceSummary();
