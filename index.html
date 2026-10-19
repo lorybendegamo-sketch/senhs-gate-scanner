@@ -330,20 +330,28 @@ box-shadow: 0 10px 35px rgba(0,0,0,0.20);
   background: rgba(255,255,255,0.96);
 }
 .scan-mode-btn {
-  padding: 10px 14px;
+  padding: 12px 16px;
   border: 2px solid #1b5e20;
-  border-radius: 10px;
-  background: #2e7d32;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #2e7d32, #66bb6a);
   color: #fff;
   font-weight: 900;
   cursor: pointer;
-  font-size: 13px;
+  font-size: 14px;
+  box-shadow: 0 3px 8px rgba(46,125,50,0.35);
+}
+.scan-mode-btn[data-mode="AM_IN"],
+.scan-mode-btn[data-mode="AM_OUT"],
+.scan-mode-btn[data-mode="PM_IN"],
+.scan-mode-btn[data-mode="PM_OUT"] {
+  background: linear-gradient(135deg, #2e7d32, #43a047);
 }
 .scan-mode-btn.active {
-  background: #174d1a;
+  background: linear-gradient(135deg, #1b5e20, #174d1a);
   color: #fff;
   border-color: #0d3b10;
-  box-shadow: 0 0 0 2px rgba(46,125,50,.22);
+  box-shadow: 0 0 0 3px rgba(255, 235, 59, 0.85), 0 3px 10px rgba(0,0,0,0.25);
+  transform: scale(1.04);
 }
 .scanner-watermark {
 position: absolute;
@@ -3162,6 +3170,8 @@ if (role === "TEACHER") {
 attendanceAccessCode = key;
 attendanceRole = "TEACHER";
 attendanceSection = "ALL";
+window.currentAccessCode = key;
+try { localStorage.setItem("pmAccessCode", key); } catch (e) {}
 showDeviceMessage("Teacher authorized. Opening view-only section attendance…", "success");
 setTimeout(function () { openTeacherPage(); }, 250);
 return;
@@ -3183,6 +3193,8 @@ throw new Error(
 attendanceAccessCode = key;
 attendanceRole = role;
 attendanceSection = section;
+window.currentAccessCode = key;
+try { localStorage.setItem("pmAccessCode", key); } catch (e) {}
 
 showDeviceMessage(
 role === "ADMIN"
@@ -5164,8 +5176,15 @@ readyBar.textContent = "QR DETECTED — PROCESSING...";
 readyBar.style.color = "#1267a5";
 beep(1000, 160);
 
-const isAdminScan = !!(window.currentAccessCode || window.pmAccessCode || localStorage.getItem("pmAccessCode"));
-const accessCode = window.currentAccessCode || window.pmAccessCode || localStorage.getItem("pmAccessCode") || "";
+// Admin / Adviser / Teacher login stores attendanceAccessCode (and we also mirror to currentAccessCode).
+const accessCode = String(
+  (typeof attendanceAccessCode !== "undefined" && attendanceAccessCode) ||
+  window.currentAccessCode ||
+  window.pmAccessCode ||
+  localStorage.getItem("pmAccessCode") ||
+  ""
+).trim();
+const isAdminScan = !!accessCode;
 
 if ((!deviceKey || !sessionToken) && !(isAdminScan && accessCode)) {
   console.warn("QR was decoded, but there is no active device session.");
@@ -5224,29 +5243,37 @@ return;
 }
 
 try {
-const isAdminScan = !!(window.currentAccessCode || window.pmAccessCode || localStorage.getItem("pmAccessCode"));
-const accessCode = window.currentAccessCode || window.pmAccessCode || localStorage.getItem("pmAccessCode") || "";
+// Admin / Adviser / Teacher login stores attendanceAccessCode (and we also mirror to currentAccessCode).
+const accessCode = String(
+  (typeof attendanceAccessCode !== "undefined" && attendanceAccessCode) ||
+  window.currentAccessCode ||
+  window.pmAccessCode ||
+  localStorage.getItem("pmAccessCode") ||
+  ""
+).trim();
+const isAdminScan = !!accessCode;
 
 let requestUrl;
 
-if (isAdminScan && accessCode) {
-  // Admin / Adviser / Teacher — NO device code needed
+const selectedMode = String(window.senhsScanMode || "AM_IN").trim().toUpperCase() || "AM_IN";
+
+if (isAdminScan && accessCode && !(deviceKey && sessionToken)) {
+  // Admin / Adviser / Teacher — Scan QR Now (NO device code needed)
   requestUrl =
     APPS_SCRIPT_URL +
     "?lrn=" + encodeURIComponent(payloadForServer) +
     "&accessCode=" + encodeURIComponent(accessCode) +
-    "&scanMode=" + encodeURIComponent(window.senhsScanMode || "AM_IN");
+    "&scanMode=" + encodeURIComponent(selectedMode);
 
 } else {
-  // Normal device scanner (DEVICE_1 to DEVICE_6): preserve the old
-  // automatic TIME IN / TIME OUT alternation. The four explicit modes
-  // are applied to Admin / Adviser / Teacher scans only.
+  // Device scanner (DEVICE_1–6): same 4-button modes, still requires device session
   requestUrl =
     APPS_SCRIPT_URL +
     "?lrn=" + encodeURIComponent(payloadForServer) +
     "&device=" + encodeURIComponent(deviceKey) +
     "&session=" + encodeURIComponent(sessionToken) +
-    "&platform=" + encodeURIComponent(platform);
+    "&platform=" + encodeURIComponent(platform) +
+    "&scanMode=" + encodeURIComponent(selectedMode);
 }
 
 const result = await jsonpRequest(requestUrl, 25000);
