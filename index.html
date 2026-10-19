@@ -5133,20 +5133,22 @@ readyBar.textContent = "QR DETECTED — PROCESSING...";
 readyBar.style.color = "#1267a5";
 beep(1000, 160);
 
-if (!deviceKey || !sessionToken) {
-console.warn("QR was decoded, but there is no active device session.");
-showOverlay(
-"QR DETECTED — LOGIN REQUIRED",
-"Nabasa ng scanner ang QR code, pero walang active device session. Bumalik sa device login, mag-login ulit, at buksan muli ang scanner.",
-true
-);
-readyBar.textContent = "DEVICE LOGIN REQUIRED";
-readyBar.style.color = "#b71c1c";
-// Keep processing locked until overlay is dismissed — then unlock.
-setTimeout(function () {
-  resumeScanner();
-}, 2500);
-return;
+const isAdminScan = !!(window.currentAccessCode || window.pmAccessCode || localStorage.getItem("pmAccessCode"));
+const accessCode = window.currentAccessCode || window.pmAccessCode || localStorage.getItem("pmAccessCode") || "";
+
+if ((!deviceKey || !sessionToken) && !(isAdminScan && accessCode)) {
+  console.warn("QR was decoded, but there is no active device session.");
+  showOverlay(
+    "QR DETECTED — LOGIN REQUIRED",
+    "Nabasa ng scanner ang QR code, pero walang active device session. Bumalik sa device login, mag-login ulit, at buksan muli ang scanner.",
+    true
+  );
+  readyBar.textContent = "DEVICE LOGIN REQUIRED";
+  readyBar.style.color = "#b71c1c";
+  setTimeout(function () {
+    resumeScanner();
+  }, 2500);
+  return;
 }
 
 window.qrProcessingStart = performance.now();
@@ -5191,29 +5193,39 @@ return;
 }
 
 try {
-const requestUrl =
-APPS_SCRIPT_URL +
-"?lrn=" + encodeURIComponent(payloadForServer) +
-"&device=" + encodeURIComponent(deviceKey) +
-"&session=" + encodeURIComponent(sessionToken) +
-"&platform=" + encodeURIComponent(platform);
+const isAdminScan = !!(window.currentAccessCode || window.pmAccessCode || localStorage.getItem("pmAccessCode"));
+const accessCode = window.currentAccessCode || window.pmAccessCode || localStorage.getItem("pmAccessCode") || "";
+
+let requestUrl;
+
+if (isAdminScan && accessCode) {
+  // Admin / Adviser / Teacher — NO device code needed
+  requestUrl =
+    APPS_SCRIPT_URL +
+    "?lrn=" + encodeURIComponent(payloadForServer) +
+    "&accessCode=" + encodeURIComponent(accessCode);
+} else {
+  // Normal device scanner (DEVICE_1 to DEVICE_6)
+  requestUrl =
+    APPS_SCRIPT_URL +
+    "?lrn=" + encodeURIComponent(payloadForServer) +
+    "&device=" + encodeURIComponent(deviceKey) +
+    "&session=" + encodeURIComponent(sessionToken) +
+    "&platform=" + encodeURIComponent(platform);
+}
 
 const result = await jsonpRequest(requestUrl, 25000);
-
 if (result && result.success && result.recorded !== false) {
   beep(1400, 180);
 }
-
 // Show the scan result immediately after the main attendance request returns.
 // Do NOT wait for SMS, SECTION_LOG, master LOGS, or Daily IO here.
 showResult(result);
-
 if (result && result.success) {
   // Refresh the on-screen summary without blocking the scanner.
   try { loadAttendanceSummary(); } catch (summaryErr) {
     console.warn("Attendance summary refresh skipped:", summaryErr);
   }
-
   // Kick the follow-up queue in the background. This promise is deliberately
   // NOT awaited, so SMS and secondary logs cannot hold up the line.
   try {
@@ -5247,7 +5259,6 @@ if (/timed out/i.test(msg)) {
     success: false,
     message: msg
   });
-}
 }
 }
 
