@@ -331,17 +331,19 @@ box-shadow: 0 10px 35px rgba(0,0,0,0.20);
 }
 .scan-mode-btn {
   padding: 10px 14px;
-  border: 2px solid #333;
+  border: 2px solid #1b5e20;
   border-radius: 10px;
-  background: #fff;
+  background: #2e7d32;
+  color: #fff;
   font-weight: 900;
   cursor: pointer;
   font-size: 13px;
 }
 .scan-mode-btn.active {
-  background: #2e7d32;
+  background: #174d1a;
   color: #fff;
-  border-color: #1b5e20;
+  border-color: #0d3b10;
+  box-shadow: 0 0 0 2px rgba(46,125,50,.22);
 }
 .scanner-watermark {
 position: absolute;
@@ -5236,14 +5238,15 @@ if (isAdminScan && accessCode) {
     "&scanMode=" + encodeURIComponent(window.senhsScanMode || "AM_IN");
 
 } else {
-  // Normal device scanner (DEVICE_1 to DEVICE_6)
+  // Normal device scanner (DEVICE_1 to DEVICE_6): preserve the old
+  // automatic TIME IN / TIME OUT alternation. The four explicit modes
+  // are applied to Admin / Adviser / Teacher scans only.
   requestUrl =
     APPS_SCRIPT_URL +
     "?lrn=" + encodeURIComponent(payloadForServer) +
     "&device=" + encodeURIComponent(deviceKey) +
     "&session=" + encodeURIComponent(sessionToken) +
-    "&platform=" + encodeURIComponent(platform) +
-    "&scanMode=" + encodeURIComponent(window.senhsScanMode || "AM_IN");
+    "&platform=" + encodeURIComponent(platform);
 }
 
 const result = await jsonpRequest(requestUrl, 25000);
@@ -5438,9 +5441,17 @@ if (isSuccess) {
 const name = result.name || "STUDENT";
 const lrn = result.lrn || "";
 const section = result.section || "";
-const recordedLabel = (result.message === "RECORDED" || result.recorded)
-? "RECORDED"
-: (result.event || "RECORDED");
+const resultSession = String(result.session || "").toUpperCase();
+const resultEvent = String(result.event || "").toUpperCase();
+let recordedLabel = "RECORDED";
+if (resultEvent === "TIME IN") {
+  recordedLabel = (isLate ? "ARRIVED LATE" : "ARRIVED") +
+    (resultSession ? " / " + resultSession + " IN" : "");
+} else if (resultEvent === "TIME OUT") {
+  recordedLabel = "LEFT" + (resultSession ? " / " + resultSession + " OUT" : "");
+} else if (result.message && result.message !== "RECORDED") {
+  recordedLabel = String(result.message);
+}
 
 let html =
 '<div style="' +
