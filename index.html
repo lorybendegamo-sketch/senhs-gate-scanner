@@ -4197,7 +4197,7 @@ APPS_SCRIPT_URL +
 "?summary=today&_t=" + Date.now();
 const result =
 await jsonpRequest(
-requestUrl
+requestUrl,120000
 );
 if (
 !result ||
