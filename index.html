@@ -5188,6 +5188,7 @@ error
 );
 }
 }
+  
 /* =====================================================
 QR DETECTED
 ===================================================== */
@@ -5203,14 +5204,12 @@ const overlayEl = document.getElementById("scanOverlay");
 if (overlayEl && overlayEl.style.display && overlayEl.style.display !== "none") return;
 processing = true;
 window.senhsQrProcessingLock = true;
-
 // Show proof of decoding immediately. This is intentionally before the
 // session check, so a missing/expired login cannot look like a dead scanner.
 console.info("SENHS QR DECODE SUCCESS. Payload length:", String(decodedText || "").length);
 readyBar.textContent = "QR DETECTED — PROCESSING...";
 readyBar.style.color = "#1267a5";
 beep(1000, 160);
-
 // Admin / Adviser / Teacher login stores attendanceAccessCode (and we also mirror to currentAccessCode).
 const accessCode = String(
   (typeof attendanceAccessCode !== "undefined" && attendanceAccessCode) ||
@@ -5220,7 +5219,6 @@ const accessCode = String(
   ""
 ).trim();
 const isAdminScan = !!accessCode;
-
 if ((!deviceKey || !sessionToken) && !(isAdminScan && accessCode)) {
   console.warn("QR was decoded, but there is no active device session.");
   showOverlay(
@@ -5235,13 +5233,10 @@ if ((!deviceKey || !sessionToken) && !(isAdminScan && accessCode)) {
   }, 2500);
   return;
 }
-
 window.qrProcessingStart = performance.now();
-
 // Stop the secondary frame decoder while the QR is being processed.
 // Any decoder callback already in flight will be rejected by the lock above.
 senhsStopQrFallback_();
-
 try {
 if (html5QrCode && scannerRunning) {
 await html5QrCode.pause(true);
@@ -5249,17 +5244,14 @@ await html5QrCode.pause(true);
 } catch (error) {
 console.log("Pause error:", error);
 }
-
 readyBar.textContent = "PROCESSING...";
 readyBar.style.color = "#1267a5";
 showProcessing();
-
 // STRICT ONLY: SECTION|LRN|NAME
 // example: 7-Banaba|123456789012|DEGAMO, LORYBEN JR D.
 const qrText = String(decodedText || "").trim();
 const qrParts = qrText.split("|").map(function (p) { return String(p || "").trim(); });
 let payloadForServer = "";
-
 if (
   qrParts.length >= 3 &&
   /^\d{1,2}\s*[-–]\s*.+/.test(qrParts[0]) &&
@@ -5268,7 +5260,6 @@ if (
 ) {
   payloadForServer = qrParts[0] + "|" + qrParts[1] + "|" + qrParts.slice(2).join("|");
 }
-
 if (!payloadForServer) {
 showResult({
 success: false,
@@ -5276,7 +5267,6 @@ message: "INVALID QR. Strict format only: SECTION|LRN|NAME (example: 7-Banaba|12
 });
 return;
 }
-
 try {
 // Admin / Adviser / Teacher login stores attendanceAccessCode (and we also mirror to currentAccessCode).
 const accessCode = String(
@@ -5287,11 +5277,8 @@ const accessCode = String(
   ""
 ).trim();
 const isAdminScan = !!accessCode;
-
 let requestUrl;
-
 const selectedMode = String(window.senhsScanMode || "AM_IN").trim().toUpperCase() || "AM_IN";
-
 if (isAdminScan && accessCode && !(deviceKey && sessionToken)) {
   // Admin / Adviser / Teacher — Scan QR Now (NO device code needed)
   requestUrl =
@@ -5299,7 +5286,6 @@ if (isAdminScan && accessCode && !(deviceKey && sessionToken)) {
     "?lrn=" + encodeURIComponent(payloadForServer) +
     "&accessCode=" + encodeURIComponent(accessCode) +
     "&scanMode=" + encodeURIComponent(selectedMode);
-
 } else {
   // Device scanner (DEVICE_1–6): same 4-button modes, still requires device session
   requestUrl =
@@ -5310,7 +5296,6 @@ if (isAdminScan && accessCode && !(deviceKey && sessionToken)) {
     "&platform=" + encodeURIComponent(platform) +
     "&scanMode=" + encodeURIComponent(selectedMode);
 }
-
 const result = await jsonpRequest(requestUrl, 25000);
 if (result && result.success && result.recorded !== false) {
   beep(1400, 180);
@@ -5323,8 +5308,15 @@ if (result && result.success) {
   try { loadAttendanceSummary(); } catch (summaryErr) {
     console.warn("Attendance summary refresh skipped:", summaryErr);
   }
-  // Kick the follow-up queue in the background. This promise is deliberately
-  // NOT awaited, so SMS and secondary logs cannot hold up the line.
+
+  // Kick SMS queue FIRST (priority para mas mabilis ang parent notification)
+  try {
+    const smsUrl = APPS_SCRIPT_URL +
+      "?action=processSmsQueue&format=json&_t=" + Date.now();
+    jsonpRequest(smsUrl, 45000).catch(function () {});
+  } catch (e) {}
+
+  // Kick the full follow-up queue (logs, IO, attendance, etc.)
   try {
     const drainUrl = APPS_SCRIPT_URL +
       "?action=processScanQueue&_t=" + Date.now();
@@ -5359,7 +5351,7 @@ if (/timed out/i.test(msg)) {
 }
 }
 } // FIX: close onQrDetected() so the remaining page scripts and Page 1 NEXT handler initialize at page load.
-
+  
 /* =====================================================
 SIMPLE QR PROCESSING OVERLAY
 ===================================================== */
