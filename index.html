@@ -1979,6 +1979,16 @@ max-height: 45dvh;
 #teacherSectionAttendance { margin-top: 0 !important; }
 @media (max-width: 600px) { #teacherPage .device-content { padding: 5px 4px 14px !important; } #teacherPage h2 { font-size: 20px; } }
 
+  #teacherSectionAttendance .senhs-detail-cell {
+  cursor: pointer;
+  font-weight: 900;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+#teacherSectionAttendance .senhs-detail-cell:active {
+  opacity: 0.75;
+}
+  
 /* Integrated page enhancements from the supplied page stylesheet */
 .scan-btn {
   background: linear-gradient(135deg, #1565c0, #42a5f5);
@@ -3307,16 +3317,24 @@ TEACHER PAGE — read-only section table only
 let senhsTeacherRefreshTimer_ = null;
 let senhsTeacherRefreshBusy_ = false;
 async function openTeacherPage() {
-  ["userPage", "devicePage", "scannerPage", "attendancePage", "mamPage", "smsPage", "lateRecordsPage"].forEach(function(id) {
+  ["userPage", "devicePage", "scannerPage", "attendancePage", "mamPage", "smsPage", "lateRecordsPage"].forEach(function (id) {
     const el = document.getElementById(id);
-    if (el) { el.style.setProperty("display", "none", "important"); el.classList.remove("is-visible"); }
+    if (el) {
+      el.style.setProperty("display", "none", "important");
+      el.classList.remove("is-visible");
+    }
   });
   const page = document.getElementById("teacherPage");
   if (page) page.style.setProperty("display", "block", "important");
+
+  // Bind click once on the container (event delegation)
+  senhsBindTeacherDetailCells_();
+
   await refreshTeacherAttendance_();
   if (senhsTeacherRefreshTimer_) clearInterval(senhsTeacherRefreshTimer_);
   senhsTeacherRefreshTimer_ = setInterval(refreshTeacherAttendance_, 5000);
 }
+
 async function refreshTeacherAttendance_() {
   if (senhsTeacherRefreshBusy_ || attendanceRole !== "TEACHER") return;
   senhsTeacherRefreshBusy_ = true;
@@ -3324,32 +3342,62 @@ async function refreshTeacherAttendance_() {
   const target = document.getElementById("teacherSectionAttendance");
   try {
     await loadAttendanceSummary();
-    if (target && sectionAttendance) target.innerHTML = sectionAttendance.innerHTML;
-    if (message) message.textContent = "Updated " + new Date().toLocaleTimeString([], {hour:"2-digit", minute:"2-digit", second:"2-digit"}) + " • Auto-update every 5 seconds • Read-only";
+    if (target && sectionAttendance) {
+      target.innerHTML = sectionAttendance.innerHTML;
+    }
+    // Ensure bind exists even if DOM was replaced
+    senhsBindTeacherDetailCells_();
+    if (message) {
+      message.textContent =
+        "Updated " +
+        new Date().toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+          second: "2-digit"
+        }) +
+        " • Auto-update every 5 seconds • Read-only";
+    }
   } catch (error) {
     if (message) message.textContent = error.message || "Unable to load section attendance.";
   } finally {
     senhsTeacherRefreshBusy_ = false;
   }
 }
+
 function senhsBindTeacherDetailCells_() {
-  const table = document.getElementById("teacherSectionAttendance");
-  if (!table || table.dataset.detailsBound === "1") return;
-  table.dataset.detailsBound = "1";
-  table.addEventListener("click", function(event) {
+  const wrap = document.getElementById("teacherSectionAttendance");
+  if (!wrap) return;
+
+  // Always use one delegated listener on the wrapper
+  if (wrap.dataset.detailsBound === "1") return;
+  wrap.dataset.detailsBound = "1";
+
+  wrap.addEventListener("click", function (event) {
     const cell = event.target.closest(".senhs-detail-cell");
-    if (!cell || !table.contains(cell)) return;
+    if (!cell || !wrap.contains(cell)) return;
     event.preventDefault();
-    senhsShowAttendanceDetails_("SECTION", cell.dataset.period, cell.dataset.category, cell.dataset.section);
+    senhsShowAttendanceDetails_(
+      "SECTION",
+      cell.dataset.period,
+      cell.dataset.category,
+      cell.dataset.section
+    );
   });
-  table.addEventListener("keydown", function(event) {
+
+  wrap.addEventListener("keydown", function (event) {
     if (event.key !== "Enter" && event.key !== " ") return;
     const cell = event.target.closest(".senhs-detail-cell");
-    if (!cell || !table.contains(cell)) return;
+    if (!cell || !wrap.contains(cell)) return;
     event.preventDefault();
-    senhsShowAttendanceDetails_("SECTION", cell.dataset.period, cell.dataset.category, cell.dataset.section);
+    senhsShowAttendanceDetails_(
+      "SECTION",
+      cell.dataset.period,
+      cell.dataset.category,
+      cell.dataset.section
+    );
   });
 }
+  
 const teacherLogoutBtn = document.getElementById("teacherLogoutBtn");
 if (teacherLogoutBtn) teacherLogoutBtn.addEventListener("click", async function() {
   if (typeof senhsTeacherRefreshTimer_ !== "undefined" && senhsTeacherRefreshTimer_) {
@@ -4374,12 +4422,11 @@ section.section || ""
 Number(
 section.total || 0
 ) +
-'</td>' +
-'<td class="am-present-cell">' +
-Number(
-section.amPresent || 0
-) +
-'</td>' +
+'<td class="am-present-cell senhs-detail-cell" role="button" tabindex="0" data-section="' +
+escapeHtml(section.section || "") +
+'" data-period="AM" data-category="PRESENT" title="View AM present students">' +
+Number(section.amPresent || 0) +
+"</td>" +
 '<td class="am-absent-cell senhs-detail-cell" role="button" tabindex="0" data-section="' + escapeHtml(section.section || "") + '" data-period="AM" data-category="ABSENT" title="View AM absent students">' +
 Number(section.amAbsent || 0) +
 '</td>' +
@@ -4388,11 +4435,11 @@ Number(section.amLate || 0) +
 '</td>';
 if (showPM) {
 html +=
-'<td class="pm-present-cell">' +
-Number(
-section.pmPresent || 0
-) +
-'</td>' +
+'<td class="pm-present-cell senhs-detail-cell" role="button" tabindex="0" data-section="' +
+escapeHtml(section.section || "") +
+'" data-period="PM" data-category="PRESENT" title="View PM present students">' +
+Number(section.pmPresent || 0) +
+"</td>" +
 '<td class="pm-absent-cell senhs-detail-cell" role="button" tabindex="0" data-section="' + escapeHtml(section.section || "") + '" data-period="PM" data-category="ABSENT" title="View PM absent students">' +
 Number(section.pmAbsent || 0) +
 '</td>' +
