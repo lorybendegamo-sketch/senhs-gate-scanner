@@ -3126,32 +3126,36 @@ JSON.stringify(deviceResult, null, 2)
 );
 
 if (isAuthorized(deviceResult)) {
-const receivedSession = String(
-deviceResult.session || ""
-).trim();
+  const receivedSession = String(
+    deviceResult.session || ""
+  ).trim();
 
-if (!receivedSession) {
-throw new Error(
-"Device authorized, but no session token was returned. Check the Apps Script response."
-);
-}
+  if (!receivedSession) {
+    throw new Error(
+      "Device authorized, but no session token was returned. Check the Apps Script response."
+    );
+  }
 
-deviceKey = key;
-setSavedDeviceCode(key);
-sessionToken = receivedSession;
-sessionActive = true;
-releaseSent = false;
+  deviceKey = key;
+  setSavedDeviceCode(key);
+  sessionToken = receivedSession;
+  sessionActive = true;
+  releaseSent = false;
 
-showDeviceMessage(
-"Device authorized. Opening Gate Scanner...",
-"success"
-);
+  // Para gumana ang click sa AM/PM Absent/Late numbers sa scanner page
+  attendanceAccessCode = key;
+  window.currentAccessCode = key;
 
-setTimeout(function () {
-openScannerPage();
-}, 300);
+  showDeviceMessage(
+    "Device authorized. Opening Gate Scanner...",
+    "success"
+  );
 
-return;
+  setTimeout(function () {
+    openScannerPage();
+  }, 300);
+
+  return;
 }
 } catch (error) {
 deviceError = error;
@@ -7165,38 +7169,93 @@ function senhsShowAttendanceDetails_(level, period, category, sectionName) {
   const message = document.getElementById("attendanceDetailsMessage");
   const results = document.getElementById("attendanceDetailsResults");
   if (!modal || !results) return;
-  const dateKey = new Intl.DateTimeFormat("en-CA", {timeZone:"Asia/Manila",year:"numeric",month:"2-digit",day:"2-digit"}).format(new Date());
+
+  // Device login: attendanceAccessCode was empty before — fall back to deviceKey
+  const code =
+    String(attendanceAccessCode || deviceKey || window.currentAccessCode || "").trim();
+  if (!code) {
+    if (message) message.textContent = "Not authorized. Please re-login.";
+    return;
+  }
+
+  const dateKey = new Intl.DateTimeFormat("en-CA", {
+    timeZone: "Asia/Manila",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit"
+  }).format(new Date());
+
   title.textContent = (sectionName || level) + " — " + period + " " + category;
   message.textContent = "Loading " + dateKey + "…";
   results.innerHTML = "";
   modal.style.display = "block";
-  const url = APPS_SCRIPT_URL + "?action=getAttendanceDetails&accessCode=" + encodeURIComponent(attendanceAccessCode) +
-    "&date=" + encodeURIComponent(dateKey) + "&level=" + encodeURIComponent(level) + "&section=" + encodeURIComponent(sectionName || "") + "&period=" + encodeURIComponent(period) + "&category=" + encodeURIComponent(category);
-  jsonpRequest(url).then(function(result) {
-    if (!result || !result.success) throw new Error(result && result.message || "Unable to load attendance details.");
-    message.textContent = dateKey + " — " + result.count + " student(s)";
-    if (!result.sections || !result.sections.length) {
-      results.innerHTML = '<div class="late-section-card" style="text-align:center;font-weight:900;">NO RECORD FOUND</div>';
-      return;
-    }
-    results.innerHTML = "";
-    result.sections.forEach(function(section) {
-      const card=document.createElement("div");card.className="late-section-card";
-      const h=document.createElement("h3");h.textContent=section.section+" — "+section.students.length;card.appendChild(h);
-      const showTime = category === "LATE";
-      const header=document.createElement("div");header.className="late-record-row header";
-      (showTime ? ["LRN","STUDENT NAME","STATUS","TIME RECORDED"] : ["LRN","STUDENT NAME","STATUS"]).forEach(function(t){const c=document.createElement("div");c.textContent=t;header.appendChild(c);});
-      card.appendChild(header);
-      section.students.forEach(function(st){
-        const row=document.createElement("div");row.className="late-record-row";
-        const values = showTime ? [st.lrn,st.name,st.status,st.time || "—"] : [st.lrn,st.name,st.status];
-        values.forEach(function(v){const c=document.createElement("div");c.textContent=v;row.appendChild(c);});
-        card.appendChild(row);
+
+  const url =
+    APPS_SCRIPT_URL +
+    "?action=getAttendanceDetails&accessCode=" +
+    encodeURIComponent(code) +
+    "&date=" + encodeURIComponent(dateKey) +
+    "&level=" + encodeURIComponent(level) +
+    "&section=" + encodeURIComponent(sectionName || "") +
+    "&period=" + encodeURIComponent(period) +
+    "&category=" + encodeURIComponent(category);
+
+  jsonpRequest(url)
+    .then(function (result) {
+      // ... existing success UI (huwag baguhin)
+      if (!result || !result.success) {
+        throw new Error(
+          (result && result.message) || "Unable to load attendance details."
+        );
+      }
+      message.textContent = dateKey + " — " + result.count + " student(s)";
+      if (!result.sections || !result.sections.length) {
+        results.innerHTML =
+          '<div class="late-section-card" style="text-align:center;font-weight:900;">NO RECORD FOUND</div>';
+        return;
+      }
+      results.innerHTML = "";
+      result.sections.forEach(function (section) {
+        const card = document.createElement("div");
+        card.className = "late-section-card";
+        const h = document.createElement("h3");
+        h.textContent = section.section + " — " + section.students.length;
+        card.appendChild(h);
+        const showTime = category === "LATE";
+        const header = document.createElement("div");
+        header.className = "late-record-row header";
+        (showTime
+          ? ["LRN", "STUDENT NAME", "STATUS", "TIME RECORDED"]
+          : ["LRN", "STUDENT NAME", "STATUS"]
+        ).forEach(function (t) {
+          const c = document.createElement("div");
+          c.textContent = t;
+          header.appendChild(c);
+        });
+        card.appendChild(header);
+        section.students.forEach(function (st) {
+          const row = document.createElement("div");
+          row.className = "late-record-row";
+          const values = showTime
+            ? [st.lrn, st.name, st.status, st.time || "—"]
+            : [st.lrn, st.name, st.status];
+          values.forEach(function (v) {
+            const c = document.createElement("div");
+            c.textContent = v;
+            row.appendChild(c);
+          });
+          card.appendChild(row);
+        });
+        results.appendChild(card);
       });
-      results.appendChild(card);
+    })
+    .catch(function (error) {
+      message.textContent = error.message || "Unable to load details.";
+      results.innerHTML =
+        '<div class="late-section-card">NO RECORD FOUND</div>';
     });
-  }).catch(function(error){message.textContent=error.message||"Unable to load details.";results.innerHTML='<div class="late-section-card">NO RECORD FOUND</div>';});
 }
+  
 const detailsCloseBtn = document.getElementById("attendanceDetailsClose");
 if (detailsCloseBtn) detailsCloseBtn.addEventListener("click", function(){document.getElementById("attendanceDetailsModal").style.display="none";});
 const detailsModal = document.getElementById("attendanceDetailsModal");
