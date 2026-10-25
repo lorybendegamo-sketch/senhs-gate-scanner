@@ -3020,15 +3020,15 @@ return String(platform || "").toLowerCase() === "tablet";
 
 /** Prefill device code on tablet from localStorage; field stays editable. */
 function applySavedDeviceCodeForTablet() {
-if (!deviceCode) return;
-if (!isTabletDevice()) return;
+  // Auto-fill saved device code on phone, tablet, and laptop
+  if (!deviceCode) return;
 
-const saved = getSavedDeviceCode();
-if (saved) {
-deviceCode.value = saved;
+  const saved = getSavedDeviceCode();
+  if (saved) {
+    deviceCode.value = saved;
+  }
 }
-}
-
+  
 /* =====================================================
 VERIFY ACCESS - DEVICE / ADVISER / ADMIN
 ===================================================== */
