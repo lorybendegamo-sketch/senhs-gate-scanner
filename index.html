@@ -5243,7 +5243,7 @@ error
 }
   
 /* =====================================================
-QR RESULT — 0.3s PROCESSING + 1.2s RESULT
+QR RESULT — 0.3s PROCESSING + 0.5s RESULT
 ===================================================== */
 function senhsFinishQrWithResult_(result) {
 
@@ -5259,7 +5259,7 @@ function senhsFinishQrWithResult_(result) {
     // Show attendance result.
     showResult(result);
 
-    // Keep result visible for 1.2 seconds.
+    // Keep result visible for 0.5 seconds.
     setTimeout(function () {
       hideOverlay();
 
@@ -5275,7 +5275,7 @@ function senhsFinishQrWithResult_(result) {
         console.warn("QR fallback restart error:", error);
       }
 
-    }, 1200);
+    }, 500);
 
   }, remaining);
 }
