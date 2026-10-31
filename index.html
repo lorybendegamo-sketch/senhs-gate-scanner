@@ -5347,8 +5347,9 @@ senhsStopQrFallback_();
 // KEEP MAIN CAMERA RUNNING
 // Do not hide processing overlay here.
 
-   // VALIDATE QR
+     // VALIDATE QR — SECTION | LRN | NAME
   const qrText = String(decodedText || "").trim();
+
   const qrParts = qrText.split("|").map(function (p) {
     return String(p || "").trim();
   });
@@ -5356,17 +5357,21 @@ senhsStopQrFallback_();
   let payloadForServer = "";
 
   if (
-    qrParts.length === 2 &&
+    qrParts.length >= 3 &&
     /^\d{1,2}\s*[-–]\s*.+/.test(qrParts[0]) &&
-    /^\d{12}$/.test(qrParts[1])
+    /^\d{12}$/.test(qrParts[1]) &&
+    String(qrParts.slice(2).join("|") || "").trim().length >= 2
   ) {
-    payloadForServer = qrParts[0] + "|" + qrParts[1];
+    payloadForServer =
+      qrParts[0] + "|" +
+      qrParts[1] + "|" +
+      qrParts.slice(2).join("|");
   }
 
   if (!payloadForServer) {
     senhsFinishQrWithResult_({
       success: false,
-      message: "INVALID QR. Required format: SECTION|12-DIGIT LRN."
+      message: "INVALID QR. Required format: SECTION|LRN|NAME."
     });
     return;
   }
