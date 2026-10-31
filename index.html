@@ -5297,9 +5297,12 @@ await html5QrCode.pause(true);
 } catch (error) {
 console.log("Pause error:", error);
 }
-readyBar.textContent = "PROCESSING...";
-readyBar.style.color = "#1267a5";
-showProcessing();
+// HUWAG MAGPAKITA NG PROCESSING OVERLAY.
+// Panatilihing nakikita ang camera habang isinusulat ang attendance.
+hideOverlay();
+
+readyBar.textContent = "● READY TO SCAN";
+readyBar.style.color = "#16803c";
 // STRICT ONLY: SECTION|LRN|NAME
 // example: 7-Banaba|123456789012|DEGAMO, LORYBEN JR D.
 const qrText = String(decodedText || "").trim();
