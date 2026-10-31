@@ -5243,168 +5243,232 @@ error
 }
   
 /* =====================================================
-QR DETECTED
+QR RESULT — FAST OVERLAY
 ===================================================== */
-async function onQrDetected(
-decodedText
-) {
-// LOCK IMMEDIATELY: the primary scanner and fallback decoder can report
-// the same QR nearly simultaneously. Set the lock before any UI/audio work
-// or await, so only the first callback can process this scan.
-// Block while previous scan is still processing OR overlay is still visible.
-if (processing || window.senhsQrProcessingLock) return;
-const overlayEl = document.getElementById("scanOverlay");
-if (overlayEl && overlayEl.style.display && overlayEl.style.display !== "none") return;
-processing = true;
-window.senhsQrProcessingLock = true;
-// Show proof of decoding immediately. This is intentionally before the
-// session check, so a missing/expired login cannot look like a dead scanner.
-console.info("SENHS QR DECODE SUCCESS. Payload length:", String(decodedText || "").length);
-readyBar.textContent = "QR DETECTED — PROCESSING...";
-readyBar.style.color = "#1267a5";
-beep(1000, 160);
-// Admin / Adviser / Teacher login stores attendanceAccessCode (and we also mirror to currentAccessCode).
-const accessCode = String(
-  (typeof attendanceAccessCode !== "undefined" && attendanceAccessCode) ||
-  window.currentAccessCode ||
-  window.pmAccessCode ||
-  localStorage.getItem("pmAccessCode") ||
-  ""
-).trim();
-const isAdminScan = !!accessCode;
-if ((!deviceKey || !sessionToken) && !(isAdminScan && accessCode)) {
-  console.warn("QR was decoded, but there is no active device session.");
-  showOverlay(
-    "QR DETECTED — LOGIN REQUIRED",
-    "Nabasa ng scanner ang QR code, pero walang active device session. Bumalik sa device login, mag-login ulit, at buksan muli ang scanner.",
-    true
-  );
-  readyBar.textContent = "DEVICE LOGIN REQUIRED";
-  readyBar.style.color = "#b71c1c";
-  setTimeout(function () {
-    resumeScanner();
-  }, 2500);
-  return;
-}
-window.qrProcessingStart = performance.now();
-// Stop the secondary frame decoder while the QR is being processed.
-// Any decoder callback already in flight will be rejected by the lock above.
-senhsStopQrFallback_();
-
-// HUWAG I-PAUSE ANG CAMERA.
-// Tuloy ang camera preview habang pinoproseso ang attendance.
-
-// HUWAG MAGPAKITA NG PROCESSING OVERLAY.
-hideOverlay();
-
-readyBar.textContent = "● READY TO SCAN";
-readyBar.style.color = "#16803c";
-
-// STRICT ONLY: SECTION|LRN|NAME
-// example: 7-Banaba|123456789012|DEGAMO, LORYBEN JR D.
-const qrText = String(decodedText || "").trim();
-const qrParts = qrText.split("|").map(function (p) { return String(p || "").trim(); });
-let payloadForServer = "";
-if (
-  qrParts.length >= 3 &&
-  /^\d{1,2}\s*[-–]\s*.+/.test(qrParts[0]) &&
-  /^\d{12}$/.test(qrParts[1]) &&
-  String(qrParts.slice(2).join("|") || "").trim().length >= 2
-) {
-  payloadForServer = qrParts[0] + "|" + qrParts[1] + "|" + qrParts.slice(2).join("|");
-}
-if (!payloadForServer) {
-showResult({
-success: false,
-message: "INVALID QR. Strict format only: SECTION|LRN|NAME (example: 7-Banaba|123456789012|DEGAMO, LORYBEN JR D.)."
-});
-return;
-}
-try {
-// Admin / Adviser / Teacher login stores attendanceAccessCode (and we also mirror to currentAccessCode).
-const accessCode = String(
-  (typeof attendanceAccessCode !== "undefined" && attendanceAccessCode) ||
-  window.currentAccessCode ||
-  window.pmAccessCode ||
-  localStorage.getItem("pmAccessCode") ||
-  ""
-).trim();
-const isAdminScan = !!accessCode;
-let requestUrl;
-const selectedMode = String(window.senhsScanMode || "AM_IN").trim().toUpperCase() || "AM_IN";
-if (isAdminScan && accessCode && !(deviceKey && sessionToken)) {
-  // Admin / Adviser / Teacher — Scan QR Now (NO device code needed)
-  requestUrl =
-    APPS_SCRIPT_URL +
-    "?lrn=" + encodeURIComponent(payloadForServer) +
-    "&accessCode=" + encodeURIComponent(accessCode) +
-    "&scanMode=" + encodeURIComponent(selectedMode);
-} else {
-  // Device scanner (DEVICE_1–6): same 4-button modes, still requires device session
-  requestUrl =
-    APPS_SCRIPT_URL +
-    "?lrn=" + encodeURIComponent(payloadForServer) +
-    "&device=" + encodeURIComponent(deviceKey) +
-    "&session=" + encodeURIComponent(sessionToken) +
-    "&platform=" + encodeURIComponent(platform) +
-    "&scanMode=" + encodeURIComponent(selectedMode);
-}
-const result = await jsonpRequest(requestUrl, 20000);
-if (result && result.success && result.recorded !== false) {
+function senhsFinishQrWithResult_(result) {
   beep(1400, 180);
-}
-// Show the scan result immediately after the main attendance request returns.
-// Do NOT wait for SMS, SECTION_LOG, master LOGS, or Daily IO here.
-showResult(result);
-if (result && result.success) {
-  // Refresh the on-screen summary without blocking the scanner.
-  try { loadAttendanceSummary(); } catch (summaryErr) {
-    console.warn("Attendance summary refresh skipped:", summaryErr);
-  }
 
-  // Kick SMS queue FIRST (priority para mas mabilis ang parent notification)
-  try {
-    const smsUrl = APPS_SCRIPT_URL +
-      "?action=processSmsQueue&format=json&_t=" + Date.now();
-    jsonpRequest(smsUrl, 45000).catch(function () {});
-  } catch (e) {}
+  showResult(result);
 
-  // Kick the full follow-up queue (logs, IO, attendance, etc.)
-  try {
-    const drainUrl = APPS_SCRIPT_URL +
-      "?action=processScanQueue&_t=" + Date.now();
-    jsonpRequest(drainUrl, 60000).then(function (drainResult) {
-      if (!drainResult || drainResult.success !== true) {
-        console.warn("Background scan queue did not confirm completion:", drainResult);
-      }
-    }).catch(function (drainErr) {
-      console.warn("Background scan queue error:", drainErr);
-    });
-  } catch (drainErr) {
-    console.warn("Could not start background scan queue:", drainErr);
-  }
+  setTimeout(function () {
+    hideOverlay();
+
+    processing = false;
+    window.senhsQrProcessingLock = false;
+
+    readyBar.textContent = "● READY TO SCAN";
+    readyBar.style.color = "#16803c";
+
+    // Restart secondary decoder only.
+    try {
+      senhsStartQrFallback_();
+    } catch (error) {
+      console.warn("QR fallback restart error:", error);
+    }
+
+  }, 1500);
 }
-} catch (error) {
-console.error("QR server error:", error);
-var msg = String(error && error.message ? error.message : "Unable to connect to server.");
-if (/timed out/i.test(msg)) {
-  // ATT is written first on the server — timeout usually means the reply was late, not a failed save.
-  showResult({
-    success: true,
-    recorded: true,
-    timedOutButLikelySaved: true,
-    message: "RECORDED (server reply late). Check ATT section. Do not rescan same student — next student please."
-  });
-  try { loadAttendanceSummary(); } catch (e) {}
-} else {
-  showResult({
-    success: false,
-    message: msg
-  });
-}
-}
-} // FIX: close onQrDetected() so the remaining page scripts and Page 1 NEXT handler initialize at page load.
   
+async function onQrDetected(decodedText) {
+
+  // PREVENT DUPLICATE SCANS
+  if (processing || window.senhsQrProcessingLock) return;
+
+  const overlayEl = document.getElementById("scanOverlay");
+  if (overlayEl && overlayEl.style.display &&
+      overlayEl.style.display !== "none") return;
+
+  processing = true;
+  window.senhsQrProcessingLock = true;
+
+  console.info(
+    "SENHS QR DECODE SUCCESS:",
+    String(decodedText || "").length
+  );
+
+  // CHECK ACCESS
+  const accessCode = String(
+    (typeof attendanceAccessCode !== "undefined" && attendanceAccessCode) ||
+    window.currentAccessCode ||
+    window.pmAccessCode ||
+    localStorage.getItem("pmAccessCode") ||
+    ""
+  ).trim();
+
+  const isAdminScan = !!accessCode;
+
+  // CHECK DEVICE SESSION
+  if ((!deviceKey || !sessionToken) &&
+      !(isAdminScan && accessCode)) {
+
+    console.warn("No active device session.");
+
+    showOverlay(
+      "QR DETECTED — LOGIN REQUIRED",
+      "Walang active device session. Mag-login ulit.",
+      true
+    );
+
+    readyBar.textContent = "DEVICE LOGIN REQUIRED";
+    readyBar.style.color = "#b71c1c";
+
+    setTimeout(function () {
+      processing = false;
+      window.senhsQrProcessingLock = false;
+      resumeScanner();
+    }, 2500);
+
+    return;
+  }
+
+  window.qrProcessingStart = performance.now();
+
+  // STOP SECONDARY DECODER
+  senhsStopQrFallback_();
+
+  // KEEP MAIN CAMERA RUNNING
+  hideOverlay();
+
+  // VALIDATE QR
+  const qrText = String(decodedText || "").trim();
+
+  const qrParts = qrText.split("|").map(function (p) {
+    return String(p || "").trim();
+  });
+
+  let payloadForServer = "";
+
+  if (
+    qrParts.length >= 3 &&
+    /^\d{1,2}\s*[-–]\s*.+/.test(qrParts[0]) &&
+    /^\d{12}$/.test(qrParts[1]) &&
+    String(qrParts.slice(2).join("|") || "").trim().length >= 2
+  ) {
+    payloadForServer =
+      qrParts[0] + "|" +
+      qrParts[1] + "|" +
+      qrParts.slice(2).join("|");
+  }
+
+  if (!payloadForServer) {
+
+    senhsFinishQrWithResult_({
+      success: false,
+      message: "INVALID QR. Strict format only: SECTION|LRN|NAME."
+    });
+
+    return;
+  }
+
+  try {
+
+    // BUILD SERVER REQUEST
+    let requestUrl;
+
+    const selectedMode =
+      String(window.senhsScanMode || "AM_IN")
+        .trim().toUpperCase() || "AM_IN";
+
+    if (isAdminScan && accessCode && !(deviceKey && sessionToken)) {
+
+      requestUrl =
+        APPS_SCRIPT_URL +
+        "?lrn=" + encodeURIComponent(payloadForServer) +
+        "&accessCode=" + encodeURIComponent(accessCode) +
+        "&scanMode=" + encodeURIComponent(selectedMode);
+
+    } else {
+
+      requestUrl =
+        APPS_SCRIPT_URL +
+        "?lrn=" + encodeURIComponent(payloadForServer) +
+        "&device=" + encodeURIComponent(deviceKey) +
+        "&session=" + encodeURIComponent(sessionToken) +
+        "&platform=" + encodeURIComponent(platform) +
+        "&scanMode=" + encodeURIComponent(selectedMode);
+    }
+
+    // MAIN ATTENDANCE REQUEST
+    const result = await jsonpRequest(requestUrl, 20000);
+
+    // SHOW RESULT — 1.5 SECONDS
+    senhsFinishQrWithResult_(result);
+
+    // BACKGROUND TASKS
+    if (result && result.success) {
+
+      // Refresh summary without blocking scanner.
+      try {
+        loadAttendanceSummary();
+      } catch (summaryErr) {
+        console.warn("Summary refresh skipped:", summaryErr);
+      }
+
+      // SMS QUEUE
+      try {
+        const smsUrl =
+          APPS_SCRIPT_URL +
+          "?action=processSmsQueue&format=json&_t=" + Date.now();
+
+        jsonpRequest(smsUrl, 45000).catch(function () {});
+
+      } catch (e) {
+        console.warn("SMS queue request error:", e);
+      }
+
+      // SCAN FOLLOW-UP QUEUE
+      try {
+        const drainUrl =
+          APPS_SCRIPT_URL +
+          "?action=processScanQueue&_t=" + Date.now();
+
+        jsonpRequest(drainUrl, 60000)
+          .then(function (drainResult) {
+            if (!drainResult || drainResult.success !== true) {
+              console.warn("Background queue not confirmed:", drainResult);
+            }
+          })
+          .catch(function (drainErr) {
+            console.warn("Background queue error:", drainErr);
+          });
+
+      } catch (drainErr) {
+        console.warn("Could not start scan queue:", drainErr);
+      }
+    }
+
+  } catch (error) {
+
+    console.error("QR server error:", error);
+
+    const msg = String(
+      error && error.message
+        ? error.message
+        : "Unable to connect to server."
+    );
+
+    if (/timed out/i.test(msg)) {
+
+      senhsFinishQrWithResult_({
+        success: false,
+        recorded: false,
+        timedOutButLikelySaved: true,
+        message: "SERVER REPLY LATE. Please verify attendance before rescanning."
+      });
+
+      try {
+        loadAttendanceSummary();
+      } catch (e) {}
+
+    } else {
+
+      senhsFinishQrWithResult_({
+        success: false,
+        message: msg
+      });
+    }
+  }
+}
 /* =====================================================
 SIMPLE QR PROCESSING OVERLAY
 ===================================================== */
@@ -5525,9 +5589,6 @@ escapeHtml(message || "") +
 RESULT - RESPONSIVE
 ===================================================== */
 function showResult(result) {
-if (showResult.timer) {
-clearTimeout(showResult.timer);
-}
 
 scanOverlay.style.display = "flex";
 scanOverlay.style.position = "fixed";
@@ -5697,12 +5758,6 @@ const processingTime = window.qrProcessingStart
 console.log(
 "QR PROCESSING TIME: " + processingTime + " seconds"
 );
-
-/* Result overlay stays visible; do NOT accept another QR until it clears. */
-// Longer pause after success so the same QR leaves the frame before resume.
-showResult.timer = setTimeout(function () {
-resumeScanner();
-}, (result && result.success) ? 2000 : 1800);
 }
 
 
