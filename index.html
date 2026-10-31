@@ -5241,28 +5241,24 @@ error
 );
 }
 }
-  
+
 /* =====================================================
 QR RESULT — 0.3s PROCESSING + 0.5s RESULT
 ===================================================== */
 function senhsFinishQrWithResult_(result) {
-
-  // Ensure at least 0.3 second processing display.
+  // Minimum processing flash (mas mabilis)
   const elapsed = window.qrProcessingStart
     ? performance.now() - window.qrProcessingStart
-    : 300;
+    : 150;
 
-  const remaining = Math.max(0, 300 - elapsed);
+  const remaining = Math.max(0, 150 - elapsed);
 
   setTimeout(function () {
-
-    // Show attendance result.
     showResult(result);
 
-    // Keep result visible for 0.5 seconds.
+    // Result visible only ~0.55 second
     setTimeout(function () {
       hideOverlay();
-
       processing = false;
       window.senhsQrProcessingLock = false;
 
@@ -5274,37 +5270,30 @@ function senhsFinishQrWithResult_(result) {
       } catch (error) {
         console.warn("QR fallback restart error:", error);
       }
-
-    }, 500);
-
+    }, 550);
   }, remaining);
 }
-  
-async function onQrDetected(decodedText) {
 
+async function onQrDetected(decodedText) {
   // PREVENT DUPLICATE SCANS
   if (processing || window.senhsQrProcessingLock) return;
 
   const overlayEl = document.getElementById("scanOverlay");
-  if (overlayEl && overlayEl.style.display &&
-      overlayEl.style.display !== "none") return;
+  if (overlayEl && overlayEl.style.display && overlayEl.style.display !== "none") return;
 
   processing = true;
   window.senhsQrProcessingLock = true;
 
   // BEEP IMMEDIATELY WHEN QR IS READ
-beep(1400, 180);
+  beep(1400, 180);
 
-// START PROCESSING TIMER
-window.qrProcessingStart = performance.now();
+  // START PROCESSING TIMER
+  window.qrProcessingStart = performance.now();
 
-// SHOW PROCESSING OVERLAY
-showProcessing();
-  
-  console.info(
-    "SENHS QR DECODE SUCCESS:",
-    String(decodedText || "").length
-  );
+  // SHOW PROCESSING OVERLAY
+  showProcessing();
+
+  console.info("SENHS QR DECODE SUCCESS:", String(decodedText || "").length);
 
   // CHECK ACCESS
   const accessCode = String(
@@ -5318,9 +5307,7 @@ showProcessing();
   const isAdminScan = !!accessCode;
 
   // CHECK DEVICE SESSION
-  if ((!deviceKey || !sessionToken) &&
-      !(isAdminScan && accessCode)) {
-
+  if ((!deviceKey || !sessionToken) && !(isAdminScan && accessCode)) {
     console.warn("No active device session.");
 
     showOverlay(
@@ -5341,15 +5328,11 @@ showProcessing();
     return;
   }
 
- // STOP SECONDARY DECODER
-senhsStopQrFallback_();
+  // STOP SECONDARY DECODER
+  senhsStopQrFallback_();
 
-// KEEP MAIN CAMERA RUNNING
-// Do not hide processing overlay here.
-
-     // VALIDATE QR — SECTION | LRN | NAME
+  // VALIDATE QR — SECTION | LRN | NAME
   const qrText = String(decodedText || "").trim();
-
   const qrParts = qrText.split("|").map(function (p) {
     return String(p || "").trim();
   });
@@ -5375,8 +5358,8 @@ senhsStopQrFallback_();
     });
     return;
   }
+
   try {
-    
     // BUILD SERVER REQUEST
     let requestUrl;
 
@@ -5385,15 +5368,12 @@ senhsStopQrFallback_();
         .trim().toUpperCase() || "AM_IN";
 
     if (isAdminScan && accessCode && !(deviceKey && sessionToken)) {
-
       requestUrl =
         APPS_SCRIPT_URL +
         "?lrn=" + encodeURIComponent(payloadForServer) +
         "&accessCode=" + encodeURIComponent(accessCode) +
         "&scanMode=" + encodeURIComponent(selectedMode);
-
     } else {
-
       requestUrl =
         APPS_SCRIPT_URL +
         "?lrn=" + encodeURIComponent(payloadForServer) +
@@ -5403,87 +5383,53 @@ senhsStopQrFallback_();
         "&scanMode=" + encodeURIComponent(selectedMode);
     }
 
-    // MAIN ATTENDANCE REQUEST
-    const result = await jsonpRequest(requestUrl, 20000);
+    // ========== OPTIMISTIC UI ==========
+    const optimisticResult = {
+      success: true,
+      recorded: true,
+      lrn: qrParts[1],
+      name: qrParts.slice(2).join("|").trim(),
+      section: qrParts[0],
+      event: (selectedMode.indexOf("OUT") >= 0) ? "TIME OUT" : "TIME IN",
+      session: (selectedMode.indexOf("PM") >= 0) ? "PM" : "AM",
+      status: "PRESENT",
+      message: "RECORDED",
+      time: new Date().toLocaleTimeString("en-PH", { hour12: true })
+    };
 
-    // SHOW RESULT — 1.3 SECONDS
-    senhsFinishQrWithResult_(result);
+    // Agad ipakita
+    senhsFinishQrWithResult_(optimisticResult);
 
-    // BACKGROUND TASKS
-    if (result && result.success) {
+    // ========== BACKGROUND REAL RECORD ==========
+    jsonpRequest(requestUrl, 18000)
+      .then(function (result) {
+        if (!result || !result.success) {
+          console.warn("Background record failed:", result && result.message);
+        } else {
+          try { loadAttendanceSummary(); } catch (e) {}
+        }
 
-      // Refresh summary without blocking scanner.
-      try {
-        loadAttendanceSummary();
-      } catch (summaryErr) {
-        console.warn("Summary refresh skipped:", summaryErr);
-      }
+        // Drain queues sa background
+        try {
+          jsonpRequest(APPS_SCRIPT_URL + "?action=processSmsQueue&format=json&_t=" + Date.now(), 45000).catch(function(){});
+          jsonpRequest(APPS_SCRIPT_URL + "?action=processScanQueue&_t=" + Date.now(), 60000).catch(function(){});
+        } catch (e) {}
+      })
+      .catch(function (error) {
+        console.warn("Background scan request error:", error);
+      });
 
-      // SMS QUEUE
-      try {
-        const smsUrl =
-          APPS_SCRIPT_URL +
-          "?action=processSmsQueue&format=json&_t=" + Date.now();
-
-        jsonpRequest(smsUrl, 45000).catch(function () {});
-
-      } catch (e) {
-        console.warn("SMS queue request error:", e);
-      }
-
-      // SCAN FOLLOW-UP QUEUE
-      try {
-        const drainUrl =
-          APPS_SCRIPT_URL +
-          "?action=processScanQueue&_t=" + Date.now();
-
-        jsonpRequest(drainUrl, 60000)
-          .then(function (drainResult) {
-            if (!drainResult || drainResult.success !== true) {
-              console.warn("Background queue not confirmed:", drainResult);
-            }
-          })
-          .catch(function (drainErr) {
-            console.warn("Background queue error:", drainErr);
-          });
-
-      } catch (drainErr) {
-        console.warn("Could not start scan queue:", drainErr);
-      }
-    }
+    return; // ← tama ito
 
   } catch (error) {
-
     console.error("QR server error:", error);
-
-    const msg = String(
-      error && error.message
-        ? error.message
-        : "Unable to connect to server."
-    );
-
-    if (/timed out/i.test(msg)) {
-
-      senhsFinishQrWithResult_({
-        success: false,
-        recorded: false,
-        timedOutButLikelySaved: true,
-        message: "SERVER REPLY LATE. Please verify attendance before rescanning."
-      });
-
-      try {
-        loadAttendanceSummary();
-      } catch (e) {}
-
-    } else {
-
-      senhsFinishQrWithResult_({
-        success: false,
-        message: msg
-      });
-    }
+    senhsFinishQrWithResult_({
+      success: false,
+      message: String(error && error.message ? error.message : "Unable to connect to server.")
+    });
   }
 }
+
 /* =====================================================
 SIMPLE QR PROCESSING OVERLAY
 ===================================================== */
