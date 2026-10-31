@@ -5243,30 +5243,41 @@ error
 }
   
 /* =====================================================
-QR RESULT — FAST OVERLAY
+QR RESULT — 0.3s PROCESSING + 1.2s RESULT
 ===================================================== */
 function senhsFinishQrWithResult_(result) {
-  beep(1400, 180);
 
-  showResult(result);
+  // Ensure at least 0.3 second processing display.
+  const elapsed = window.qrProcessingStart
+    ? performance.now() - window.qrProcessingStart
+    : 300;
+
+  const remaining = Math.max(0, 300 - elapsed);
 
   setTimeout(function () {
-    hideOverlay();
 
-    processing = false;
-    window.senhsQrProcessingLock = false;
+    // Show attendance result.
+    showResult(result);
 
-    readyBar.textContent = "● READY TO SCAN";
-    readyBar.style.color = "#16803c";
+    // Keep result visible for 1.2 seconds.
+    setTimeout(function () {
+      hideOverlay();
 
-    // Restart secondary decoder only.
-    try {
-      senhsStartQrFallback_();
-    } catch (error) {
-      console.warn("QR fallback restart error:", error);
-    }
+      processing = false;
+      window.senhsQrProcessingLock = false;
 
-  }, 1500);
+      readyBar.textContent = "● READY TO SCAN";
+      readyBar.style.color = "#16803c";
+
+      try {
+        senhsStartQrFallback_();
+      } catch (error) {
+        console.warn("QR fallback restart error:", error);
+      }
+
+    }, 1200);
+
+  }, remaining);
 }
   
 async function onQrDetected(decodedText) {
@@ -5281,6 +5292,15 @@ async function onQrDetected(decodedText) {
   processing = true;
   window.senhsQrProcessingLock = true;
 
+  // BEEP IMMEDIATELY WHEN QR IS READ
+beep(1400, 180);
+
+// START PROCESSING TIMER
+window.qrProcessingStart = performance.now();
+
+// SHOW PROCESSING OVERLAY
+showProcessing();
+  
   console.info(
     "SENHS QR DECODE SUCCESS:",
     String(decodedText || "").length
@@ -5321,17 +5341,14 @@ async function onQrDetected(decodedText) {
     return;
   }
 
-  window.qrProcessingStart = performance.now();
+ // STOP SECONDARY DECODER
+senhsStopQrFallback_();
 
-  // STOP SECONDARY DECODER
-  senhsStopQrFallback_();
+// KEEP MAIN CAMERA RUNNING
+// Do not hide processing overlay here.
 
-  // KEEP MAIN CAMERA RUNNING
-  hideOverlay();
-
-  // VALIDATE QR
+   // VALIDATE QR
   const qrText = String(decodedText || "").trim();
-
   const qrParts = qrText.split("|").map(function (p) {
     return String(p || "").trim();
   });
@@ -5339,29 +5356,22 @@ async function onQrDetected(decodedText) {
   let payloadForServer = "";
 
   if (
-    qrParts.length >= 3 &&
+    qrParts.length === 2 &&
     /^\d{1,2}\s*[-–]\s*.+/.test(qrParts[0]) &&
-    /^\d{12}$/.test(qrParts[1]) &&
-    String(qrParts.slice(2).join("|") || "").trim().length >= 2
+    /^\d{12}$/.test(qrParts[1])
   ) {
-    payloadForServer =
-      qrParts[0] + "|" +
-      qrParts[1] + "|" +
-      qrParts.slice(2).join("|");
+    payloadForServer = qrParts[0] + "|" + qrParts[1];
   }
 
   if (!payloadForServer) {
-
     senhsFinishQrWithResult_({
       success: false,
-      message: "INVALID QR. Strict format only: SECTION|LRN|NAME."
+      message: "INVALID QR. Required format: SECTION|12-DIGIT LRN."
     });
-
     return;
   }
-
   try {
-
+    
     // BUILD SERVER REQUEST
     let requestUrl;
 
