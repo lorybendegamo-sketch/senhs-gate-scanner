@@ -5290,18 +5290,16 @@ window.qrProcessingStart = performance.now();
 // Stop the secondary frame decoder while the QR is being processed.
 // Any decoder callback already in flight will be rejected by the lock above.
 senhsStopQrFallback_();
+
 // HUWAG I-PAUSE ANG CAMERA.
 // Tuloy ang camera preview habang pinoproseso ang attendance.
-hideOverlay();
 
-readyBar.textContent = "● READY TO SCAN";
-readyBar.style.color = "#16803c";
 // HUWAG MAGPAKITA NG PROCESSING OVERLAY.
-// Panatilihing nakikita ang camera habang isinusulat ang attendance.
 hideOverlay();
 
 readyBar.textContent = "● READY TO SCAN";
 readyBar.style.color = "#16803c";
+
 // STRICT ONLY: SECTION|LRN|NAME
 // example: 7-Banaba|123456789012|DEGAMO, LORYBEN JR D.
 const qrText = String(decodedText || "").trim();
